@@ -5,7 +5,7 @@
 
 <SplitPane dividerPositions="0.2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../styles/pages/main-page.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.MainPageController">
    <items>
-      <fx:include source="../components/sidebar.fxml" />
-      <StackPane prefHeight="397.0" prefWidth="380.0" />
+      <fx:include fx:id="sidebar" source="../components/sidebar.fxml" />
+      <StackPane fx:id="mainContent" prefHeight="397.0" prefWidth="380.0" />
    </items>
 </SplitPane>
