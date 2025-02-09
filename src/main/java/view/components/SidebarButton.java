@@ -5,10 +5,11 @@ import javafx.scene.control.Button;
 public class SidebarButton extends Button {
     public SidebarButton(String text) {
         super(text);
-        initialise();
+        configure();
     }
 
-    private void initialise() {
+    private void configure() {
         this.getStyleClass().add("sidebar-button");
+        this.setMaxWidth(Double.MAX_VALUE);
     }
 }
