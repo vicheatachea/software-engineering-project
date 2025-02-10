@@ -1,6 +1,7 @@
 package entity;
 
 import jakarta.persistence.*;
+import util.PasswordHashUtil;
 
 import java.sql.Date;
 import java.util.Set;
@@ -12,6 +13,15 @@ public class UserEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long userId;
+
+	@Column(nullable = false)
+	private String username;
+
+	@Column(nullable = false)
+	private String password;
+
+	@Column(nullable = false)
+	private String salt;
 
 	@Column(nullable = false)
 	private String firstName;
@@ -103,5 +113,30 @@ public class UserEntity {
 
 	public Role getRole() {
 		return role;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.salt = PasswordHashUtil.generateSalt();
+		this.password = PasswordHashUtil.hashPassword(password, this.salt);
+	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public Set<UserGroupEntity> getGroups() {
+		return groups;
 	}
 }
