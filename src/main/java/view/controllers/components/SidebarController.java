@@ -13,7 +13,6 @@ public class SidebarController {
 
     @FXML
     private void initialize() {
-//        addButton("Really long text because I need to see if this thing is resizing properly", "stuff");
         addButton("Home", "home");
         addButton("Timetable", "timetable");
         addButton("Settings", "settings");
