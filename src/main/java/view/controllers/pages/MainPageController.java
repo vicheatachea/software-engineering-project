@@ -37,7 +37,6 @@ public class MainPageController implements Initializable {
         SplitPane.setResizableWithParent(mainContent, false);
 
         sidebarController.currentViewProperty().addListener((observableValue, oldValue, newValue) -> {
-            System.out.println(newValue);
             switch (newValue) {
                 case "home":
                     loadContent("/layouts/pages/home.fxml");
@@ -56,7 +55,6 @@ public class MainPageController implements Initializable {
     private void loadContent(String fxmlFilePath) {
         try {
             Node content = FXMLLoader.load(getClass().getResource(fxmlFilePath));
-            System.out.println(content);
             if (content == null) {
                 System.out.println("MainPageController loadContent() could not load " + fxmlFilePath);
                 return;

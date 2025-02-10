@@ -1,5 +1,6 @@
 package view.controllers.components;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
@@ -16,6 +17,8 @@ public class SidebarController {
         addButton("Home", "home");
         addButton("Timetable", "timetable");
         addButton("Settings", "settings");
+
+        Platform.runLater(() -> currentView.set("home"));
     }
 
     public StringProperty currentViewProperty() {
