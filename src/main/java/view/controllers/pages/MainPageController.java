@@ -1,12 +1,16 @@
-package view.controllers;
+package view.controllers.pages;
 
 import controller.Controller;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import view.controllers.components.SidebarController;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -34,8 +38,23 @@ public class MainPageController implements Initializable {
 
         sidebarController.currentViewProperty().addListener((observableValue, oldValue, newValue) -> {
             switch (newValue) {
-                // Implement the logic for switching views here
+                case "settings":
+                    loadContent("/layouts/pages/settings.fxml");
             }
         });
+    }
+
+    // This function is not handling errors properly now
+    private void loadContent(String fxmlFilePath) {
+        try {
+            Node content = FXMLLoader.load(getClass().getResource(fxmlFilePath));
+            if (content == null) {
+                System.out.println("MainPageController loadContent() could not load " + fxmlFilePath);
+                return;
+            }
+            mainContent.getChildren().setAll(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

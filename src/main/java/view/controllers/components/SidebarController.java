@@ -1,4 +1,4 @@
-package view.controllers;
+package view.controllers.components;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -14,7 +14,7 @@ public class SidebarController {
     @FXML
     private void initialize() {
 //        addButton("Really long text because I need to see if this thing is resizing properly", "stuff");
-        addButton("Dashboard", "dashboard");
+        addButton("Home", "home");
         addButton("Timetable", "timetable");
         addButton("Settings", "settings");
     }
