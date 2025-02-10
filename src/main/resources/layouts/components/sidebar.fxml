@@ -4,11 +4,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="sidebar" stylesheets="@../../styles/components/sidebar.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.components.SidebarController">
+<VBox fx:id="sidebar" stylesheets="@sidebar.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.components.SidebarController">
    <padding>
       <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
    </padding>
    <children>
-      <Label stylesheets="@../../styles/components/sidebar.css" text="STMS" />
+      <Label stylesheets="@sidebar.css" text="STMS" />
    </children>
 </VBox>
