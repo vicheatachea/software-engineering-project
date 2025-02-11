@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import view.controllers.components.SidebarController;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.util.ResourceBundle;
 * The controller should be passed to other view controllers as needed
 */
 public class MainPageController implements Initializable {
+    Stage stage;
     Controller controller;
     @FXML
     private SidebarController sidebarController;
@@ -29,6 +31,10 @@ public class MainPageController implements Initializable {
 
     public MainPageController() {
         this.controller = new Controller();
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     @Override
@@ -49,6 +55,9 @@ public class MainPageController implements Initializable {
                     break;
                 case "settings":
                     loadContent("/layouts/pages/settings.fxml");
+                    break;
+                case "quit":
+                    stage.close();
                     break;
             }
         });

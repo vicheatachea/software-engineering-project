@@ -23,6 +23,7 @@ public class SidebarController {
         addButton("\uD83D\uDCC6 Timetable", "timetable");
         addButton("\uD83D\uDC65 Groups", "groups");
         addButton("\uD83D\uDEE0 Settings", "settings");
+        addButton("\uD83D\uDEAA Quit", "quit");
 
         Platform.runLater(() -> currentView.set("home"));
     }

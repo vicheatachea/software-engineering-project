@@ -4,6 +4,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import view.controllers.pages.MainPageController;
+
+import java.io.IOException;
 
 /*
 * The controller should be initialized in the main page view controller
@@ -11,15 +14,20 @@ import javafx.stage.Stage;
 public class View extends Application {
     @Override
     public void start(Stage stage) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/pages/main-page.fxml"));
         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/pages/main-page.fxml"));
             stage.setScene(new Scene(loader.load()));
+            MainPageController controller = loader.getController();
+            controller.setStage(stage);
+
             stage.setTitle("Student Timetable Management System");
             stage.setMinWidth(400);
             stage.setMinHeight(600);
             stage.setMaximized(true);
             stage.show();
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
+            System.out.println("View could not start the application");
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
