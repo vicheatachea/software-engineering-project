@@ -15,6 +15,8 @@ public class View extends Application {
         try {
             stage.setScene(new Scene(loader.load()));
             stage.setTitle("Student Timetable Management System");
+            stage.setMinWidth(400);
+            stage.setMinHeight(600);
             stage.setMaximized(true);
             stage.show();
         } catch (Exception e) {
