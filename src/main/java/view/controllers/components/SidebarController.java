@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -36,6 +37,7 @@ public class SidebarController {
 
             button.setText(name);
             button.setOnAction(event -> currentView.set(view));
+            VBox.setMargin(button, new Insets(30, 0 , 0, 0));
             sidebar.getChildren().add(button);
         } catch (IOException e) {
             e.printStackTrace();
