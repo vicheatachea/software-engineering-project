@@ -2,6 +2,9 @@ package dao;
 
 import entity.UserEntity;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+
+import java.util.List;
 
 import static util.PasswordHashUtil.verifyPassword;
 
@@ -11,7 +14,13 @@ public class UserDAO {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		em.getTransaction().begin();
 		try {
-			em.merge(user);
+			UserEntity existingUser = findByUsername(user.getUsername());
+			if (existingUser == null) {
+				em.persist(user);
+			} else {
+				existingUser.setPassword(user.getPassword());
+				em.merge(existingUser);
+			}
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
@@ -25,14 +34,23 @@ public class UserDAO {
 
 	public UserEntity findByUsername(String username) {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
-		UserEntity user;
 		try {
-			user = em.createQuery("SELECT u FROM UserEntity u WHERE u.username = :username", UserEntity.class)
+			return em.createQuery("SELECT u FROM UserEntity u WHERE u.username = :username", UserEntity.class)
 			         .setParameter("username", username)
 			         .getSingleResult();
-			if (!authenticate(username, user.getPassword())) {
-				return null;
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
 			}
+		}
+	}
+
+	public List<UserEntity> findAll() {
+		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		try {
+			return em.createQuery("SELECT u FROM UserEntity u", UserEntity.class).getResultList();
 		} catch (Exception e) {
 			return null;
 		} finally {
@@ -40,7 +58,6 @@ public class UserDAO {
 				em.close();
 			}
 		}
-		return user;
 	}
 
 	public boolean authenticate(String username, String password) {
@@ -56,6 +73,22 @@ public class UserDAO {
 		em.getTransaction().begin();
 		try {
 			em.remove(em.contains(user) ? user : em.merge(user));
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public void deleteAll() {
+		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		em.getTransaction().begin();
+		try {
+			em.createQuery("DELETE FROM UserEntity").executeUpdate();
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();

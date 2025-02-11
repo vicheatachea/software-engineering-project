@@ -2,6 +2,7 @@ package entity;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -9,8 +10,8 @@ import java.util.Set;
 public class UserGroupEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long groupId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Column(nullable = false)
 	private String name;
@@ -22,10 +23,10 @@ public class UserGroupEntity {
 	private Integer capacity;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "teacher_id", nullable = false)
 	private UserEntity teacher;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "belongs_to",
 	           joinColumns = @JoinColumn(name = "group_id"),
 	           inverseJoinColumns = @JoinColumn(name = "user_id")
@@ -50,11 +51,11 @@ public class UserGroupEntity {
 	}
 
 	public void setId(Long id) {
-		this.groupId = id;
+		this.id = id;
 	}
 
 	public Long getId() {
-		return groupId;
+		return id;
 	}
 
 	public void setName(String name) {
@@ -104,5 +105,31 @@ public class UserGroupEntity {
 
 	public Set<UserEntity> getStudents() {
 		return students;
+	}
+
+	public TimetableEntity getTimetable() {
+		return timetable;
+	}
+
+	public void setTimetable(TimetableEntity timetable) {
+		this.timetable = timetable;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+		UserGroupEntity userGroup = (UserGroupEntity) obj;
+		return Objects.equals(id, userGroup.id) &&
+		       Objects.equals(name, userGroup.name) &&
+		       Objects.equals(code, userGroup.code) &&
+		       Objects.equals(capacity, userGroup.capacity) &&
+		       Objects.equals(teacher, userGroup.teacher) &&
+		       Objects.equals(students, userGroup.students) &&
+		       Objects.equals(timetable, userGroup.timetable);
 	}
 }

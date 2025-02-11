@@ -2,13 +2,15 @@ package entity;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "location")
 public class LocationEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long locationId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Column(nullable = false)
 	private String name;
@@ -29,11 +31,11 @@ public class LocationEntity {
 	}
 
 	public void setId(Long id) {
-		this.locationId = id;
+		this.id = id;
 	}
 
 	public Long getId() {
-		return locationId;
+		return id;
 	}
 
 	public void setName(String name) {
@@ -58,5 +60,23 @@ public class LocationEntity {
 
 	public String getBuilding() {
 		return building;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+		LocationEntity location = (LocationEntity) obj;
+		return id.equals(location.id) && name.equals(location.name) && campus.equals(location.campus)
+		       && building.equals(location.building);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name, campus, building);
 	}
 }

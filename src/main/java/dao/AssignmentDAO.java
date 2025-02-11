@@ -11,7 +11,7 @@ public class AssignmentDAO {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		em.getTransaction().begin();
 		try {
-			em.merge(assignment);
+			em.persist(assignment);
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
@@ -49,7 +49,41 @@ public class AssignmentDAO {
 		}
 	}
 
-	public void delete() {
+	public void deleteById(Long id) {
+		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		em.getTransaction().begin();
+		try {
+			AssignmentEntity assignment = em.find(AssignmentEntity.class, id);
+			if (assignment != null) {
+				em.remove(assignment);
+			}
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+	public void delete(AssignmentEntity assignment) {
+		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		em.getTransaction().begin();
+		try {
+			em.remove(em.contains(assignment) ? assignment : em.merge(assignment));
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public void deleteAll() {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		em.getTransaction().begin();
 		try {
@@ -64,4 +98,6 @@ public class AssignmentDAO {
 			}
 		}
 	}
+
+
 }

@@ -10,7 +10,14 @@ public class TeachingSessionDAO {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		em.getTransaction().begin();
 		try {
-			em.merge(teachingSession);
+			TeachingSessionEntity existingTeachingSession = findById(teachingSession.getId());
+			if (existingTeachingSession == null) {
+				em.persist(teachingSession);
+			} else {
+				existingTeachingSession.setSubject(teachingSession.getSubject());
+				existingTeachingSession.setLocation(teachingSession.getLocation());
+				em.merge(existingTeachingSession);
+			}
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
@@ -53,6 +60,64 @@ public class TeachingSessionDAO {
 		em.getTransaction().begin();
 		try {
 			em.remove(em.contains(teachingSession) ? teachingSession : em.merge(teachingSession));
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public TeachingSessionEntity findBySubjectId(Long id) {
+		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		try {
+			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.subject.id = :id", TeachingSessionEntity.class)
+			         .setParameter("id", id).getSingleResult();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public TeachingSessionEntity findByLocationId(Long id) {
+		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		try {
+			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.location.id = :id", TeachingSessionEntity.class)
+			         .setParameter("id", id).getSingleResult();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public List<TeachingSessionEntity> findAllByTimetableId(Long id) {
+		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		try {
+			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.timetable.id = :id", TeachingSessionEntity.class)
+			         .setParameter("id", id).getResultList();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public void deleteAll() {
+		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		em.getTransaction().begin();
+		try {
+			em.createQuery("DELETE FROM TeachingSessionEntity").executeUpdate();
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();

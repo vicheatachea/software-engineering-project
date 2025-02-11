@@ -11,7 +11,7 @@ public class LocationDAO {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		em.getTransaction().begin();
 		try {
-			em.merge(location);
+			em.persist(location);
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
@@ -54,6 +54,22 @@ public class LocationDAO {
 		em.getTransaction().begin();
 		try {
 			em.remove(em.contains(location) ? location : em.merge(location));
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public void deleteAll() {
+		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		em.getTransaction().begin();
+		try {
+			em.createQuery("DELETE FROM LocationEntity").executeUpdate();
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();

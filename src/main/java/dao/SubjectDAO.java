@@ -11,7 +11,7 @@ public class SubjectDAO {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		em.getTransaction().begin();
 		try {
-			em.merge(subject);
+			em.persist(subject);
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
@@ -56,6 +56,22 @@ public class SubjectDAO {
 		em.getTransaction().begin();
 		try {
 			em.remove(em.contains(subjectEntity) ? subjectEntity : em.merge(subjectEntity));
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public void deleteAll() {
+		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		em.getTransaction().begin();
+		try {
+			em.createQuery("DELETE FROM SubjectEntity").executeUpdate();
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();

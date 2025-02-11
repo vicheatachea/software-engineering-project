@@ -2,7 +2,8 @@ package entity;
 
 import jakarta.persistence.*;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -10,14 +11,14 @@ import java.util.Set;
 public class TeachingSessionEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long teachingSessionId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-	@Column(nullable = false)
-	private Date StartDate;
+	@Column(name = "start_date", nullable = false)
+	private Timestamp StartDate;
 
-	@Column(nullable = false)
-	private Date EndDate;
+	@Column(name = "end_date", nullable = false)
+	private Timestamp EndDate;
 
 	@ManyToOne
 	@JoinColumn(name = "location_id")
@@ -37,7 +38,8 @@ public class TeachingSessionEntity {
 	public TeachingSessionEntity() {
 	}
 
-	public TeachingSessionEntity(Date StartDate, Date EndDate, LocationEntity location, TimetableEntity timetable,
+	public TeachingSessionEntity(Timestamp StartDate, Timestamp EndDate, LocationEntity location,
+	                             TimetableEntity timetable,
 	                             SubjectEntity subject) {
 		this.StartDate = StartDate;
 		this.EndDate = EndDate;
@@ -47,26 +49,26 @@ public class TeachingSessionEntity {
 	}
 
 	public void setId(Long id) {
-		this.teachingSessionId = id;
+		this.id = id;
 	}
 
 	public Long getId() {
-		return teachingSessionId;
+		return id;
 	}
 
-	public void setStartDate(Date StartDate) {
+	public void setStartDate(Timestamp StartDate) {
 		this.StartDate = StartDate;
 	}
 
-	public Date getStartDate() {
+	public Timestamp getStartDate() {
 		return StartDate;
 	}
 
-	public void setEndDate(Date EndDate) {
+	public void setEndDate(Timestamp EndDate) {
 		this.EndDate = EndDate;
 	}
 
-	public Date getEndDate() {
+	public Timestamp getEndDate() {
 		return EndDate;
 	}
 
@@ -100,5 +102,25 @@ public class TeachingSessionEntity {
 
 	public Set<UserEntity> getTeachers() {
 		return teachers;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		TeachingSessionEntity that = (TeachingSessionEntity) o;
+
+		return Objects.equals(id, that.id) &&
+		       Objects.equals(StartDate, that.StartDate) &&
+		       Objects.equals(EndDate, that.EndDate) &&
+		       Objects.equals(location, that.location) &&
+		       Objects.equals(timetable, that.timetable) &&
+		       Objects.equals(subject, that.subject);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, StartDate, EndDate, location, timetable, subject);
 	}
 }

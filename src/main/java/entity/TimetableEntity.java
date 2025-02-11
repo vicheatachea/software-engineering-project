@@ -2,19 +2,34 @@ package entity;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "timetable")
 public class TimetableEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long timetableId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	public void setId(Long id) {
-		this.timetableId = id;
+		this.id = id;
 	}
 
 	public Long getId() {
-		return timetableId;
+		return id;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		TimetableEntity that = (TimetableEntity) o;
+		return Objects.equals(id, that.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }
