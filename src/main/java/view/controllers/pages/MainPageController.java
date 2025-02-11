@@ -51,15 +51,12 @@ public class MainPageController implements Initializable {
         });
     }
 
-    // This function is not handling errors properly now
     private void loadContent(String fxmlFilePath) {
         try {
             Node content = FXMLLoader.load(getClass().getResource(fxmlFilePath));
-            if (content == null) {
-                System.out.println("MainPageController loadContent() could not load " + fxmlFilePath);
-                return;
-            }
             mainContent.getChildren().setAll(content);
+        } catch (NullPointerException e) {
+            System.out.println("MainPageController loadContent() could not load " + fxmlFilePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
