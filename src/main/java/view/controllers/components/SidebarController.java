@@ -4,8 +4,12 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-import view.components.SidebarButton;
+
+import java.io.IOException;
 
 public class SidebarController {
     private final StringProperty currentView = new SimpleStringProperty();
@@ -26,8 +30,15 @@ public class SidebarController {
     }
 
     private void addButton(String name, String view) {
-        SidebarButton button = new SidebarButton(name);
-        button.setOnAction(event -> currentView.set(view));
-        sidebar.getChildren().add(button);
+        try {
+            Parent buttonNode = FXMLLoader.load(getClass().getResource("/layouts/components/sidebar-button.fxml"));
+            Button button = (Button) buttonNode;
+
+            button.setText(name);
+            button.setOnAction(event -> currentView.set(view));
+            sidebar.getChildren().add(button);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
