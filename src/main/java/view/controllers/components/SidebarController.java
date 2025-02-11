@@ -20,7 +20,8 @@ public class SidebarController {
     @FXML
     private void initialize() {
         addButton("\uD83C\uDFE0 Home", "home");
-        addButton("\uD83D\uDCC5 Timetable", "timetable");
+        addButton("\uD83D\uDCC6 Timetable", "timetable");
+        addButton("\uD83D\uDC65 Groups", "groups");
         addButton("\uD83D\uDEE0 Settings", "settings");
 
         Platform.runLater(() -> currentView.set("home"));

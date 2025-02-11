@@ -44,6 +44,9 @@ public class MainPageController implements Initializable {
                 case "timetable":
                     loadContent("/layouts/pages/timetable.fxml");
                     break;
+                case "groups":
+                    loadContent("/layouts/pages/groups.fxml");
+                    break;
                 case "settings":
                     loadContent("/layouts/pages/settings.fxml");
                     break;
