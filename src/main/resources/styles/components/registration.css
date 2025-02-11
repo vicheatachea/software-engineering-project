@@ -1,0 +1,29 @@
+.registration-vbox {
+    -fx-background-color: #FFE0E9;
+    -fx-padding: 30px;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+}
+
+.register-label {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ff6b81;
+}
+
+.first-name-field, .last-name-field, .social-number-field, .email-field, .username-field, .password-field, .dob-field, .role-field {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 35px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #FF6B81;
+    -fx-padding: 5px;
+}
+
+.register-button, .back-to-login-button, .exit-button {
+    -fx-background-color: #FF6B81;
+    -fx-text-fill: white;
+    -fx-background-radius: 10px;
+    -fx-pref-width: 140px;
+    -fx-pref-height: 35px;
+}
