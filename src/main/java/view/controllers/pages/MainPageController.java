@@ -45,16 +45,16 @@ public class MainPageController implements Initializable {
         sidebarController.currentViewProperty().addListener((observableValue, oldValue, newValue) -> {
             switch (newValue) {
                 case "home":
-                    loadContent("/layouts/pages/home.fxml");
+                    loadContent("/layouts/pages/main/home.fxml");
                     break;
                 case "timetable":
-                    loadContent("/layouts/pages/timetable.fxml");
+                    loadContent("/layouts/pages/main/timetable.fxml");
                     break;
                 case "groups":
-                    loadContent("/layouts/pages/groups.fxml");
+                    loadContent("/layouts/pages/main/groups.fxml");
                     break;
                 case "settings":
-                    loadContent("/layouts/pages/settings.fxml");
+                    loadContent("/layouts/pages/main/settings.fxml");
                     break;
                 case "quit":
                     stage.close();

@@ -15,7 +15,7 @@ public class View extends Application {
     @Override
     public void start(Stage stage) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/pages/main-page.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/pages/main/main-page.fxml"));
             stage.setScene(new Scene(loader.load()));
             MainPageController controller = loader.getController();
             controller.setStage(stage);

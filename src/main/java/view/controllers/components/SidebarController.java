@@ -34,7 +34,7 @@ public class SidebarController {
 
     private void addButton(String name, String view) {
         try {
-            Parent buttonNode = FXMLLoader.load(getClass().getResource("/layouts/components/sidebar-button.fxml"));
+            Parent buttonNode = FXMLLoader.load(getClass().getResource("/layouts/components/sidebar/sidebar-button.fxml"));
             Button button = (Button) buttonNode;
 
             button.setText(name);
