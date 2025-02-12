@@ -1,0 +1,24 @@
+.user-profile-vbox {
+    -fx-background-color: #FFE0E9;
+    -fx-padding: 30px;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+}
+
+.profile-image {
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+}
+
+.name-label, .role-label, .social-number-label {
+    -fx-font-size: 18px;
+    -fx-text-fill: #ff6b81;
+}
+
+.logout-button {
+    -fx-background-color: #FF6B81;
+    -fx-text-fill: white;
+    -fx-background-radius: 10px;
+    -fx-pref-width: 140px;
+    -fx-pref-height: 35px;
+}
