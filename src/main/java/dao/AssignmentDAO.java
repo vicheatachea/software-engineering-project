@@ -1,26 +1,17 @@
 package dao;
 
-import entity.UserEntity;
+import entity.AssignmentEntity;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 
 import java.util.List;
 
-import static util.PasswordHashUtil.verifyPassword;
+public class AssignmentDAO {
 
-public class UserDAO {
-
-	public void persist(UserEntity user) {
+	public void persist(AssignmentEntity assignment) {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		em.getTransaction().begin();
 		try {
-			UserEntity existingUser = findByUsername(user.getUsername());
-			if (existingUser == null) {
-				em.persist(user);
-			} else {
-				existingUser.setPassword(user.getPassword());
-				em.merge(existingUser);
-			}
+			em.persist(assignment);
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
@@ -32,25 +23,10 @@ public class UserDAO {
 		}
 	}
 
-	public UserEntity findByUsername(String username) {
+	public AssignmentEntity findById(Long id) {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		try {
-			return em.createQuery("SELECT u FROM UserEntity u WHERE u.username = :username", UserEntity.class)
-			         .setParameter("username", username)
-			         .getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		} finally {
-			if (em.isOpen()) {
-				em.close();
-			}
-		}
-	}
-
-	public List<UserEntity> findAll() {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
-		try {
-			return em.createQuery("SELECT u FROM UserEntity u", UserEntity.class).getResultList();
+			return em.find(AssignmentEntity.class, id);
 		} catch (Exception e) {
 			return null;
 		} finally {
@@ -60,19 +36,42 @@ public class UserDAO {
 		}
 	}
 
-	public boolean authenticate(String username, String password) {
-		UserEntity user = findByUsername(username);
-		if (user == null) {
-			return false;
+	public List<AssignmentEntity> findAll() {
+		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		try {
+			return em.createQuery("SELECT a FROM AssignmentEntity a", AssignmentEntity.class).getResultList();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
 		}
-		return verifyPassword(password, user.getPassword(), user.getSalt());
 	}
 
-	public void delete(UserEntity user) {
+	public void deleteById(Long id) {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		em.getTransaction().begin();
 		try {
-			em.remove(em.contains(user) ? user : em.merge(user));
+			AssignmentEntity assignment = em.find(AssignmentEntity.class, id);
+			if (assignment != null) {
+				em.remove(assignment);
+			}
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+	public void delete(AssignmentEntity assignment) {
+		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		em.getTransaction().begin();
+		try {
+			em.remove(em.contains(assignment) ? assignment : em.merge(assignment));
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
@@ -88,7 +87,7 @@ public class UserDAO {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		em.getTransaction().begin();
 		try {
-			em.createQuery("DELETE FROM UserEntity").executeUpdate();
+			em.createQuery("DELETE FROM AssignmentEntity").executeUpdate();
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
@@ -99,4 +98,6 @@ public class UserDAO {
 			}
 		}
 	}
+
+
 }
