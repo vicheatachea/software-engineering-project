@@ -19,8 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class UserGroupDAOTest {
 
 	@BeforeAll
-	static void setUpDatabase() throws SQLException {
-		MariaDBConnection.resetDatabaseForTests();
+	static void ensureDatabase() throws SQLException {
+		MariaDBConnection.verifyDatabase();
 	}
 
 	@AfterAll

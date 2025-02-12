@@ -13,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class TimetableDAOTest {
 
 	@BeforeAll
-	static void setUpDatabase() throws SQLException {
-		datasource.MariaDBConnection.resetDatabaseForTests();
+	static void ensureDatabase() throws SQLException {
+		datasource.MariaDBConnection.verifyDatabase();
 	}
 
 	@BeforeEach

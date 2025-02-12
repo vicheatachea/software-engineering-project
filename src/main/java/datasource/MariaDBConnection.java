@@ -6,14 +6,9 @@ import jakarta.persistence.Persistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class MariaDBConnection {
 
@@ -44,12 +39,10 @@ public class MariaDBConnection {
 		return conn;
 	}
 
-	public static void resetDatabaseForTests() throws SQLException {
+	public static void verifyDatabase() throws SQLException {
 		try (Connection conn = getConnection()) {
-			conn.createStatement().executeUpdate("DROP SCHEMA IF EXISTS `stms`");
-			conn.createStatement().executeUpdate("CREATE DATABASE `stms`");
+			conn.createStatement().executeUpdate("CREATE DATABASE IF NOT EXISTS `stms`");
 			conn.createStatement().executeUpdate("USE `stms`");
-			//executeSqlFile("scripts/database.sql");
 		} catch (SQLException e) {
 			logger.error("Error resetting database for tests: {}", e.getMessage());
 			throw e;
@@ -74,52 +67,6 @@ public class MariaDBConnection {
 		} catch (SQLException e) {
 			logger.error("Error closing database resources: {}", e.getMessage());
 			throw new SQLException(e);
-		}
-	}
-
-	public static void executeSqlFile(String filePath) throws SQLException {
-		try (InputStream input = MariaDBConnection.class.getClassLoader().getResourceAsStream(filePath)) {
-			assert input != null;
-			try (BufferedReader br = new BufferedReader(new InputStreamReader(input))) {
-				StringBuilder sb = new StringBuilder();
-				String line;
-				boolean inProcedure = false;
-
-				while ((line = br.readLine()) != null) {
-					if (line.trim().equalsIgnoreCase("DELIMITER //")) {
-						inProcedure = true;
-						continue;
-					} else if (line.trim().equalsIgnoreCase("DELIMITER ;")) {
-						inProcedure = false;
-						continue;
-					}
-
-					if (inProcedure) {
-						if (line.trim().endsWith("//")) {
-							sb.append(line, 0, line.length() - 2).append("\n");
-							try (Statement stmt = conn.createStatement()) {
-								stmt.execute(sb.toString());
-							}
-							sb.setLength(0);
-						} else {
-							sb.append(line).append("\n");
-						}
-					} else {
-						sb.append(line).append("\n");
-						if (line.trim().endsWith(";")) {
-							try (Statement stmt = conn.createStatement()) {
-								stmt.execute(sb.toString());
-							}
-							sb.setLength(0);
-						}
-					}
-				}
-
-				logger.debug("Executed SQL file: {}", filePath);
-			}
-		} catch (SQLException | IOException ex) {
-			logger.error("Failed to execute SQL file!", ex);
-			throw new SQLException(ex);
 		}
 	}
 }
