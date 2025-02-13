@@ -1,11 +1,48 @@
 package view.controllers.pages.main;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 public class TimetableController {
     @FXML
+    private HBox topbar;
+    @FXML
     private GridPane timetableGrid;
+    @FXML
+    private Label dateLabel;
+    @FXML
+    private Label weekLabel;
+
+    @FXML
+    private void initialize() {
+        addButtons();
+    }
+
+    private void addButtons() {
+        try {
+            Button[] buttons = new Button[3];
+            for (int i = 0; i < 3; i++) {
+                buttons[i] = FXMLLoader.load(getClass().getResource("/layouts/components/timetable/timetable-button.fxml"));
+            }
+
+            buttons[0].setText("New Event");
+            buttons[1].setText("\uD83D\uDCC5");
+            buttons[2].setText("\uD83D\uDD27");
+
+            topbar.getChildren().addFirst(buttons[0]);
+            topbar.getChildren().addAll(buttons[1], buttons[2]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Not to be implemented yet
     private void addColumn() {
