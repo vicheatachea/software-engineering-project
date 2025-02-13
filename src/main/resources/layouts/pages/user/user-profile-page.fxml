@@ -5,7 +5,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="userProfileVBox" alignment="CENTER" prefHeight="540.0" prefWidth="520.0" spacing="15" styleClass="user-profile-vbox" stylesheets="@user-profile.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.UserProfileController">
+<VBox fx:id="userProfileVBox" alignment="CENTER" prefHeight="540.0" prefWidth="520.0" spacing="15" styleClass="user-profile-vbox" stylesheets="@user-profile.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.UserProfileController">
 
     <ImageView fx:id="profileImageView" fitHeight="170.0" fitWidth="168.0" styleClass="profile-image" />
 

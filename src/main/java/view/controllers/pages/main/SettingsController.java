@@ -1,4 +1,4 @@
-package view.controllers.pages;
+package view.controllers.pages.main;
 
 public class SettingsController {
 }

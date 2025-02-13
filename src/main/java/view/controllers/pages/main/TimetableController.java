@@ -1,4 +1,4 @@
-package view.controllers.pages;
+package view.controllers.pages.main;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
