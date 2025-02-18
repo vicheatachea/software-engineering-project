@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -12,6 +13,8 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class TimetableController {
+    private static final int NUMBER_OF_BUTTONS = 2;
+
     @FXML
     private HBox topbar;
     @FXML
@@ -28,17 +31,18 @@ public class TimetableController {
 
     private void addButtons() {
         try {
-            Button[] buttons = new Button[3];
-            for (int i = 0; i < 3; i++) {
+            Button[] buttons = new Button[NUMBER_OF_BUTTONS];
+            for (int i = 0; i < NUMBER_OF_BUTTONS; i++) {
                 buttons[i] = FXMLLoader.load(getClass().getResource("/layouts/components/timetable/timetable-button.fxml"));
             }
 
             buttons[0].setText("New Event");
-            buttons[1].setText("\uD83D\uDCC5");
-            buttons[2].setText("\uD83D\uDD27");
+            buttons[1].setText("\uD83D\uDD27");
+
+            DatePicker datePicker = new DatePicker();
 
             topbar.getChildren().addFirst(buttons[0]);
-            topbar.getChildren().addAll(buttons[1], buttons[2]);
+            topbar.getChildren().addAll(datePicker, buttons[1]);
         } catch (IOException e) {
             e.printStackTrace();
         }
