@@ -1,7 +1,7 @@
 package view.controllers.pages.main;
 
+import controller.Controller;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -9,15 +9,16 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import view.controllers.ControllerAware;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.temporal.WeekFields;
 
-public class TimetableController {
+public class TimetableController implements ControllerAware {
     private static final int NUMBER_OF_BUTTONS = 2;
+    Controller controller;
 
     LocalDate currentDate;
     LocalDate startDate;
@@ -39,6 +40,11 @@ public class TimetableController {
     private void initialize() {
         addButtons();
         Platform.runLater(() -> datePicker.setValue(LocalDate.now()));
+    }
+
+    @Override
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 
     private void addButtons() {
