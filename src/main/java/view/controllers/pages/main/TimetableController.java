@@ -53,6 +53,7 @@ public class TimetableController {
 
             buttons[0].setOnAction(event -> handleAddEvent());
             // Settings buttons is not yet implemented
+            buttons[1].setDisable(true);
 
             topbar.getChildren().addFirst(buttons[0]);
             topbar.getChildren().add(buttons[1]);
