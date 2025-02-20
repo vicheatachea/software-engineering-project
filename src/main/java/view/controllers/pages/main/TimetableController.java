@@ -9,7 +9,9 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import view.controllers.ControllerAware;
+import view.controllers.components.EventPopupController;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -57,7 +59,7 @@ public class TimetableController implements ControllerAware {
             buttons[0].setText("New Event");
             buttons[1].setText("\uD83D\uDD27");
 
-            buttons[0].setOnAction(event -> handleAddEvent());
+            buttons[0].setOnAction(event -> handleNewEvent());
             // Settings buttons is not yet implemented
             buttons[1].setDisable(true);
 
@@ -86,11 +88,24 @@ public class TimetableController implements ControllerAware {
         weekLabel.setText("Week " + currentWeek);
     }
 
-    private void handleAddEvent() {
-        // Get the start and end times, type, etc
-        // Based on the start and end times allocate the necessary amount of cells
-        // Change margins so that the times match the hours in relation to cell size
-        // Maybe make a separate label component for this
+    private void handleNewEvent() {
+
+    }
+
+    private void handleEditEvent() {
+
+    }
+
+    private void openEventPopup(String eventType) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/components/event-popup.fxml"));
+            VBox content = loader.load();
+
+            EventPopupController popupController = loader.getController();
+            popupController.initialise(eventType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Not to be implemented yet
