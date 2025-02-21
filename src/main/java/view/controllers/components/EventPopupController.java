@@ -1,12 +1,13 @@
 package view.controllers.components;
 
+import dto.Event;
 import javafx.fxml.FXML;
 
 public class EventPopupController {
-    private String eventType;
+    private Event event;
 
-    public void initialise(String eventType) {
-        this.eventType = eventType;
+    public void initialise(Event event) {
+        this.event = event;
     }
 
     @FXML

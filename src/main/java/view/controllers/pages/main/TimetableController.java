@@ -1,15 +1,19 @@
 package view.controllers.pages.main;
 
 import controller.Controller;
+import dto.Event;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import view.controllers.ControllerAware;
 import view.controllers.components.EventPopupController;
 
@@ -89,20 +93,28 @@ public class TimetableController implements ControllerAware {
     }
 
     private void handleNewEvent() {
-
+        openEventPopup(null);
     }
 
     private void handleEditEvent() {
 
     }
 
-    private void openEventPopup(String eventType) {
+    private void openEventPopup(Event event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/components/event-popup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/components/timetable/event-popup.fxml"));
             VBox content = loader.load();
 
             EventPopupController popupController = loader.getController();
-            popupController.initialise(eventType);
+            popupController.initialise(event);
+
+            Stage popupStage = new Stage();
+            popupStage.setScene(new Scene(content));
+
+            popupStage.setTitle(event == null ? "New Event" : "Edit Event");
+            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.initOwner(topbar.getScene().getWindow());
+            popupStage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }
