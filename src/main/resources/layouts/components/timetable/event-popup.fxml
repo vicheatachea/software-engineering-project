@@ -45,13 +45,13 @@
             <Label text="Description" GridPane.rowIndex="9" />
             <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <ComboBox fx:id="eventComboBox" prefWidth="150.0" GridPane.columnIndex="1" />
+            <ComboBox fx:id="scheduleComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <ComboBox fx:id="groupComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ComboBox fx:id="subjectComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField fx:id="nameTextField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <ComboBox fx:id="assignmentComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <ComboBox fx:id="locationComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
          </children>
          <padding>

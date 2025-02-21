@@ -12,7 +12,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import view.controllers.ControllerAware;
@@ -107,7 +106,7 @@ public class TimetableController implements ControllerAware {
             Parent content = loader.load();
 
             EventPopupController popupController = loader.getController();
-            popupController.initialise(event);
+            popupController.setUp(event);
 
             Stage popupStage = new Stage();
             popupStage.setScene(new Scene(content));
