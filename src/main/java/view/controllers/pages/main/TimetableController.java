@@ -5,6 +5,7 @@ import dto.Event;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -103,7 +104,7 @@ public class TimetableController implements ControllerAware {
     private void openEventPopup(Event event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/components/timetable/event-popup.fxml"));
-            VBox content = loader.load();
+            Parent content = loader.load();
 
             EventPopupController popupController = loader.getController();
             popupController.initialise(event);
