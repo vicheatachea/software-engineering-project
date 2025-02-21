@@ -4,6 +4,7 @@ import dto.AssignmentDTO;
 import dto.Event;
 import dto.TeachingSessionDTO;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
@@ -45,7 +46,32 @@ public class EventPopupController {
     }
 
     @FXML
-    private void handleSaveData() {
-        // Return data back to the timetable controller and close popup
+    private void handleSaveEvent() {
+        String eventType = (String) eventComboBox.getValue();
+
+        if (eventType == null) {
+            displayErrorAlert("Please select an event type");
+            return;
+        }
+
+        switch (eventType) {
+            case "Class":
+                // Save class event
+                break;
+            case "Assignment":
+                // Save assignment event
+                break;
+            default:
+                // Save default event
+                break;
+        }
+    }
+
+    private void displayErrorAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Configuration Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

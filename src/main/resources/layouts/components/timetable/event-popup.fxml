@@ -58,7 +58,7 @@
             <Insets bottom="20.0" />
          </padding>
       </GridPane>
-      <Button mnemonicParsing="false" text="Save Event" />
+      <Button mnemonicParsing="false" onAction="#handleSaveEvent" text="Save Event" />
    </children>
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
