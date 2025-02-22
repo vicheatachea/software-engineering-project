@@ -15,7 +15,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.components.EventPopupController">
    <children>
-      <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+      <GridPane fx:id="popupGridPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -35,22 +35,22 @@
          <children>
             <Label text="Event Type" />
             <Label fx:id="startLabel" text="Start Date" GridPane.rowIndex="1" />
-            <Label fx:id="endLabel" text="EndDate" GridPane.rowIndex="2" />
+            <Label fx:id="endLabel" text="End Date" GridPane.rowIndex="2" />
             <Label text="Schedule for" GridPane.rowIndex="3" />
-            <Label text="Group" GridPane.rowIndex="4" />
+            <Label fx:id="groupLabel" text="Group" GridPane.rowIndex="4" />
             <Label text="Subject" GridPane.rowIndex="5" />
-            <Label text="Name" GridPane.rowIndex="6" />
-            <Label text="Assignment Type" GridPane.rowIndex="7" />
-            <Label text="Location" GridPane.rowIndex="8" />
+            <Label fx:id="nameLabel" text="Name" GridPane.rowIndex="6" />
+            <Label fx:id="assignmentLabel" text="Assignment Type" GridPane.rowIndex="7" />
+            <Label fx:id="locationLabel" text="Location" GridPane.rowIndex="8" />
             <Label text="Description" GridPane.rowIndex="9" />
             <HBox fx:id="startHBox" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <DatePicker />
+                  <DatePicker fx:id="startDatePicker" />
                </children>
             </HBox>
             <HBox fx:id="endHBox" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <DatePicker />
+                  <DatePicker fx:id="endDatePicker" />
                </children>
             </HBox>
             <ComboBox fx:id="eventComboBox" prefWidth="150.0" GridPane.columnIndex="1" />
