@@ -14,6 +14,8 @@ import javafx.scene.layout.RowConstraints;
 public class EventPopupController {
     private Event event;
     private final RowConstraints hiddenRow = new RowConstraints(0);
+    private final TimeTextField startTimeField = new TimeTextField();
+    private final TimeTextField endTimeField = new TimeTextField();
 
     @FXML
     private GridPane popupGridPane;
@@ -58,8 +60,8 @@ public class EventPopupController {
 
     @FXML
     private void initialize() {
-        startHBox.getChildren().add(new TimeTextField());
-        endHBox.getChildren().add(new TimeTextField());
+        startHBox.getChildren().add(startTimeField);
+        endHBox.getChildren().add(endTimeField);
 
         eventComboBox.getItems().addAll("Class", "Assignment");
         scheduleComboBox.getItems().addAll("Myself", "Group");
@@ -157,9 +159,27 @@ public class EventPopupController {
     private void handleSaveEvent() {
         String eventType = (String) eventComboBox.getValue();
 
-        if (eventType == null) {
-            displayErrorAlert("Please select an event type");
+        if (checkNullOrEmpty(eventType, "Please select an event type") ||
+                checkNullOrEmpty(scheduleComboBox.getValue(), "Please select a schedule type") ||
+                checkNullOrEmpty(subjectComboBox.getValue(), "Please select a subject")) {
             return;
+        }
+
+        if (eventType.equals("Assignment")) {
+            if (checkNullOrEmpty(startDatePicker.getValue(), "Please select a publishing date") ||
+                    checkNullOrEmpty(endDatePicker.getValue(), "Please select a due date") ||
+                    checkNullOrEmpty(nameTextField.getText(), "Please enter an assignment name") ||
+                    checkNullOrEmpty(assignmentComboBox.getValue(), "Please select an assignment type")) {
+                return;
+            }
+        }
+
+        if (eventType.equals("Class")) {
+            if (checkNullOrEmpty(startTimeField.getText(), "Please enter a start time") ||
+                    checkNullOrEmpty(endTimeField.getText(), "Please enter an end time") ||
+                    checkNullOrEmpty(locationComboBox.getValue(), "Please select a location")) {
+                return;
+            }
         }
 
         switch (eventType) {
@@ -173,6 +193,14 @@ public class EventPopupController {
                 // Save default event
                 break;
         }
+    }
+
+    private boolean checkNullOrEmpty(Object object, String message) {
+        if (object == null || object instanceof String && ((String) object).isEmpty()) {
+            displayErrorAlert(message);
+            return true;
+        }
+        return false;
     }
 
     private void displayErrorAlert(String message) {
