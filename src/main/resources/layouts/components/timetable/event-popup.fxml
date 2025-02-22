@@ -9,9 +9,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-
 
 <VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.components.EventPopupController">
    <children>
@@ -43,8 +43,16 @@
             <Label text="Assignment Type" GridPane.rowIndex="7" />
             <Label text="Location" GridPane.rowIndex="8" />
             <Label text="Description" GridPane.rowIndex="9" />
-            <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <HBox fx:id="startHBox" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <DatePicker />
+               </children>
+            </HBox>
+            <HBox fx:id="endHBox" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <children>
+                  <DatePicker />
+               </children>
+            </HBox>
             <ComboBox fx:id="eventComboBox" prefWidth="150.0" GridPane.columnIndex="1" />
             <ComboBox fx:id="scheduleComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <ComboBox fx:id="groupComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />

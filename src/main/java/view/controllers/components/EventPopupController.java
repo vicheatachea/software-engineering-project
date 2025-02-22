@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 
 public class EventPopupController {
     private Event event;
@@ -25,6 +26,10 @@ public class EventPopupController {
     private ComboBox locationComboBox;
     @FXML
     private TextField nameTextField;
+    @FXML
+    private HBox startHBox;
+    @FXML
+    private HBox endHBox;
 
     public void setUp(Event event) {
         this.event = event;
@@ -32,6 +37,9 @@ public class EventPopupController {
 
     @FXML
     private void initialize() {
+        startHBox.getChildren().add(new TimeTextField());
+        endHBox.getChildren().add(new TimeTextField());
+
         eventComboBox.getItems().addAll("Class", "Assignment");
         scheduleComboBox.getItems().addAll("Myself", "Group");
         assignmentComboBox.getItems().addAll("Individual", "Group");
