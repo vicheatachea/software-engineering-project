@@ -10,11 +10,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
+import util.TimeFormatterUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 public class EventPopupController {
     private Event event;
@@ -195,15 +195,14 @@ public class EventPopupController {
             }
         }
 
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         Event newEvent;
 
         LocalDate startDate = startDatePicker.getValue();
         String startTime = startTimeField.getText();
         String endTime = endTimeField.getText();
 
-        LocalTime startLocalTime = LocalTime.parse(startTime, timeFormatter);
-        LocalTime endLocalTime = LocalTime.parse(endTime, timeFormatter);
+        LocalTime startLocalTime = TimeFormatterUtil.getTimeFromString(startTime);
+        LocalTime endLocalTime = TimeFormatterUtil.getTimeFromString(endTime);
 
         String scheduleFor = (String) scheduleComboBox.getValue();
         String subject = (String) subjectComboBox.getValue();
