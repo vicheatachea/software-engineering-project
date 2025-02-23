@@ -67,6 +67,12 @@ public class EventPopupController {
         scheduleComboBox.getItems().addAll("Myself", "Group");
         assignmentComboBox.getItems().addAll("Individual", "Group");
 
+        // Placeholders
+        // TODO: Add subjects and locations from database
+        subjectComboBox.getItems().addAll("Math", "Science", "English", "History", "Geography");
+        locationComboBox.getItems().addAll("Room 1", "Room 2", "Room 3", "Room 4", "Room 5");
+        groupComboBox.getItems().addAll("Group 1", "Group 2", "Group 3", "Group 4", "Group 5");
+
         eventComboBox.addEventHandler(ActionEvent.ACTION, event -> handleEventChange());
         scheduleComboBox.addEventHandler(ActionEvent.ACTION, event -> handleScheduleChange());
 
