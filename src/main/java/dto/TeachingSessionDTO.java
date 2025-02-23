@@ -1,7 +1,7 @@
 package dto;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
-public record TeachingSessionDTO(Timestamp StartDate, Timestamp EndDate, String locationName,
-                                 String subjectName) implements Event {
+public record TeachingSessionDTO(LocalDateTime startDate, LocalDateTime endDate, String locationName,
+                                 String subjectName, String description) implements Event {
 }

@@ -1,7 +1,7 @@
 package dto;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
-public record AssignmentDTO(String type, Timestamp publishingDate, Timestamp deadline,
-                            String subjectName) implements Event {
+public record AssignmentDTO(String type, LocalDateTime publishingDate, LocalDateTime deadline,
+                            String assignmentName, String subjectName) implements Event {
 }
