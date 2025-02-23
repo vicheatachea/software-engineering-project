@@ -226,7 +226,7 @@ public class EventPopupController {
                 String assignmentName = nameTextField.getText();
                 String assignmentType = (String) assignmentComboBox.getValue();
 
-                newEvent = new AssignmentDTO(assignmentType, publishingDateTime, deadlineDateTime, assignmentName, subject);
+                newEvent = new AssignmentDTO(assignmentType, publishingDateTime, deadlineDateTime, assignmentName, subject, description);
                 break;
         }
 
