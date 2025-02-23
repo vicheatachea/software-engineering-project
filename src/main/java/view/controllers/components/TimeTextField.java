@@ -48,26 +48,4 @@ public class TimeTextField extends TextField {
                 break;
         }
     }
-
-    @Override
-    public void replaceText(int start, int end, String text) {
-        if (validate(text)) {
-            super.replaceText(start, end, text);
-        }
-    }
-
-    @Override
-    public void replaceSelection(String text) {
-        if (validate(text)) {
-            super.replaceSelection(text);
-        }
-    }
-
-    private boolean validate(String text) {
-        if (text.isEmpty() || text.matches("[0-9:]*")) {
-            String newText = getText().substring(0, getCaretPosition()) + text + getText().substring(getCaretPosition());
-            return newText.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]");
-        }
-        return false;
-    }
 }
