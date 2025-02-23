@@ -92,10 +92,37 @@ public class EventPopupController {
 
             eventComboBox.setDisable(true);
 
-            if (event instanceof TeachingSessionDTO) {
+            if (event instanceof TeachingSessionDTO teachingSession) {
+                LocalDateTime startDateTime = teachingSession.startDate();
+                LocalDateTime endDateTime = teachingSession.endDate();
+                String location = teachingSession.locationName();
+                String subject = teachingSession.subjectName();
+                String description = teachingSession.description();
+
                 eventComboBox.setValue("Class");
-            } else if (event instanceof AssignmentDTO) {
+                startDatePicker.setValue(startDateTime.toLocalDate());
+                startTimeField.setText(TimeFormatterUtil.getTimeFromDateTime(startDateTime));
+                endTimeField.setText(TimeFormatterUtil.getTimeFromDateTime(endDateTime));
+                locationComboBox.setValue(location);
+                subjectComboBox.setValue(subject);
+                descriptionTextArea.setText(description);
+            } else if (event instanceof AssignmentDTO assignment) {
+                LocalDateTime publishingDateTime = assignment.publishingDate();
+                LocalDateTime deadlineDateTime = assignment.deadline();
+                String assignmentName = assignment.assignmentName();
+                String assignmentType = assignment.type();
+                String subject = assignment.subjectName();
+                String description = assignment.description();
+
                 eventComboBox.setValue("Assignment");
+                startDatePicker.setValue(publishingDateTime.toLocalDate());
+                startTimeField.setText(TimeFormatterUtil.getTimeFromDateTime(publishingDateTime));
+                endDatePicker.setValue(deadlineDateTime.toLocalDate());
+                endTimeField.setText(TimeFormatterUtil.getTimeFromDateTime(deadlineDateTime));
+                nameTextField.setText(assignmentName);
+                assignmentComboBox.setValue(assignmentType);
+                subjectComboBox.setValue(subject);
+                descriptionTextArea.setText(description);
             }
         });
     }
