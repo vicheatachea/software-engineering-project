@@ -11,6 +11,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 public class EventPopupController {
     private Event event;
     private final RowConstraints hiddenRow = new RowConstraints(0);
@@ -53,6 +58,8 @@ public class EventPopupController {
     private DatePicker startDatePicker;
     @FXML
     private DatePicker endDatePicker;
+    @FXML
+    private TextArea descriptionTextArea;
 
     public void setUp(Event event) {
         this.event = event;
@@ -188,16 +195,46 @@ public class EventPopupController {
             }
         }
 
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        Event newEvent;
+
+        LocalDate startDate = startDatePicker.getValue();
+        String startTime = startTimeField.getText();
+        String endTime = endTimeField.getText();
+
+        LocalTime startLocalTime = LocalTime.parse(startTime, timeFormatter);
+        LocalTime endLocalTime = LocalTime.parse(endTime, timeFormatter);
+
+        String scheduleFor = (String) scheduleComboBox.getValue();
+        String subject = (String) subjectComboBox.getValue();
+        String description = descriptionTextArea.getText();
+
         switch (eventType) {
             case "Class":
-                // Save class event
+                LocalDateTime startDateTime = LocalDateTime.of(startDate, startLocalTime);
+                LocalDateTime endDateTime = LocalDateTime.of(startDate, endLocalTime);
+
+                String location = (String) locationComboBox.getValue();
+
+                newEvent = new TeachingSessionDTO(startDateTime, endDateTime, location, subject, description);
                 break;
             case "Assignment":
-                // Save assignment event
+                LocalDate endDate = endDatePicker.getValue();
+                LocalDateTime publishingDateTime = LocalDateTime.of(startDate, startLocalTime);
+                LocalDateTime deadlineDateTime = LocalDateTime.of(endDate, endLocalTime);
+
+                String assignmentName = nameTextField.getText();
+                String assignmentType = (String) assignmentComboBox.getValue();
+
+                newEvent = new AssignmentDTO(assignmentType, publishingDateTime, deadlineDateTime, assignmentName, subject);
                 break;
-            default:
-                // Save default event
-                break;
+        }
+
+        if (scheduleFor.equals("Myself")) {
+            // Save teaching session for myself
+        } else {
+            String group = (String) groupComboBox.getValue();
+            // Save teaching session for group
         }
     }
 
