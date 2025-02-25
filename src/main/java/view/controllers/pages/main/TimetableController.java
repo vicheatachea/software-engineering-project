@@ -155,8 +155,8 @@ public class TimetableController implements ControllerAware {
         for (int i = 0; i < daysBetween; i++) {
 
             String weekDay = startDate.plusDays(i).getDayOfWeek().toString().substring(0, 3);
-            int monthDay = startDate.plusDays(i).getDayOfMonth();
-            int month = startDate.plusDays(i).getMonthValue();
+            String monthDay = formatNumber(startDate.plusDays(i).getDayOfMonth());
+            String month = formatNumber(startDate.plusDays(i).getMonthValue());
 
             HeaderLabel header = new HeaderLabel(StringUtil.capitaliseFirst(weekDay), monthDay, month);
             timetableGrid.add(header, i, 0);
