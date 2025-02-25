@@ -20,6 +20,7 @@ import view.controllers.components.EventPopupController;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
 
 public class TimetableController implements ControllerAware {
@@ -48,6 +49,8 @@ public class TimetableController implements ControllerAware {
         Platform.runLater(() -> {
             datePicker.setValue(LocalDate.now());
             handleDatePick();
+
+            updateTimetableHeaders();
         });
     }
 
@@ -93,6 +96,8 @@ public class TimetableController implements ControllerAware {
         // Date formatting needs to be updated
         dateLabel.setText(startDate + " - " + endDate);
         weekLabel.setText("Week " + currentWeek);
+
+        updateTimetableHeaders();
     }
 
     private void handleNewEvent() {
@@ -120,6 +125,22 @@ public class TimetableController implements ControllerAware {
             popupStage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void updateTimetableHeaders() {
+        timetableGrid.getChildren().removeIf(node -> GridPane.getColumnIndex(node) != null &&
+                GridPane.getRowIndex(node) == 0);
+        int daysBetween = (int) ChronoUnit.DAYS.between(startDate, endDate) + 1;
+
+        for (int i = 0; i < daysBetween; i++) {
+
+            String weekDay = startDate.plusDays(i).getDayOfWeek().toString().substring(0, 3);
+            String monthDay = String.format("%02d" ,startDate.plusDays(i).getDayOfMonth());
+            String month = String.format("%02d" , startDate.plusDays(i).getMonthValue());
+
+            Label header = new Label(weekDay + ". " + monthDay + "/" + month);
+            timetableGrid.add(header, i, 0);
         }
     }
 
