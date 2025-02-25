@@ -14,6 +14,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import util.StringUtil;
 import view.controllers.ControllerAware;
 import view.controllers.components.EventPopupController;
 import view.controllers.components.HeaderLabel;
@@ -140,7 +141,7 @@ public class TimetableController implements ControllerAware {
             int monthDay = startDate.plusDays(i).getDayOfMonth();
             int month = startDate.plusDays(i).getMonthValue();
 
-            HeaderLabel header = new HeaderLabel(weekDay, monthDay, month);
+            HeaderLabel header = new HeaderLabel(StringUtil.capitaliseFirst(weekDay), monthDay, month);
             timetableGrid.add(header, i, 0);
 
             GridPane.setHalignment(header, javafx.geometry.HPos.CENTER);
