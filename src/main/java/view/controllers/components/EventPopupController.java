@@ -60,6 +60,8 @@ public class EventPopupController {
     private DatePicker endDatePicker;
     @FXML
     private TextArea descriptionTextArea;
+    @FXML
+    private Button deleteButton;
 
     public void setUp(Event event) {
         this.event = event;
@@ -74,8 +76,9 @@ public class EventPopupController {
         scheduleComboBox.getItems().addAll("Myself", "Group");
         assignmentComboBox.getItems().addAll("Individual", "Group");
 
-        // Placeholders
-        // TODO: Add subjects and locations from database
+        // TODO: Call controller to get existing subjects, locations, and groups
+
+        // TODO: Remove these lines of dummy data
         subjectComboBox.getItems().addAll("Math", "Science", "English", "History", "Geography");
         locationComboBox.getItems().addAll("Room 1", "Room 2", "Room 3", "Room 4", "Room 5");
         groupComboBox.getItems().addAll("Group 1", "Group 2", "Group 3", "Group 4", "Group 5");
@@ -87,6 +90,8 @@ public class EventPopupController {
             if (event == null) {
                 eventComboBox.setValue("Class");
                 scheduleComboBox.setValue("Myself");
+                deleteButton.setVisible(false);
+                deleteButton.setManaged(false);
                 return;
             }
 
@@ -257,10 +262,23 @@ public class EventPopupController {
         }
 
         if (scheduleFor.equals("Myself")) {
-            // Save teaching session for myself
+            // TODO: Call controller to save teaching session for myself
         } else {
             String group = (String) groupComboBox.getValue();
-            // Save teaching session for group
+            // TODO: Call controller to save teaching session for group
+        }
+    }
+
+    @FXML
+    private void handleDeleteEvent() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Event");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you want to delete this event?");
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.OK) {
+            // TODO: Call controller to delete event
         }
     }
 
