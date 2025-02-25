@@ -16,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import view.controllers.ControllerAware;
 import view.controllers.components.EventPopupController;
+import view.controllers.components.HeaderLabel;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -136,11 +137,14 @@ public class TimetableController implements ControllerAware {
         for (int i = 0; i < daysBetween; i++) {
 
             String weekDay = startDate.plusDays(i).getDayOfWeek().toString().substring(0, 3);
-            String monthDay = String.format("%02d" ,startDate.plusDays(i).getDayOfMonth());
-            String month = String.format("%02d" , startDate.plusDays(i).getMonthValue());
+            int monthDay = startDate.plusDays(i).getDayOfMonth();
+            int month = startDate.plusDays(i).getMonthValue();
 
-            Label header = new Label(weekDay + ". " + monthDay + "/" + month);
+            HeaderLabel header = new HeaderLabel(weekDay, monthDay, month);
             timetableGrid.add(header, i, 0);
+
+            GridPane.setHalignment(header, javafx.geometry.HPos.CENTER);
+            GridPane.setValignment(header, javafx.geometry.VPos.CENTER);
         }
     }
 
