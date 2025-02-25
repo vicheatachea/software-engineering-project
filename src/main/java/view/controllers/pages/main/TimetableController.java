@@ -24,6 +24,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
+import java.util.Objects;
 
 public class TimetableController implements ControllerAware {
     private static final int NUMBER_OF_BUTTONS = 2;
@@ -96,7 +97,23 @@ public class TimetableController implements ControllerAware {
         currentWeek = newDate.get(WeekFields.ISO.weekOfWeekBasedYear());
 
         // Date formatting needs to be updated
-        dateLabel.setText(startDate + " - " + endDate);
+        String startDay = formatNumber(startDate.getDayOfMonth());
+        String endDay = formatNumber(endDate.getDayOfMonth());
+        String fullStartMonth = startDate.getMonth().toString();
+        String startMonth = StringUtil.capitaliseFirst(startDate.getMonth().toString().substring(0, 3));
+        String fullEndMonth = endDate.getMonth().toString();
+        String endMonth = StringUtil.capitaliseFirst(endDate.getMonth().toString().substring(0, 3));
+        int startYear = startDate.getYear();
+        int endYear = endDate.getYear();
+
+        if (startYear != endYear) {
+            dateLabel.setText(startDay + " " + startMonth + ". " + startYear + " - " + endDay + " " + endMonth + ". " + endYear);
+        } else if (!Objects.equals(fullStartMonth, fullEndMonth)) {
+            dateLabel.setText(startDay + " " + startMonth + ". - " + endDay + " " + endMonth + ". " + startYear);
+        } else {
+            dateLabel.setText(startDay + " - " + endDay + " " + startMonth + ". " + startYear);
+        }
+
         weekLabel.setText("Week " + currentWeek);
 
         updateTimetableHeaders();
@@ -147,6 +164,10 @@ public class TimetableController implements ControllerAware {
             GridPane.setHalignment(header, javafx.geometry.HPos.CENTER);
             GridPane.setValignment(header, javafx.geometry.VPos.CENTER);
         }
+    }
+
+    private String formatNumber(int number) {
+        return String.format("%02d", number);
     }
 
     // Not to be implemented yet
