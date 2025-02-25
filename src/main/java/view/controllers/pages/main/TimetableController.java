@@ -45,7 +45,10 @@ public class TimetableController implements ControllerAware {
     @FXML
     private void initialize() {
         addButtons();
-        Platform.runLater(() -> datePicker.setValue(LocalDate.now()));
+        Platform.runLater(() -> {
+            datePicker.setValue(LocalDate.now());
+            handleDatePick();
+        });
     }
 
     @Override
