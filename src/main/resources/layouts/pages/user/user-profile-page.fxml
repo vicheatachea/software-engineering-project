@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="userProfileVBox" alignment="CENTER" prefHeight="540.0" prefWidth="520.0" spacing="15" styleClass="user-profile-vbox" stylesheets="@user-profile.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.UserProfileController">
+
+    <ImageView fx:id="profileImageView" fitHeight="170.0" fitWidth="168.0" styleClass="profile-image" />
+
+    <Label fx:id="nameLabel" styleClass="name-label" text="Name" />
+    <Label fx:id="roleLabel" styleClass="role-label" text="Role" />
+    <Label fx:id="socialNumberLabel" styleClass="social-number-label" text="Social Number" />
+
+    <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="logout-button" text="Logout" />
+</VBox>

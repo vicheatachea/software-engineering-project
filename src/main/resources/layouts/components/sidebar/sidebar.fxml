@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="sidebar" alignment="TOP_CENTER" stylesheets="@sidebar.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.components.SidebarController">
+   <padding>
+      <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+   </padding>
+   <children>
+      <Label alignment="TOP_LEFT" contentDisplay="TOP" stylesheets="@sidebar.css" text="STMS">
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin>
+         <font>
+            <Font name="Rockwell" size="64.0" />
+         </font>
+         <effect>
+            <DropShadow height="2.0" offsetX="1.5" offsetY="1.5" radius="0.5" spread="1.0" width="2.0">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect></Label>
+      <Label text="User Stuff">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+   </children>
+</VBox>
