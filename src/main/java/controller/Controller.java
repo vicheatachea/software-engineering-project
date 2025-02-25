@@ -16,6 +16,15 @@ import java.util.List;
 */
 public class Controller {
     private final Model model;
+    private boolean userLoggedIn = false;
+
+    public boolean isUserLoggedIn() {
+        return userLoggedIn;
+    }
+
+    public void setUserLoggedIn(boolean status) {
+        userLoggedIn = status;
+    }
 
     public Controller() {
         this.model = new Model();

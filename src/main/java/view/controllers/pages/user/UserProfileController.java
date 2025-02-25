@@ -1,38 +1,44 @@
 package view.controllers.pages.user;
 
+import controller.Controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import util.SceneSwitcher;
 
 public class UserProfileController {
+    private Controller controller;
 
     @FXML private ImageView profileImageView;
     @FXML private Label nameLabel;
     @FXML private Label roleLabel;
     @FXML private Label socialNumberLabel;
 
-//    private User user;
+    public void setController(Controller controller) {
+        this.controller = controller;
+        loadUserData();
+    }
 
-    public void initialize() {
-        // Load user data (this is just an example, you should load the actual user data)
-//        user = new User();
-//        user.setFirstName("Jane");
-//        user.setLastName("Doe");
-//        user.setRole("Student");
-//        user.setSocialNumber("123-45-6789");
+    private void loadUserData() {
+        // Mock user data for demonstration purposes
+        String firstName = "Jane";
+        String lastName = "Doe";
+        String role = "Student";
+        String socialNumber = "123-45-6789";
+        String profileImagePath = "path/to/profile/image.png"; // Replace with actual path
 
         // Set user data to UI elements
-//        profileImageView.setImage(new Image("path/to/profile/image.png"));
-//        nameLabel.setText(user.getFirstName() + " " + user.getLastName());
-//        roleLabel.setText(user.getRole());
-//        socialNumberLabel.setText(user.getSocialNumber());
+        profileImageView.setImage(new Image(profileImagePath));
+        nameLabel.setText(firstName + " " + lastName);
+        roleLabel.setText(role);
+        socialNumberLabel.setText(socialNumber);
     }
 
     @FXML
     private void handleLogout() {
-        // Perform logout actions, such as clearing session data
-        SceneSwitcher.switchScene((Stage) nameLabel.getScene().getWindow(), "/views/login.fxml");
+        controller.setUserLoggedIn(false);
+        Stage stage = (Stage) nameLabel.getScene().getWindow();
+        stage.close();
     }
 }
