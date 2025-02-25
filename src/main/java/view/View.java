@@ -4,7 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import view.controllers.pages.MainPageController;
+import view.controllers.pages.main.MainPageController;
 
 import java.io.IOException;
 

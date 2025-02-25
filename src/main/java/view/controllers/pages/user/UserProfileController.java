@@ -1,8 +1,7 @@
-package view.controllers.pages;
+package view.controllers.pages.user;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import util.SceneSwitcher;
