@@ -11,22 +11,11 @@ public class UserGroupDAO {
 	public void persist(UserGroupEntity userGroup) {
 		EntityManager em = MariaDBConnection.getEntityManager();
 		em.getTransaction().begin();
-		em.persist(userGroup);
-		em.getTransaction().commit();
-		em.close();
-	}
-
-	public void update(UserGroupEntity userGroup) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
-		em.getTransaction().begin();
 		try {
-			UserGroupEntity existingUserGroup = em.find(UserGroupEntity.class, userGroup.getId());
-			if (existingUserGroup != null) {
-				existingUserGroup.getStudents().forEach(student -> student.getGroups().remove(existingUserGroup));
-				userGroup.getStudents().forEach(student -> student.getGroups().add(userGroup));
-				em.merge(userGroup);
+			if (userGroup.getId() == null || findById(userGroup.getId()) == null) {
+				em.persist(userGroup);
 			} else {
-				throw new IllegalArgumentException("UserGroupEntity with id " + userGroup.getId() + " does not exist.");
+				em.merge(userGroup);
 			}
 			em.getTransaction().commit();
 		} catch (Exception e) {
