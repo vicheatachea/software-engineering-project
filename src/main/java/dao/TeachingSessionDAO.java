@@ -10,13 +10,10 @@ public class TeachingSessionDAO {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		em.getTransaction().begin();
 		try {
-			TeachingSessionEntity existingTeachingSession = findById(teachingSession.getId());
-			if (existingTeachingSession == null) {
+			if (teachingSession.getId() == null || findById(teachingSession.getId()) == null) {
 				em.persist(teachingSession);
 			} else {
-				existingTeachingSession.setSubject(teachingSession.getSubject());
-				existingTeachingSession.setLocation(teachingSession.getLocation());
-				em.merge(existingTeachingSession);
+				em.merge(teachingSession);
 			}
 			em.getTransaction().commit();
 		} catch (Exception e) {
@@ -28,7 +25,7 @@ public class TeachingSessionDAO {
 			}
 		}
 	}
-
+	
 	public TeachingSessionEntity findById(Long id) {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		try {
