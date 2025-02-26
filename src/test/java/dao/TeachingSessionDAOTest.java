@@ -79,6 +79,41 @@ class TeachingSessionDAOTest {
 	}
 
 	@Test
+	void persistUpdate() {
+		TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
+		LocationDAO locationDAO = new LocationDAO();
+		SubjectDAO subjectDAO = new SubjectDAO();
+		TimetableDAO timetableDAO = new TimetableDAO();
+
+		LocationEntity location = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
+		locationDAO.persist(location);
+
+		SubjectEntity subject = new SubjectEntity("Math", "Mathematics-101");
+		subjectDAO.persist(subject);
+
+		TimetableEntity timetable = new TimetableEntity();
+		timetableDAO.persist(timetable);
+
+		Timestamp start = Timestamp.valueOf("2025-02-11 12:00:00");
+		Timestamp end = Timestamp.valueOf("2025-02-11 15:00:00");
+
+		TeachingSessionEntity teachingSession = new TeachingSessionEntity(start, end, location, timetable, subject);
+		teachingSessionDAO.persist(teachingSession);
+
+		// Update the teaching session
+		Timestamp newStart = Timestamp.valueOf("2025-02-11 13:00:00");
+		Timestamp newEnd = Timestamp.valueOf("2025-02-11 16:00:00");
+		teachingSession.setStartDate(newStart);
+		teachingSession.setEndDate(newEnd);
+		teachingSessionDAO.persist(teachingSession);
+
+		TeachingSessionEntity updatedSession = teachingSessionDAO.findById(teachingSession.getId());
+		assertEquals(newStart, updatedSession.getStartDate());
+		assertEquals(newEnd, updatedSession.getEndDate());
+		assertEquals(1, teachingSessionDAO.findAll().size());
+	}
+
+	@Test
 	void findById() {
 		TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
 		LocationDAO locationDAO = new LocationDAO();
