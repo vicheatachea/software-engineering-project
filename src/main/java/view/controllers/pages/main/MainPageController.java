@@ -1,6 +1,6 @@
 package view.controllers.pages.main;
 
-import controller.Controller;
+import controller.BaseController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 */
 public class MainPageController implements Initializable {
     Stage stage;
-    Controller controller;
+    BaseController baseController;
     @FXML
     private SidebarController sidebarController;
     @FXML
@@ -31,7 +31,7 @@ public class MainPageController implements Initializable {
     private StackPane mainContent;
 
     public MainPageController() {
-        this.controller = new Controller();
+        this.baseController = new BaseController();
     }
 
     public void setStage(Stage stage) {
@@ -71,7 +71,7 @@ public class MainPageController implements Initializable {
             Object subController = FXMLLoader.getController();
 
             if (subController instanceof ControllerAware) {
-                ((ControllerAware) subController).setController(controller);
+                ((ControllerAware) subController).setBaseController(baseController);
             }
 
             mainContent.getChildren().setAll(content);

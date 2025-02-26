@@ -1,6 +1,6 @@
 package view.controllers.pages.main;
 
-import controller.Controller;
+import controller.BaseController;
 import dto.Event;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -28,7 +28,7 @@ import java.util.Objects;
 
 public class TimetableController implements ControllerAware {
     private static final int NUMBER_OF_BUTTONS = 2;
-    Controller controller;
+    BaseController baseController;
 
     LocalDate currentDate;
     LocalDate startDate;
@@ -58,8 +58,8 @@ public class TimetableController implements ControllerAware {
     }
 
     @Override
-    public void setController(Controller controller) {
-        this.controller = controller;
+    public void setBaseController(BaseController baseController) {
+        this.baseController = baseController;
     }
 
     private void addButtons() {
@@ -96,7 +96,6 @@ public class TimetableController implements ControllerAware {
         endDate = newDate.with(DayOfWeek.SUNDAY);
         currentWeek = newDate.get(WeekFields.ISO.weekOfWeekBasedYear());
 
-        // Date formatting needs to be updated
         String startDay = formatNumber(startDate.getDayOfMonth());
         String endDay = formatNumber(endDate.getDayOfMonth());
         String fullStartMonth = startDate.getMonth().toString();

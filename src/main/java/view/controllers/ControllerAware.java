@@ -1,7 +1,7 @@
 package view.controllers;
 
-import controller.Controller;
+import controller.BaseController;
 
 public interface ControllerAware {
-    void setController(Controller controller);
+    void setBaseController(BaseController baseController);
 }
