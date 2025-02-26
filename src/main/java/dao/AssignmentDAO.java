@@ -11,7 +11,11 @@ public class AssignmentDAO {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		em.getTransaction().begin();
 		try {
-			em.persist(assignment);
+			if (assignment.getId() == null || findById(assignment.getId()) == null) {
+				em.persist(assignment);
+			} else {
+				em.merge(assignment);
+			}
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
@@ -67,6 +71,7 @@ public class AssignmentDAO {
 			}
 		}
 	}
+
 	public void delete(AssignmentEntity assignment) {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		em.getTransaction().begin();
