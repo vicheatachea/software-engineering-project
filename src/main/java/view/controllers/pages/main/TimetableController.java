@@ -132,7 +132,7 @@ public class TimetableController implements ControllerAware {
             Parent content = loader.load();
 
             EventPopupController popupController = loader.getController();
-            popupController.setUp(event);
+            popupController.setUp(event, baseController);
 
             Stage popupStage = new Stage();
             popupStage.setScene(new Scene(content));

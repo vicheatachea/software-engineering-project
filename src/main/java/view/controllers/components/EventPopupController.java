@@ -1,11 +1,14 @@
 package view.controllers.components;
 
-import dto.AssignmentDTO;
-import dto.Event;
-import dto.TeachingSessionDTO;
+import controller.BaseController;
+import controller.GroupController;
+import controller.LocationController;
+import controller.SubjectController;
+import dto.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -17,6 +20,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class EventPopupController {
+    private GroupController groupController;
+    private LocationController locationController;
+    private SubjectController subjectController;
+
     private Event event;
     private final RowConstraints hiddenRow = new RowConstraints(0);
     private final TimeTextField startTimeField = new TimeTextField();
@@ -63,8 +70,11 @@ public class EventPopupController {
     @FXML
     private Button deleteButton;
 
-    public void setUp(Event event) {
+    public void setUp(Event event, BaseController baseController) {
         this.event = event;
+        this.groupController = baseController.getGroupController();
+        this.locationController = baseController.getLocationController();
+        this.subjectController = baseController.getSubjectController();
     }
 
     @FXML
@@ -76,17 +86,32 @@ public class EventPopupController {
         scheduleComboBox.getItems().addAll("Myself", "Group");
         assignmentComboBox.getItems().addAll("Individual", "Group");
 
-        // TODO: Call controller to get existing subjects, locations, and groups
-
-        // TODO: Remove these lines of dummy data
-        subjectComboBox.getItems().addAll("Math", "Science", "English", "History", "Geography");
-        locationComboBox.getItems().addAll("Room 1", "Room 2", "Room 3", "Room 4", "Room 5");
-        groupComboBox.getItems().addAll("Group 1", "Group 2", "Group 3", "Group 4", "Group 5");
+        // TODO: Remove these lines of dummy data, used for testing
+//        subjectComboBox.getItems().addAll("Math", "Science", "English", "History", "Geography");
+//        locationComboBox.getItems().addAll("Room 1", "Room 2", "Room 3", "Room 4", "Room 5");
+//        groupComboBox.getItems().addAll("Group 1", "Group 2", "Group 3", "Group 4", "Group 5");
 
         eventComboBox.addEventHandler(ActionEvent.ACTION, event -> handleEventChange());
         scheduleComboBox.addEventHandler(ActionEvent.ACTION, event -> handleScheduleChange());
 
         Platform.runLater(() -> {
+            // Fetch data from the database
+            subjectComboBox.getItems().addAll(
+                    subjectController.fetchSubjectsByUser().stream()
+                            .map(SubjectDTO::name)
+                            .toList()
+            );
+            locationComboBox.getItems().addAll(
+                    locationController.fetchAllLocations().stream()
+                            .map(LocationDTO::name)
+                            .toList()
+            );
+            groupComboBox.getItems().addAll(
+                    groupController.fetchGroupsByUser().stream()
+                            .map(GroupDTO::name)
+                            .toList()
+            );
+
             if (event == null) {
                 eventComboBox.setValue("Class");
                 scheduleComboBox.setValue("Myself");
