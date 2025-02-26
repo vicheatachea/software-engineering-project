@@ -65,6 +65,34 @@ class AssignmentDAOTest {
 	}
 
 	@Test
+	void persistUpdate() {
+		SubjectDAO subjectDAO = new SubjectDAO();
+		TimetableDAO timeTableDAO = new TimetableDAO();
+		AssignmentDAO assignmentDAO = new AssignmentDAO();
+
+		SubjectEntity math = new SubjectEntity("Math", "Mathematics-101");
+		subjectDAO.persist(math);
+
+		TimetableEntity timetable = new TimetableEntity();
+		timeTableDAO.persist(timetable);
+
+		Timestamp publishingDate = Timestamp.valueOf("2025-02-11 00:00:00");
+		Timestamp deadline = Timestamp.valueOf("2025-02-25 00:00:00");
+		AssignmentEntity assignment = new AssignmentEntity("Individual", publishingDate, deadline, math, timetable);
+		assignmentDAO.persist(assignment);
+		
+		Timestamp newDeadline = Timestamp.valueOf("2025-03-01 00:00:00");
+		assignment.setDeadline(newDeadline);
+		assignment.setType("Group");
+		assignmentDAO.persist(assignment);
+
+		AssignmentEntity updatedAssignment = assignmentDAO.findById(assignment.getId());
+		assertEquals("Group", updatedAssignment.getType());
+		assertEquals(newDeadline, updatedAssignment.getDeadline());
+		assertEquals(1, assignmentDAO.findAll().size());
+	}
+
+	@Test
 	void findById() {
 		SubjectDAO subjectDAO = new SubjectDAO();
 		TimetableDAO timeTableDAO = new TimetableDAO();
