@@ -14,17 +14,28 @@ public class UserDAO {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		em.getTransaction().begin();
 		try {
-			UserEntity existingUser = findByUsername(user.getUsername());
-			if (existingUser == null) {
+			if (user.getId() == null || findById(user.getId()) == null) {
 				em.persist(user);
 			} else {
-				existingUser.setPassword(user.getPassword());
-				em.merge(existingUser);
+				em.merge(user);
 			}
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
 			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+	
+	private UserEntity findById(Long id) {
+		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		try {
+			return em.find(UserEntity.class, id);
+		} catch (Exception e) {
+			return null;
 		} finally {
 			if (em.isOpen()) {
 				em.close();
