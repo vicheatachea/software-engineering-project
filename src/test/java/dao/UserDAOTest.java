@@ -64,6 +64,43 @@ class UserDAOTest {
 		assertEquals(user.getRole(), foundUser.getRole());
 		assertEquals(user.getTimetable(), foundUser.getTimetable());
 	}
+	
+	@Test
+	void persistUpdate() {
+		UserDAO userDao = new UserDAO();
+		TimetableDAO timetableDAO = new TimetableDAO();
+
+		Timestamp DoB = Timestamp.valueOf("2000-01-01 00:00:00");
+
+		TimetableEntity timetable = new TimetableEntity();
+
+		timetableDAO.persist(timetable);
+
+		UserEntity user =
+				new UserEntity("John", "Doe", "JohnDoe", "password", DoB, "123456789AB", Role.STUDENT, timetable);
+
+		userDao.persist(user);
+
+		user.setFirstName("Jane");
+		user.setLastName("Smith");
+		user.setUsername("JaneSmith");
+		user.setPassword("newpassword");
+		user.setDateOfBirth(Timestamp.valueOf("2001-01-01 00:00:00"));
+		user.setSocialNumber("987654321AB");
+		user.setRole(Role.TEACHER);
+		
+		userDao.persist(user);
+
+		UserEntity foundUser = userDao.findByUsername("JaneSmith");
+
+		assertEquals(user.getFirstName(), foundUser.getFirstName());
+		assertEquals(user.getLastName(), foundUser.getLastName());
+		assertEquals(user.getUsername(), foundUser.getUsername());
+		assertEquals(user.getPassword(), foundUser.getPassword());
+		assertEquals(user.getDateOfBirth(), foundUser.getDateOfBirth());
+		assertEquals(user.getRole(), foundUser.getRole());
+		assertEquals(user.getTimetable(), foundUser.getTimetable());
+	}
 
 	@Test
 	void findByUsername() {
