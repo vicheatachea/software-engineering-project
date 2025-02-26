@@ -231,7 +231,7 @@ class UserGroupDAOTest {
 				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "123456789AB", Role.TEACHER, timetable7);
 
 		UserEntity teacher2 =
-				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "123456789AB", Role.TEACHER, timetable8);
+				new UserEntity("Jeff", "Doe", "JeffDoe", "password", DoB, "987654321BA", Role.TEACHER, timetable8);
 
 		userDAO.persist(teacher);
 		userDAO.persist(teacher2);
@@ -373,7 +373,7 @@ class UserGroupDAOTest {
 				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "123456789AB", Role.TEACHER, timetable7);
 
 		UserEntity teacher2 =
-				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "123456789AB", Role.TEACHER, timetable8);
+				new UserEntity("Jeff", "Doe", "JeffDoe", "password", DoB, "987654321BA", Role.TEACHER, timetable8);
 
 		userDAO.persist(teacher);
 		userDAO.persist(teacher2);
