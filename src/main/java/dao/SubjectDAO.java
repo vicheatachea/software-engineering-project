@@ -11,7 +11,11 @@ public class SubjectDAO {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		em.getTransaction().begin();
 		try {
-			em.persist(subject);
+			if (subject.getId() == null || findById(subject.getId()) == null) {
+				em.persist(subject);
+			} else {
+				em.merge(subject);
+			}
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
