@@ -43,6 +43,23 @@ class SubjectDAOTest {
 		assertEquals("Math", foundSubject.getName());
 		assertEquals("Mathematics-101", foundSubject.getCode());
 	}
+	
+	@Test
+	void persistUpdate() {
+		SubjectDAO subjectDAO = new SubjectDAO();
+		SubjectEntity subject = new SubjectEntity("Math", "Mathematics-101");
+
+		subjectDAO.persist(subject);
+
+		subject.setName("Advanced Math");
+		subject.setCode("Mathematics-201");
+		subjectDAO.persist(subject);
+
+		SubjectEntity foundSubject = subjectDAO.findById(subject.getId());
+
+		assertEquals("Advanced Math", foundSubject.getName());
+		assertEquals("Mathematics-201", foundSubject.getCode());
+	}
 
 	@Test
 	void findById() {
