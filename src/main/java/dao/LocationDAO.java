@@ -11,7 +11,11 @@ public class LocationDAO {
 		EntityManager em = datasource.MariaDBConnection.getEntityManager();
 		em.getTransaction().begin();
 		try {
-			em.persist(location);
+			if (location.getId() == null || findById(location.getId()) == null) {
+				em.persist(location);
+			} else {
+				em.merge(location);
+			}
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
