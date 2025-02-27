@@ -168,8 +168,8 @@ public class EventPopupController {
             case "Class":
                 startLabel.setText("Start Time");
                 endLabel.setText("End Time");
-                endDatePicker.setVisible(false);
-                endDatePicker.setManaged(false);
+                endDatePicker.setValue(null);
+                endDatePicker.setDisable(true);
 
                 popupGridPane.getRowConstraints().set(6, hiddenRow);
                 nameLabel.setVisible(false);
@@ -186,8 +186,7 @@ public class EventPopupController {
             case "Assignment":
                 startLabel.setText("Publishing Date");
                 endLabel.setText("Due Date");
-                endDatePicker.setVisible(true);
-                endDatePicker.setManaged(true);
+                endDatePicker.setDisable(false);
 
                 popupGridPane.getRowConstraints().set(6, new RowConstraints());
                 nameLabel.setVisible(true);
