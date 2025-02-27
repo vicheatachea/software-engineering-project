@@ -26,7 +26,7 @@ public class UserProfileController {
         String lastName = "Doe";
         String role = "Student";
         String socialNumber = "123-45-6789";
-        String profileImagePath = "path/to/profile/image.png"; // Replace with actual path
+        String profileImagePath = "/Users/vicheatachea/Documents/SEP/software-engineering-project/src/main/resources/dwayne-rock-johnson.jpg"; // Replace with actual path
 
         // Set user data to UI elements
         profileImageView.setImage(new Image(profileImagePath));
