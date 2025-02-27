@@ -1,14 +1,10 @@
 package view.controllers.components;
 
-import controller.BaseController;
-import controller.GroupController;
-import controller.LocationController;
-import controller.SubjectController;
+import controller.*;
 import dto.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -20,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class EventPopupController {
+    private EventController eventController;
     private GroupController groupController;
     private LocationController locationController;
     private SubjectController subjectController;
@@ -72,6 +69,7 @@ public class EventPopupController {
 
     public void setUp(Event event, BaseController baseController) {
         this.event = event;
+        this.eventController = baseController.getEventController();
         this.groupController = baseController.getGroupController();
         this.locationController = baseController.getLocationController();
         this.subjectController = baseController.getSubjectController();
@@ -251,7 +249,7 @@ public class EventPopupController {
             }
         }
 
-        Event newEvent;
+        Event newEvent = null;
 
         LocalDate startDate = startDatePicker.getValue();
         String startTime = startTimeField.getText();
@@ -285,11 +283,29 @@ public class EventPopupController {
                 break;
         }
 
+        if (newEvent == null) {
+            displayErrorAlert("Event type not recognised");
+            return;
+        }
+
         if (scheduleFor.equals("Myself")) {
-            // TODO: Call controller to save teaching session for myself
+            if (event == null) {
+                eventController.addEventForUser(newEvent);
+            } else {
+                eventController.updateEventForUser(event, newEvent);
+            }
         } else {
-            String group = (String) groupComboBox.getValue();
-            // TODO: Call controller to save teaching session for group
+            String groupName = (String) groupComboBox.getValue();
+
+            if (checkNullOrEmpty(groupName, "Please select a group")) {
+                return;
+            }
+
+            if (event == null) {
+                eventController.addEventForGroup(newEvent, groupName);
+            } else {
+                eventController.updateEventForGroup(event, newEvent, groupName);
+            }
         }
     }
 
