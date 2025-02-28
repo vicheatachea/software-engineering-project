@@ -34,20 +34,8 @@ public class MainPageController implements Initializable {
     @FXML
     private StackPane mainContent;
 
-    private UserDTO userDTO;
-
     public MainPageController() {
         this.baseController = new BaseController();
-        this.userDTO = new UserDTO(
-                "username",
-                "password",
-                "salt",
-                "firstName",
-                "lastName",
-                LocalDate.of(1990, 1, 1),
-                "123-45-6789",
-                "STUDENT"
-        );
     }
 
     public void setStage(Stage stage) {

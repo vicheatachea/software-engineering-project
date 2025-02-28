@@ -1,7 +1,6 @@
 package view.controllers.pages.user;
 
 import controller.UserController;
-import dto.UserDTO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.scene.control.Alert;
+
 
 import java.io.IOException;
 
@@ -34,6 +35,12 @@ public class LoginController {
         String username = emailField.getText();
         String password = passwordField.getText();
 
+
+        if (username.isEmpty() || password.isEmpty()) {
+            showAlert("Error", "Please fill in all fields.");
+            return;
+        }
+
         if (userController.authenticateUser(username, password)) {
             userController.setUserLoggedIn(true);
             stage.close(); // Close the login popup
@@ -58,5 +65,13 @@ public class LoginController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

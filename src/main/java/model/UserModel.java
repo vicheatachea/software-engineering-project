@@ -1,6 +1,9 @@
 package model;
 
+import dao.UserDAO;
 import dto.UserDTO;
+import entity.UserEntity;
+
 import java.time.LocalDate;
 
 public class UserModel {
@@ -24,6 +27,57 @@ public class UserModel {
         this.role = userDTO.role();
     }
 
+    public boolean authenticate(String username, String password) {
+        UserDAO userDAO = new UserDAO();
+        return userDAO.authenticate(username, password);
+    }
+
+    public boolean register(UserDTO userDTO) {
+        if (!isValid(userDTO)) {
+            return false;
+        }
+
+        UserDAO userDAO = new UserDAO();
+        userDAO.persist(new UserEntity(userDTO));
+        return true;
+    }
+
+    public boolean isValid(UserDTO userDTO) {
+        return isUsernameValid(userDTO.username()) && isPasswordValid(userDTO.password()) &&
+                isFirstNameValid(userDTO.firstName()) && isLastNameValid(userDTO.lastName()) &&
+                isDateOfBirthValid(userDTO.dateOfBirth()) && isSocialNumberValid(userDTO.socialNumber()) &&
+                isRoleValid(userDTO.role());
+    }
+
+    private boolean isUsernameValid(String username) {
+        return username != null && !username.trim().isEmpty();
+    }
+
+    private boolean isPasswordValid(String password) {
+        return password != null && password.length() >= 8;
+    }
+
+    private boolean isFirstNameValid(String firstName) {
+        return firstName != null && !firstName.trim().isEmpty();
+    }
+
+    private boolean isLastNameValid(String lastName) {
+        return lastName != null && !lastName.trim().isEmpty();
+    }
+
+    private boolean isDateOfBirthValid(LocalDate dateOfBirth) {
+        return dateOfBirth != null && dateOfBirth.isBefore(LocalDate.now());
+    }
+
+    private boolean isSocialNumberValid(String socialNumber) {
+        return socialNumber != null && socialNumber.matches("\\d{3}-\\d{2}-\\d{4}");
+    }
+
+    private boolean isRoleValid(String role) {
+        return role != null && (role.equals("STUDENT") || role.equals("TEACHER"));
+    }
+
+    // Getters for the fields
     public String getUsername() {
         return username;
     }
@@ -54,38 +108,5 @@ public class UserModel {
 
     public String getRole() {
         return role;
-    }
-
-    public boolean isValid() {
-        return isUsernameValid() && isPasswordValid() && isFirstNameValid() && isLastNameValid() &&
-                isDateOfBirthValid() && isSocialNumberValid() && isRoleValid();
-    }
-
-    private boolean isUsernameValid() {
-        return username != null && !username.trim().isEmpty();
-    }
-
-    private boolean isPasswordValid() {
-        return password != null && password.length() >= 8;
-    }
-
-    private boolean isFirstNameValid() {
-        return firstName != null && !firstName.trim().isEmpty();
-    }
-
-    private boolean isLastNameValid() {
-        return lastName != null && !lastName.trim().isEmpty();
-    }
-
-    private boolean isDateOfBirthValid() {
-        return dateOfBirth != null && dateOfBirth.isBefore(LocalDate.now());
-    }
-
-    private boolean isSocialNumberValid() {
-        return socialNumber != null && socialNumber.matches("\\d{3}-\\d{2}-\\d{4}");
-    }
-
-    private boolean isRoleValid() {
-        return role != null && (role.equals("STUDENT") || role.equals("TEACHER"));
     }
 }

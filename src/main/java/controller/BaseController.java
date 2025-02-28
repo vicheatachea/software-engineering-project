@@ -1,7 +1,5 @@
 package controller;
 
-import dto.UserDTO;
-
 import java.time.LocalDate;
 
 /*
@@ -15,16 +13,7 @@ public class BaseController {
     private final GroupController groupController = new GroupController();
     private final LocationController locationController = new LocationController();
     private final SubjectController subjectController = new SubjectController();
-    private final UserController userController = new UserController(new UserDTO(
-            "username",
-            "password",
-            "salt",
-            "firstName",
-            "lastName",
-            LocalDate.of(1990, 1, 1),
-            "123-45-6789",
-            "STUDENT"
-    ));
+    private final UserController userController;
 
     public EventController getEventController() {
         return eventController;
@@ -41,6 +30,8 @@ public class BaseController {
     public SubjectController getSubjectController() {
         return subjectController;
     }
+
+    public BaseController() {this.userController = new UserController();}
 
     public UserController getUserController() {
         return userController;
