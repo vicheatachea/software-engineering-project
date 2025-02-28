@@ -6,7 +6,6 @@ import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
@@ -34,8 +33,7 @@ public class SidebarController {
 
     private void addButton(String name, String view) {
         try {
-            Parent buttonNode = FXMLLoader.load(getClass().getResource("/layouts/components/sidebar/sidebar-button.fxml"));
-            Button button = (Button) buttonNode;
+            Button button = FXMLLoader.load(getClass().getResource("/layouts/components/sidebar/sidebar-button.fxml"));;
 
             button.setText(name);
             button.setOnAction(event -> currentView.set(view));

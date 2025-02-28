@@ -1,6 +1,6 @@
-package view.controllers.pages;
+package view.controllers.pages.main;
 
-import controller.Controller;
+import controller.BaseController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -9,6 +9,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import view.controllers.ControllerAware;
 import view.controllers.components.SidebarController;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ import java.util.ResourceBundle;
 */
 public class MainPageController implements Initializable {
     Stage stage;
-    Controller controller;
+    BaseController baseController;
     @FXML
     private SidebarController sidebarController;
     @FXML
@@ -30,7 +31,7 @@ public class MainPageController implements Initializable {
     private StackPane mainContent;
 
     public MainPageController() {
-        this.controller = new Controller();
+        this.baseController = new BaseController();
     }
 
     public void setStage(Stage stage) {
@@ -65,7 +66,14 @@ public class MainPageController implements Initializable {
 
     private void loadContent(String fxmlFilePath) {
         try {
-            Node content = FXMLLoader.load(getClass().getResource(fxmlFilePath));
+            FXMLLoader FXMLLoader = new FXMLLoader(getClass().getResource(fxmlFilePath));
+            Node content = FXMLLoader.load();
+            Object subController = FXMLLoader.getController();
+
+            if (subController instanceof ControllerAware) {
+                ((ControllerAware) subController).setBaseController(baseController);
+            }
+
             mainContent.getChildren().setAll(content);
         } catch (NullPointerException e) {
             System.out.println("MainPageController loadContent() could not load " + fxmlFilePath);
