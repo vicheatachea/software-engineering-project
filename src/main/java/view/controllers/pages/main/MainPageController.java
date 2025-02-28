@@ -1,6 +1,8 @@
 package view.controllers.pages.main;
 
 import controller.BaseController;
+import controller.UserController;
+import dto.UserDTO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,10 +16,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import view.controllers.ControllerAware;
 import view.controllers.components.SidebarController;
-import view.controllers.pages.user.LoginController;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class MainPageController implements Initializable {
@@ -30,8 +32,20 @@ public class MainPageController implements Initializable {
     @FXML
     private StackPane mainContent;
 
+    private UserDTO userDTO;
+
     public MainPageController() {
         this.baseController = new BaseController();
+        this.userDTO = new UserDTO(
+                "username",
+                "password",
+                "salt",
+                "firstName",
+                "lastName",
+                LocalDate.of(1990, 1, 1),
+                "123-45-6789",
+                "STUDENT"
+        );
     }
 
     public void setStage(Stage stage) {
@@ -43,10 +57,12 @@ public class MainPageController implements Initializable {
         SplitPane.setResizableWithParent(sidebar, false);
         SplitPane.setResizableWithParent(mainContent, false);
 
+        UserController userController = new UserController(userDTO); // Create an instance of UserController
+
         sidebarController.currentViewProperty().addListener((observableValue, oldValue, newValue) -> {
             switch (newValue) {
                 case "account":
-                    if (controller.isUserLoggedIn()) {
+                    if (userController.isUserLoggedIn()) {
                         showUserProfilePopup();
                     } else {
                         showLoginPopup();
@@ -94,25 +110,20 @@ public class MainPageController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/login-page.fxml"));
             Parent parent = fxmlLoader.load();
 
-            LoginController loginController = fxmlLoader.getController();
-            loginController.setController(controller);
+            UserController userController = baseController.getUserController();
+            userController.setStage(stage);
 
             Stage loginStage = new Stage();
             loginStage.initModality(Modality.APPLICATION_MODAL);
             loginStage.initOwner(stage);
             loginStage.setTitle("Login");
             loginStage.setScene(new Scene(parent));
-            loginController.setStage(loginStage); // Set the stage in LoginController
             loginStage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    @FXML
-    public void initialize() {
-        showUserProfilePopup(); // Directly show the user profile page
-    }
     private void showUserProfilePopup() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/user-profile-page.fxml"));

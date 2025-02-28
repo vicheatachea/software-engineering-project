@@ -1,7 +1,8 @@
 package dto;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
 public record UserDTO(String username, String password, String salt, String firstName, String lastName,
-                      Timestamp dateOfBirth, String socialNumber, String role) {
+                      LocalDate dateOfBirth, String socialNumber, String role) {
+
 }

@@ -2,7 +2,7 @@ package entity;
 
 import jakarta.persistence.*;
 import util.PasswordHashUtil;
-
+import dto.UserDTO;
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Set;
@@ -58,16 +58,15 @@ public class UserEntity {
 	public UserEntity() {
 	}
 
-	public UserEntity(String firstName, String lastName, String username, String password, Timestamp dateOfBirth,
-	                  String socialNumber, Role role, TimetableEntity timetable) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.username = username;
-		setPassword(password);
-		this.dateOfBirth = dateOfBirth;
-		this.socialNumber = socialNumber;
-		this.role = role;
-		this.timetable = timetable;
+	public UserEntity(UserDTO userDTO) {
+		this.username = userDTO.username();
+		setPassword(userDTO.password());
+		this.salt = userDTO.salt();
+		this.firstName = userDTO.firstName();
+		this.lastName = userDTO.lastName();
+		this.dateOfBirth = Timestamp.valueOf(userDTO.dateOfBirth().atStartOfDay());
+		this.socialNumber = userDTO.socialNumber();
+		this.role = Role.valueOf(userDTO.role());
 	}
 
 	public void setId(Long id) {

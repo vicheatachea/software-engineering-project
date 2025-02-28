@@ -19,6 +19,4 @@
         <Button fx:id="loginButton" onAction="#handleLogin" styleClass="login-button" text="Login" />
         <Button fx:id="registerButton" onAction="#handleRegister" styleClass="register-button" text="Register" />    </HBox>
 
-    <Button fx:id="exitButton" onAction="#handleExit" styleClass="exit-button" text="Exit" />
-
 </VBox>
