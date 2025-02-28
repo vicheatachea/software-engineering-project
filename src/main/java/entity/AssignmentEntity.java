@@ -14,6 +14,9 @@ public class AssignmentEntity {
 	private Long id;
 
 	@Column(nullable = false)
+	private String name;
+
+	@Column(nullable = false)
 	private String type;
 
 	@Column(name = "publishing_date", nullable = false)
@@ -21,6 +24,9 @@ public class AssignmentEntity {
 
 	@Column(nullable = false)
 	private Timestamp deadline;
+
+	@Column
+	private String description;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "subject_id", nullable = false)
@@ -33,11 +39,13 @@ public class AssignmentEntity {
 	public AssignmentEntity() {
 	}
 
-	public AssignmentEntity(String type, Timestamp publishingDate, Timestamp deadline, SubjectEntity subject,
-	                        TimetableEntity timetable) {
+	public AssignmentEntity(String name, String type, Timestamp publishingDate, Timestamp deadline, String description,
+	                        SubjectEntity subject, TimetableEntity timetable) {
+		this.name = name;
 		this.type = type;
 		this.publishingDate = publishingDate;
 		this.deadline = deadline;
+		this.description = description;
 		this.subject = subject;
 		this.timetable = timetable;
 	}
@@ -48,6 +56,14 @@ public class AssignmentEntity {
 
 	public Long getId() {
 		return id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public void setType(String type) {
@@ -74,6 +90,14 @@ public class AssignmentEntity {
 		return deadline;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public TimetableEntity getTimetable() {
 		return timetable;
 	}
@@ -95,12 +119,9 @@ public class AssignmentEntity {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		AssignmentEntity that = (AssignmentEntity) o;
-		return Objects.equals(id, that.id) &&
-		       Objects.equals(type, that.type) &&
-		       Objects.equals(publishingDate, that.publishingDate) &&
-		       Objects.equals(deadline, that.deadline) &&
-		       Objects.equals(subject, that.subject) &&
-		       Objects.equals(timetable, that.timetable);
+		return Objects.equals(id, that.id) && Objects.equals(type, that.type) &&
+		       Objects.equals(publishingDate, that.publishingDate) && Objects.equals(deadline, that.deadline) &&
+		       Objects.equals(subject, that.subject) && Objects.equals(timetable, that.timetable);
 	}
 
 	@Override
