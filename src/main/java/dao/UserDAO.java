@@ -2,6 +2,7 @@ package dao;
 
 import entity.UserEntity;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
 
 import java.util.List;
@@ -10,16 +11,16 @@ import static util.PasswordHashUtil.verifyPassword;
 
 public class UserDAO {
 
+	private static final EntityManagerFactory emf = datasource.MariaDBConnection.getEntityManagerFactory();
+
 	public void persist(UserEntity user) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
-			UserEntity existingUser = findByUsername(user.getUsername());
-			if (existingUser == null) {
+			if (user.getId() == null || findById(user.getId()) == null) {
 				em.persist(user);
 			} else {
-				existingUser.setPassword(user.getPassword());
-				em.merge(existingUser);
+				em.merge(user);
 			}
 			em.getTransaction().commit();
 		} catch (Exception e) {
@@ -32,8 +33,21 @@ public class UserDAO {
 		}
 	}
 
+	private UserEntity findById(Long id) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.find(UserEntity.class, id);
+		} catch (Exception e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
 	public UserEntity findByUsername(String username) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT u FROM UserEntity u WHERE u.username = :username", UserEntity.class)
 			         .setParameter("username", username)
@@ -48,7 +62,7 @@ public class UserDAO {
 	}
 
 	public List<UserEntity> findAll() {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT u FROM UserEntity u", UserEntity.class).getResultList();
 		} catch (Exception e) {
@@ -69,7 +83,7 @@ public class UserDAO {
 	}
 
 	public void delete(UserEntity user) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			em.remove(em.contains(user) ? user : em.merge(user));
@@ -85,7 +99,7 @@ public class UserDAO {
 	}
 
 	public void deleteAll() {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			em.createQuery("DELETE FROM UserEntity").executeUpdate();

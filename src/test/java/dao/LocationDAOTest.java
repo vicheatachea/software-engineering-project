@@ -46,6 +46,27 @@ class LocationDAOTest {
 	}
 
 	@Test
+	void persistUpdate() {
+		LocationDAO locationDAO = new LocationDAO();
+
+		LocationEntity location = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
+
+		locationDAO.persist(location);
+
+		location.setName("Metropolia Myllypuro 2");
+		location.setCampus("Myllypuro");
+		location.setBuilding("B");
+
+		locationDAO.persist(location);
+
+		LocationEntity foundLocation = locationDAO.findById(location.getId());
+
+		assertEquals(location.getName(), foundLocation.getName());
+		assertEquals(location.getCampus(), foundLocation.getCampus());
+		assertEquals(location.getBuilding(), foundLocation.getBuilding());
+	}
+
+	@Test
 	void findById() {
 		LocationDAO locationDAO = new LocationDAO();
 

@@ -26,10 +26,5 @@
                </color>
             </DropShadow>
          </effect></Label>
-      <Label text="User Stuff">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
    </children>
 </VBox>
