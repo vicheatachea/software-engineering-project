@@ -249,6 +249,15 @@ public class EventPopupController {
             }
         }
 
+        Long id;
+        if (event != null && event instanceof TeachingSessionDTO teachingSession) {
+            id = teachingSession.id();
+        } else if (event != null && event instanceof AssignmentDTO assignment) {
+            id = assignment.id();
+        } else {
+            id = null;
+        }
+
         Event newEvent = null;
 
         LocalDate startDate = startDatePicker.getValue();
@@ -269,7 +278,7 @@ public class EventPopupController {
 
                 String location = (String) locationComboBox.getValue();
 
-                newEvent = new TeachingSessionDTO(startDateTime, endDateTime, location, subject, description);
+                newEvent = new TeachingSessionDTO(id, startDateTime, endDateTime, location, subject, description);
                 break;
             case "Assignment":
                 LocalDate endDate = endDatePicker.getValue();
@@ -279,7 +288,7 @@ public class EventPopupController {
                 String assignmentName = nameTextField.getText();
                 String assignmentType = (String) assignmentComboBox.getValue();
 
-                newEvent = new AssignmentDTO(assignmentType, publishingDateTime, deadlineDateTime, assignmentName, subject, description);
+                newEvent = new AssignmentDTO(id, assignmentType, publishingDateTime, deadlineDateTime, assignmentName, subject, description);
                 break;
         }
 
@@ -292,7 +301,7 @@ public class EventPopupController {
             if (event == null) {
                 eventController.addEventForUser(newEvent);
             } else {
-                eventController.updateEventForUser(event, newEvent);
+                eventController.updateEventForUser(newEvent);
             }
         } else {
             String groupName = (String) groupComboBox.getValue();
@@ -304,7 +313,7 @@ public class EventPopupController {
             if (event == null) {
                 eventController.addEventForGroup(newEvent, groupName);
             } else {
-                eventController.updateEventForGroup(event, newEvent, groupName);
+                eventController.updateEventForGroup(newEvent, groupName);
             }
         }
     }

@@ -1,6 +1,5 @@
 package datasource;
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.slf4j.Logger;
@@ -49,11 +48,11 @@ public class MariaDBConnection {
 		}
 	}
 
-	public static EntityManager getEntityManager() {
-		if (emf == null) {
+	public static EntityManagerFactory getEntityManagerFactory() {
+		if (emf == null || !emf.isOpen()) {
 			emf = Persistence.createEntityManagerFactory("stms");
 		}
-		return emf.createEntityManager();
+		return emf;
 	}
 
 	public static void terminate() throws SQLException {

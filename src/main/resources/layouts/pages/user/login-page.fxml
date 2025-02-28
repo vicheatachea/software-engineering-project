@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="loginVBox" alignment="CENTER" prefHeight="540.0" prefWidth="520.0" spacing="15" styleClass="login-vbox" stylesheets="@login-page.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.LoginController">
+<VBox fx:id="loginVBox" alignment="CENTER" prefHeight="540.0" prefWidth="520.0" spacing="15" styleClass="login-vbox" stylesheets="@login-page.css" xmlns="http://javafx.com/javafx/23.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.LoginController">
 
     <Label fx:id="loginLabel" contentDisplay="CENTER" styleClass="login-label" text="Login" textFill="#ff6b81" />
 
@@ -17,8 +17,7 @@
 
     <HBox fx:id="buttonsHBox" alignment="CENTER" spacing="10">
         <Button fx:id="loginButton" onAction="#handleLogin" styleClass="login-button" text="Login" />
-        <Button fx:id="registerButton" onAction="#goToRegisterPage" styleClass="register-button" text="Register" />
-    </HBox>
+        <Button fx:id="registerButton" onAction="#handleRegister" styleClass="register-button" text="Register" />    </HBox>
 
     <Button fx:id="exitButton" onAction="#handleExit" styleClass="exit-button" text="Exit" />
 

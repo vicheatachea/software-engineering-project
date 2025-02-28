@@ -22,7 +22,7 @@ public class EventController {
     }
 
     // Update an event for a user
-    public void updateEventForUser(Event oldEvent, Event newEvent) {
+    public void updateEventForUser(Event event) {
         // Placeholder
     }
 
@@ -31,7 +31,7 @@ public class EventController {
         // Placeholder
     }
 
-    // NOTE: Group is currently a String but can be changed to GroupDTO
+    // NOTE: groupName should be unique
 
     // Add an event for a group
     public void addEventForGroup(Event event, String groupName) {
@@ -39,7 +39,7 @@ public class EventController {
     }
 
     // Update an event for a group
-    public void updateEventForGroup(Event oldEvent, Event newEvent, String groupName) {
+    public void updateEventForGroup(Event event, String groupName) {
         // Placeholder
     }
 

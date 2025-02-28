@@ -3,30 +3,22 @@ package dao;
 import datasource.MariaDBConnection;
 import entity.UserGroupEntity;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
 
 public class UserGroupDAO {
 
-	public void persist(UserGroupEntity userGroup) {
-		EntityManager em = MariaDBConnection.getEntityManager();
-		em.getTransaction().begin();
-		em.persist(userGroup);
-		em.getTransaction().commit();
-		em.close();
-	}
+	private static final EntityManagerFactory emf = MariaDBConnection.getEntityManagerFactory();
 
-	public void update(UserGroupEntity userGroup) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+	public void persist(UserGroupEntity userGroup) {
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
-			UserGroupEntity existingUserGroup = em.find(UserGroupEntity.class, userGroup.getId());
-			if (existingUserGroup != null) {
-				existingUserGroup.getStudents().forEach(student -> student.getGroups().remove(existingUserGroup));
-				userGroup.getStudents().forEach(student -> student.getGroups().add(userGroup));
-				em.merge(userGroup);
+			if (userGroup.getId() == null || findById(userGroup.getId()) == null) {
+				em.persist(userGroup);
 			} else {
-				throw new IllegalArgumentException("UserGroupEntity with id " + userGroup.getId() + " does not exist.");
+				em.merge(userGroup);
 			}
 			em.getTransaction().commit();
 		} catch (Exception e) {
@@ -40,7 +32,7 @@ public class UserGroupDAO {
 	}
 
 	public UserGroupEntity findById(Long id) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		try {
 			return em.find(UserGroupEntity.class, id);
 		} catch (Exception e) {
@@ -53,7 +45,7 @@ public class UserGroupDAO {
 	}
 
 	public List<UserGroupEntity> findAll() {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT u FROM UserGroupEntity u", UserGroupEntity.class).getResultList();
 		} catch (Exception e) {
@@ -66,7 +58,7 @@ public class UserGroupDAO {
 	}
 
 	public void delete(UserGroupEntity userGroup) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			userGroup.getStudents().forEach(student -> student.getGroups().remove(userGroup));
@@ -83,7 +75,7 @@ public class UserGroupDAO {
 	}
 
 	public void deleteAll() {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			em.createQuery("DELETE FROM UserGroupEntity").executeUpdate();

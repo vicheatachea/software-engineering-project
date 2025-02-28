@@ -2,21 +2,22 @@ package dao;
 
 import entity.TeachingSessionEntity;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
 
 public class TeachingSessionDAO {
+
+	private static final EntityManagerFactory emf = datasource.MariaDBConnection.getEntityManagerFactory();
+
 	public void persist(TeachingSessionEntity teachingSession) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
-			TeachingSessionEntity existingTeachingSession = findById(teachingSession.getId());
-			if (existingTeachingSession == null) {
+			if (teachingSession.getId() == null || findById(teachingSession.getId()) == null) {
 				em.persist(teachingSession);
 			} else {
-				existingTeachingSession.setSubject(teachingSession.getSubject());
-				existingTeachingSession.setLocation(teachingSession.getLocation());
-				em.merge(existingTeachingSession);
+				em.merge(teachingSession);
 			}
 			em.getTransaction().commit();
 		} catch (Exception e) {
@@ -30,7 +31,7 @@ public class TeachingSessionDAO {
 	}
 
 	public TeachingSessionEntity findById(Long id) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		try {
 			return em.find(TeachingSessionEntity.class, id);
 		} catch (Exception e) {
@@ -43,7 +44,7 @@ public class TeachingSessionDAO {
 	}
 
 	public List<TeachingSessionEntity> findAll() {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT t FROM TeachingSessionEntity t", TeachingSessionEntity.class).getResultList();
 		} catch (Exception e) {
@@ -56,7 +57,7 @@ public class TeachingSessionDAO {
 	}
 
 	public void delete(TeachingSessionEntity teachingSession) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			em.remove(em.contains(teachingSession) ? teachingSession : em.merge(teachingSession));
@@ -72,9 +73,10 @@ public class TeachingSessionDAO {
 	}
 
 	public TeachingSessionEntity findBySubjectId(Long id) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		try {
-			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.subject.id = :id", TeachingSessionEntity.class)
+			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.subject.id = :id",
+			                      TeachingSessionEntity.class)
 			         .setParameter("id", id).getSingleResult();
 		} catch (Exception e) {
 			return null;
@@ -86,9 +88,10 @@ public class TeachingSessionDAO {
 	}
 
 	public TeachingSessionEntity findByLocationId(Long id) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		try {
-			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.location.id = :id", TeachingSessionEntity.class)
+			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.location.id = :id",
+			                      TeachingSessionEntity.class)
 			         .setParameter("id", id).getSingleResult();
 		} catch (Exception e) {
 			return null;
@@ -100,9 +103,10 @@ public class TeachingSessionDAO {
 	}
 
 	public List<TeachingSessionEntity> findAllByTimetableId(Long id) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		try {
-			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.timetable.id = :id", TeachingSessionEntity.class)
+			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.timetable.id = :id",
+			                      TeachingSessionEntity.class)
 			         .setParameter("id", id).getResultList();
 		} catch (Exception e) {
 			return null;
@@ -114,7 +118,7 @@ public class TeachingSessionDAO {
 	}
 
 	public void deleteAll() {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			em.createQuery("DELETE FROM TeachingSessionEntity").executeUpdate();
