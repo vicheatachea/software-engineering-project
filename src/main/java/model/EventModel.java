@@ -117,7 +117,7 @@ public class EventModel {
 		entity.setType(dto.type());
 		entity.setPublishingDate(Timestamp.valueOf(dto.publishingDate()));
 
-		entity.setDeadline(dto.deadline() != null ? Timestamp.valueOf(dto.deadline()) : null);
+		entity.setDeadline(Timestamp.valueOf(dto.deadline()));
 
 		SubjectDAO subjectDAO = new SubjectDAO();
 		TimetableDAO timeTableDAO = new TimetableDAO();
@@ -130,9 +130,13 @@ public class EventModel {
 	}
 
 	private AssignmentDTO convertToAssignmentDTO(AssignmentEntity entity) {
-		return new AssignmentDTO(entity.getId(), entity.getType(), entity.getPublishingDate().toLocalDateTime(),
-		                         entity.getDeadline() != null ? entity.getDeadline().toLocalDateTime() : null,
-		                         entity.getName(), entity.getSubject().getName(), entity.getDescription(),
+		return new AssignmentDTO(entity.getId(),
+		                         entity.getType(),
+		                         entity.getPublishingDate().toLocalDateTime(),
+		                         entity.getDeadline().toLocalDateTime(),
+		                         entity.getName(),
+		                         entity.getSubject().getName(),
+		                         entity.getDescription(),
 		                         entity.getTimetable().getId());
 	}
 
