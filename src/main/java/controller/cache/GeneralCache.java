@@ -5,9 +5,9 @@ import dto.Event;
 import java.util.List;
 import java.util.TreeMap;
 
-public class GeneralCache {
+public class GeneralCache<T> {
     private static GeneralCache instance;
-    private final TreeMap<String, List<Event>> dataCache;
+    private final TreeMap<String, List<T>> dataCache;
 
     private GeneralCache() {
         dataCache = new TreeMap<>();
@@ -20,11 +20,11 @@ public class GeneralCache {
         return instance;
     }
 
-    public void addData(String key, List<Event> data) {
+    public void addData(String key, List<T> data) {
         dataCache.put(key, data);
     }
 
-    public List<Event> getData(String key) {
+    public List<T> getData(String key) {
         return dataCache.get(key);
     }
 
