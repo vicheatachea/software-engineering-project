@@ -2,16 +2,23 @@ package dao;
 
 import entity.AssignmentEntity;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
 
 public class AssignmentDAO {
 
+	private static final EntityManagerFactory emf = datasource.MariaDBConnection.getEntityManagerFactory();
+
 	public void persist(AssignmentEntity assignment) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
-			em.persist(assignment);
+			if (assignment.getId() == null || findById(assignment.getId()) == null) {
+				em.persist(assignment);
+			} else {
+				em.merge(assignment);
+			}
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
@@ -24,7 +31,7 @@ public class AssignmentDAO {
 	}
 
 	public AssignmentEntity findById(Long id) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		try {
 			return em.find(AssignmentEntity.class, id);
 		} catch (Exception e) {
@@ -37,7 +44,7 @@ public class AssignmentDAO {
 	}
 
 	public List<AssignmentEntity> findAll() {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT a FROM AssignmentEntity a", AssignmentEntity.class).getResultList();
 		} catch (Exception e) {
@@ -50,7 +57,7 @@ public class AssignmentDAO {
 	}
 
 	public void deleteById(Long id) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			AssignmentEntity assignment = em.find(AssignmentEntity.class, id);
@@ -67,8 +74,9 @@ public class AssignmentDAO {
 			}
 		}
 	}
+
 	public void delete(AssignmentEntity assignment) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			em.remove(em.contains(assignment) ? assignment : em.merge(assignment));
@@ -84,7 +92,7 @@ public class AssignmentDAO {
 	}
 
 	public void deleteAll() {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			em.createQuery("DELETE FROM AssignmentEntity").executeUpdate();
@@ -98,6 +106,4 @@ public class AssignmentDAO {
 			}
 		}
 	}
-
-
 }

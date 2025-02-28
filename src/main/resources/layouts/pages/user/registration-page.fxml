@@ -8,8 +8,10 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.collections.FXCollections?>
 
-<VBox fx:id="registrationVBox" alignment="CENTER" prefHeight="540.0" prefWidth="520.0" spacing="15" styleClass="registration-vbox" stylesheets="@registration-page.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.RegisterController">
+
+<VBox fx:id="registrationVBox" alignment="CENTER" prefHeight="540.0" prefWidth="520.0" spacing="15" styleClass="registration-vbox" stylesheets="@registration-page.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.RegistrationController">
 
     <Label fx:id="registerLabel" contentDisplay="CENTER" styleClass="register-label" text="Register" textFill="#ff6b81" />
 
@@ -21,13 +23,14 @@
 
     <TextField fx:id="emailField" prefHeight="40.0" promptText="Email" styleClass="email-field" />
 
-    <TextField fx:id="usernameField" prefHeight="40.0" promptText="Create Username" styleClass="username-field" />
+    <TextField fx:id="usernameField" prefHeight="40.0" promptText="Type Username" styleClass="username-field" />
 
     <PasswordField fx:id="passwordField" prefHeight="40.0" promptText="Password" styleClass="password-field" />
 
     <HBox fx:id="dobRoleHBox" alignment="CENTER" spacing="10">
         <DatePicker fx:id="dobPicker" prefHeight="41.0" prefWidth="200.0" promptText="Date of Birth" showWeekNumbers="true" styleClass="dob-field" />
-        <ComboBox fx:id="roleComboBox" prefHeight="41.0" prefWidth="200.0" promptText="Select Role" styleClass="role-field" />
+        <ComboBox fx:id="roleComboBox" prefHeight="41.0" prefWidth="200.0" promptText="Select Role"
+                  styleClass="role-field" />
     </HBox>
 
     <HBox fx:id="buttonsHBox" alignment="CENTER" spacing="10">

@@ -98,6 +98,67 @@ class UserGroupDAOTest {
 		assertEquals(userGroup.getStudents().size(), foundUserGroup.getStudents().size());
 		assertEquals(userGroup.getTimetable().getId(), foundUserGroup.getTimetable().getId());
 	}
+	
+	@Test
+	void persistUpdate() {
+		UserGroupDAO userGroupDAO = new UserGroupDAO();
+		UserDAO userDAO = new UserDAO();
+		TimetableDAO timetableDAO = new TimetableDAO();
+
+		TimetableEntity timetable1 = new TimetableEntity();
+		TimetableEntity timetable2 = new TimetableEntity();
+		TimetableEntity timetable3 = new TimetableEntity();
+		TimetableEntity timetable4 = new TimetableEntity();
+		TimetableEntity timetable5 = new TimetableEntity();
+
+		timetableDAO.persist(timetable1);
+		timetableDAO.persist(timetable2);
+		timetableDAO.persist(timetable3);
+		timetableDAO.persist(timetable4);
+		timetableDAO.persist(timetable5);
+
+		Timestamp DoB = Timestamp.valueOf("2000-01-01 00:00:00");
+
+		UserEntity user =
+				new UserEntity("John", "Doe", "JohnDoe", "password", DoB, "123456789AB", Role.STUDENT, timetable1);
+
+		UserEntity user2 =
+				new UserEntity("Matti", "Meikäläinen", "MattiMeikäläinen", "password", DoB, "123456789AB", Role.STUDENT,
+				               timetable2);
+
+		UserEntity user3 =
+				new UserEntity("Maija", "Meikäläinen", "MaijaMeikäläinen", "password", DoB, "123456789AB", Role.STUDENT,
+				               timetable3);
+
+		HashSet<UserEntity> students = new HashSet<>();
+
+		students.add(user);
+		students.add(user2);
+		students.add(user3);
+
+		userDAO.persist(user);
+		userDAO.persist(user2);
+		userDAO.persist(user3);
+
+		UserEntity teacher =
+				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "123456789AB", Role.TEACHER, timetable4);
+
+		userDAO.persist(teacher);
+
+		UserGroupEntity userGroup = new UserGroupEntity("Group 1", "ICT3003", 34, teacher, students, timetable5);
+
+		userGroupDAO.persist(userGroup);
+
+		userGroup.setName("Updated Group");
+		
+		userGroupDAO.persist(userGroup);
+
+		UserGroupEntity foundUserGroup = userGroupDAO.findById(userGroup.getId());
+
+		assertEquals("Updated Group", foundUserGroup.getName());
+		
+		assertEquals(1, userGroupDAO.findAll().size());
+	}
 
 	@Test
 	void findById() {
@@ -231,7 +292,7 @@ class UserGroupDAOTest {
 				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "123456789AB", Role.TEACHER, timetable7);
 
 		UserEntity teacher2 =
-				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "123456789AB", Role.TEACHER, timetable8);
+				new UserEntity("Jeff", "Doe", "JeffDoe", "password", DoB, "987654321BA", Role.TEACHER, timetable8);
 
 		userDAO.persist(teacher);
 		userDAO.persist(teacher2);
@@ -373,7 +434,7 @@ class UserGroupDAOTest {
 				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "123456789AB", Role.TEACHER, timetable7);
 
 		UserEntity teacher2 =
-				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "123456789AB", Role.TEACHER, timetable8);
+				new UserEntity("Jeff", "Doe", "JeffDoe", "password", DoB, "987654321BA", Role.TEACHER, timetable8);
 
 		userDAO.persist(teacher);
 		userDAO.persist(teacher2);
