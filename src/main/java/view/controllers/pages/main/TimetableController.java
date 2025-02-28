@@ -1,6 +1,6 @@
 package view.controllers.pages.main;
 
-import controller.Controller;
+import controller.BaseController;
 import dto.Event;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -14,17 +14,21 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import util.StringUtil;
 import view.controllers.ControllerAware;
 import view.controllers.components.EventPopupController;
+import view.controllers.components.HeaderLabel;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
+import java.util.Objects;
 
 public class TimetableController implements ControllerAware {
     private static final int NUMBER_OF_BUTTONS = 2;
-    Controller controller;
+    BaseController baseController;
 
     LocalDate currentDate;
     LocalDate startDate;
@@ -45,12 +49,17 @@ public class TimetableController implements ControllerAware {
     @FXML
     private void initialize() {
         addButtons();
-        Platform.runLater(() -> datePicker.setValue(LocalDate.now()));
+        Platform.runLater(() -> {
+            datePicker.setValue(LocalDate.now());
+            handleDatePick();
+
+            updateTimetableHeaders();
+        });
     }
 
     @Override
-    public void setController(Controller controller) {
-        this.controller = controller;
+    public void setBaseController(BaseController baseController) {
+        this.baseController = baseController;
     }
 
     private void addButtons() {
@@ -87,9 +96,26 @@ public class TimetableController implements ControllerAware {
         endDate = newDate.with(DayOfWeek.SUNDAY);
         currentWeek = newDate.get(WeekFields.ISO.weekOfWeekBasedYear());
 
-        // Date formatting needs to be updated
-        dateLabel.setText(startDate + " - " + endDate);
+        String startDay = formatNumber(startDate.getDayOfMonth());
+        String endDay = formatNumber(endDate.getDayOfMonth());
+        String fullStartMonth = startDate.getMonth().toString();
+        String startMonth = StringUtil.capitaliseFirst(startDate.getMonth().toString().substring(0, 3));
+        String fullEndMonth = endDate.getMonth().toString();
+        String endMonth = StringUtil.capitaliseFirst(endDate.getMonth().toString().substring(0, 3));
+        int startYear = startDate.getYear();
+        int endYear = endDate.getYear();
+
+        if (startYear != endYear) {
+            dateLabel.setText(startDay + " " + startMonth + ". " + startYear + " - " + endDay + " " + endMonth + ". " + endYear);
+        } else if (!Objects.equals(fullStartMonth, fullEndMonth)) {
+            dateLabel.setText(startDay + " " + startMonth + ". - " + endDay + " " + endMonth + ". " + startYear);
+        } else {
+            dateLabel.setText(startDay + " - " + endDay + " " + startMonth + ". " + startYear);
+        }
+
         weekLabel.setText("Week " + currentWeek);
+
+        updateTimetableHeaders();
     }
 
     private void handleNewEvent() {
@@ -106,7 +132,7 @@ public class TimetableController implements ControllerAware {
             Parent content = loader.load();
 
             EventPopupController popupController = loader.getController();
-            popupController.setUp(event);
+            popupController.setUp(event, baseController);
 
             Stage popupStage = new Stage();
             popupStage.setScene(new Scene(content));
@@ -118,6 +144,29 @@ public class TimetableController implements ControllerAware {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void updateTimetableHeaders() {
+        timetableGrid.getChildren().removeIf(node -> GridPane.getColumnIndex(node) != null &&
+                GridPane.getRowIndex(node) == 0);
+        int daysBetween = (int) ChronoUnit.DAYS.between(startDate, endDate) + 1;
+
+        for (int i = 0; i < daysBetween; i++) {
+
+            String weekDay = startDate.plusDays(i).getDayOfWeek().toString().substring(0, 3);
+            String monthDay = formatNumber(startDate.plusDays(i).getDayOfMonth());
+            String month = formatNumber(startDate.plusDays(i).getMonthValue());
+
+            HeaderLabel header = new HeaderLabel(StringUtil.capitaliseFirst(weekDay), monthDay, month);
+            timetableGrid.add(header, i, 0);
+
+            GridPane.setHalignment(header, javafx.geometry.HPos.CENTER);
+            GridPane.setValignment(header, javafx.geometry.VPos.CENTER);
+        }
+    }
+
+    private String formatNumber(int number) {
+        return String.format("%02d", number);
     }
 
     // Not to be implemented yet

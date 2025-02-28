@@ -1,8 +1,7 @@
 package view.controllers.components;
 
-import dto.AssignmentDTO;
-import dto.Event;
-import dto.TeachingSessionDTO;
+import controller.*;
+import dto.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +16,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class EventPopupController {
+    private EventController eventController;
+    private GroupController groupController;
+    private LocationController locationController;
+    private SubjectController subjectController;
+
     private Event event;
     private final RowConstraints hiddenRow = new RowConstraints(0);
     private final TimeTextField startTimeField = new TimeTextField();
@@ -60,9 +64,15 @@ public class EventPopupController {
     private DatePicker endDatePicker;
     @FXML
     private TextArea descriptionTextArea;
+    @FXML
+    private Button deleteButton;
 
-    public void setUp(Event event) {
+    public void setUp(Event event, BaseController baseController) {
         this.event = event;
+        this.eventController = baseController.getEventController();
+        this.groupController = baseController.getGroupController();
+        this.locationController = baseController.getLocationController();
+        this.subjectController = baseController.getSubjectController();
     }
 
     @FXML
@@ -74,19 +84,37 @@ public class EventPopupController {
         scheduleComboBox.getItems().addAll("Myself", "Group");
         assignmentComboBox.getItems().addAll("Individual", "Group");
 
-        // Placeholders
-        // TODO: Add subjects and locations from database
-        subjectComboBox.getItems().addAll("Math", "Science", "English", "History", "Geography");
-        locationComboBox.getItems().addAll("Room 1", "Room 2", "Room 3", "Room 4", "Room 5");
-        groupComboBox.getItems().addAll("Group 1", "Group 2", "Group 3", "Group 4", "Group 5");
+        // TODO: Remove these lines of dummy data, used for testing
+//        subjectComboBox.getItems().addAll("Math", "Science", "English", "History", "Geography");
+//        locationComboBox.getItems().addAll("Room 1", "Room 2", "Room 3", "Room 4", "Room 5");
+//        groupComboBox.getItems().addAll("Group 1", "Group 2", "Group 3", "Group 4", "Group 5");
 
         eventComboBox.addEventHandler(ActionEvent.ACTION, event -> handleEventChange());
         scheduleComboBox.addEventHandler(ActionEvent.ACTION, event -> handleScheduleChange());
 
         Platform.runLater(() -> {
+            // Fetch data from the database
+            subjectComboBox.getItems().addAll(
+                    subjectController.fetchSubjectsByUser().stream()
+                            .map(SubjectDTO::name)
+                            .toList()
+            );
+            locationComboBox.getItems().addAll(
+                    locationController.fetchAllLocations().stream()
+                            .map(LocationDTO::name)
+                            .toList()
+            );
+            groupComboBox.getItems().addAll(
+                    groupController.fetchGroupsByUser().stream()
+                            .map(GroupDTO::name)
+                            .toList()
+            );
+
             if (event == null) {
                 eventComboBox.setValue("Class");
                 scheduleComboBox.setValue("Myself");
+                deleteButton.setVisible(false);
+                deleteButton.setManaged(false);
                 return;
             }
 
@@ -138,8 +166,8 @@ public class EventPopupController {
             case "Class":
                 startLabel.setText("Start Time");
                 endLabel.setText("End Time");
-                endDatePicker.setVisible(false);
-                endDatePicker.setManaged(false);
+                endDatePicker.setValue(null);
+                endDatePicker.setDisable(true);
 
                 popupGridPane.getRowConstraints().set(6, hiddenRow);
                 nameLabel.setVisible(false);
@@ -156,8 +184,7 @@ public class EventPopupController {
             case "Assignment":
                 startLabel.setText("Publishing Date");
                 endLabel.setText("Due Date");
-                endDatePicker.setVisible(true);
-                endDatePicker.setManaged(true);
+                endDatePicker.setDisable(false);
 
                 popupGridPane.getRowConstraints().set(6, new RowConstraints());
                 nameLabel.setVisible(true);
@@ -222,7 +249,7 @@ public class EventPopupController {
             }
         }
 
-        Event newEvent;
+        Event newEvent = null;
 
         LocalDate startDate = startDatePicker.getValue();
         String startTime = startTimeField.getText();
@@ -256,11 +283,42 @@ public class EventPopupController {
                 break;
         }
 
+        if (newEvent == null) {
+            displayErrorAlert("Event type not recognised");
+            return;
+        }
+
         if (scheduleFor.equals("Myself")) {
-            // Save teaching session for myself
+            if (event == null) {
+                eventController.addEventForUser(newEvent);
+            } else {
+                eventController.updateEventForUser(event, newEvent);
+            }
         } else {
-            String group = (String) groupComboBox.getValue();
-            // Save teaching session for group
+            String groupName = (String) groupComboBox.getValue();
+
+            if (checkNullOrEmpty(groupName, "Please select a group")) {
+                return;
+            }
+
+            if (event == null) {
+                eventController.addEventForGroup(newEvent, groupName);
+            } else {
+                eventController.updateEventForGroup(event, newEvent, groupName);
+            }
+        }
+    }
+
+    @FXML
+    private void handleDeleteEvent() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Event");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you want to delete this event?");
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.OK) {
+            // TODO: Call controller to delete event
         }
     }
 
