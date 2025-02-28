@@ -1,6 +1,7 @@
 package view.controllers.pages.main;
 
 import controller.BaseController;
+import controller.EventController;
 import dto.Event;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -24,11 +25,13 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
+import java.util.List;
 import java.util.Objects;
 
 public class TimetableController implements ControllerAware {
     private static final int NUMBER_OF_BUTTONS = 2;
     BaseController baseController;
+    EventController eventController;
 
     LocalDate currentDate;
     LocalDate startDate;
@@ -60,6 +63,7 @@ public class TimetableController implements ControllerAware {
     @Override
     public void setBaseController(BaseController baseController) {
         this.baseController = baseController;
+        this.eventController = baseController.getEventController();
     }
 
     private void addButtons() {
@@ -122,8 +126,8 @@ public class TimetableController implements ControllerAware {
         openEventPopup(null);
     }
 
-    private void handleEditEvent() {
-
+    private void handleEditEvent(Event event) {
+        openEventPopup(event);
     }
 
     private void openEventPopup(Event event) {
@@ -169,6 +173,21 @@ public class TimetableController implements ControllerAware {
         return String.format("%02d", number);
     }
 
+    private void loadTimetable() {
+        List<Event> events = eventController.fetchEventsByUser(startDate, endDate);
+
+        // TODO: Add events to timetable as Labels through the createEventLabel method
+    }
+
+    private Label createEventLabel(Event event) {
+        // Name is a placeholder, label should be updated to include event content
+        Label eventLabel = new Label("Event");
+        eventLabel.getStyleClass().add("event-label");
+        eventLabel.setOnMouseClicked(mouseEvent -> handleEditEvent(event));
+
+        return eventLabel;
+    }
+
     // Not to be implemented yet
     private void addColumn() {
 
@@ -177,11 +196,6 @@ public class TimetableController implements ControllerAware {
     // If number of columns is odd remove last, otherwise remove first
     // Not to be implemented yet
     private void removeColumn() {
-
-    }
-
-    // Fetch data for an entire week
-    private void loadTimetable() {
 
     }
 }
