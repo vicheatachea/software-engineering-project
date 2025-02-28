@@ -16,6 +16,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import view.controllers.ControllerAware;
 import view.controllers.components.SidebarController;
+import view.controllers.pages.user.LoginController;
+import view.controllers.pages.user.UserProfileController;
 
 import java.io.IOException;
 import java.net.URL;
@@ -63,9 +65,9 @@ public class MainPageController implements Initializable {
             switch (newValue) {
                 case "account":
                     if (userController.isUserLoggedIn()) {
-                        showUserProfilePopup();
+                        showUserProfilePopup(userController);
                     } else {
-                        showLoginPopup();
+                        showLoginPopup(userController);
                     }
                     break;
                 case "home":
@@ -105,13 +107,14 @@ public class MainPageController implements Initializable {
         }
     }
 
-    private void showLoginPopup() {
+    private void showLoginPopup(UserController userController) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/login-page.fxml"));
             Parent parent = fxmlLoader.load();
 
-            UserController userController = baseController.getUserController();
-            userController.setStage(stage);
+            LoginController loginController = fxmlLoader.getController();
+            loginController.setUserController(userController);
+            loginController.setStage(stage);
 
             Stage loginStage = new Stage();
             loginStage.initModality(Modality.APPLICATION_MODAL);
@@ -124,10 +127,14 @@ public class MainPageController implements Initializable {
         }
     }
 
-    private void showUserProfilePopup() {
+    private void showUserProfilePopup(UserController userController) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/user-profile-page.fxml"));
             Parent parent = fxmlLoader.load();
+
+            UserProfileController userProfileController = fxmlLoader.getController();
+            userProfileController.setUserController(userController);
+            userProfileController.setStage(stage);
 
             Stage userProfileStage = new Stage();
             userProfileStage.initModality(Modality.APPLICATION_MODAL);

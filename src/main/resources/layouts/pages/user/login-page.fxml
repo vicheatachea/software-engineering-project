@@ -17,6 +17,7 @@
 
     <HBox fx:id="buttonsHBox" alignment="CENTER" spacing="10">
         <Button fx:id="loginButton" onAction="#handleLogin" styleClass="login-button" text="Login" />
-        <Button fx:id="registerButton" onAction="#handleRegister" styleClass="register-button" text="Register" />    </HBox>
+        <Button fx:id="registerButton" onAction="#goToRegisterPage" styleClass="register-button" text="Register" />
+    </HBox>
 
 </VBox>
