@@ -119,6 +119,8 @@ public class EventPopupController {
             }
 
             eventComboBox.setDisable(true);
+            // TODO: Make sure to disable schedule and group combo boxes if the event is not for the user
+            // This will require verifying the timetable id and checking if it matches the user's timetable id
 
             if (event instanceof TeachingSessionDTO teachingSession) {
                 LocalDateTime startDateTime = teachingSession.startDate();
@@ -293,7 +295,7 @@ public class EventPopupController {
         }
 
         if (newEvent == null) {
-            displayErrorAlert("Event type not recognised");
+            displayErrorAlert("Configuration Error", "Event type not recognised");
             return;
         }
 
@@ -327,21 +329,31 @@ public class EventPopupController {
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.OK) {
-            // TODO: Call controller to delete event
+            if (scheduleComboBox.getValue() == "Myself") {
+                eventController.deleteEventForUser(event);
+            } else {
+                String groupName = (String) groupComboBox.getValue();
+
+                if (!groupController.isUserGroupOwner(groupName)) {
+                    displayErrorAlert("Permission Error", "You do not have permission to delete events for this group");
+                    return;
+                }
+                eventController.deleteEventForGroup(event, groupName);
+            }
         }
     }
 
     private boolean checkNullOrEmpty(Object object, String message) {
         if (object == null || object instanceof String && ((String) object).isEmpty()) {
-            displayErrorAlert(message);
+            displayErrorAlert("Configuration Error", message);
             return true;
         }
         return false;
     }
 
-    private void displayErrorAlert(String message) {
+    private void displayErrorAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Configuration Error");
+        alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
