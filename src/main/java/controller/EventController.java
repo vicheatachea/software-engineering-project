@@ -4,7 +4,6 @@ import dto.Event;
 import model.EventModel;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class EventController {
