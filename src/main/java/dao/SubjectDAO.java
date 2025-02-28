@@ -44,6 +44,22 @@ public class SubjectDAO {
 		}
 	}
 
+	public SubjectEntity findByName(String name) {
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		try {
+			return em.createQuery("SELECT s FROM SubjectEntity s WHERE s.name = :name", SubjectEntity.class)
+					.setParameter("name", name)
+					.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
 	public List<SubjectEntity> findAll() {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
