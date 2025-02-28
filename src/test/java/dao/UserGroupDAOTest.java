@@ -98,7 +98,7 @@ class UserGroupDAOTest {
 		assertEquals(userGroup.getStudents().size(), foundUserGroup.getStudents().size());
 		assertEquals(userGroup.getTimetable().getId(), foundUserGroup.getTimetable().getId());
 	}
-	
+
 	@Test
 	void persistUpdate() {
 		UserGroupDAO userGroupDAO = new UserGroupDAO();
@@ -150,13 +150,13 @@ class UserGroupDAOTest {
 		userGroupDAO.persist(userGroup);
 
 		userGroup.setName("Updated Group");
-		
+
 		userGroupDAO.persist(userGroup);
 
 		UserGroupEntity foundUserGroup = userGroupDAO.findById(userGroup.getId());
 
 		assertEquals("Updated Group", foundUserGroup.getName());
-		
+
 		assertEquals(1, userGroupDAO.findAll().size());
 	}
 
