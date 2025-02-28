@@ -2,13 +2,16 @@ package dao;
 
 import entity.SubjectEntity;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
 
 public class SubjectDAO {
 
+	private static final EntityManagerFactory emf = datasource.MariaDBConnection.getEntityManagerFactory();
+
 	public void persist(SubjectEntity subject) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			if (subject.getId() == null || findById(subject.getId()) == null) {
@@ -28,7 +31,7 @@ public class SubjectDAO {
 	}
 
 	public SubjectEntity findById(Long id) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			return em.find(SubjectEntity.class, id);
@@ -42,7 +45,7 @@ public class SubjectDAO {
 	}
 
 	public List<SubjectEntity> findAll() {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			return em.createQuery("SELECT s FROM SubjectEntity s", SubjectEntity.class).getResultList();
@@ -56,7 +59,7 @@ public class SubjectDAO {
 	}
 
 	public void delete(SubjectEntity subjectEntity) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			em.remove(em.contains(subjectEntity) ? subjectEntity : em.merge(subjectEntity));
@@ -72,7 +75,7 @@ public class SubjectDAO {
 	}
 
 	public void deleteAll() {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			em.createQuery("DELETE FROM SubjectEntity").executeUpdate();

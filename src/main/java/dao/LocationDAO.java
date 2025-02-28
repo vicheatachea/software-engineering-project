@@ -2,13 +2,16 @@ package dao;
 
 import entity.LocationEntity;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
 
 public class LocationDAO {
 
+	private static final EntityManagerFactory emf = datasource.MariaDBConnection.getEntityManagerFactory();
+
 	public void persist(LocationEntity location) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			if (location.getId() == null || findById(location.getId()) == null) {
@@ -28,7 +31,7 @@ public class LocationDAO {
 	}
 
 	public LocationEntity findById(Long id) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		try {
 			return em.find(LocationEntity.class, id);
 		} catch (Exception e) {
@@ -41,7 +44,7 @@ public class LocationDAO {
 	}
 
 	public List<LocationEntity> findAll() {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT l FROM LocationEntity l", LocationEntity.class).getResultList();
 		} catch (Exception e) {
@@ -54,7 +57,7 @@ public class LocationDAO {
 	}
 
 	public void delete(LocationEntity location) {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			em.remove(em.contains(location) ? location : em.merge(location));
@@ -69,8 +72,9 @@ public class LocationDAO {
 		}
 	}
 
+
 	public void deleteAll() {
-		EntityManager em = datasource.MariaDBConnection.getEntityManager();
+		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
 			em.createQuery("DELETE FROM LocationEntity").executeUpdate();
