@@ -33,11 +33,43 @@ public class UserDAO {
 		}
 	}
 
-	private UserEntity findById(Long id) {
+	public UserEntity findById(Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.find(UserEntity.class, id);
 		} catch (Exception e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public UserEntity findTeacherById(Long id) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em
+					.createQuery("SELECT u FROM UserEntity u WHERE u.id = :id AND u.role = 'TEACHER'", UserEntity.class)
+					.setParameter("id", id)
+					.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public UserEntity findStudentById(Long id) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em
+					.createQuery("SELECT u FROM UserEntity u WHERE u.id = :id AND u.role = 'STUDENT'", UserEntity.class)
+					.setParameter("id", id)
+					.getSingleResult();
+		} catch (NoResultException e) {
 			return null;
 		} finally {
 			if (em.isOpen()) {
