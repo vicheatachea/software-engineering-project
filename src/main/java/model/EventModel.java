@@ -158,9 +158,12 @@ public class EventModel {
 	}
 
 	private TeachingSessionDTO convertToTeachingSessionDTO(TeachingSessionEntity entity) {
-		return new TeachingSessionDTO(entity.getId(), entity.getStartDate().toLocalDateTime(),
-		                              entity.getEndDate().toLocalDateTime(), entity.getLocation().getName(),
-		                              entity.getSubject().getName(), entity.getDescription(),
+		return new TeachingSessionDTO(entity.getId(),
+		                              entity.getStartDate().toLocalDateTime(),
+		                              entity.getEndDate().toLocalDateTime(),
+		                              entity.getLocation().getName(),
+		                              entity.getSubject().getName(),
+		                              entity.getDescription(),
 		                              entity.getTimetable().getId());
 	}
 }
