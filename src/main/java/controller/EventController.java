@@ -1,8 +1,9 @@
 package controller;
 
+import dto.AssignmentDTO;
 import dto.Event;
+import dto.TeachingSessionDTO;
 import model.EventModel;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

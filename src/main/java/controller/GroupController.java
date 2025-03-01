@@ -20,4 +20,10 @@ public class GroupController {
         // Placeholder
         return new ArrayList<>();
     }
+
+    // Check if the logged-in user is the owner of a group
+    public boolean isUserGroupOwner(String groupName) {
+        // Placeholder
+        return false;
+    }
 }
