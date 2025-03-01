@@ -223,7 +223,7 @@ public class TimetableController implements ControllerAware {
 
             // Calling eventLabel.getEvent() instead of just event should avoid storing the event twice
             eventLabel.setOnMouseClicked(mouseEvent -> handleEditEvent(eventLabel.getEvent()));
-            timetableGrid.add(eventLabel, column, startRow, 1, endRow - startRow + 1);
+            timetableGrid.add(eventLabel, column + 1, startRow, 1, endRow - startRow + 1);
         }
     }
 
