@@ -11,13 +11,20 @@ public class SubjectController {
 
     // Fetch all available subjects
     public List<SubjectDTO> fetchAllSubjects() {
-        // Placeholder
-        return new ArrayList<>();
+        return subjectModel.fetchAllSubjects();
     }
 
-    // Fetch all subjects for a user
-    public List<SubjectDTO> fetchSubjectsByUser() {
-        // Placeholder
-        return new ArrayList<>();
+    public List<SubjectDTO> fetchSubjectsByUser(long userId) {
+        return subjectModel.fetchSubjectsByUser(userId);
+    }
+
+    // Adds/Updates a subject
+    public void saveSubject(SubjectDTO subjectDTO) {
+        subjectModel.saveSubject(subjectDTO);
+    }
+
+    // Deletes a subject
+    public void deleteSubject(SubjectDTO subjectDTO) {
+        subjectModel.deleteSubject(subjectDTO);
     }
 }
