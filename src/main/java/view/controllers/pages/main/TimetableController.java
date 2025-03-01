@@ -101,6 +101,7 @@ public class TimetableController implements ControllerAware {
             return;
         }
 
+        LocalDate previousStartDate = startDate;
         currentDate = newDate;
         startDate = newDate.with(DayOfWeek.MONDAY);
         endDate = newDate.with(DayOfWeek.SUNDAY);
@@ -125,7 +126,10 @@ public class TimetableController implements ControllerAware {
 
         weekLabel.setText("Week " + currentWeek);
 
-        updateTimetableHeaders();
+        if (!Objects.equals(previousStartDate, startDate)) {
+            updateTimetableHeaders();
+            loadTimetable();
+        }
     }
 
     private void handleNewEvent() {
@@ -217,8 +221,13 @@ public class TimetableController implements ControllerAware {
                 eventLabel.getStyleClass().add("assignment-label");
             }
 
-            if (column == -1 || startRow == -1 || endRow == -1) {
-                return;
+            if (column < 1 || column > (timetableGrid.getColumnCount() - 1)) {
+                System.out.println("An event with a date outside the timetable range was found");
+                continue;
+            }
+            if (startRow == -1 || endRow == -1) {
+                System.out.println("An invalid event was found");
+                continue;
             }
 
             // Calling eventLabel.getEvent() instead of just event should avoid storing the event twice
