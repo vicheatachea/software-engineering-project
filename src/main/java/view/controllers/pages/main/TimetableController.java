@@ -200,6 +200,7 @@ public class TimetableController implements ControllerAware {
     }
 
     private void loadTimetable() {
+        clearTimetable();
         List<Event> events = eventController.fetchEventsByUser(startDate, endDate);
 
         for (Event event : events) {
@@ -234,6 +235,14 @@ public class TimetableController implements ControllerAware {
             eventLabel.setOnMouseClicked(mouseEvent -> handleEditEvent(eventLabel.getEvent()));
             timetableGrid.add(eventLabel, column + 1, startRow, 1, endRow - startRow + 1);
         }
+    }
+
+    private void clearTimetable() {
+        timetableGrid.getChildren().removeIf(node -> {
+            Integer column = GridPane.getColumnIndex(node);
+            Integer row = GridPane.getRowIndex(node);
+            return node instanceof Label && (column != null && column > 0) && (row != null && row > 0);
+        });
     }
 
     private int getRowIndex(LocalDateTime dateTime, boolean isStart) {
