@@ -19,6 +19,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import util.StringUtil;
 import view.controllers.ControllerAware;
+import view.controllers.components.EventLabel;
 import view.controllers.components.EventPopupController;
 import view.controllers.components.HeaderLabel;
 
@@ -199,7 +200,7 @@ public class TimetableController implements ControllerAware {
 
         for (Event event : events) {
             int column = -1, startRow = -1, endRow = -1;
-            Label eventLabel = createEventLabel(event);
+            EventLabel eventLabel = new EventLabel(event);
 
             if (event instanceof TeachingSessionDTO teachingSession) {
                 column = (int) ChronoUnit.DAYS.between(startDate, teachingSession.startDate());
@@ -216,6 +217,12 @@ public class TimetableController implements ControllerAware {
                 eventLabel.getStyleClass().add("assignment-label");
             }
 
+            if (column == -1 || startRow == -1 || endRow == -1) {
+                return;
+            }
+
+            // Calling eventLabel.getEvent() instead of just event should avoid storing the event twice
+            eventLabel.setOnMouseClicked(mouseEvent -> handleEditEvent(eventLabel.getEvent()));
             timetableGrid.add(eventLabel, column, startRow, 1, endRow - startRow + 1);
         }
     }
@@ -226,14 +233,6 @@ public class TimetableController implements ControllerAware {
         int minutes = dateTime.getMinute();
         double timeInHours = hours + minutes / 60.0;
         return isStart ? (int) (timeInHours / timeStep + 1) : (int) Math.ceil(timeInHours / timeStep);
-    }
-
-    private Label createEventLabel(Event event) {
-        // Name is a placeholder, label should be updated to include event content
-        Label eventLabel = new Label("Event");
-        eventLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        eventLabel.setOnMouseClicked(mouseEvent -> handleEditEvent(event));
-        return eventLabel;
     }
 
     // Not to be implemented yet
