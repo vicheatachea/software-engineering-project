@@ -64,7 +64,7 @@ class UserDAOTest {
 		assertEquals(user.getRole(), foundUser.getRole());
 		assertEquals(user.getTimetable(), foundUser.getTimetable());
 	}
-	
+
 	@Test
 	void persistUpdate() {
 		UserDAO userDao = new UserDAO();
@@ -88,7 +88,7 @@ class UserDAOTest {
 		user.setDateOfBirth(Timestamp.valueOf("2001-01-01 00:00:00"));
 		user.setSocialNumber("987654321AB");
 		user.setRole(Role.TEACHER);
-		
+
 		userDao.persist(user);
 
 		UserEntity foundUser = userDao.findByUsername("JaneSmith");

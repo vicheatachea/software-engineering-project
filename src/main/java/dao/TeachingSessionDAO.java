@@ -1,9 +1,11 @@
 package dao;
 
 import entity.TeachingSessionEntity;
+import entity.UserGroupEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class TeachingSessionDAO {
@@ -14,6 +16,32 @@ public class TeachingSessionDAO {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
+			if (teachingSession.getId() == null || findById(teachingSession.getId()) == null) {
+				em.persist(teachingSession);
+			} else {
+				em.merge(teachingSession);
+			}
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public void persistForGroup(TeachingSessionEntity teachingSession, String groupName) {
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		try {
+			UserGroupEntity userGroup =
+					em.createQuery("SELECT u FROM UserGroupEntity u WHERE u.name = :name", UserGroupEntity.class)
+					  .setParameter("name", groupName).getSingleResult();
+
+			teachingSession.setTimetable(teachingSession.getTimetable());
+
 			if (teachingSession.getId() == null || findById(teachingSession.getId()) == null) {
 				em.persist(teachingSession);
 			} else {
@@ -76,8 +104,7 @@ public class TeachingSessionDAO {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.subject.id = :id",
-			                      TeachingSessionEntity.class)
-			         .setParameter("id", id).getSingleResult();
+			                      TeachingSessionEntity.class).setParameter("id", id).getSingleResult();
 		} catch (Exception e) {
 			return null;
 		} finally {
@@ -91,8 +118,7 @@ public class TeachingSessionDAO {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.location.id = :id",
-			                      TeachingSessionEntity.class)
-			         .setParameter("id", id).getSingleResult();
+			                      TeachingSessionEntity.class).setParameter("id", id).getSingleResult();
 		} catch (Exception e) {
 			return null;
 		} finally {
@@ -106,10 +132,28 @@ public class TeachingSessionDAO {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.timetable.id = :id",
-			                      TeachingSessionEntity.class)
-			         .setParameter("id", id).getResultList();
+			                      TeachingSessionEntity.class).setParameter("id", id).getResultList();
 		} catch (Exception e) {
 			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public void deleteById(long id) {
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		try {
+			TeachingSessionEntity teachingSession = findById(id);
+			if (teachingSession != null) {
+				em.remove(em.contains(teachingSession) ? teachingSession : em.merge(teachingSession));
+			}
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			throw e;
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -126,6 +170,45 @@ public class TeachingSessionDAO {
 		} catch (Exception e) {
 			em.getTransaction().rollback();
 			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public void deleteByGroupName(TeachingSessionEntity teachingSession, String groupName) {
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		try {
+			UserGroupEntity userGroup =
+					em.createQuery("SELECT u FROM UserGroupEntity u WHERE u.name = :name", UserGroupEntity.class)
+					  .setParameter("name", groupName).getSingleResult();
+
+			if (teachingSession.getTimetable().getId().equals(userGroup.getTimetable().getId())) {
+				em.remove(em.contains(teachingSession) ? teachingSession : em.merge(teachingSession));
+			}
+
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public List<TeachingSessionEntity> findAllByTimetableIdDuringPeriod(Long id, LocalDateTime start,
+	                                                                    LocalDateTime end) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.timetable.id = :id AND t.StartDate " +
+			                      "BETWEEN :start AND :end", TeachingSessionEntity.class).setParameter("id", id)
+			         .setParameter("start", start).setParameter("end", end).getResultList();
+		} catch (Exception e) {
+			return null;
 		} finally {
 			if (em.isOpen()) {
 				em.close();
