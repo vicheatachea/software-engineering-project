@@ -44,6 +44,36 @@ public class UserGroupDAO {
 		}
 	}
 
+	public UserGroupEntity findByName(String groupName) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.createQuery("SELECT g FROM UserGroupEntity g WHERE g.name = :groupName", UserGroupEntity.class)
+					.setParameter("groupName", groupName)
+					.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public List<UserGroupEntity> findAllByUserId(Long userId) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.createQuery("SELECT g FROM UserGroupEntity g JOIN g.students s WHERE s.id = :userId", UserGroupEntity.class)
+					.setParameter("userId", userId)
+					.getResultList();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
 	public List<UserGroupEntity> findAll() {
 		EntityManager em = emf.createEntityManager();
 		try {
