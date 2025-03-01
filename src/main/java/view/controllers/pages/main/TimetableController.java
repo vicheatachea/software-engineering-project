@@ -57,6 +57,7 @@ public class TimetableController implements ControllerAware {
             handleDatePick();
 
             updateTimetableHeaders();
+            updateTimetableHours();
         });
     }
 
@@ -162,10 +163,26 @@ public class TimetableController implements ControllerAware {
             String month = formatNumber(startDate.plusDays(i).getMonthValue());
 
             HeaderLabel header = new HeaderLabel(StringUtil.capitaliseFirst(weekDay), monthDay, month);
-            timetableGrid.add(header, i, 0);
+            timetableGrid.add(header, i + 1, 0);
 
             GridPane.setHalignment(header, javafx.geometry.HPos.CENTER);
             GridPane.setValignment(header, javafx.geometry.VPos.CENTER);
+        }
+    }
+
+    private void updateTimetableHours() {
+        int rowCount = timetableGrid.getRowCount();
+        double timeStep = 24.0 / (rowCount - 1);
+
+        for (int i = 0; i < rowCount; i++) {
+            int hours = (int) (i * timeStep);
+            int minutes = (int) ((i * timeStep - hours) * 60);
+
+            Label timeLabel = new Label(formatNumber(hours) + ":" + formatNumber(minutes));
+            timetableGrid.add(timeLabel, 0, i);
+
+            GridPane.setHalignment(timeLabel, javafx.geometry.HPos.CENTER);
+            GridPane.setValignment(timeLabel, javafx.geometry.VPos.BOTTOM);
         }
     }
 
