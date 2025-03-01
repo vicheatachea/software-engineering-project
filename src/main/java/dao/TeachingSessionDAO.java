@@ -1,7 +1,6 @@
 package dao;
 
 import entity.TeachingSessionEntity;
-import entity.UserGroupEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -16,32 +15,6 @@ public class TeachingSessionDAO {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
-			if (teachingSession.getId() == null || findById(teachingSession.getId()) == null) {
-				em.persist(teachingSession);
-			} else {
-				em.merge(teachingSession);
-			}
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			em.getTransaction().rollback();
-			throw e;
-		} finally {
-			if (em.isOpen()) {
-				em.close();
-			}
-		}
-	}
-
-	public void persistForGroup(TeachingSessionEntity teachingSession, String groupName) {
-		EntityManager em = emf.createEntityManager();
-		em.getTransaction().begin();
-		try {
-			UserGroupEntity userGroup =
-					em.createQuery("SELECT u FROM UserGroupEntity u WHERE u.name = :name", UserGroupEntity.class)
-					  .setParameter("name", groupName).getSingleResult();
-
-			teachingSession.setTimetable(teachingSession.getTimetable());
-
 			if (teachingSession.getId() == null || findById(teachingSession.getId()) == null) {
 				em.persist(teachingSession);
 			} else {
@@ -166,29 +139,6 @@ public class TeachingSessionDAO {
 		em.getTransaction().begin();
 		try {
 			em.createQuery("DELETE FROM TeachingSessionEntity").executeUpdate();
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			em.getTransaction().rollback();
-			throw e;
-		} finally {
-			if (em.isOpen()) {
-				em.close();
-			}
-		}
-	}
-
-	public void deleteByGroupName(TeachingSessionEntity teachingSession, String groupName) {
-		EntityManager em = emf.createEntityManager();
-		em.getTransaction().begin();
-		try {
-			UserGroupEntity userGroup =
-					em.createQuery("SELECT u FROM UserGroupEntity u WHERE u.name = :name", UserGroupEntity.class)
-					  .setParameter("name", groupName).getSingleResult();
-
-			if (teachingSession.getTimetable().getId().equals(userGroup.getTimetable().getId())) {
-				em.remove(em.contains(teachingSession) ? teachingSession : em.merge(teachingSession));
-			}
-
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
