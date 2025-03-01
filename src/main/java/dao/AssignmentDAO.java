@@ -32,33 +32,6 @@ public class AssignmentDAO {
 		}
 	}
 
-	public void persistForGroup(AssignmentEntity assignment, String groupName) {
-		EntityManager em = emf.createEntityManager();
-		em.getTransaction().begin();
-		try {
-			UserGroupEntity group =
-					em.createQuery("SELECT g FROM UserGroupEntity g WHERE g.name = :groupName", UserGroupEntity.class)
-					  .setParameter("groupName", groupName).getSingleResult();
-
-			assignment.setTimetable(group.getTimetable());
-
-			if (assignment.getId() == null || findById(assignment.getId()) == null) {
-				em.persist(assignment);
-			} else {
-				em.merge(assignment);
-			}
-
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			em.getTransaction().rollback();
-			throw e;
-		} finally {
-			if (em.isOpen()) {
-				em.close();
-			}
-		}
-	}
-
 	public AssignmentEntity findById(Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
