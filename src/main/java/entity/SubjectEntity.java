@@ -3,6 +3,7 @@ package entity;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "subject")
@@ -17,6 +18,10 @@ public class SubjectEntity {
 
 	@Column(nullable = false)
 	private String code;
+
+	@OneToMany(mappedBy = "subject")
+	private Set<UserGroupEntity> userGroups;
+
 
 	public SubjectEntity() {
 	}
