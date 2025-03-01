@@ -2,7 +2,9 @@ package view.controllers.pages.main;
 
 import controller.BaseController;
 import controller.EventController;
+import dto.AssignmentDTO;
 import dto.Event;
+import dto.TeachingSessionDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +25,7 @@ import view.controllers.components.HeaderLabel;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
 import java.util.List;
@@ -58,6 +61,7 @@ public class TimetableController implements ControllerAware {
 
             updateTimetableHeaders();
             updateTimetableHours();
+            loadTimetable();
         });
     }
 
@@ -193,15 +197,42 @@ public class TimetableController implements ControllerAware {
     private void loadTimetable() {
         List<Event> events = eventController.fetchEventsByUser(startDate, endDate);
 
-        // TODO: Add events to timetable as Labels through the createEventLabel method
+        for (Event event : events) {
+            int column = -1, startRow = -1, endRow = -1;
+            Label eventLabel = createEventLabel(event);
+
+            if (event instanceof TeachingSessionDTO teachingSession) {
+                column = (int) ChronoUnit.DAYS.between(startDate, teachingSession.startDate());
+                startRow = getRowIndex(teachingSession.startDate(), true);
+                endRow = getRowIndex(teachingSession.endDate(), false);
+
+                eventLabel.getStyleClass().add("teaching-session-label");
+            } else if (event instanceof AssignmentDTO assignment) {
+                column = (int) ChronoUnit.DAYS.between(startDate, assignment.deadline());
+                LocalDateTime deadline = assignment.deadline();
+                startRow = getRowIndex(deadline.minusHours(1), true);
+                endRow = getRowIndex(deadline, false);
+
+                eventLabel.getStyleClass().add("assignment-label");
+            }
+
+            timetableGrid.add(eventLabel, column, startRow, 1, endRow - startRow + 1);
+        }
+    }
+
+    private int getRowIndex(LocalDateTime dateTime, boolean isStart) {
+        double timeStep = 24.0 / (timetableGrid.getRowCount() - 1);
+        int hours = dateTime.getHour();
+        int minutes = dateTime.getMinute();
+        double timeInHours = hours + minutes / 60.0;
+        return isStart ? (int) (timeInHours / timeStep + 1) : (int) Math.ceil(timeInHours / timeStep);
     }
 
     private Label createEventLabel(Event event) {
         // Name is a placeholder, label should be updated to include event content
         Label eventLabel = new Label("Event");
-        eventLabel.getStyleClass().add("event-label");
+        eventLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         eventLabel.setOnMouseClicked(mouseEvent -> handleEditEvent(event));
-
         return eventLabel;
     }
 
