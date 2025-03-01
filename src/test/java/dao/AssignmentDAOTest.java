@@ -16,6 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AssignmentDAOTest {
 
+	private static final AssignmentDAO assignmentDAO = new AssignmentDAO();
+	private static final TimetableDAO timeTableDAO = new TimetableDAO();
+	private static final SubjectDAO subjectDAO = new SubjectDAO();
+
 	@BeforeAll
 	static void ensureDatabase() throws SQLException {
 		MariaDBConnection.verifyDatabase();
@@ -23,9 +27,6 @@ class AssignmentDAOTest {
 
 	@AfterAll
 	static void tearDown() {
-		AssignmentDAO assignmentDAO = new AssignmentDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-		SubjectDAO subjectDAO = new SubjectDAO();
 		assignmentDAO.deleteAll();
 		timeTableDAO.deleteAll();
 		subjectDAO.deleteAll();
@@ -33,9 +34,6 @@ class AssignmentDAOTest {
 
 	@BeforeEach
 	void setUp() {
-		AssignmentDAO assignmentDAO = new AssignmentDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-		SubjectDAO subjectDAO = new SubjectDAO();
 		assignmentDAO.deleteAll();
 		timeTableDAO.deleteAll();
 		subjectDAO.deleteAll();
@@ -43,10 +41,6 @@ class AssignmentDAOTest {
 
 	@Test
 	void persist() {
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-		AssignmentDAO assignmentDAO = new AssignmentDAO();
-
 		SubjectEntity math = new SubjectEntity("Math", "Mathematics-101");
 		subjectDAO.persist(math);
 
@@ -71,10 +65,6 @@ class AssignmentDAOTest {
 
 	@Test
 	void persistUpdate() {
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-		AssignmentDAO assignmentDAO = new AssignmentDAO();
-
 		SubjectEntity math = new SubjectEntity("Math", "Mathematics-101");
 		subjectDAO.persist(math);
 
@@ -104,10 +94,6 @@ class AssignmentDAOTest {
 
 	@Test
 	void findById() {
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-		AssignmentDAO assignmentDAO = new AssignmentDAO();
-
 		SubjectEntity math = new SubjectEntity("Math", "Mathematics-101");
 		subjectDAO.persist(math);
 
@@ -129,10 +115,6 @@ class AssignmentDAOTest {
 
 	@Test
 	void findAll() {
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-		AssignmentDAO assignmentDAO = new AssignmentDAO();
-
 		SubjectEntity math = new SubjectEntity("Math", "Mathematics-101");
 		subjectDAO.persist(math);
 		SubjectEntity physics = new SubjectEntity("Physics", "Physics-101");
@@ -161,10 +143,6 @@ class AssignmentDAOTest {
 
 	@Test
 	void deleteAll() {
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-		AssignmentDAO assignmentDAO = new AssignmentDAO();
-
 		SubjectEntity math = new SubjectEntity("Math", "Mathematics-101");
 		subjectDAO.persist(math);
 		SubjectEntity physics = new SubjectEntity("Physics", "Physics-101");
@@ -197,10 +175,6 @@ class AssignmentDAOTest {
 
 	@Test
 	void delete() {
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-		AssignmentDAO assignmentDAO = new AssignmentDAO();
-
 		SubjectEntity math = new SubjectEntity("Math", "Mathematics-101");
 		subjectDAO.persist(math);
 		SubjectEntity physics = new SubjectEntity("Physics", "Physics-101");

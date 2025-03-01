@@ -12,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TimetableDAOTest {
 
+	private static final TimetableDAO timetableDAO = new TimetableDAO();
+
 	@BeforeAll
 	static void ensureDatabase() throws SQLException {
 		datasource.MariaDBConnection.verifyDatabase();
@@ -19,20 +21,16 @@ class TimetableDAOTest {
 
 	@BeforeEach
 	void setUp() {
-		TimetableDAO timetableDAO = new TimetableDAO();
 		timetableDAO.deleteAll();
 	}
 
 	@AfterAll
 	static void tearDown() {
-		TimetableDAO timetableDAO = new TimetableDAO();
 		timetableDAO.deleteAll();
 	}
 
 	@Test
 	void persist() {
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		TimetableEntity timetable = new TimetableEntity();
 
 		timetableDAO.persist(timetable);
@@ -42,8 +40,6 @@ class TimetableDAOTest {
 
 	@Test
 	void findAll() {
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		TimetableEntity timetable1 = new TimetableEntity();
 		TimetableEntity timetable2 = new TimetableEntity();
 
@@ -55,8 +51,6 @@ class TimetableDAOTest {
 
 	@Test
 	void findById() {
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		TimetableEntity timetable = new TimetableEntity();
 
 		timetableDAO.persist(timetable);
@@ -66,8 +60,6 @@ class TimetableDAOTest {
 
 	@Test
 	void delete() {
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		TimetableEntity timetable = new TimetableEntity();
 
 		timetableDAO.persist(timetable);
@@ -79,8 +71,6 @@ class TimetableDAOTest {
 
 	@Test
 	void deleteAll() {
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		TimetableEntity timetable1 = new TimetableEntity();
 		TimetableEntity timetable2 = new TimetableEntity();
 
