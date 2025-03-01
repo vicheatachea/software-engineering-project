@@ -11,7 +11,16 @@ public class LocationController {
 
     // Fetch all available locations
     public List<LocationDTO> fetchAllLocations() {
-        // Placeholder
-        return new ArrayList<>();
+        return locationModel.fetchAllLocations();
+    }
+
+    // Adds/Updates a location
+    public void saveLocation(LocationDTO locationDTO) {
+        locationModel.saveLocation(locationDTO);
+    }
+
+    // Deletes a location
+    public void deleteLocation(LocationDTO locationDTO) {
+        locationModel.deleteLocation(locationDTO);
     }
 }
