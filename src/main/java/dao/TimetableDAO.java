@@ -1,5 +1,6 @@
 package dao;
 
+import entity.SubjectEntity;
 import entity.TimetableEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -140,6 +141,37 @@ public class TimetableDAO {
 		} catch (Exception e) {
 			em.getTransaction().rollback();
 			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public TimetableEntity findByUserId(long userId) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.createQuery("SELECT u.timetable FROM UserEntity u WHERE u.id = :userId", TimetableEntity.class)
+			         .setParameter("userId", userId)
+			         .getSingleResult();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public TimetableEntity findByGroupName(String groupName) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.createQuery("SELECT g.timetable FROM UserGroupEntity g WHERE g.name = :groupName",
+			                      TimetableEntity.class)
+			         .setParameter("groupName", groupName)
+			         .getSingleResult();
+		} catch (Exception e) {
+			return null;
 		} finally {
 			if (em.isOpen()) {
 				em.close();
