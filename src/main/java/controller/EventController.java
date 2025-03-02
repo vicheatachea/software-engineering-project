@@ -10,8 +10,8 @@ public class EventController {
 	private final EventModel eventModel = new EventModel();
 
 	// Fetch all events for a user within a time interval
-	public List<Event> fetchEventsByUser(LocalDateTime startDate, LocalDateTime endDate, long userId) {
-		return eventModel.fetchEventsByUser(startDate, endDate, userId);
+	public List<Event> fetchEventsByUser(LocalDateTime startDate, LocalDateTime endDate) {
+		return eventModel.fetchEventsByUser(startDate, endDate);
 	}
 
 	// Add an event for a user

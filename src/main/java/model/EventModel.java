@@ -24,10 +24,10 @@ public class EventModel {
 	private static final TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
 	private static final TimetableDAO timetableDAO = new TimetableDAO();
 
-	public List<Event> fetchEventsByUser(LocalDateTime startDate, LocalDateTime endDate, long userId) {
+	public List<Event> fetchEventsByUser(LocalDateTime startDate, LocalDateTime endDate) {
 		List<Event> events = new ArrayList<>();
 
-		List<TimetableEntity> timetables = timetableDAO.findAllByUserId(userId);
+		List<TimetableEntity> timetables = timetableDAO.findAllByUserId(UserPreferences.getUserId());
 
 		for (TimetableEntity timetable : timetables) {
 			List<Event> eventsByTimetable = fetchEventsByTimetable(startDate, endDate, timetable.getId());
