@@ -1,5 +1,6 @@
 package view.controllers.pages.user;
 
+import controller.BaseController;
 import controller.UserController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,7 +42,6 @@ public class LoginController {
 
         try {
             if (userController.authenticateUser(username, password)) {
-                userController.setUserLoggedIn(true);
                 stage.close(); // Close the login popup
             } else {
                 showAlert("Error", "Invalid credentials.");
