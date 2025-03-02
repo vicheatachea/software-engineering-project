@@ -18,6 +18,11 @@ public class GroupController {
 		return groupModel.fetchGroupsByUser();
 	}
 
+	// Fetch a group DTO by the group name
+	public GroupDTO fetchGroupByName(String groupName) {
+		return groupModel.fetchGroupByName(groupName);
+	}
+
 	// Check if the logged-in user is the owner of a group
 	public boolean isUserGroupOwner(String groupName) {
 		// TODO: Implement this method

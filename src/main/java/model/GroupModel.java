@@ -48,6 +48,10 @@ public class GroupModel {
 		return groupDTOs;
 	}
 
+	// Fetch a group DTO by the group name
+	public GroupDTO fetchGroupByName(String groupName) {
+	}
+
 	public void addGroup(GroupDTO groupDTO) {
 
 		UserEntity teacher = userDAO.findTeacherById(groupDTO.teacherId());
