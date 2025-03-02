@@ -270,7 +270,7 @@ public class EventPopupController {
         String subject = (String) subjectComboBox.getValue();
         String description = descriptionTextArea.getText();
 
-        long timetableId = -1;
+        Long timetableId;
 
         if (scheduleFor.equals("Myself")) {
             timetableId = timetableController.fetchTimetableForUser();
@@ -292,7 +292,7 @@ public class EventPopupController {
             timetableId = timetableController.fetchTimetableForGroup(groupName);
         }
 
-        if (timetableId == -1) {
+        if (timetableId == null) {
             System.out.println("Timetable ID not found");
             return;
         }
@@ -328,26 +328,6 @@ public class EventPopupController {
         } else {
             eventController.updateEvent(newEvent);
         }
-
-//        if (scheduleFor.equals("Myself")) {
-//            if (event == null) {
-//                eventController.addEventForUser(newEvent);
-//            } else {
-//                eventController.updateEventForUser(newEvent);
-//            }
-//        } else {
-//            String groupName = (String) groupComboBox.getValue();
-//
-//            if (checkNullOrEmpty(groupName, "Please select a group")) {
-//                return;
-//            }
-//
-//            if (event == null) {
-//                eventController.addEventForGroup(newEvent, groupName);
-//            } else {
-//                eventController.updateEventForGroup(newEvent, groupName);
-//            }
-//        }
     }
 
     @FXML
