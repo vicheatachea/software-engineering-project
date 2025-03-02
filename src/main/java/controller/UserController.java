@@ -18,15 +18,15 @@ public class UserController {
 		return userModel.register(userDTO);
 	}
 
-	public String getFullName() {
-		return userModel.getFirstName() + " " + userModel.getLastName();
+	public UserDTO getLoggedInUser() {
+		return userModel.getLoggedInUser();
 	}
 
-	public String getRole() {
-		return userModel.getRole();
+	public void updateUser(UserDTO userDTO) {
+		userModel.update(userDTO);
 	}
 
-	public String getSocialNumber() {
-		return userModel.getSocialNumber();
+	public void logout() {
+		userModel.logout();
 	}
 }
