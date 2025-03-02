@@ -37,9 +37,8 @@ public class GroupModel {
 	}
 
 	// Fetch all groups for a user
-	public List<GroupDTO> fetchGroupsByUser(GroupDTO groupDTO, long userId) {
-
-		List<UserGroupEntity> groups = userGroupDAO.findAllByUserId(userId);
+	public List<GroupDTO> fetchGroupsByUser() {
+		List<UserGroupEntity> groups = userGroupDAO.findAllByUserId(UserPreferences.getUserId());
 		List<GroupDTO> groupDTOs = new ArrayList<>();
 
 		for (UserGroupEntity group : groups) {
