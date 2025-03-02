@@ -2,6 +2,7 @@ package view.controllers.pages.main;
 
 import controller.BaseController;
 import controller.EventController;
+import controller.UserController;
 import dto.AssignmentDTO;
 import dto.Event;
 import dto.TeachingSessionDTO;
@@ -10,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -36,6 +38,7 @@ public class TimetableController implements ControllerAware {
     private static final int NUMBER_OF_BUTTONS = 2;
     BaseController baseController;
     EventController eventController;
+    UserController userController;
 
     LocalDate currentDate;
     LocalDateTime startDate;
@@ -70,6 +73,7 @@ public class TimetableController implements ControllerAware {
     public void setBaseController(BaseController baseController) {
         this.baseController = baseController;
         this.eventController = baseController.getEventController();
+        this.userController = baseController.getUserController();
     }
 
     private void addButtons() {
@@ -133,6 +137,14 @@ public class TimetableController implements ControllerAware {
     }
 
     private void handleNewEvent() {
+        if (!userController.isUserLoggedIn()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Not logged in");
+            alert.setHeaderText(null);
+            alert.setContentText("You need to be logged in to create an event!");
+            alert.showAndWait();
+            return;
+        }
         openEventPopup(null);
     }
 
@@ -200,6 +212,10 @@ public class TimetableController implements ControllerAware {
     }
 
     private void loadTimetable() {
+        if (!userController.isUserLoggedIn()) {
+            return;
+        }
+
         clearTimetable();
         List<Event> events = eventController.fetchEventsByUser(startDate, endDate);
 
