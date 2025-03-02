@@ -1,6 +1,7 @@
 package view.controllers.pages.user;
 
 import controller.UserController;
+import dto.UserDTO;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -8,7 +9,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
-
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -49,7 +49,7 @@ public class RegistrationController {
             String socialNumber = socialNumberField.getText();
             String username = usernameField.getText();
             String password = passwordField.getText();
-            LocalDate dateOfBirth = LocalDate.parse(dateOfBirthField.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            String dateOfBirthText = dateOfBirthField.getText();
             String role = roleComboBox.getValue();
 
             if (firstName.isEmpty() || lastName.isEmpty() || socialNumber.isEmpty() || username.isEmpty() ||
@@ -58,17 +58,19 @@ public class RegistrationController {
                 return;
             }
 
+            LocalDate dateOfBirth = LocalDate.parse(dateOfBirthText, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
             UserDTO userDTO = new UserDTO(username, password, "salt", firstName, lastName, dateOfBirth, socialNumber, role);
 
             if (userController.registerUser(userDTO)) {
                 stage.close();
             } else {
-                System.out.println("Invalid user data.");
+                showAlert("Error", "Invalid user data.");
             }
         } catch (DateTimeParseException e) {
-            System.out.println("Invalid date format. Please use yyyy-MM-dd.");
+            showAlert("Error", "Invalid date format. Please use yyyy-MM-dd.");
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Error", "An unexpected error occurred: " + e.getMessage());
         }
     }
 
@@ -86,7 +88,7 @@ public class RegistrationController {
             scene.setRoot(parent);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            showAlert("Error", "An unexpected error occurred: " + e.getMessage());
         }
     }
 

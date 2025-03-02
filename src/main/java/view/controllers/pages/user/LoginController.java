@@ -10,7 +10,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 
-
 import java.io.IOException;
 
 public class LoginController {
@@ -35,17 +34,20 @@ public class LoginController {
         String username = emailField.getText();
         String password = passwordField.getText();
 
-
         if (username.isEmpty() || password.isEmpty()) {
             showAlert("Error", "Please fill in all fields.");
             return;
         }
 
-        if (userController.authenticateUser(username, password)) {
-            userController.setUserLoggedIn(true);
-            stage.close(); // Close the login popup
-        } else {
-            System.out.println("Invalid credentials.");
+        try {
+            if (userController.authenticateUser(username, password)) {
+                userController.setUserLoggedIn(true);
+                stage.close(); // Close the login popup
+            } else {
+                showAlert("Error", "Invalid credentials.");
+            }
+        } catch (Exception e) {
+            showAlert("Error", "An unexpected error occurred: " + e.getMessage());
         }
     }
 
@@ -63,7 +65,7 @@ public class LoginController {
             scene.setRoot(parent);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            showAlert("Error", "An unexpected error occurred: " + e.getMessage());
         }
     }
 

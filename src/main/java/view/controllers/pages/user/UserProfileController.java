@@ -35,8 +35,8 @@ public class UserProfileController {
 
     @FXML
     public void initialize() {
-        nameLabel.setText(userController.getUserModel().getFirstName() + " " + userController.getUserModel().getLastName());
-        roleLabel.setText(userController.getUserModel().getRole());
-        socialNumberLabel.setText(userController.getUserModel().getSocialNumber());
+        nameLabel.setText(userController.getFullName());
+        roleLabel.setText(userController.getRole());
+        socialNumberLabel.setText(userController.getSocialNumber());
     }
 }

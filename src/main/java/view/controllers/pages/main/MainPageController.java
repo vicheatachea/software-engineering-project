@@ -2,7 +2,6 @@ package view.controllers.pages.main;
 
 import controller.BaseController;
 import controller.UserController;
-import dto.UserDTO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,12 +20,13 @@ import view.controllers.pages.user.UserProfileController;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class MainPageController implements Initializable {
-    Stage stage;
-    BaseController baseController;
+    private Stage stage;
+    private final BaseController baseController;
+    private final UserController userController;
+
     @FXML
     private SidebarController sidebarController;
     @FXML
@@ -36,6 +36,7 @@ public class MainPageController implements Initializable {
 
     public MainPageController() {
         this.baseController = new BaseController();
+        this.userController = baseController.getUserController();
     }
 
     public void setStage(Stage stage) {
@@ -47,15 +48,13 @@ public class MainPageController implements Initializable {
         SplitPane.setResizableWithParent(sidebar, false);
         SplitPane.setResizableWithParent(mainContent, false);
 
-        UserController userController = new UserController(userDTO); // Create an instance of UserController
-
         sidebarController.currentViewProperty().addListener((observableValue, oldValue, newValue) -> {
             switch (newValue) {
                 case "account":
                     if (userController.isUserLoggedIn()) {
-                        showUserProfilePopup(userController);
+                        showUserProfilePopup();
                     } else {
-                        showLoginPopup(userController);
+                        showLoginPopup();
                     }
                     break;
                 case "home":
@@ -95,7 +94,7 @@ public class MainPageController implements Initializable {
         }
     }
 
-    private void showLoginPopup(UserController userController) {
+    private void showLoginPopup() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/login-page.fxml"));
             Parent parent = fxmlLoader.load();
@@ -115,7 +114,7 @@ public class MainPageController implements Initializable {
         }
     }
 
-    private void showUserProfilePopup(UserController userController) {
+    private void showUserProfilePopup() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/user-profile-page.fxml"));
             Parent parent = fxmlLoader.load();
