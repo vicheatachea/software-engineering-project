@@ -14,8 +14,8 @@ public class SubjectController {
         return subjectModel.fetchAllSubjects();
     }
 
-    public List<SubjectDTO> fetchSubjectsByUser(long userId) {
-        return subjectModel.fetchSubjectsByUser(userId);
+    public List<SubjectDTO> fetchSubjectsByUser() {
+        return subjectModel.fetchSubjectsByUser();
     }
 
     // Adds/Updates a subject
