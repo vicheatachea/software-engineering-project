@@ -1,112 +1,144 @@
 package model;
 
+import dao.TimetableDAO;
 import dao.UserDAO;
 import dto.UserDTO;
+import entity.Role;
+import entity.TimetableEntity;
 import entity.UserEntity;
 
-import java.time.LocalDate;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.prefs.BackingStoreException;
 
 public class UserModel {
-    private String username;
-    private String password;
-    private String salt;
-    private String firstName;
-    private String lastName;
-    private LocalDate dateOfBirth;
-    private String socialNumber;
-    private String role;
+	private static final UserDAO userDAO = new UserDAO();
+	private static final TimetableDAO timetableDAO = new TimetableDAO();
 
-    public UserModel(UserDTO userDTO) {
-        this.username = userDTO.username();
-        this.password = userDTO.password();
-        this.salt = userDTO.salt();
-        this.firstName = userDTO.firstName();
-        this.lastName = userDTO.lastName();
-        this.dateOfBirth = userDTO.dateOfBirth();
-        this.socialNumber = userDTO.socialNumber();
-        this.role = userDTO.role();
-    }
+	public UserDTO getLoggedInUser() {
+		UserEntity user = userDAO.findById(UserPreferences.getUserId());
 
-    public boolean authenticate(String username, String password) {
-        UserDAO userDAO = new UserDAO();
-        return userDAO.authenticate(username, password);
-    }
+		if (user == null) {
+			throw new IllegalArgumentException("User not found");
+		}
 
-    public boolean register(UserDTO userDTO) {
-        if (!isValid(userDTO)) {
-            return false;
-        }
+		return convertToDTO(user);
+	}
 
-        UserDAO userDAO = new UserDAO();
-        userDAO.persist(new UserEntity(userDTO));
-        return true;
-    }
+	public boolean authenticate(String username, String password) {
+		UserEntity user = userDAO.authenticate(username, password);
 
-    public boolean isValid(UserDTO userDTO) {
-        return isUsernameValid(userDTO.username()) && isPasswordValid(userDTO.password()) &&
-                isFirstNameValid(userDTO.firstName()) && isLastNameValid(userDTO.lastName()) &&
-                isDateOfBirthValid(userDTO.dateOfBirth()) && isSocialNumberValid(userDTO.socialNumber()) &&
-                isRoleValid(userDTO.role());
-    }
+		if (user != null) {
+			UserPreferences.setUser(user.getId(), user.getRole());
+			return true;
+		}
 
-    private boolean isUsernameValid(String username) {
-        return username != null && !username.trim().isEmpty();
-    }
+		return false;
+	}
 
-    private boolean isPasswordValid(String password) {
-        return password != null && password.length() >= 8;
-    }
+	public boolean register(UserDTO userDTO) {
+		if (!isValid(userDTO)) {
+			throw new IllegalArgumentException("Invalid user data");
+		}
 
-    private boolean isFirstNameValid(String firstName) {
-        return firstName != null && !firstName.trim().isEmpty();
-    }
+		TimetableEntity timetable = new TimetableEntity();
 
-    private boolean isLastNameValid(String lastName) {
-        return lastName != null && !lastName.trim().isEmpty();
-    }
+		timetableDAO.persist(timetable);
 
-    private boolean isDateOfBirthValid(LocalDate dateOfBirth) {
-        return dateOfBirth != null && dateOfBirth.isBefore(LocalDate.now());
-    }
+		UserEntity user = convertToEntity(userDTO, timetable);
 
-    private boolean isSocialNumberValid(String socialNumber) {
-        return socialNumber != null && socialNumber.matches("\\d{3}-\\d{2}-\\d{4}");
-    }
+		userDAO.persist(user);
 
-    private boolean isRoleValid(String role) {
-        return role != null && (role.equals("STUDENT") || role.equals("TEACHER"));
-    }
+		return true;
+	}
 
-    // Getters for the fields
-    public String getUsername() {
-        return username;
-    }
+	public void update(UserDTO userDTO) {
 
-    public String getPassword() {
-        return password;
-    }
+		UserEntity user = userDAO.findById(UserPreferences.getUserId());
 
-    public String getSalt() {
-        return salt;
-    }
+		if (!isValid(userDTO)) {
+			throw new IllegalArgumentException("Invalid user data");
+		}
 
-    public String getFirstName() {
-        return firstName;
-    }
+		user.setUsername(userDTO.username());
+		user.setPassword(userDTO.password());
+		user.setFirstName(userDTO.firstName());
+		user.setLastName(userDTO.lastName());
+		user.setDateOfBirth(Timestamp.valueOf(userDTO.dateOfBirth()));
+		user.setSocialNumber(userDTO.socialNumber());
+		user.setRole(Role.valueOf(userDTO.role()));
 
-    public String getLastName() {
-        return lastName;
-    }
+		userDAO.persist(user);
+	}
 
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
+	public boolean isValid(UserDTO userDTO) {
+		return isUsernameValid(userDTO.username()) && isPasswordValid(userDTO.password()) &&
+		       isFirstNameValid(userDTO.firstName()) && isLastNameValid(userDTO.lastName()) &&
+		       isDateOfBirthValid(userDTO.dateOfBirth()) && isSocialNumberValid(userDTO.socialNumber()) &&
+		       isRoleValid(userDTO.role());
+	}
 
-    public String getSocialNumber() {
-        return socialNumber;
-    }
+	private boolean isUsernameValid(String username) {
+		return username != null && !username.trim().isEmpty();
+	}
 
-    public String getRole() {
-        return role;
-    }
+	private boolean isPasswordValid(String password) {
+		return password != null && password.length() >= 8;
+	}
+
+	private boolean isFirstNameValid(String firstName) {
+		return firstName != null && !firstName.trim().isEmpty();
+	}
+
+	private boolean isLastNameValid(String lastName) {
+		return lastName != null && !lastName.trim().isEmpty();
+	}
+
+	private boolean isDateOfBirthValid(LocalDateTime dateOfBirth) {
+		return dateOfBirth != null && dateOfBirth.isBefore(LocalDateTime.now());
+	}
+
+	private boolean isSocialNumberValid(String socialNumber) {
+		return socialNumber != null;
+	}
+
+	private boolean isRoleValid(String role) {
+		return role != null && (role.equals("STUDENT") || role.equals("TEACHER"));
+	}
+
+	public boolean isUserLoggedIn() {
+		return UserPreferences.getUserId() != -1;
+	}
+
+	public boolean logout() {
+		try {
+			UserPreferences.deleteUser();
+			return true;
+		} catch (BackingStoreException e) {
+			System.out.println("Error logging out user: " + e.getMessage());
+			return false;
+		}
+	}
+
+	private UserDTO convertToDTO(UserEntity user) {
+		return new UserDTO(user.getUsername(),
+		                   user.getPassword(),
+		                   user.getSalt(),
+		                   user.getFirstName(),
+		                   user.getLastName(),
+		                   user.getDateOfBirth().toLocalDateTime(),
+		                   user.getSocialNumber(),
+		                   user.getRole().toString());
+	}
+
+	private UserEntity convertToEntity(UserDTO user, TimetableEntity timetable) {
+		return new UserEntity(user.firstName(),
+		                      user.lastName(),
+		                      user.username(),
+		                      user.password(),
+		                      Timestamp.valueOf(user.dateOfBirth()),
+		                      user.socialNumber(),
+		                      Role.valueOf(user.role()),
+		                      timetable);
+	}
 }
