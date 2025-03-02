@@ -116,8 +116,8 @@ public class EventPopupController {
             }
 
             eventComboBox.setDisable(true);
-            // TODO: Make sure to disable schedule and group combo boxes if the event is not for the user
-            // This will require verifying the timetable id and checking if it matches the user's timetable id
+            scheduleComboBox.setDisable(true);
+            groupComboBox.setDisable(true);
 
             if (event instanceof TeachingSessionDTO teachingSession) {
                 LocalDateTime startDateTime = teachingSession.startDate();
