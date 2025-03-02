@@ -162,7 +162,7 @@ public class TimetableController implements ControllerAware {
 
     private void updateTimetableHeaders() {
         timetableGrid.getChildren().removeIf(node -> GridPane.getColumnIndex(node) != null &&
-                GridPane.getRowIndex(node) == 0);
+                GridPane.getRowIndex(node) == 0 && GridPane.getColumnIndex(node) > 0);
         int daysBetween = (int) ChronoUnit.DAYS.between(startDate, endDate) + 1;
 
         for (int i = 0; i < daysBetween; i++) {
