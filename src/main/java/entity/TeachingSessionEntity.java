@@ -42,8 +42,7 @@ public class TeachingSessionEntity {
 	}
 
 	public TeachingSessionEntity(Timestamp StartDate, Timestamp EndDate, String description, LocationEntity location,
-	                             TimetableEntity timetable,
-	                             SubjectEntity subject) {
+	                             TimetableEntity timetable, SubjectEntity subject) {
 		this.StartDate = StartDate;
 		this.EndDate = EndDate;
 		this.description = description;
@@ -123,12 +122,9 @@ public class TeachingSessionEntity {
 
 		TeachingSessionEntity that = (TeachingSessionEntity) o;
 
-		return Objects.equals(id, that.id) &&
-		       Objects.equals(StartDate, that.StartDate) &&
-		       Objects.equals(EndDate, that.EndDate) &&
-		       Objects.equals(location, that.location) &&
-		       Objects.equals(timetable, that.timetable) &&
-		       Objects.equals(subject, that.subject);
+		return Objects.equals(id, that.id) && Objects.equals(StartDate, that.StartDate) &&
+		       Objects.equals(EndDate, that.EndDate) && Objects.equals(location, that.location) &&
+		       Objects.equals(timetable, that.timetable) && Objects.equals(subject, that.subject);
 	}
 
 	@Override

@@ -44,6 +44,28 @@ public class SubjectDAO {
 		}
 	}
 
+	public List<SubjectEntity> findAllByUserId(long userId) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			// This query finds subjects from groups where the user is a student
+			// AND subjects from teaching sessions where the user is a teacher
+			return em.createQuery(
+					         "SELECT DISTINCT s FROM SubjectEntity s WHERE " +
+					         "s IN (SELECT g.subject FROM UserGroupEntity g JOIN g.students u WHERE u.id = :userId) " +
+					         "OR " +
+					         "s IN (SELECT ts.subject FROM TeachingSessionEntity ts JOIN ts.teachers t WHERE t.id = :userId)",
+					         SubjectEntity.class)
+			         .setParameter("userId", userId)
+			         .getResultList();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
 	public SubjectEntity findByName(String name) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -105,4 +127,7 @@ public class SubjectDAO {
 			}
 		}
 	}
+
+
+
 }

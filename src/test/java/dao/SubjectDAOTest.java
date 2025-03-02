@@ -14,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 class SubjectDAOTest {
 
+	private static final SubjectDAO subjectDAO = new SubjectDAO();
+
 	@BeforeAll
 	static void ensureDatabase() throws SQLException {
 		MariaDBConnection.verifyDatabase();
@@ -21,19 +23,16 @@ class SubjectDAOTest {
 
 	@AfterAll
 	static void tearDown() {
-		SubjectDAO subjectDAO = new SubjectDAO();
 		subjectDAO.deleteAll();
 	}
 
 	@BeforeEach
 	void setUp() {
-		SubjectDAO subjectDAO = new SubjectDAO();
 		subjectDAO.deleteAll();
 	}
 
 	@Test
 	void persist() {
-		SubjectDAO subjectDAO = new SubjectDAO();
 		SubjectEntity subject = new SubjectEntity("Math", "Mathematics-101");
 
 		subjectDAO.persist(subject);
@@ -43,10 +42,9 @@ class SubjectDAOTest {
 		assertEquals("Math", foundSubject.getName());
 		assertEquals("Mathematics-101", foundSubject.getCode());
 	}
-	
+
 	@Test
 	void persistUpdate() {
-		SubjectDAO subjectDAO = new SubjectDAO();
 		SubjectEntity subject = new SubjectEntity("Math", "Mathematics-101");
 
 		subjectDAO.persist(subject);
@@ -63,7 +61,6 @@ class SubjectDAOTest {
 
 	@Test
 	void findById() {
-		SubjectDAO subjectDAO = new SubjectDAO();
 		SubjectEntity subject = new SubjectEntity("Math", "Mathematics-101");
 
 		subjectDAO.persist(subject);
@@ -73,7 +70,6 @@ class SubjectDAOTest {
 
 	@Test
 	void findAll() {
-		SubjectDAO subjectDAO = new SubjectDAO();
 		SubjectEntity subject1 = new SubjectEntity("Math", "Mathematics-101");
 		SubjectEntity subject2 = new SubjectEntity("Physics", "Physics-101");
 
@@ -85,7 +81,6 @@ class SubjectDAOTest {
 
 	@Test
 	void delete() {
-		SubjectDAO subjectDAO = new SubjectDAO();
 		SubjectEntity subject = new SubjectEntity("Math", "Mathematics-101");
 
 		subjectDAO.persist(subject);
@@ -96,7 +91,6 @@ class SubjectDAOTest {
 
 	@Test
 	void deleteAll() {
-		SubjectDAO subjectDAO = new SubjectDAO();
 		SubjectEntity subject1 = new SubjectEntity("Math", "Mathematics-101");
 		SubjectEntity subject2 = new SubjectEntity("Physics", "Physics-101");
 

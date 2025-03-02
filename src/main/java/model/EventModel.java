@@ -10,18 +10,34 @@ import dto.TeachingSessionDTO;
 import entity.AssignmentEntity;
 import entity.SubjectEntity;
 import entity.TeachingSessionEntity;
+import entity.TimetableEntity;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class EventModel {
 
 	private static final AssignmentDAO assignmentDAO = new AssignmentDAO();
 	private static final TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
+	private static final TimetableDAO timetableDAO = new TimetableDAO();
 
-	public List<Event> fetchEventsByUser(LocalDateTime startDate, LocalDateTime endDate, Long timetableId) {
+	public List<Event> fetchEventsByUser(LocalDateTime startDate, LocalDateTime endDate, long userId) {
+		List<Event> events = new ArrayList<>();
+
+		List<TimetableEntity> timetables = timetableDAO.findAllByUserId(userId);
+
+		for (TimetableEntity timetable : timetables) {
+			List<Event> eventsByTimetable = fetchEventsByTimetable(startDate, endDate, timetable.getId());
+			events.addAll(eventsByTimetable);
+		}
+
+		return events;
+	}
+
+	public List<Event> fetchEventsByTimetable(LocalDateTime startDate, LocalDateTime endDate, long timetableId) {
 		List<Event> events = new ArrayList<>();
 
 		List<TeachingSessionEntity> teachingSessions =
@@ -44,8 +60,8 @@ public class EventModel {
 		return events;
 	}
 
-	// Add an event for a user
-	public void addEventForUser(Event event) {
+	// Add an event
+	public void addEvent(Event event) {
 		if (event instanceof TeachingSessionDTO teachingSessionDTO) {
 			TeachingSessionEntity entity = convertToTeachingSessionEntity(teachingSessionDTO);
 			teachingSessionDAO.persist(entity);
@@ -55,8 +71,8 @@ public class EventModel {
 		}
 	}
 
-	// Update an event for a user
-	public void updateEventForUser(Event event) {
+	// Update an event
+	public void updateEvent(Event event) {
 		if (event instanceof TeachingSessionDTO teachingSessionDTO) {
 			TeachingSessionEntity entity = convertToTeachingSessionEntity(teachingSessionDTO);
 			teachingSessionDAO.persist(entity);
@@ -66,47 +82,14 @@ public class EventModel {
 		}
 	}
 
-	// Delete an event for a user
-	public void deleteEventForUser(Event event) {
+	// Delete an event
+	public void deleteEvent(Event event) {
 		if (event instanceof TeachingSessionDTO teachingSessionDTO) {
 			TeachingSessionEntity entity = convertToTeachingSessionEntity(teachingSessionDTO);
-			teachingSessionDAO.deleteById(entity.getId());
+			teachingSessionDAO.delete(entity);
 		} else if (event instanceof AssignmentDTO assignmentDTO) {
 			AssignmentEntity entity = convertToAssignmentEntity(assignmentDTO);
-			assignmentDAO.deleteById(entity.getId());
-		}
-	}
-
-	// Add an event for a group
-	public void addEventForGroup(Event event, String groupName) {
-		if (event instanceof TeachingSessionDTO teachingSessionDTO) {
-			TeachingSessionEntity entity = convertToTeachingSessionEntity(teachingSessionDTO);
-			teachingSessionDAO.persistForGroup(entity, groupName);
-		} else if (event instanceof AssignmentDTO assignmentDTO) {
-			AssignmentEntity entity = convertToAssignmentEntity(assignmentDTO);
-			assignmentDAO.persistForGroup(entity, groupName);
-		}
-	}
-
-	// Update an event for a group
-	public void updateEventForGroup(Event event, String groupName) {
-		if (event instanceof TeachingSessionDTO teachingSessionDTO) {
-			TeachingSessionEntity entity = convertToTeachingSessionEntity(teachingSessionDTO);
-			teachingSessionDAO.persistForGroup(entity, groupName);
-		} else if (event instanceof AssignmentDTO assignmentDTO) {
-			AssignmentEntity entity = convertToAssignmentEntity(assignmentDTO);
-			assignmentDAO.persistForGroup(entity, groupName);
-		}
-	}
-
-	// Delete an event for a group
-	public void deleteEventForGroup(Event event, String groupName) {
-		if (event instanceof TeachingSessionDTO teachingSessionDTO) {
-			TeachingSessionEntity entity = convertToTeachingSessionEntity(teachingSessionDTO);
-			teachingSessionDAO.deleteByGroupName(entity, groupName);
-		} else if (event instanceof AssignmentDTO assignmentDTO) {
-			AssignmentEntity entity = convertToAssignmentEntity(assignmentDTO);
-			assignmentDAO.deleteByGroupName(entity, groupName);
+			assignmentDAO.delete(entity);
 		}
 	}
 

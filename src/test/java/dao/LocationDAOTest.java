@@ -13,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LocationDAOTest {
 
+	private static final LocationDAO locationDAO = new LocationDAO();
+
 	@BeforeAll
 	static void ensureDatabase() throws SQLException {
 		MariaDBConnection.verifyDatabase();
@@ -20,20 +22,16 @@ class LocationDAOTest {
 
 	@AfterAll
 	static void tearDown() {
-		LocationDAO locationDAO = new LocationDAO();
 		locationDAO.deleteAll();
 	}
 
 	@BeforeEach
 	void setUp() {
-		LocationDAO locationDAO = new LocationDAO();
 		locationDAO.deleteAll();
 	}
 
 	@Test
 	void persist() {
-		LocationDAO locationDAO = new LocationDAO();
-
 		LocationEntity location = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
 
 		locationDAO.persist(location);
@@ -47,8 +45,6 @@ class LocationDAOTest {
 
 	@Test
 	void persistUpdate() {
-		LocationDAO locationDAO = new LocationDAO();
-
 		LocationEntity location = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
 
 		locationDAO.persist(location);
@@ -68,8 +64,6 @@ class LocationDAOTest {
 
 	@Test
 	void findById() {
-		LocationDAO locationDAO = new LocationDAO();
-
 		LocationEntity location = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
 
 		locationDAO.persist(location);
@@ -79,8 +73,6 @@ class LocationDAOTest {
 
 	@Test
 	void findAll() {
-		LocationDAO locationDAO = new LocationDAO();
-
 		LocationEntity location1 = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
 		LocationEntity location2 = new LocationEntity("MPA5027", "Metropolia Myllypuro", "A");
 
@@ -92,8 +84,6 @@ class LocationDAOTest {
 
 	@Test
 	void delete() {
-		LocationDAO locationDAO = new LocationDAO();
-
 		LocationEntity location = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
 
 		locationDAO.persist(location);
@@ -103,8 +93,6 @@ class LocationDAOTest {
 
 	@Test
 	void deleteAll() {
-		LocationDAO locationDAO = new LocationDAO();
-
 		LocationEntity location1 = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
 		LocationEntity location2 = new LocationEntity("MPA5027", "Metropolia Myllypuro", "A");
 

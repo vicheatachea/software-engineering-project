@@ -16,6 +16,10 @@ import java.sql.Timestamp;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TeachingSessionDAOTest {
+	private static final TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
+	private static final LocationDAO locationDAO = new LocationDAO();
+	private static final SubjectDAO subjectDAO = new SubjectDAO();
+	private static final TimetableDAO timetableDAO = new TimetableDAO();
 
 	@BeforeAll
 	static void ensureDatabase() throws SQLException {
@@ -24,10 +28,6 @@ class TeachingSessionDAOTest {
 
 	@AfterAll
 	static void tearDown() {
-		TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
-		LocationDAO locationDAO = new LocationDAO();
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
 		teachingSessionDAO.deleteAll();
 		locationDAO.deleteAll();
 		subjectDAO.deleteAll();
@@ -36,10 +36,6 @@ class TeachingSessionDAOTest {
 
 	@BeforeEach
 	void setUp() {
-		TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
-		LocationDAO locationDAO = new LocationDAO();
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
 		teachingSessionDAO.deleteAll();
 		locationDAO.deleteAll();
 		subjectDAO.deleteAll();
@@ -48,11 +44,6 @@ class TeachingSessionDAOTest {
 
 	@Test
 	void persist() {
-		TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
-		LocationDAO locationDAO = new LocationDAO();
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		LocationEntity location = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
 		locationDAO.persist(location);
 
@@ -67,8 +58,8 @@ class TeachingSessionDAOTest {
 
 		String description = "Math class";
 
-		TeachingSessionEntity teachingSession = new TeachingSessionEntity(start, end, description, location, timetable,
-		                                                                  subject);
+		TeachingSessionEntity teachingSession =
+				new TeachingSessionEntity(start, end, description, location, timetable, subject);
 
 		teachingSessionDAO.persist(teachingSession);
 
@@ -83,11 +74,6 @@ class TeachingSessionDAOTest {
 
 	@Test
 	void persistUpdate() {
-		TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
-		LocationDAO locationDAO = new LocationDAO();
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		LocationEntity location = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
 		locationDAO.persist(location);
 
@@ -102,8 +88,8 @@ class TeachingSessionDAOTest {
 
 		String description = "Math class";
 
-		TeachingSessionEntity teachingSession = new TeachingSessionEntity(start, end, description, location, timetable,
-		                                                                  subject);
+		TeachingSessionEntity teachingSession =
+				new TeachingSessionEntity(start, end, description, location, timetable, subject);
 		teachingSessionDAO.persist(teachingSession);
 
 		// Update the teaching session
@@ -121,11 +107,6 @@ class TeachingSessionDAOTest {
 
 	@Test
 	void findById() {
-		TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
-		LocationDAO locationDAO = new LocationDAO();
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		LocationEntity location = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
 		locationDAO.persist(location);
 
@@ -140,8 +121,8 @@ class TeachingSessionDAOTest {
 
 		String description = "Math class";
 
-		TeachingSessionEntity teachingSession = new TeachingSessionEntity(start, end, description, location, timetable,
-		                                                                  subject);
+		TeachingSessionEntity teachingSession =
+				new TeachingSessionEntity(start, end, description, location, timetable, subject);
 
 		teachingSessionDAO.persist(teachingSession);
 
@@ -150,11 +131,6 @@ class TeachingSessionDAOTest {
 
 	@Test
 	void findAll() {
-		TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
-		LocationDAO locationDAO = new LocationDAO();
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		LocationEntity location = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
 		locationDAO.persist(location);
 
@@ -169,10 +145,10 @@ class TeachingSessionDAOTest {
 
 		String description = "Math class";
 
-		TeachingSessionEntity teachingSession1 = new TeachingSessionEntity(start, end, description, location, timetable,
-		                                                                   subject);
-		TeachingSessionEntity teachingSession2 = new TeachingSessionEntity(start, end, description, location, timetable,
-		                                                                   subject);
+		TeachingSessionEntity teachingSession1 =
+				new TeachingSessionEntity(start, end, description, location, timetable, subject);
+		TeachingSessionEntity teachingSession2 =
+				new TeachingSessionEntity(start, end, description, location, timetable, subject);
 
 		teachingSessionDAO.persist(teachingSession1);
 		teachingSessionDAO.persist(teachingSession2);
@@ -182,11 +158,6 @@ class TeachingSessionDAOTest {
 
 	@Test
 	void delete() {
-		TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
-		LocationDAO locationDAO = new LocationDAO();
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		LocationEntity location = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
 		locationDAO.persist(location);
 
@@ -201,8 +172,8 @@ class TeachingSessionDAOTest {
 
 		String description = "Math class";
 
-		TeachingSessionEntity teachingSession = new TeachingSessionEntity(start, end, description, location, timetable,
-		                                                                  subject);
+		TeachingSessionEntity teachingSession =
+				new TeachingSessionEntity(start, end, description, location, timetable, subject);
 
 		teachingSessionDAO.persist(teachingSession);
 
@@ -215,11 +186,6 @@ class TeachingSessionDAOTest {
 
 	@Test
 	void findBySubjectId() {
-		TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
-		LocationDAO locationDAO = new LocationDAO();
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		LocationEntity location = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
 		locationDAO.persist(location);
 
@@ -234,8 +200,8 @@ class TeachingSessionDAOTest {
 
 		String description = "Math class";
 
-		TeachingSessionEntity teachingSession = new TeachingSessionEntity(start, end, description, location, timetable,
-		                                                                  subject);
+		TeachingSessionEntity teachingSession =
+				new TeachingSessionEntity(start, end, description, location, timetable, subject);
 
 		teachingSessionDAO.persist(teachingSession);
 
@@ -244,11 +210,6 @@ class TeachingSessionDAOTest {
 
 	@Test
 	void findByLocationId() {
-		TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
-		LocationDAO locationDAO = new LocationDAO();
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		LocationEntity location = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
 		locationDAO.persist(location);
 
@@ -263,8 +224,8 @@ class TeachingSessionDAOTest {
 
 		String description = "Math class";
 
-		TeachingSessionEntity teachingSession = new TeachingSessionEntity(start, end, description, location, timetable,
-		                                                                  subject);
+		TeachingSessionEntity teachingSession =
+				new TeachingSessionEntity(start, end, description, location, timetable, subject);
 
 		teachingSessionDAO.persist(teachingSession);
 
@@ -273,11 +234,6 @@ class TeachingSessionDAOTest {
 
 	@Test
 	void deleteAll() {
-		TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
-		LocationDAO locationDAO = new LocationDAO();
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		LocationEntity location = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
 		locationDAO.persist(location);
 
@@ -293,11 +249,10 @@ class TeachingSessionDAOTest {
 		String description = "Math class";
 		String description2 = "Math class 2";
 
-		TeachingSessionEntity teachingSession1 = new TeachingSessionEntity(start, end, description, location,
-		                                                                   timetable, subject);
-		TeachingSessionEntity teachingSession2 = new TeachingSessionEntity(start, end, description2, location,
-		                                                                   timetable,
-		                                                                   subject);
+		TeachingSessionEntity teachingSession1 =
+				new TeachingSessionEntity(start, end, description, location, timetable, subject);
+		TeachingSessionEntity teachingSession2 =
+				new TeachingSessionEntity(start, end, description2, location, timetable, subject);
 
 		teachingSessionDAO.persist(teachingSession1);
 		teachingSessionDAO.persist(teachingSession2);
@@ -311,11 +266,6 @@ class TeachingSessionDAOTest {
 
 	@Test
 	void findAllByTimetableId() {
-		TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
-		LocationDAO locationDAO = new LocationDAO();
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		LocationEntity location = new LocationEntity("MPA5026", "Metropolia Myllypuro", "A");
 		locationDAO.persist(location);
 
@@ -334,11 +284,10 @@ class TeachingSessionDAOTest {
 		String description = "Math class";
 		String description2 = "Math class 2";
 
-		TeachingSessionEntity teachingSession1 = new TeachingSessionEntity(start, end, description, location, timetable,
-		                                                                   subject);
+		TeachingSessionEntity teachingSession1 =
+				new TeachingSessionEntity(start, end, description, location, timetable, subject);
 		TeachingSessionEntity teachingSession2 =
-				new TeachingSessionEntity(start, end, description2, location, timetable2,
-				                          subject);
+				new TeachingSessionEntity(start, end, description2, location, timetable2, subject);
 
 		teachingSessionDAO.persist(teachingSession1);
 		teachingSessionDAO.persist(teachingSession2);

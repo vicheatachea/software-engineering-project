@@ -1,10 +1,7 @@
 package dao;
 
 import datasource.MariaDBConnection;
-import entity.Role;
-import entity.TimetableEntity;
-import entity.UserEntity;
-import entity.UserGroupEntity;
+import entity.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +15,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserGroupDAOTest {
 
+	private static final UserGroupDAO userGroupDAO = new UserGroupDAO();
+	private static final UserDAO userDAO = new UserDAO();
+	private static final TimetableDAO timetableDAO = new TimetableDAO();
+	private static final SubjectDAO subjectDAO = new SubjectDAO();
+
 	@BeforeAll
 	static void ensureDatabase() throws SQLException {
 		MariaDBConnection.verifyDatabase();
@@ -25,9 +27,6 @@ class UserGroupDAOTest {
 
 	@AfterAll
 	static void tearDown() {
-		UserGroupDAO userGroupDAO = new UserGroupDAO();
-		UserDAO userDAO = new UserDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
 		userGroupDAO.deleteAll();
 		userDAO.deleteAll();
 		timetableDAO.deleteAll();
@@ -35,9 +34,6 @@ class UserGroupDAOTest {
 
 	@BeforeEach
 	void setUp() {
-		UserGroupDAO userGroupDAO = new UserGroupDAO();
-		UserDAO userDAO = new UserDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
 		userGroupDAO.deleteAll();
 		userDAO.deleteAll();
 		timetableDAO.deleteAll();
@@ -45,10 +41,6 @@ class UserGroupDAOTest {
 
 	@Test
 	void persist() {
-		UserGroupDAO userGroupDAO = new UserGroupDAO();
-		UserDAO userDAO = new UserDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		TimetableEntity timetable1 = new TimetableEntity();
 		TimetableEntity timetable2 = new TimetableEntity();
 		TimetableEntity timetable3 = new TimetableEntity();
@@ -85,7 +77,12 @@ class UserGroupDAOTest {
 
 		userDAO.persist(teacher);
 
-		UserGroupEntity userGroup = new UserGroupEntity("Group 1", "ICT3003", 34, teacher, students, timetable5);
+		SubjectEntity subject = new SubjectEntity("ICT", "ICT3005");
+
+		subjectDAO.persist(subject);
+
+		UserGroupEntity userGroup =
+				new UserGroupEntity("Group 1", "ICT3003", 34, teacher, students, subject, timetable5);
 
 		userGroupDAO.persist(userGroup);
 
@@ -101,10 +98,6 @@ class UserGroupDAOTest {
 
 	@Test
 	void persistUpdate() {
-		UserGroupDAO userGroupDAO = new UserGroupDAO();
-		UserDAO userDAO = new UserDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		TimetableEntity timetable1 = new TimetableEntity();
 		TimetableEntity timetable2 = new TimetableEntity();
 		TimetableEntity timetable3 = new TimetableEntity();
@@ -145,7 +138,11 @@ class UserGroupDAOTest {
 
 		userDAO.persist(teacher);
 
-		UserGroupEntity userGroup = new UserGroupEntity("Group 1", "ICT3003", 34, teacher, students, timetable5);
+		SubjectEntity subject = new SubjectEntity("ICT", "ICT3005");
+		subjectDAO.persist(subject);
+
+		UserGroupEntity userGroup =
+				new UserGroupEntity("Group 1", "ICT3003", 34, teacher, students, subject, timetable5);
 
 		userGroupDAO.persist(userGroup);
 
@@ -162,10 +159,6 @@ class UserGroupDAOTest {
 
 	@Test
 	void findById() {
-		UserGroupDAO userGroupDAO = new UserGroupDAO();
-		UserDAO userDAO = new UserDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		TimetableEntity timetable1 = new TimetableEntity();
 		TimetableEntity timetable2 = new TimetableEntity();
 		TimetableEntity timetable3 = new TimetableEntity();
@@ -206,7 +199,12 @@ class UserGroupDAOTest {
 
 		userDAO.persist(teacher);
 
-		UserGroupEntity userGroup = new UserGroupEntity("Group 1", "ICT3003", 34, teacher, students, timetable5);
+		SubjectEntity subject = new SubjectEntity("ICT", "ICT3005");
+
+		subjectDAO.persist(subject);
+
+		UserGroupEntity userGroup =
+				new UserGroupEntity("Group 1", "ICT3003", 34, teacher, students, subject, timetable5);
 
 		userGroupDAO.persist(userGroup);
 
@@ -223,10 +221,6 @@ class UserGroupDAOTest {
 
 	@Test
 	void findAll() {
-		UserGroupDAO userGroupDAO = new UserGroupDAO();
-		UserDAO userDAO = new UserDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		TimetableEntity timetable1 = new TimetableEntity();
 		TimetableEntity timetable2 = new TimetableEntity();
 		TimetableEntity timetable3 = new TimetableEntity();
@@ -297,8 +291,13 @@ class UserGroupDAOTest {
 		userDAO.persist(teacher);
 		userDAO.persist(teacher2);
 
-		UserGroupEntity userGroup1 = new UserGroupEntity("Group 1", "ICT3003", 34, teacher, students1, timetable9);
-		UserGroupEntity userGroup2 = new UserGroupEntity("Group 2", "ICT3004", 30, teacher, students2, timetable10);
+		SubjectEntity subject = new SubjectEntity("ICT", "ICT3005");
+		subjectDAO.persist(subject);
+
+		UserGroupEntity userGroup1 =
+				new UserGroupEntity("Group 1", "ICT3003", 34, teacher, students1, subject, timetable9);
+		UserGroupEntity userGroup2 =
+				new UserGroupEntity("Group 2", "ICT3004", 30, teacher, students2, subject, timetable10);
 
 		userGroupDAO.persist(userGroup1);
 		userGroupDAO.persist(userGroup2);
@@ -308,10 +307,6 @@ class UserGroupDAOTest {
 
 	@Test
 	void delete() {
-		UserGroupDAO userGroupDAO = new UserGroupDAO();
-		UserDAO userDAO = new UserDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		TimetableEntity timetable1 = new TimetableEntity();
 		TimetableEntity timetable2 = new TimetableEntity();
 		TimetableEntity timetable3 = new TimetableEntity();
@@ -350,7 +345,11 @@ class UserGroupDAOTest {
 
 		userDAO.persist(teacher);
 
-		UserGroupEntity userGroup = new UserGroupEntity("Group 1", "ICT3003", 34, teacher, students, timetable5);
+		SubjectEntity subject = new SubjectEntity("ICT", "ICT3005");
+		subjectDAO.persist(subject);
+
+		UserGroupEntity userGroup =
+				new UserGroupEntity("Group 1", "ICT3003", 34, teacher, students, subject, timetable5);
 
 		userGroupDAO.persist(userGroup);
 
@@ -365,10 +364,6 @@ class UserGroupDAOTest {
 
 	@Test
 	void deleteAll() {
-		UserGroupDAO userGroupDAO = new UserGroupDAO();
-		UserDAO userDAO = new UserDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		TimetableEntity timetable1 = new TimetableEntity();
 		TimetableEntity timetable2 = new TimetableEntity();
 		TimetableEntity timetable3 = new TimetableEntity();
@@ -436,11 +431,17 @@ class UserGroupDAOTest {
 		UserEntity teacher2 =
 				new UserEntity("Jeff", "Doe", "JeffDoe", "password", DoB, "987654321BA", Role.TEACHER, timetable8);
 
+
 		userDAO.persist(teacher);
 		userDAO.persist(teacher2);
 
-		UserGroupEntity userGroup1 = new UserGroupEntity("Group 1", "ICT3003", 34, teacher, students1, timetable9);
-		UserGroupEntity userGroup2 = new UserGroupEntity("Group 2", "ICT3004", 30, teacher, students2, timetable10);
+		SubjectEntity subject = new SubjectEntity("ICT", "ICT3005");
+		subjectDAO.persist(subject);
+
+		UserGroupEntity userGroup1 =
+				new UserGroupEntity("Group 1", "ICT3003", 34, teacher, students1, subject, timetable9);
+		UserGroupEntity userGroup2 =
+				new UserGroupEntity("Group 2", "ICT3004", 30, teacher, students2, subject, timetable10);
 
 		userGroupDAO.persist(userGroup1);
 		userGroupDAO.persist(userGroup2);
