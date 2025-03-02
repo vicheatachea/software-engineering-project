@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import view.controllers.ControllerAware;
 import view.controllers.components.SidebarController;
 import view.controllers.pages.user.LoginController;
+import view.controllers.pages.user.UserProfileController;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,6 +24,7 @@ import java.util.ResourceBundle;
 public class MainPageController implements Initializable {
 	Stage stage;
 	BaseController baseController;
+
 	@FXML
 	private SidebarController sidebarController;
 	@FXML
@@ -40,13 +42,15 @@ public class MainPageController implements Initializable {
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
+
+
 		SplitPane.setResizableWithParent(sidebar, false);
 		SplitPane.setResizableWithParent(mainContent, false);
 
 		sidebarController.currentViewProperty().addListener((observableValue, oldValue, newValue) -> {
 			switch (newValue) {
 				case "account":
-					if (userController.isUserLoggedIn()) {
+					if (baseController.getUserController().isUserLoggedIn()) {
 						showUserProfilePopup();
 					} else {
 						showLoginPopup();
@@ -95,10 +99,10 @@ public class MainPageController implements Initializable {
 			Parent parent = fxmlLoader.load();
 
 			LoginController loginController = fxmlLoader.getController();
-			loginController.setUserController(userController);
-			loginController.setStage(stage);
+			loginController.setUserController(baseController.getUserController());
 
 			Stage loginStage = new Stage();
+			loginController.setStage(loginStage);
 			loginStage.initModality(Modality.APPLICATION_MODAL);
 			loginStage.initOwner(stage);
 			loginStage.setTitle("Login");
@@ -120,9 +124,12 @@ public class MainPageController implements Initializable {
 					new FXMLLoader(getClass().getResource("/layouts/pages/user/user-profile-page.fxml"));
 			Parent parent = fxmlLoader.load();
 
-            UserProfileController userProfileController = fxmlLoader.getController();
-            userProfileController.setUserController(userController);
-            userProfileController.setStage(stage);
+			//TODO: Something causes the userController to be null when
+			//      trying to open the userProfilePage after being logged in.
+
+			UserProfileController userProfileController = fxmlLoader.getController();
+			userProfileController.setUserController(baseController.getUserController());
+			userProfileController.setStage(stage);
 
 			Stage userProfileStage = new Stage();
 			userProfileStage.initModality(Modality.APPLICATION_MODAL);
