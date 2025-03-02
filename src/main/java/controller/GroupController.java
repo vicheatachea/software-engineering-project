@@ -14,12 +14,17 @@ public class GroupController {
 	}
 
 	// Fetch all groups for a user
-	public List<GroupDTO> fetchGroupsByUser(GroupDTO groupDTO, long userId) {
-		return groupModel.fetchGroupsByUser(groupDTO, userId);
+	public List<GroupDTO> fetchGroupsByUser() {
+		return groupModel.fetchGroupsByUser();
+	}
+
+	// Fetch a group DTO by the group name
+	public GroupDTO fetchGroupByName(String groupName) {
+		return groupModel.fetchGroupByName(groupName);
 	}
 
 	// Check if the logged-in user is the owner of a group
-	public boolean isUserGroupOwner(GroupDTO groupDTO) {
+	public boolean isUserGroupOwner(String groupName) {
 		// TODO: Implement this method
 		return false;
 	}

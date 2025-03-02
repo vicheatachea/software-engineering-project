@@ -22,9 +22,9 @@ public class SubjectModel {
 		return subjects;
 	}
 
-	public List<SubjectDTO> fetchSubjectsByUser(long userId) {
+	public List<SubjectDTO> fetchSubjectsByUser() {
 		List<SubjectDTO> subjectDTOs = new ArrayList<>();
-		List<SubjectEntity> subjects = subjectDAO.findAllByUserId(userId);
+		List<SubjectEntity> subjects = subjectDAO.findAllByUserId(UserPreferences.getUserId());
 
 		for (SubjectEntity subject : subjects) {
 			subjectDTOs.add(convertToSubjectDTO(subject));

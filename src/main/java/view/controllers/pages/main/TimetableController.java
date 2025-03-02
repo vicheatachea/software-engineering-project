@@ -38,8 +38,8 @@ public class TimetableController implements ControllerAware {
     EventController eventController;
 
     LocalDate currentDate;
-    LocalDate startDate;
-    LocalDate endDate;
+    LocalDateTime startDate;
+    LocalDateTime endDate;
     int currentWeek;
 
     @FXML
@@ -101,10 +101,10 @@ public class TimetableController implements ControllerAware {
             return;
         }
 
-        LocalDate previousStartDate = startDate;
+        LocalDateTime previousStartDate = startDate;
         currentDate = newDate;
-        startDate = newDate.with(DayOfWeek.MONDAY);
-        endDate = newDate.with(DayOfWeek.SUNDAY);
+        startDate = newDate.with(DayOfWeek.MONDAY).atStartOfDay();
+        endDate = newDate.with(DayOfWeek.SUNDAY).atTime(23, 59, 59);
         currentWeek = newDate.get(WeekFields.ISO.weekOfWeekBasedYear());
 
         String startDay = formatNumber(startDate.getDayOfMonth());
