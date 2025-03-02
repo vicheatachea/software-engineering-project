@@ -1,42 +1,45 @@
 package view.controllers.pages.user;
 
 import controller.UserController;
+import dto.UserDTO;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 public class UserProfileController {
-    private UserController userController;
-    private Stage stage;
+	private UserController userController;
+	private Stage stage;
 
-    @FXML
-    private ImageView profileImageView;
-    @FXML
-    private Label nameLabel;
-    @FXML
-    private Label roleLabel;
-    @FXML
-    private Label socialNumberLabel;
+	@FXML
+	private ImageView profileImageView;
+	@FXML
+	private Label nameLabel;
+	@FXML
+	private Label roleLabel;
+	@FXML
+	private Label socialNumberLabel;
 
-    public void setUserController(UserController userController) {
-        this.userController = userController;
-    }
+	public void setUserController(UserController userController) {
+		this.userController = userController;
+	}
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
 
-    @FXML
-    private void handleLogout() {
-        userController.setUserLoggedIn(false);
-        stage.close();
-    }
+	@FXML
+	private void handleLogout() {
+		userController.logout();
+		stage.close();
+	}
 
-    @FXML
-    public void initialize() {
-        nameLabel.setText(userController.getFullName());
-        roleLabel.setText(userController.getRole());
-        socialNumberLabel.setText(userController.getSocialNumber());
-    }
+	@FXML
+	public void initialize() {
+		UserDTO userDTO = userController.getLoggedInUser();
+		String fullName = userDTO.firstName() + " " + userDTO.lastName();
+		nameLabel.setText(fullName);
+		roleLabel.setText(userDTO.role());
+		socialNumberLabel.setText(userDTO.socialNumber());
+	}
 }
