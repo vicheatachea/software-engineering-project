@@ -25,8 +25,7 @@ public class GroupController {
 
 	// Check if the logged-in user is the owner of a group
 	public boolean isUserGroupOwner(String groupName) {
-		// TODO: Implement this method
-		return false;
+		return groupModel.isUserGroupOwner(groupName);
 	}
 
 	// Add a group
