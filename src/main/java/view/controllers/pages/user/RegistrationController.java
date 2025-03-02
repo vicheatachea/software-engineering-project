@@ -1,96 +1,107 @@
-//package view.controllers.pages.user;
-//
-//import controller.Controller;
-//import javafx.fxml.FXML;
-//import javafx.scene.control.TextField;
-//import javafx.scene.control.PasswordField;
-//import javafx.stage.Stage;
-//import javafx.scene.control.ComboBox;
-//import javafx.collections.FXCollections;
-//import javafx.fxml.FXMLLoader;
-//import javafx.scene.Parent;
-//import javafx.scene.Scene;
-//import java.io.IOException;
-//
-//public class RegistrationController {
-////    private Controller controller;
-//    private Stage stage;
-//
-//    @FXML
-//    private ComboBox<String> roleComboBox;
-//
-//    @FXML
-//    public void initialize() {
-//        roleComboBox.setItems(FXCollections.observableArrayList("STUDENT", "TEACHER"));
-//    }
-//
-//    @FXML
-//    private TextField firstNameField;
-//
-//    @FXML
-//    private TextField lastNameField;
-//
-//    @FXML
-//    private TextField socialNumberField;
-//
-//    @FXML
-//    private TextField usernameField;
-//
-//    @FXML
-//    private TextField dateOfBirthField;
-//
-//    @FXML
-//    private TextField emailField;
-//
-//    @FXML
-//    private PasswordField passwordField;
-//
-////    public void setController(Controller controller) {
-////        this.controller = controller;
-//    }
-//
-//    public void setStage(Stage stage) {
-//        this.stage = stage;
-//    }
-//
-//    @FXML
-//    private void goToLoginPage() {
-//        try {
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/login-page.fxml"));
-//            Parent parent = fxmlLoader.load();
-//
-//            LoginController loginController = fxmlLoader.getController();
-////            loginController.setController(controller);
-//            loginController.setStage(stage); // Use the same stage as registration
-//
-//            // Update the scene instead of creating a new Stage
-//            Scene scene = emailField.getScene(); // Get current scene
-//            scene.setRoot(parent); // Replace the scene root with login page
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @FXML
-//    private void handleRegister() {
-//
-//        String firstName = firstNameField.getText();
-//        String lastName = lastNameField.getText();
-//        Integer socialNumber = Integer.parseInt(socialNumberField.getText());
-//        String email = emailField.getText();
-//        String username = usernameField.getText();
-//        String password = passwordField.getText();
-//        Integer dateOfBirth = Integer.parseInt(dateOfBirthField.getText());
-//        String role = roleComboBox.getValue();
-//
-//        // Add registration logic here
-//
-//        stage.close(); // Close the registration popup
-//    }
-//
-//    @FXML
-//    private void handleExit() {
-//        stage.close();
-//    }
-//}
+package view.controllers.pages.user;
+
+import controller.UserController;
+import dto.UserDTO;
+import javafx.collections.FXCollections;
+import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import javafx.scene.control.Alert;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
+public class RegistrationController {
+    private UserController userController;
+    private Stage stage;
+
+    @FXML
+    private TextField firstNameField;
+    @FXML
+    private TextField lastNameField;
+    @FXML
+    private TextField socialNumberField;
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private TextField dateOfBirthField;
+    @FXML
+    private ComboBox<String> roleComboBox;
+
+    public void setUserController(UserController userController) {
+        this.userController = userController;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    @FXML
+    private void handleRegister() {
+        try {
+            String firstName = firstNameField.getText();
+            String lastName = lastNameField.getText();
+            String socialNumber = socialNumberField.getText();
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+            String dateOfBirthText = dateOfBirthField.getText();
+            String role = roleComboBox.getValue();
+
+            if (firstName.isEmpty() || lastName.isEmpty() || socialNumber.isEmpty() || username.isEmpty() ||
+                    password.isEmpty() || dateOfBirthText.isEmpty() || role == null) {
+                showAlert("Error", "Please fill in all fields.");
+                return;
+            }
+
+            LocalDate dateOfBirth = LocalDate.parse(dateOfBirthText, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            UserDTO userDTO = new UserDTO(username, password, "salt", firstName, lastName, dateOfBirth, socialNumber, role);
+
+            if (userController.registerUser(userDTO)) {
+                stage.close();
+            } else {
+                showAlert("Error", "Invalid user data.");
+            }
+        } catch (DateTimeParseException e) {
+            showAlert("Error", "Invalid date format. Please use yyyy-MM-dd.");
+        } catch (Exception e) {
+            showAlert("Error", "An unexpected error occurred: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void goToLoginPage() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/login-page.fxml"));
+            Parent parent = fxmlLoader.load();
+
+            LoginController loginController = fxmlLoader.getController();
+            loginController.setUserController(userController);
+            loginController.setStage(stage);
+
+            Scene scene = firstNameField.getScene();
+            scene.setRoot(parent);
+
+        } catch (IOException e) {
+            showAlert("Error", "An unexpected error occurred: " + e.getMessage());
+        }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    @FXML
+    public void initialize() {
+        roleComboBox.setItems(FXCollections.observableArrayList("STUDENT", "TEACHER"));
+    }
+}
