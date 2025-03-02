@@ -10,6 +10,7 @@ import entity.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 public class GroupModel {
 
@@ -151,6 +152,6 @@ public class GroupModel {
 			throw new IllegalArgumentException("Group does not exist.");
 		}
 
-		return group.getTeacher().getId() == UserPreferences.getUserId();
+		return Objects.equals(group.getTeacher().getId(), UserPreferences.getUserId());
 	}
 }
