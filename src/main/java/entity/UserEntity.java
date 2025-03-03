@@ -132,8 +132,12 @@ public class UserEntity {
 	}
 
 	public void setPassword(String password) {
+		generateSalt();
+		this.password = PasswordHashUtil.hashPassword(password, getSalt());
+	}
+
+	public void generateSalt() {
 		this.salt = PasswordHashUtil.generateSalt();
-		this.password = PasswordHashUtil.hashPassword(password, this.salt);
 	}
 
 	public String getSalt() {
