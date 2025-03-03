@@ -128,7 +128,6 @@ public class MainPageController implements Initializable {
 			
 			UserProfileController userProfileController = fxmlLoader.getController();
 			userProfileController.setUserController(baseController.getUserController());
-			userProfileController.setStage(stage);
 			userProfileController.updateUserInfo();
 
 			Stage userProfileStage = new Stage();
