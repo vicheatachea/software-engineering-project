@@ -58,8 +58,28 @@ public class RegistrationController {
 				return;
 			}
 
+			if (!firstName.matches("[a-zA-Z]+") || !lastName.matches("[a-zA-Z]+")) {
+				showAlert("Error", "First name and last name can only contain letters.");
+				return;
+			}
+
+			if (socialNumber.length() != 11) {
+				showAlert("Error", "Social number has to be exactly 11 characters long.");
+				return;
+			}
+
+			if (userController.isUsernameTaken(username)) {
+				showAlert("Error", "Username is already taken.");
+				return;
+			}
+
+			if (password.length() < 8) {
+				showAlert("Error", "Password must be 8 characters long.");
+				return;
+			}
+
 			UserDTO userDTO =
-					new UserDTO(username, password, "salt", firstName, lastName, dateOfBirth, socialNumber, role);
+					new UserDTO(username, password, firstName, lastName, dateOfBirth, socialNumber.toUpperCase(), role);
 
 			if (userController.registerUser(userDTO)) {
 				userController.authenticateUser(username, password);
