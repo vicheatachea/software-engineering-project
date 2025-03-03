@@ -54,17 +54,17 @@ public class RegistrationController {
 
 			if (firstName.isEmpty() || lastName.isEmpty() || socialNumber.isEmpty() || username.isEmpty() ||
 			    password.isEmpty() || dobPicker.getValue() == null || role == null) {
-				showAlert("Error", "Please fill in all fields.");
+				showAlert("Warning", "Please fill in all fields.");
 				return;
 			}
 
 			if (!firstName.matches("[a-zA-Z]+") || !lastName.matches("[a-zA-Z]+")) {
-				showAlert("Error", "First name and last name can only contain letters.");
+				showAlert("Warning", "First name and last name can only contain letters.");
 				return;
 			}
 
 			if (socialNumber.length() != 11) {
-				showAlert("Error", "Social number has to be exactly 11 characters long.");
+				showAlert("Warning", "Social number has to be exactly 11 characters long.");
 				return;
 			}
 
@@ -74,7 +74,7 @@ public class RegistrationController {
 			}
 
 			if (password.length() < 8) {
-				showAlert("Error", "Password must be 8 characters long.");
+				showAlert("Warning", "Password must be 8 characters long.");
 				return;
 			}
 
