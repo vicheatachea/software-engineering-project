@@ -3,7 +3,6 @@ package view.controllers.pages.user;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 public class NotificationItemController {
     @FXML
@@ -17,9 +16,9 @@ public class NotificationItemController {
 
     private NotificationsController parentController;
 
-    public void setNotificationData(NotificationsController parent, String eventTitle, int time) {
+    public void setNotificationData(NotificationsController parent, String event, int time) {
         this.parentController = parent;
-        eventLabel.setText(eventTitle);
+        eventLabel.setText(event);
         timeLabel.setText("Time: " + time);
     }
 

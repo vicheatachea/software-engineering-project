@@ -38,13 +38,13 @@ public class NotificationsController implements NotificationAware {
         loadNotification(event.toString(), time);
     }
 
-    private void loadNotification(String eventTitle, int time) {
+    private void loadNotification(String event, int time) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/notifications/notification-item.fxml"));
             HBox notificationBox = loader.load();
 
             NotificationItemController controller = loader.getController();
-            controller.setNotificationData(this, eventTitle, time);
+            controller.setNotificationData(this, event, time);
 
             notificationsContainer.getChildren().add(notificationBox);
         } catch (IOException e) {
