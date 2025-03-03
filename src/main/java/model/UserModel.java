@@ -19,6 +19,7 @@ public class UserModel {
 		UserEntity user = userDAO.findById(UserPreferences.getUserId());
 
 		if (user == null) {
+			logout();
 			throw new IllegalArgumentException("User not found");
 		}
 
@@ -123,7 +124,6 @@ public class UserModel {
 	private UserDTO convertToDTO(UserEntity user) {
 		return new UserDTO(user.getUsername(),
 		                   user.getPassword(),
-		                   user.getSalt(),
 		                   user.getFirstName(),
 		                   user.getLastName(),
 		                   user.getDateOfBirth().toLocalDateTime(),
@@ -140,5 +140,9 @@ public class UserModel {
 		                      user.socialNumber(),
 		                      Role.valueOf(user.role()),
 		                      timetable);
+	}
+
+	public boolean isUsernameTaken(String username) {
+		return userDAO.findByUsername(username) != null;
 	}
 }
