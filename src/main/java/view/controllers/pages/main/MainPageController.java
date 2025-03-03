@@ -125,10 +125,7 @@ public class MainPageController implements Initializable {
 			FXMLLoader fxmlLoader =
 					new FXMLLoader(getClass().getResource("/layouts/pages/user/user-profile-page.fxml"));
 			Parent parent = fxmlLoader.load();
-
-			//TODO: Something causes the userController to be null when
-			//      trying to open the userProfilePage after being logged in.
-
+			
 			UserProfileController userProfileController = fxmlLoader.getController();
 			userProfileController.setUserController(baseController.getUserController());
 			userProfileController.setStage(stage);
