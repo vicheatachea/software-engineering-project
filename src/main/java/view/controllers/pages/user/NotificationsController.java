@@ -5,6 +5,7 @@ import dto.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,13 +35,13 @@ public class NotificationsController implements NotificationAware {
     @Override
     public void notify(Event event, int time) {
         events.add(event);
-        loadNotification(event.getTitle(), time);
+        loadNotification(event.toString(), time);
     }
 
     private void loadNotification(String eventTitle, int time) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/notifications/notification-item.fxml"));
-            VBox notificationBox = loader.load();
+            HBox notificationBox = loader.load();
 
             NotificationItemController controller = loader.getController();
             controller.setNotificationData(this, eventTitle, time);
@@ -51,7 +52,7 @@ public class NotificationsController implements NotificationAware {
         }
     }
 
-    public void removeNotification(VBox notification) {
+    public void removeNotification(HBox notification) {
         notificationsContainer.getChildren().remove(notification);
     }
 

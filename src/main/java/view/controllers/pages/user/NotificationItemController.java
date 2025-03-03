@@ -2,6 +2,7 @@ package view.controllers.pages.user;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class NotificationItemController {
@@ -12,7 +13,7 @@ public class NotificationItemController {
     private Label timeLabel;
 
     @FXML
-    private VBox notificationItem;
+    private HBox notificationItem;
 
     private NotificationsController parentController;
 
