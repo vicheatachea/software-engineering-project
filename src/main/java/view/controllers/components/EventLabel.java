@@ -26,13 +26,21 @@ public class EventLabel extends Label {
         return event;
     }
 
+    public int getLabelPosition() {
+        return labelPosition;
+    }
+
+    public int getNumberOfLabels() {
+        return numberOfLabels;
+    }
+
     public void updateLabelHeight(double cellHeight) {
         this.setMaxHeight(cellHeight * height);
         this.setTranslateY(cellHeight * top_offset);
     }
 
     public void updateLabelWidth(double cellWidth) {
-        this.setMaxWidth((double) labelPosition / numberOfLabels * cellWidth);
+        this.setMaxWidth((double) 1 / numberOfLabels * cellWidth);
         this.setTranslateX((double) (labelPosition - 1) / numberOfLabels * cellWidth);
     }
 
