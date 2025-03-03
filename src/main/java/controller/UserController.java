@@ -29,4 +29,8 @@ public class UserController {
 	public void logout() {
 		userModel.logout();
 	}
+
+	public boolean isUsernameTaken(String username) {
+		return userModel.isUsernameTaken(username);
+	}
 }
