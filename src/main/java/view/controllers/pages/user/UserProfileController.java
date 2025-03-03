@@ -33,13 +33,18 @@ public class UserProfileController {
 		userController.logout();
 		stage.close();
 	}
-
+	
 	@FXML
 	public void initialize() {
-		UserDTO userDTO = userController.getLoggedInUser();
-		String fullName = userDTO.firstName() + " " + userDTO.lastName();
-		nameLabel.setText(fullName);
-		roleLabel.setText(userDTO.role());
-		socialNumberLabel.setText(userDTO.socialNumber());
+	}
+
+	@FXML
+	public void updateUserInfo() {
+		if (userController != null) {
+			UserDTO userDTO = userController.getLoggedInUser();
+			nameLabel.setText(userDTO.firstName() + " " + userDTO.lastName());
+			roleLabel.setText(userDTO.role());
+			socialNumberLabel.setText(userDTO.socialNumber());
+		}
 	}
 }
