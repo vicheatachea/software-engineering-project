@@ -53,6 +53,8 @@ public class UserProfileController {
 		nameLabel.setText(userDTO.firstName() + " " + userDTO.lastName());
 		roleLabel.setText(userDTO.role());
 		socialNumberLabel.setText(userDTO.socialNumber());
+
+
 	}
 
 

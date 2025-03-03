@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+
+<HBox fx:id="notificationItem" spacing="10" xmlns="http://javafx.com/javafx/23.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.NotificationItemController" styleClass="notification-item" stylesheets="@notifications+item-page.css">
+
+    <Label fx:id="eventLabel" text="Event" styleClass="event-label" />
+    <Label fx:id="timeLabel" text="Time" styleClass="time-label" />
+
+    <Button fx:id="deleteButton" text="✖" onAction="#handleDelete" styleClass="delete-button" />
+</HBox>

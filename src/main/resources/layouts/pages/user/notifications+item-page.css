@@ -1,0 +1,60 @@
+.notifications-vbox {
+    -fx-background-color: #FFE0E9;
+    -fx-padding: 30px;
+    -fx-border-radius: 0 0 15px 15px;
+    -fx-background-radius: 0 0 15px 15px;
+    -fx-alignment: center;
+}
+
+.notification-label {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FF6B81;
+    -fx-alignment: center;
+    -fx-padding: 10px 0;
+    -fx-max-width: Infinity;
+}
+
+.notifications-container {
+    -fx-background-color: white;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px;
+}
+
+.notification-item {
+    -fx-background-color: #FF6B81;
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+}
+
+.event-label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFE0E9;
+}
+
+.time-label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFE0E9;
+}
+
+.delete-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+
+.mark-all-button {
+    -fx-background-color: #FF6B81;
+    -fx-text-fill: white;
+    -fx-padding: 8px 15px;
+    -fx-background-radius: 10px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+    -fx-margin: 20px 0 0 0;
+}
