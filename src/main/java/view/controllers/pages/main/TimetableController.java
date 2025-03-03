@@ -250,12 +250,26 @@ public class TimetableController implements ControllerAware {
                 eventLabel.getStyleClass().add("teaching-session-label");
             } else if (event instanceof AssignmentDTO assignment) {
                 LocalDateTime deadline = assignment.deadline();
+                LocalDateTime deadlineBuffer = deadline.minusHours(1);
 
                 column = (int) ChronoUnit.DAYS.between(startDate, deadline);
-                startRow = getRowIndex(deadline.minusHours(1), true);
-                endRow = getRowIndex(deadline, false);
 
-                double[] sizeAndOffset = getEventHeightAndOffset(deadline.minusHours(1), deadline);
+                LocalDateTime startTime = deadlineBuffer;
+                LocalDateTime endTime = deadline;
+
+                if (deadline.getDayOfMonth() != deadlineBuffer.getDayOfMonth()) {
+                    if (deadline.getHour() == 0 && deadline.getMinute() == 0) {
+                        column -= 1;
+                        endTime = LocalDateTime.of(deadlineBuffer.getYear(), deadlineBuffer.getMonth(), deadlineBuffer.getDayOfMonth(), 23, 59);
+                    } else {
+                        startTime = LocalDateTime.of(deadline.getYear(), deadline.getMonth(), deadline.getDayOfMonth(), 0, 0);
+                    }
+                }
+
+                startRow = getRowIndex(startTime, true);
+                endRow = getRowIndex(endTime, false);
+
+                double[] sizeAndOffset = getEventHeightAndOffset(startTime, endTime);
 
                 eventLabel = new EventLabel(assignment, sizeAndOffset[0], sizeAndOffset[1]);
                 eventLabel.getStyleClass().add("assignment-label");
