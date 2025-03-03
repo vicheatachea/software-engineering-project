@@ -64,11 +64,15 @@ public class NotificationService {
                 continue;
             }
 
-            long minutesUntilEvent = ChronoUnit.MINUTES.between(now, eventTime);
+            int minutesUntilEvent = (int) ChronoUnit.MINUTES.between(now, eventTime);
 
+            boolean notified = false;
             for (int time : notificationTimes) {
                 if (minutesUntilEvent <= time && !status.isNotified(time)) {
-                    notificationAware.notify(event, time);
+                    if (!notified) {
+                        notificationAware.notify(event, minutesUntilEvent);
+                        notified = true;
+                    }
                     status.setNotified(time);
                 }
             }
