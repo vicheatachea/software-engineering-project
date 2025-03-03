@@ -9,6 +9,7 @@ import dto.TeachingSessionDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -31,8 +32,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TimetableController implements ControllerAware {
     private static final int NUMBER_OF_BUTTONS = 2;
@@ -267,12 +271,37 @@ public class TimetableController implements ControllerAware {
                 continue;
             }
 
+            Set<EventLabel> overlappingEvents = getEventLabelsInRange(column + 1, startRow, column + 1, endRow);;
+
+            if (!overlappingEvents.isEmpty()) {
+                int maxLabelPosition = overlappingEvents.stream()
+                        .mapToInt(EventLabel::getNumberOfLabels)
+                        .max()
+                        .orElse(1);
+
+                AtomicInteger i = new AtomicInteger(1);
+                boolean added = false;
+                for (; i.get() <= maxLabelPosition; i.incrementAndGet()) {
+                    if (overlappingEvents.stream().noneMatch(eventLabel1 -> eventLabel1.getLabelPosition() == i.get())) {
+                        eventLabel.updateLabelPosition(i.get(), maxLabelPosition);
+                        added = true;
+                        break;
+                    }
+                }
+
+                if (!added) {
+                    eventLabel.updateLabelPosition(maxLabelPosition + 1, maxLabelPosition + 1);
+                    overlappingEvents.forEach(eventLabel1 -> eventLabel1.updateLabelPosition(eventLabel1.getLabelPosition(), maxLabelPosition + 1));
+                }
+            }
+
             GridPane.setHalignment(eventLabel, javafx.geometry.HPos.LEFT);
             GridPane.setValignment(eventLabel, javafx.geometry.VPos.TOP);
 
             // Calling eventLabel.getEvent() instead of just event should avoid storing the event twice
             eventLabel.setOnMouseClicked(mouseEvent -> handleEditEvent(eventLabel.getEvent()));
             timetableGrid.add(eventLabel, column + 1, startRow, 1, endRow - startRow + 1);
+            System.out.println("Event added");
         }
 
         updateEventHeight();
@@ -319,6 +348,31 @@ public class TimetableController implements ControllerAware {
         timetableGrid.getChildren().stream()
                 .filter(node -> node instanceof EventLabel)
                 .forEach(node -> ((EventLabel) node).updateLabelWidth(cellWidth));
+    }
+
+    private Set<EventLabel> getEventLabelsInRange(int startColumn, int startRow, int endColumn, int endRow) {
+        Set<EventLabel> uniqueEventLabels = new HashSet<>();
+
+        for (Node node : timetableGrid.getChildren()) {
+            Integer colIndex = GridPane.getColumnIndex(node);
+            Integer rowIndex = GridPane.getRowIndex(node);
+            Integer rowSpan = GridPane.getRowSpan(node);
+
+            if (colIndex != null && rowIndex != null && rowSpan != null) {
+                int nodeEndRow = rowIndex + rowSpan - 1;
+
+                if (colIndex >= startColumn && colIndex <= endColumn &&
+                        ((rowIndex >= startRow && rowIndex <= endRow) || (nodeEndRow >= startRow && nodeEndRow <= endRow) ||
+                                (rowIndex <= startRow && nodeEndRow >= endRow))) {
+
+                    if (node instanceof EventLabel eventLabel) {
+                        uniqueEventLabels.add(eventLabel);
+                    }
+                }
+            }
+        }
+
+        return uniqueEventLabels;
     }
 
     // Not to be implemented yet
