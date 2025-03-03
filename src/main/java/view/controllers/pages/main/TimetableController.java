@@ -362,6 +362,7 @@ public class TimetableController implements ControllerAware {
     }
 
     private void updateEventWidth() {
+        // 50 is the width of the first column
         cellWidth = (timetableGrid.getWidth() - 50) / (timetableGrid.getColumnCount() - 1);
         timetableGrid.getChildren().stream()
                 .filter(node -> node instanceof EventLabel)
