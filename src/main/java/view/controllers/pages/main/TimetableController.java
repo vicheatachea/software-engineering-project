@@ -274,6 +274,9 @@ public class TimetableController implements ControllerAware {
             eventLabel.setOnMouseClicked(mouseEvent -> handleEditEvent(eventLabel.getEvent()));
             timetableGrid.add(eventLabel, column + 1, startRow, 1, endRow - startRow + 1);
         }
+
+        updateEventHeight();
+        updateEventWidth();
     }
 
     private void clearTimetable() {
