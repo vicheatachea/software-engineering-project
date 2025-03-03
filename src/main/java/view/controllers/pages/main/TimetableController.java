@@ -205,12 +205,15 @@ public class TimetableController implements ControllerAware {
         int rowCount = timetableGrid.getRowCount();
         double timeStep = 24.0 / (rowCount - 1);
 
-        for (int i = 0; i < rowCount; i++) {
-            int hours = (int) (i * timeStep);
-            int minutes = (int) ((i * timeStep - hours) * 60);
+        for (int i = 0; i < rowCount - 1; i++) {
+            int hours = (int) (i * timeStep) % 24;
+            int minutes = (int) ((i * timeStep % 24 - hours) * 60);
 
             Label timeLabel = new Label(formatNumber(hours) + ":" + formatNumber(minutes));
+            timeLabel.setTranslateY(8);
             timetableGrid.add(timeLabel, 0, i);
+
+            timeLabel.getStyleClass().add("time-label");
 
             GridPane.setHalignment(timeLabel, javafx.geometry.HPos.CENTER);
             GridPane.setValignment(timeLabel, javafx.geometry.VPos.BOTTOM);
