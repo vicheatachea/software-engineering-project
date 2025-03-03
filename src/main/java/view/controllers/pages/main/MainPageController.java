@@ -120,11 +120,6 @@ public class MainPageController implements Initializable {
 		}
 	}
 
-	@FXML
-	public void initialize() {
-		showUserProfilePopup(); // Directly show the user profile page
-	}
-
 	private void showUserProfilePopup() {
 		try {
 			FXMLLoader fxmlLoader =
@@ -137,6 +132,7 @@ public class MainPageController implements Initializable {
 			UserProfileController userProfileController = fxmlLoader.getController();
 			userProfileController.setUserController(baseController.getUserController());
 			userProfileController.setStage(stage);
+			userProfileController.updateUserInfo();
 
 			Stage userProfileStage = new Stage();
 			userProfileStage.initModality(Modality.APPLICATION_MODAL);
