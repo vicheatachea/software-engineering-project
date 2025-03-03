@@ -58,10 +58,10 @@ class UserGroupDAOTest {
 		UserEntity user =
 				new UserEntity("John", "Doe", "JohnDoe", "password", DoB, "123456789AB", Role.STUDENT, timetable1);
 		UserEntity user2 =
-				new UserEntity("Matti", "Meikäläinen", "MattiMeikäläinen", "password", DoB, "123456789AB", Role.STUDENT,
+				new UserEntity("Matti", "Meikäläinen", "MattiMeikäläinen", "password", DoB, "987654321", Role.STUDENT,
 				               timetable2);
 		UserEntity user3 =
-				new UserEntity("Maija", "Meikäläinen", "MaijaMeikäläinen", "password", DoB, "123456789AB", Role.STUDENT,
+				new UserEntity("Maija", "Meikäläinen", "MaijaMeikäläinen", "password", DoB, "876543219", Role.STUDENT,
 				               timetable3);
 
 		HashSet<UserEntity> students = new HashSet<>();
@@ -73,7 +73,7 @@ class UserGroupDAOTest {
 		userDAO.persist(user3);
 
 		UserEntity teacher =
-				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "123456789AB", Role.TEACHER, timetable4);
+				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "765432198", Role.TEACHER, timetable4);
 
 		userDAO.persist(teacher);
 
@@ -116,11 +116,12 @@ class UserGroupDAOTest {
 				new UserEntity("John", "Doe", "JohnDoe", "password", DoB, "123456789AB", Role.STUDENT, timetable1);
 
 		UserEntity user2 =
-				new UserEntity("Matti", "Meikäläinen", "MattiMeikäläinen", "password", DoB, "123456789AB", Role.STUDENT,
+				new UserEntity("Matti", "Meikäläinen", "MattiMeikäläinen", "password", DoB, "qwdfzsdfwefs",
+				               Role.STUDENT,
 				               timetable2);
 
 		UserEntity user3 =
-				new UserEntity("Maija", "Meikäläinen", "MaijaMeikäläinen", "password", DoB, "123456789AB", Role.STUDENT,
+				new UserEntity("Maija", "Meikäläinen", "MaijaMeikäläinen", "password", DoB, "vdsadgvdsas", Role.STUDENT,
 				               timetable3);
 
 		HashSet<UserEntity> students = new HashSet<>();
@@ -134,7 +135,7 @@ class UserGroupDAOTest {
 		userDAO.persist(user3);
 
 		UserEntity teacher =
-				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "123456789AB", Role.TEACHER, timetable4);
+				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "vcxvsdvfbfd", Role.TEACHER, timetable4);
 
 		userDAO.persist(teacher);
 
@@ -177,11 +178,13 @@ class UserGroupDAOTest {
 				new UserEntity("John", "Doe", "JohnDoe", "password", DoB, "123456789AB", Role.STUDENT, timetable1);
 
 		UserEntity user2 =
-				new UserEntity("Matti", "Meikäläinen", "MattiMeikäläinen", "password", DoB, "123456789AB", Role.STUDENT,
+				new UserEntity("Matti", "Meikäläinen", "MattiMeikäläinen", "password", DoB, "asdfqwefaseg",
+				               Role.STUDENT,
 				               timetable2);
 
 		UserEntity user3 =
-				new UserEntity("Maija", "Meikäläinen", "MaijaMeikäläinen", "password", DoB, "123456789AB", Role.STUDENT,
+				new UserEntity("Maija", "Meikäläinen", "MaijaMeikäläinen", "password", DoB, "bfdsrgesrt234",
+				               Role.STUDENT,
 				               timetable3);
 
 		HashSet<UserEntity> students = new HashSet<>();
@@ -195,7 +198,7 @@ class UserGroupDAOTest {
 		userDAO.persist(user3);
 
 		UserEntity teacher =
-				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "123456789AB", Role.TEACHER, timetable4);
+				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "asdfwefzvswe", Role.TEACHER, timetable4);
 
 		userDAO.persist(teacher);
 
@@ -248,19 +251,19 @@ class UserGroupDAOTest {
 		UserEntity user1 =
 				new UserEntity("John", "Doe", "JohnDoe", "password1", DoB, "123456789AB", Role.STUDENT, timetable1);
 
-		UserEntity user2 = new UserEntity("Matti", "Meikäläinen", "MattiMeikäläinen", "password2", DoB, "123456789AB",
+		UserEntity user2 = new UserEntity("Matti", "Meikäläinen", "MattiMeikäläinen", "password2", DoB, "BA987654321",
 		                                  Role.STUDENT, timetable2);
 
-		UserEntity user3 = new UserEntity("Maija", "Meikäläinen", "MaijaMeikäläinen", "password3", DoB, "123456789AB",
+		UserEntity user3 = new UserEntity("Maija", "Meikäläinen", "MaijaMeikäläinen", "password3", DoB, "A987654321B",
 		                                  Role.STUDENT, timetable3);
 
-		UserEntity user4 = new UserEntity("user1", "name1", "user1name1", "password4", DoB, "123456789AB", Role.STUDENT,
+		UserEntity user4 = new UserEntity("user1", "name1", "user1name1", "password4", DoB, "987654321BA", Role.STUDENT,
 		                                  timetable4);
 
-		UserEntity user5 = new UserEntity("user2", "name2", "user2name2", "password5", DoB, "123456789AB", Role.STUDENT,
+		UserEntity user5 = new UserEntity("user2", "name2", "user2name2", "password5", DoB, "87654321BA9", Role.STUDENT,
 		                                  timetable5);
 
-		UserEntity user6 = new UserEntity("user3", "name3", "user3name3", "password6", DoB, "123456789AB", Role.STUDENT,
+		UserEntity user6 = new UserEntity("user3", "name3", "user3name3", "password6", DoB, "7654321BA98", Role.STUDENT,
 		                                  timetable6);
 
 		HashSet<UserEntity> students1 = new HashSet<>();
@@ -283,10 +286,10 @@ class UserGroupDAOTest {
 		userDAO.persist(user6);
 
 		UserEntity teacher =
-				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "123456789AB", Role.TEACHER, timetable7);
+				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "asdfcvbdB", Role.TEACHER, timetable7);
 
 		UserEntity teacher2 =
-				new UserEntity("Jeff", "Doe", "JeffDoe", "password", DoB, "987654321BA", Role.TEACHER, timetable8);
+				new UserEntity("Jeff", "Doe", "JeffDoe", "password", DoB, "asdbsadfsdvf", Role.TEACHER, timetable8);
 
 		userDAO.persist(teacher);
 		userDAO.persist(teacher2);
@@ -322,12 +325,12 @@ class UserGroupDAOTest {
 		Timestamp DoB = Timestamp.valueOf("2000-01-01 00:00:00");
 
 		UserEntity user1 =
-				new UserEntity("John", "Doe", "JohnDoe", "password1", DoB, "123456789AB", Role.STUDENT, timetable1);
+				new UserEntity("John", "Doe", "JohnDoe", "password1", DoB, "987654321", Role.STUDENT, timetable1);
 
 		UserEntity user2 = new UserEntity("Matti", "Meikäläinen", "MattiMeikäläinen", "password2", DoB, "123456789AB",
 		                                  Role.STUDENT, timetable2);
 
-		UserEntity user3 = new UserEntity("Maija", "Meikäläinen", "MaijaMeikäläinen", "password3", DoB, "123456789AB",
+		UserEntity user3 = new UserEntity("Maija", "Meikäläinen", "MaijaMeikäläinen", "password3", DoB, "BA987654321",
 		                                  Role.STUDENT, timetable3);
 
 		HashSet<UserEntity> students = new HashSet<>();
@@ -341,7 +344,7 @@ class UserGroupDAOTest {
 		userDAO.persist(user3);
 
 		UserEntity teacher =
-				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "123456789AB", Role.TEACHER, timetable4);
+				new UserEntity("Jane", "Doe", "JaneDoe", "password", DoB, "9876543321BA", Role.TEACHER, timetable4);
 
 		userDAO.persist(teacher);
 
@@ -389,21 +392,21 @@ class UserGroupDAOTest {
 		Timestamp DoB = Timestamp.valueOf("2000-01-01 00:00:00");
 
 		UserEntity user1 =
-				new UserEntity("John", "Doe", "JohnDoe", "password1", DoB, "123456789AB", Role.STUDENT, timetable1);
+				new UserEntity("John", "Doe", "JohnDoe", "password1", DoB, "987654321", Role.STUDENT, timetable1);
 
-		UserEntity user2 = new UserEntity("Matti", "Meikäläinen", "MattiMeikäläinen", "password2", DoB, "123456789AB",
+		UserEntity user2 = new UserEntity("Matti", "Meikäläinen", "MattiMeikäläinen", "password2", DoB, "876543219",
 		                                  Role.STUDENT, timetable2);
 
-		UserEntity user3 = new UserEntity("Maija", "Meikäläinen", "MaijaMeikäläinen", "password3", DoB, "123456789AB",
+		UserEntity user3 = new UserEntity("Maija", "Meikäläinen", "MaijaMeikäläinen", "password3", DoB, "765432198",
 		                                  Role.STUDENT, timetable3);
 
-		UserEntity user4 = new UserEntity("user1", "name1", "user1name1", "password4", DoB, "123456789AB", Role.STUDENT,
+		UserEntity user4 = new UserEntity("user1", "name1", "user1name1", "password4", DoB, "654321987", Role.STUDENT,
 		                                  timetable4);
 
-		UserEntity user5 = new UserEntity("user2", "name2", "user2name2", "password5", DoB, "123456789AB", Role.STUDENT,
+		UserEntity user5 = new UserEntity("user2", "name2", "user2name2", "password5", DoB, "543219876", Role.STUDENT,
 		                                  timetable5);
 
-		UserEntity user6 = new UserEntity("user3", "name3", "user3name3", "password6", DoB, "123456789AB", Role.STUDENT,
+		UserEntity user6 = new UserEntity("user3", "name3", "user3name3", "password6", DoB, "432198765", Role.STUDENT,
 		                                  timetable6);
 
 		HashSet<UserEntity> students1 = new HashSet<>();
