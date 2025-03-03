@@ -261,6 +261,8 @@ public class TimetableController implements ControllerAware {
                 continue;
             }
 
+            column += 1;
+
             if (column < 1 || column > (timetableGrid.getColumnCount() - 1)) {
                 System.out.println("An event with a date outside the timetable range was found");
                 continue;
@@ -271,7 +273,7 @@ public class TimetableController implements ControllerAware {
                 continue;
             }
 
-            Set<EventLabel> overlappingEvents = getEventLabelsInRange(column + 1, startRow, column + 1, endRow);;
+            Set<EventLabel> overlappingEvents = getEventLabelsInRange(column, startRow, endRow);;
 
             if (!overlappingEvents.isEmpty()) {
                 int maxLabelPosition = overlappingEvents.stream()
@@ -300,8 +302,7 @@ public class TimetableController implements ControllerAware {
 
             // Calling eventLabel.getEvent() instead of just event should avoid storing the event twice
             eventLabel.setOnMouseClicked(mouseEvent -> handleEditEvent(eventLabel.getEvent()));
-            timetableGrid.add(eventLabel, column + 1, startRow, 1, endRow - startRow + 1);
-            System.out.println("Event added");
+            timetableGrid.add(eventLabel, column, startRow, 1, endRow - startRow + 1);
         }
 
         updateEventHeight();
@@ -350,7 +351,7 @@ public class TimetableController implements ControllerAware {
                 .forEach(node -> ((EventLabel) node).updateLabelWidth(cellWidth));
     }
 
-    private Set<EventLabel> getEventLabelsInRange(int startColumn, int startRow, int endColumn, int endRow) {
+    private Set<EventLabel> getEventLabelsInRange(int column, int startRow, int endRow) {
         Set<EventLabel> uniqueEventLabels = new HashSet<>();
 
         for (Node node : timetableGrid.getChildren()) {
@@ -361,7 +362,7 @@ public class TimetableController implements ControllerAware {
             if (colIndex != null && rowIndex != null && rowSpan != null) {
                 int nodeEndRow = rowIndex + rowSpan - 1;
 
-                if (colIndex >= startColumn && colIndex <= endColumn &&
+                if (colIndex == column &&
                         ((rowIndex >= startRow && rowIndex <= endRow) || (nodeEndRow >= startRow && nodeEndRow <= endRow) ||
                                 (rowIndex <= startRow && nodeEndRow >= endRow))) {
 
