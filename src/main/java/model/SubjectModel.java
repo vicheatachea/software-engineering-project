@@ -44,7 +44,7 @@ public class SubjectModel {
 	}
 
 	private SubjectDTO convertToSubjectDTO(SubjectEntity subject) {
-		return new SubjectDTO(subject.getName(), subject.getCode());
+		return new SubjectDTO(subject.getId(), subject.getName(), subject.getCode());
 	}
 
 	private SubjectEntity convertToSubjectEntity(SubjectDTO subjectDTO) {

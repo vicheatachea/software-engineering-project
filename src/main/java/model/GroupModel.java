@@ -29,7 +29,7 @@ public class GroupModel {
 
 		for (UserGroupEntity group : groups) {
 			groupDTOs.add(
-					new GroupDTO(group.getName(), group.getCode(), group.getCapacity(), group.getTeacher().getId(),
+					new GroupDTO(group.getId(), group.getName(), group.getCode(), group.getCapacity(), group.getTeacher().getId(),
 					             group.getSubject().getName()));
 		}
 
@@ -50,6 +50,7 @@ public class GroupModel {
 
 	// Fetch a group DTO by the group name
 	public GroupDTO fetchGroupByName(String groupName) {
+		return null;
 	}
 
 	public void addGroup(GroupDTO groupDTO) {
@@ -132,7 +133,7 @@ public class GroupModel {
 	}
 
 	private GroupDTO ConvertToGroupDTO(UserGroupEntity group) {
-		return new GroupDTO(group.getName(), group.getCode(), group.getCapacity(), group.getTeacher().getId(),
+		return new GroupDTO(group.getId(), group.getName(), group.getCode(), group.getCapacity(), group.getTeacher().getId(),
 		                    group.getSubject().getName());
 	}
 }
