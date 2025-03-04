@@ -24,8 +24,7 @@ public class LocationEntity {
 	public LocationEntity() {
 	}
 
-	public LocationEntity(Long id, String name, String campus, String building) {
-		this.id = id;
+	public LocationEntity(String name, String campus, String building) {
 		this.name = name;
 		this.campus = campus;
 		this.building = building;
@@ -72,12 +71,12 @@ public class LocationEntity {
 			return false;
 		}
 		LocationEntity location = (LocationEntity) obj;
-		return id.equals(location.id) && name.equals(location.name) && campus.equals(location.campus)
+		return name.equals(location.name) && campus.equals(location.campus)
 		       && building.equals(location.building);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name, campus, building);
+		return Objects.hash(name, campus, building);
 	}
 }
