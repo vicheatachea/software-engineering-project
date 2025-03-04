@@ -53,7 +53,7 @@ public class SubjectsController implements ControllerAware {
 
         for (String key : components) {
             HBox componentBox = new HBox();
-            Label label = new Label(key);
+            Label label = new Label(key + ":");
             TextField textField = new TextField();
 
             textField.setPromptText("Enter " + key);
@@ -134,6 +134,15 @@ public class SubjectsController implements ControllerAware {
 
     @FXML
     private void handleSave() {
+        if (areFieldsEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("All fields are required.");
+            alert.showAndWait();
+            return;
+        }
+
         int selectedIndex = itemView.getSelectionModel().getSelectedIndex();
         if (selectedIndex != -1) {
             String name = nameTextField.getText();
