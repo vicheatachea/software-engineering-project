@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import view.controllers.ControllerAware;
 import view.controllers.components.SidebarController;
 import view.controllers.pages.user.LoginController;
+import view.controllers.pages.user.NotificationsController;
 import view.controllers.pages.user.UserProfileController;
 
 import java.io.IOException;
@@ -51,6 +52,9 @@ public class MainPageController implements Initializable {
 
 		sidebarController.currentViewProperty().addListener((observableValue, oldValue, newValue) -> {
 			switch (newValue) {
+				case "notifications":
+					showNotificationPopup();
+					break;
 				case "account":
 					if (baseController.getUserController().isUserLoggedIn()) {
 						showUserProfilePopup();
@@ -99,6 +103,28 @@ public class MainPageController implements Initializable {
 			e.printStackTrace();
 		}
 	}
+
+	private void showNotificationPopup() {
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/notifications-page.fxml"));
+			Parent parent = fxmlLoader.load();
+
+			//NotificationsController notificationsController = fxmlLoader.getController();
+			//notificationsController.setUserController(baseController.getUserController());
+
+			Stage notificationStage = new Stage();
+			notificationStage.initModality(Modality.APPLICATION_MODAL);
+			notificationStage.initOwner(stage);
+			notificationStage.setTitle("Notifications");
+			notificationStage.setScene(new Scene(parent));
+			notificationStage.showAndWait();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 
 	private void showLoginPopup() {
 		try {

@@ -24,6 +24,7 @@ public class SidebarController {
 
     @FXML
     private void initialize() {
+        addButton("\uD83D\uDD14", "notifications");
         addButton("\uD83D\uDC64 Account", "account");
         addButton("\uD83C\uDFE0 Home", "home");
         addButton("\uD83D\uDCC6 Timetable", "timetable");

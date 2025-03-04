@@ -1,5 +1,6 @@
 package view.controllers.pages.user;
 
+import controller.UserController;
 import controller.notifications.NotificationAware;
 import dto.Event;
 import javafx.fxml.FXML;
@@ -20,6 +21,12 @@ public class NotificationsController implements NotificationAware {
     private Button markAllReadButton;
 
     private final List<Event> events = new ArrayList<>();
+
+    //private UserController userController;
+
+   /* public void setUserController(UserController userController) {
+        this.userController = userController;
+    }*/
 
     @FXML
     private VBox notificationsVBox;
