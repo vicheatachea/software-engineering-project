@@ -1,9 +1,6 @@
 package model;
 
-import dao.AssignmentDAO;
-import dao.SubjectDAO;
-import dao.TeachingSessionDAO;
-import dao.TimetableDAO;
+import dao.*;
 import dto.AssignmentDTO;
 import dto.Event;
 import dto.TeachingSessionDTO;
@@ -105,7 +102,7 @@ public class EventModel {
 		SubjectDAO subjectDAO = new SubjectDAO();
 		TimetableDAO timeTableDAO = new TimetableDAO();
 
-		SubjectEntity subjectEntity = subjectDAO.findByName(dto.subjectName());
+		SubjectEntity subjectEntity = subjectDAO.findByCode(dto.subjectCode());
 		entity.setSubject(subjectEntity);
 		entity.setTimetable(timeTableDAO.findById(dto.timetableId()));
 
@@ -126,14 +123,21 @@ public class EventModel {
 	private TeachingSessionEntity convertToTeachingSessionEntity(TeachingSessionDTO dto) {
 		TeachingSessionEntity entity = new TeachingSessionEntity();
 
-		entity.setId(dto.id());
+		if (dto.id() != null) {
+			entity.setId(dto.id());
+		}
 		entity.setStartDate(Timestamp.valueOf(dto.startDate()));
 		entity.setEndDate(Timestamp.valueOf(dto.endDate()));
 
 		SubjectDAO subjectDAO = new SubjectDAO();
 		TimetableDAO timeTableDAO = new TimetableDAO();
 
-		SubjectEntity subjectEntity = subjectDAO.findByName(dto.subjectName());
+		if (dto.locationName() != null) {
+			LocationDAO locationDAO = new LocationDAO();
+			entity.setLocation(locationDAO.findByName(dto.locationName()));
+		}
+
+		SubjectEntity subjectEntity = subjectDAO.findByCode(dto.subjectCode());
 		entity.setSubject(subjectEntity);
 		entity.setTimetable(timeTableDAO.findById(dto.timetableId()));
 
