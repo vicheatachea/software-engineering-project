@@ -14,11 +14,23 @@ public class LocationDAO {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
-			if (location.getId() == null || findById(location.getId()) == null) {
-				em.persist(location);
-			} else {
-				em.merge(location);
+			em.persist(location);
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
 			}
+		}
+	}
+
+	public void update(LocationEntity location) {
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		try {
+			em.merge(location);
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
@@ -73,8 +85,11 @@ public class LocationDAO {
 
 	public void delete(LocationEntity location) {
 		EntityManager em = emf.createEntityManager();
+		location = findByName(location.getName());
 		em.getTransaction().begin();
 		try {
+			em.createQuery("DELETE FROM TeachingSessionEntity ts WHERE ts.location = :location")
+			  .setParameter("location", location).executeUpdate();
 			em.remove(em.contains(location) ? location : em.merge(location));
 			em.getTransaction().commit();
 		} catch (Exception e) {

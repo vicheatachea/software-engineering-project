@@ -5,6 +5,7 @@ import entity.UserGroupEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,11 +17,23 @@ public class AssignmentDAO {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
-			if (assignment.getId() == null || findById(assignment.getId()) == null) {
-				em.persist(assignment);
-			} else {
-				em.merge(assignment);
+			em.persist(assignment);
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
 			}
+		}
+	}
+
+	public void update(AssignmentEntity assignment) {
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		try {
+			em.merge(assignment);
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
@@ -80,6 +93,7 @@ public class AssignmentDAO {
 	public void delete(AssignmentEntity assignment) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
+		assignment = findById(assignment.getId());
 		try {
 			em.remove(em.contains(assignment) ? assignment : em.merge(assignment));
 			em.getTransaction().commit();
@@ -132,8 +146,8 @@ public class AssignmentDAO {
 		}
 	}
 
-	public List<AssignmentEntity> findAllByTimetableIdDuringPeriod(Long timetableId, LocalDateTime start,
-	                                                               LocalDateTime end) {
+	public List<AssignmentEntity> findAllByTimetableIdDuringPeriod(Long timetableId, Timestamp start,
+	                                                               Timestamp end) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT a FROM AssignmentEntity a WHERE a.timetable.id = :timetableId AND " +

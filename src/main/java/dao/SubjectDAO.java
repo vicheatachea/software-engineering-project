@@ -14,11 +14,23 @@ public class SubjectDAO {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
-			if (subject.getId() == null || findById(subject.getId()) == null) {
-				em.persist(subject);
-			} else {
-				em.merge(subject);
+			em.persist(subject);
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
 			}
+		}
+	}
+
+	public void update(SubjectEntity subject) {
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		try {
+			em.merge(subject);
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
@@ -98,6 +110,7 @@ public class SubjectDAO {
 
 	public void delete(SubjectEntity subjectEntity) {
 		EntityManager em = emf.createEntityManager();
+		subjectEntity = findByCode(subjectEntity.getCode());
 		em.getTransaction().begin();
 		try {
 			// Delete related assignments
