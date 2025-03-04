@@ -66,13 +66,13 @@ public class SubjectDAO {
 		}
 	}
 
-	public SubjectEntity findByName(String name) {
+	public SubjectEntity findByCode(String code) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
-			return em.createQuery("SELECT s FROM SubjectEntity s WHERE s.name = :name", SubjectEntity.class)
-					.setParameter("name", name)
-					.getSingleResult();
+			return em.createQuery("SELECT s FROM SubjectEntity s WHERE s.code = :code", SubjectEntity.class)
+			         .setParameter("code", code)
+			         .getSingleResult();
 		} catch (Exception e) {
 			return null;
 		} finally {
@@ -100,6 +100,19 @@ public class SubjectDAO {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
+			// Delete related assignments
+			em.createQuery("DELETE FROM AssignmentEntity a WHERE a.subject = :subject")
+			  .setParameter("subject", subjectEntity).executeUpdate();
+
+			// Delete related teaching sessions
+			em.createQuery("DELETE FROM TeachingSessionEntity ts WHERE ts.subject = :subject")
+			  .setParameter("subject", subjectEntity).executeUpdate();
+
+			// Delete related user groups
+			em.createQuery("DELETE FROM UserGroupEntity g WHERE g.subject = :subject")
+			  .setParameter("subject", subjectEntity).executeUpdate();
+
+			// Delete the subject itself
 			em.remove(em.contains(subjectEntity) ? subjectEntity : em.merge(subjectEntity));
 			em.getTransaction().commit();
 		} catch (Exception e) {
@@ -116,6 +129,9 @@ public class SubjectDAO {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
+			em.createQuery("DELETE FROM AssignmentEntity").executeUpdate();
+			em.createQuery("DELETE FROM TeachingSessionEntity").executeUpdate();
+			em.createQuery("DELETE FROM UserGroupEntity").executeUpdate();
 			em.createQuery("DELETE FROM SubjectEntity").executeUpdate();
 			em.getTransaction().commit();
 		} catch (Exception e) {
@@ -127,7 +143,4 @@ public class SubjectDAO {
 			}
 		}
 	}
-
-
-
 }
