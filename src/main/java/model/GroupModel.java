@@ -27,7 +27,7 @@ public class GroupModel {
 
 		for (UserGroupEntity group : groups) {
 			groupDTOs.add(
-					new GroupDTO(group.getName(), group.getCode(), group.getCapacity(), group.getTeacher().getId(),
+					new GroupDTO(group.getId(), group.getName(), group.getCode(), group.getCapacity(), group.getTeacher().getId(),
 					             group.getSubject().getName()));
 		}
 
@@ -137,7 +137,7 @@ public class GroupModel {
 	}
 
 	private GroupDTO ConvertToGroupDTO(UserGroupEntity group) {
-		return new GroupDTO(group.getName(), group.getCode(), group.getCapacity(), group.getTeacher().getId(),
+		return new GroupDTO(group.getId(), group.getName(), group.getCode(), group.getCapacity(), group.getTeacher().getId(),
 		                    group.getSubject().getName());
 	}
 

@@ -35,7 +35,7 @@ public class LocationModel {
 	}
 
 	private LocationDTO convertToLocationDTO(LocationEntity location) {
-		return new LocationDTO(location.getName(), location.getCampus(), location.getBuilding());
+		return new LocationDTO(location.getId(), location.getName(), location.getCampus(), location.getBuilding());
 	}
 
 	private LocationEntity convertToLocationEntity(LocationDTO locationDTO) {
