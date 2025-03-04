@@ -28,6 +28,11 @@ class LocationDAOTest {
 	@BeforeEach
 	void setUp() {
 		locationDAO.deleteAll();
+		try {
+			Thread.sleep(0);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Test
@@ -53,7 +58,7 @@ class LocationDAOTest {
 		location.setCampus("Myllypuro");
 		location.setBuilding("B");
 
-		locationDAO.persist(location);
+		locationDAO.update(location);
 
 		LocationEntity foundLocation = locationDAO.findById(location.getId());
 

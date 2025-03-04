@@ -32,6 +32,7 @@ class TeachingSessionDAOTest {
 		locationDAO.deleteAll();
 		subjectDAO.deleteAll();
 		timetableDAO.deleteAll();
+
 	}
 
 	@BeforeEach
@@ -40,6 +41,11 @@ class TeachingSessionDAOTest {
 		locationDAO.deleteAll();
 		subjectDAO.deleteAll();
 		timetableDAO.deleteAll();
+		try {
+			Thread.sleep(0);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Test
@@ -97,7 +103,7 @@ class TeachingSessionDAOTest {
 		Timestamp newEnd = Timestamp.valueOf("2025-02-11 16:00:00");
 		teachingSession.setStartDate(newStart);
 		teachingSession.setEndDate(newEnd);
-		teachingSessionDAO.persist(teachingSession);
+		teachingSessionDAO.update(teachingSession);
 
 		TeachingSessionEntity updatedSession = teachingSessionDAO.findById(teachingSession.getId());
 		assertEquals(newStart, updatedSession.getStartDate());
