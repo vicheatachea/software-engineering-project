@@ -2,7 +2,6 @@ package view.controllers.pages.main;
 
 import controller.BaseController;
 import controller.SubjectController;
-import dto.LocationDTO;
 import dto.SubjectDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -12,14 +11,13 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import view.controllers.ControllerAware;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
 public class SubjectsController implements ControllerAware {
     private SubjectController subjectController;
     private List<SubjectDTO> subjects;
-    private final LinkedHashMap<String, String> components = new LinkedHashMap<>();
+    private final List<String> components = List.of("Name", "Code");
     private boolean isEditingMode;
     private int currentIndex;
 
@@ -53,10 +51,7 @@ public class SubjectsController implements ControllerAware {
         saveButton.setText("Save " + title);
         deleteButton.setText("Delete " + title);
 
-        components.put("Name", "Field");
-        components.put("Code", "Field");
-
-        for (String key : components.keySet()) {
+        for (String key : components) {
             HBox componentBox = new HBox();
             Label label = new Label(key);
             TextField textField = new TextField();

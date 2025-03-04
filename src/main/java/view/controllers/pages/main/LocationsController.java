@@ -11,14 +11,13 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import view.controllers.ControllerAware;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
 public class LocationsController implements ControllerAware {
     private LocationController locationController;
     private List<LocationDTO> locations;
-    private final LinkedHashMap<String, String> components = new LinkedHashMap<>();
+    private final List<String> components = List.of("Name", "Building", "Campus");
     private boolean isEditingMode;
     private int currentIndex;
 
@@ -53,11 +52,7 @@ public class LocationsController implements ControllerAware {
         saveButton.setText("Save " + title);
         deleteButton.setText("Delete " + title);
 
-        components.put("Name", "Field");
-        components.put("Building", "Field");
-        components.put("Campus", "Field");
-
-        for (String key : components.keySet()) {
+        for (String key : components) {
             HBox componentBox = new HBox();
             Label label = new Label(key);
             TextField textField = new TextField();
