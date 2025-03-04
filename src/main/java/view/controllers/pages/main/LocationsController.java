@@ -71,16 +71,12 @@ public class LocationsController implements ControllerAware {
 
         Platform.runLater(() -> {
             loadLocations();
-            nameTextField = getTextFieldById("nameTextField");
-            buildingTextField = getTextFieldById("buildingTextField");
-            campusTextField = getTextFieldById("campusTextField");
+            nameTextField = (TextField) contentVBox.lookup("#nameTextField");
+            buildingTextField = (TextField) contentVBox.lookup("#buildingTextField");
+            campusTextField = (TextField) contentVBox.lookup("#campusTextField");
 
             changeButtonVisibility(false);
         });
-    }
-
-    private TextField getTextFieldById(String id) {
-        return (TextField) contentVBox.lookup("#" + id);
     }
 
     public void setBaseController(BaseController baseController) {
@@ -144,6 +140,8 @@ public class LocationsController implements ControllerAware {
             LocationDTO locationDTO = new LocationDTO(locations.get(selectedIndex).id(), name, campus, building);
             locationController.saveLocation(locationDTO);
             loadLocations();
+
+            itemView.getSelectionModel().select(selectedIndex);
         }
     }
 
@@ -194,9 +192,9 @@ public class LocationsController implements ControllerAware {
     }
 
     private void clearFields() {
-        nameTextField.setText("");
-        buildingTextField.setText("");
-        campusTextField.setText("");
+        nameTextField.clear();
+        buildingTextField.clear();
+        campusTextField.clear();
     }
 
     private void changeButtonVisibility(boolean editingMode) {
