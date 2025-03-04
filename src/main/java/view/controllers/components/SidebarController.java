@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.scene.Node;
 
 import java.io.IOException;
 
@@ -47,6 +48,19 @@ public class SidebarController {
             sidebar.getChildren().add(button);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    // SidebarController.java
+    public void updateAccountButtonText(boolean isLoggedIn) {
+        for (Node node : sidebar.getChildren()) {
+            if (node instanceof Button) {
+                Button button = (Button) node;
+                if (button.getText().contains("Account")) {
+                    button.setText(isLoggedIn ? "\uD83D\uDC64 My Account" : "\uD83D\uDC64 Account");
+                    break;
+                }
+            }
         }
     }
 }

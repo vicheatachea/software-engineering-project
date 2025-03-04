@@ -115,6 +115,9 @@ public class MainPageController implements Initializable {
 			loginStage.setTitle("Login");
 			loginStage.setScene(new Scene(parent));
 			loginStage.showAndWait();
+
+			sidebarController.updateAccountButtonText(baseController.getUserController().isUserLoggedIn());
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -136,6 +139,9 @@ public class MainPageController implements Initializable {
 			userProfileStage.setTitle("User Profile");
 			userProfileStage.setScene(new Scene(parent));
 			userProfileStage.showAndWait();
+
+			sidebarController.updateAccountButtonText(baseController.getUserController().isUserLoggedIn());
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
