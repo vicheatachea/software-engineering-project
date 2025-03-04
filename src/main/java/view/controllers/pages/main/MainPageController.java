@@ -54,16 +54,22 @@ public class MainPageController implements Initializable {
                     }
                     break;
                 case "home":
-                    loadContent("/layouts/pages/main/home.fxml");
+                    loadContent("/layouts/pages/main/home.fxml", null);
                     break;
                 case "timetable":
-                    loadContent("/layouts/pages/main/timetable.fxml");
+                    loadContent("/layouts/pages/main/timetable.fxml", null);
                     break;
                 case "groups":
-                    loadContent("/layouts/pages/main/groups.fxml");
+                    loadContent("/layouts/pages/main/groups.fxml", null);
+                    break;
+                case "subjects":
+                    loadContent("/layouts/pages/main/general-page.fxml", "subjects");
+                    break;
+                case "locations":
+                    loadContent("/layouts/pages/main/general-page.fxml", "locations");
                     break;
                 case "settings":
-                    loadContent("/layouts/pages/main/settings.fxml");
+                    loadContent("/layouts/pages/main/settings.fxml", null);
                     break;
                 case "quit":
                     stage.close();
@@ -72,9 +78,21 @@ public class MainPageController implements Initializable {
         });
     }
 
-    private void loadContent(String fxmlFilePath) {
+    private void loadContent(String fxmlFilePath, String name) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFilePath));
+
+            if (name != null) {
+                switch (name) {
+                    case "subjects":
+                        fxmlLoader.setController(new SubjectsController());
+                        break;
+                    case "locations":
+                        fxmlLoader.setController(new LocationsController());
+                        break;
+                }
+            }
+
             Node content = fxmlLoader.load();
             Object subController = fxmlLoader.getController();
 
