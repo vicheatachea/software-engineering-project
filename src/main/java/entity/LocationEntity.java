@@ -24,8 +24,7 @@ public class LocationEntity {
 	public LocationEntity() {
 	}
 
-	public LocationEntity(Long id, String name, String campus, String building) {
-		this.id = id;
+	public LocationEntity(String name, String campus, String building) {
 		this.name = name;
 		this.campus = campus;
 		this.building = building;
