@@ -115,7 +115,7 @@ public class SubjectsController implements ControllerAware {
         String name = nameTextField.getText();
         String code = codeTextField.getText();
 
-        SubjectDTO subject = new SubjectDTO(null, name, code);
+        SubjectDTO subject = new SubjectDTO(name, code);
         subjectController.saveSubject(subject);
         loadSubjects();
         clearFields();
@@ -128,7 +128,7 @@ public class SubjectsController implements ControllerAware {
             String name = nameTextField.getText();
             String code = codeTextField.getText();
 
-            SubjectDTO subject = new SubjectDTO(subjects.get(selectedIndex).id(), name, code);
+            SubjectDTO subject = new SubjectDTO(subjects.get(selectedIndex).name(), code);
             subjectController.saveSubject(subject);
             loadSubjects();
 
