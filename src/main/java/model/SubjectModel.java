@@ -48,7 +48,7 @@ public class SubjectModel {
 	}
 
 	private SubjectEntity convertToSubjectEntity(SubjectDTO subjectDTO) {
-		return new SubjectEntity(subjectDTO.name(), subjectDTO.code());
+		return new SubjectEntity(subjectDTO.id(), subjectDTO.name(), subjectDTO.code());
 	}
 
 }
