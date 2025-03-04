@@ -45,8 +45,6 @@ public class MainPageController implements Initializable {
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
-
-
 		SplitPane.setResizableWithParent(sidebar, false);
 		SplitPane.setResizableWithParent(mainContent, false);
 

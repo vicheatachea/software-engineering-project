@@ -14,8 +14,11 @@ import java.io.IOException;
 
 public class SidebarController {
     private final StringProperty currentView = new SimpleStringProperty();
+    private int notificationCount = 0;
+
     @FXML
     private VBox sidebar;
+    private Button notificationButton;
 
     @FXML
     private void handleRegister() {
@@ -24,7 +27,8 @@ public class SidebarController {
 
     @FXML
     private void initialize() {
-        addButton("\uD83D\uDD14", "notifications");
+        //addButton("\uD83D\uDD14", "notifications");
+        addNotificationButton();
         addButton("\uD83D\uDC64 Account", "account");
         addButton("\uD83C\uDFE0 Home", "home");
         addButton("\uD83D\uDCC6 Timetable", "timetable");
@@ -52,7 +56,32 @@ public class SidebarController {
         }
     }
 
-    // SidebarController.java
+    private void addNotificationButton() {
+        notificationButton = new Button("\uD83D\uDD14");
+        notificationButton.setOnAction(event -> currentView.set("notifications"));
+        notificationButton.getStyleClass().add("icon-button");
+        VBox.setMargin(notificationButton, new Insets(30, 0 , 0, 0));
+        sidebar.getChildren().add(notificationButton);
+    }
+
+    public void incrementNotificationCount() {
+        notificationCount++;
+        updateNotificationButton();
+    }
+
+    public void resetNotificationCount() {
+        notificationCount = 0;
+        updateNotificationButton();
+    }
+
+    private void updateNotificationButton() {
+        if (notificationCount > 0) {
+            notificationButton.setText("\uD83D\uDD14 " + notificationCount);
+        } else {
+            notificationButton.setText("\uD83D\uDD14");
+        }
+    }
+
     public void updateAccountButtonText(boolean isLoggedIn) {
         for (Node node : sidebar.getChildren()) {
             if (node instanceof Button) {
