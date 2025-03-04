@@ -16,7 +16,7 @@ public class SubjectEntity {
 	@Column(nullable = false)
 	private String name;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String code;
 
 	@OneToMany(mappedBy = "subject")
@@ -26,8 +26,7 @@ public class SubjectEntity {
 	public SubjectEntity() {
 	}
 
-	public SubjectEntity(Long id, String name, String code) {
-		this.id = id;
+	public SubjectEntity(String name, String code) {
 		this.name = name;
 		this.code = code;
 	}
