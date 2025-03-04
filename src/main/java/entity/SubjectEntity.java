@@ -26,7 +26,8 @@ public class SubjectEntity {
 	public SubjectEntity() {
 	}
 
-	public SubjectEntity(String name, String code) {
+	public SubjectEntity(Long id, String name, String code) {
+		this.id = id;
 		this.name = name;
 		this.code = code;
 	}

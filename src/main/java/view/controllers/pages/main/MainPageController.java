@@ -1,7 +1,6 @@
 package view.controllers.pages.main;
 
 import controller.BaseController;
-import datasource.MariaDBConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,7 +19,6 @@ import view.controllers.pages.user.UserProfileController;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class MainPageController implements Initializable {
@@ -34,59 +32,73 @@ public class MainPageController implements Initializable {
 	@FXML
 	private StackPane mainContent;
 
-	public MainPageController() {
-		this.baseController = new BaseController();
-	}
+    public MainPageController() {
+        this.baseController = new BaseController();
+    }
 
-	public void setStage(Stage stage) {
-		this.stage = stage;
-	}
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
-	@Override
-	public void initialize(URL url, ResourceBundle resourceBundle) {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        SplitPane.setResizableWithParent(sidebar, false);
+        SplitPane.setResizableWithParent(mainContent, false);
 
+        sidebarController.currentViewProperty().addListener((observableValue, oldValue, newValue) -> {
+            switch (newValue) {
+                case "account":
+                    if (baseController.getUserController().isUserLoggedIn()) {
+                        showUserProfilePopup();
+                    } else {
+                        showLoginPopup();
+                    }
+                    break;
+                case "home":
+                    loadContent("/layouts/pages/main/home.fxml", null);
+                    break;
+                case "timetable":
+                    loadContent("/layouts/pages/main/timetable.fxml", null);
+                    break;
+                case "groups":
+                    loadContent("/layouts/pages/main/general-page.fxml", "groups");
+                    break;
+                case "subjects":
+                    loadContent("/layouts/pages/main/general-page.fxml", "subjects");
+                    break;
+                case "locations":
+                    loadContent("/layouts/pages/main/general-page.fxml", "locations");
+                    break;
+                case "settings":
+                    loadContent("/layouts/pages/main/settings.fxml", null);
+                    break;
+                case "quit":
+                    stage.close();
+                    break;
+            }
+        });
+    }
 
-		SplitPane.setResizableWithParent(sidebar, false);
-		SplitPane.setResizableWithParent(mainContent, false);
+    private void loadContent(String fxmlFilePath, String name) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFilePath));
 
-		sidebarController.currentViewProperty().addListener((observableValue, oldValue, newValue) -> {
-			switch (newValue) {
-				case "account":
-					if (baseController.getUserController().isUserLoggedIn()) {
-						showUserProfilePopup();
-					} else {
-						showLoginPopup();
-					}
-					break;
-				case "home":
-					loadContent("/layouts/pages/main/home.fxml");
-					break;
-				case "timetable":
-					loadContent("/layouts/pages/main/timetable.fxml");
-					break;
-				case "groups":
-					loadContent("/layouts/pages/main/groups.fxml");
-					break;
-				case "settings":
-					loadContent("/layouts/pages/main/settings.fxml");
-					break;
-				case "quit":
-					try {
-						MariaDBConnection.terminate();
-					} catch (SQLException e) {
-						throw new RuntimeException(e);
-					}
-					stage.close();
-					break;
-			}
-		});
-	}
+            if (name != null) {
+                switch (name) {
+                    case "groups":
+                        fxmlLoader.setController(new GroupsController());
+                        break;
+                    case "subjects":
+                        fxmlLoader.setController(new SubjectsController());
+                        break;
+                    case "locations":
+                        fxmlLoader.setController(new LocationsController());
+                        break;
+                }
+            }
 
-	private void loadContent(String fxmlFilePath) {
-		try {
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFilePath));
-			Node content = fxmlLoader.load();
-			Object subController = fxmlLoader.getController();
+            Node content = fxmlLoader.load();
+            Object subController = fxmlLoader.getController();
 
 			if (subController instanceof ControllerAware) {
 				((ControllerAware) subController).setBaseController(baseController);
@@ -125,7 +137,7 @@ public class MainPageController implements Initializable {
 			FXMLLoader fxmlLoader =
 					new FXMLLoader(getClass().getResource("/layouts/pages/user/user-profile-page.fxml"));
 			Parent parent = fxmlLoader.load();
-			
+
 			UserProfileController userProfileController = fxmlLoader.getController();
 			userProfileController.setUserController(baseController.getUserController());
 			userProfileController.setStage(stage);

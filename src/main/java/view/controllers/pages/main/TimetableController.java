@@ -2,14 +2,17 @@ package view.controllers.pages.main;
 
 import controller.BaseController;
 import controller.EventController;
+import controller.UserController;
 import dto.AssignmentDTO;
 import dto.Event;
 import dto.TeachingSessionDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -29,18 +32,25 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TimetableController implements ControllerAware {
     private static final int NUMBER_OF_BUTTONS = 2;
     BaseController baseController;
     EventController eventController;
+    UserController userController;
 
     LocalDate currentDate;
     LocalDateTime startDate;
     LocalDateTime endDate;
     int currentWeek;
+
+    private double cellHeight;
+    private double cellWidth;
 
     @FXML
     private HBox topbar;
@@ -63,6 +73,9 @@ public class TimetableController implements ControllerAware {
             updateTimetableHeaders();
             updateTimetableHours();
             loadTimetable();
+
+            timetableGrid.heightProperty().addListener((observable, oldValue, newValue) -> updateEventHeight());
+            timetableGrid.widthProperty().addListener((observable, oldValue, newValue) -> updateEventWidth());
         });
     }
 
@@ -70,6 +83,7 @@ public class TimetableController implements ControllerAware {
     public void setBaseController(BaseController baseController) {
         this.baseController = baseController;
         this.eventController = baseController.getEventController();
+        this.userController = baseController.getUserController();
     }
 
     private void addButtons() {
@@ -133,6 +147,14 @@ public class TimetableController implements ControllerAware {
     }
 
     private void handleNewEvent() {
+        if (!userController.isUserLoggedIn()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Not logged in");
+            alert.setHeaderText(null);
+            alert.setContentText("You need to be logged in to create an event!");
+            alert.showAndWait();
+            return;
+        }
         openEventPopup(null);
     }
 
@@ -162,7 +184,7 @@ public class TimetableController implements ControllerAware {
 
     private void updateTimetableHeaders() {
         timetableGrid.getChildren().removeIf(node -> GridPane.getColumnIndex(node) != null &&
-                GridPane.getRowIndex(node) == 0);
+                GridPane.getRowIndex(node) == 0 && GridPane.getColumnIndex(node) > 0);
         int daysBetween = (int) ChronoUnit.DAYS.between(startDate, endDate) + 1;
 
         for (int i = 0; i < daysBetween; i++) {
@@ -183,12 +205,15 @@ public class TimetableController implements ControllerAware {
         int rowCount = timetableGrid.getRowCount();
         double timeStep = 24.0 / (rowCount - 1);
 
-        for (int i = 0; i < rowCount; i++) {
-            int hours = (int) (i * timeStep);
-            int minutes = (int) ((i * timeStep - hours) * 60);
+        for (int i = 0; i < rowCount - 1; i++) {
+            int hours = (int) (i * timeStep) % 24;
+            int minutes = (int) ((i * timeStep % 24 - hours) * 60);
 
             Label timeLabel = new Label(formatNumber(hours) + ":" + formatNumber(minutes));
+            timeLabel.setTranslateY(8);
             timetableGrid.add(timeLabel, 0, i);
+
+            timeLabel.getStyleClass().add("time-label");
 
             GridPane.setHalignment(timeLabel, javafx.geometry.HPos.CENTER);
             GridPane.setValignment(timeLabel, javafx.geometry.VPos.BOTTOM);
@@ -200,41 +225,105 @@ public class TimetableController implements ControllerAware {
     }
 
     private void loadTimetable() {
+        if (!userController.isUserLoggedIn()) {
+            return;
+        }
+
         clearTimetable();
         List<Event> events = eventController.fetchEventsByUser(startDate, endDate);
 
         for (Event event : events) {
-            int column = -1, startRow = -1, endRow = -1;
-            EventLabel eventLabel = new EventLabel(event);
+            int column, startRow, endRow;
+            EventLabel eventLabel;
 
             if (event instanceof TeachingSessionDTO teachingSession) {
-                column = (int) ChronoUnit.DAYS.between(startDate, teachingSession.startDate());
-                startRow = getRowIndex(teachingSession.startDate(), true);
-                endRow = getRowIndex(teachingSession.endDate(), false);
+                LocalDateTime teachingSessionStart = teachingSession.startDate();
+                LocalDateTime teachingSessionEnd = teachingSession.endDate();
 
+                column = (int) ChronoUnit.DAYS.between(startDate, teachingSessionStart);
+                startRow = getRowIndex(teachingSessionStart, true);
+                endRow = getRowIndex(teachingSessionEnd, false);
+
+                double[] sizeAndOffset = getEventHeightAndOffset(teachingSessionStart, teachingSessionEnd);
+
+                eventLabel = new EventLabel(teachingSession, sizeAndOffset[0], sizeAndOffset[1]);
                 eventLabel.getStyleClass().add("teaching-session-label");
             } else if (event instanceof AssignmentDTO assignment) {
-                column = (int) ChronoUnit.DAYS.between(startDate, assignment.deadline());
                 LocalDateTime deadline = assignment.deadline();
-                startRow = getRowIndex(deadline.minusHours(1), true);
-                endRow = getRowIndex(deadline, false);
+                LocalDateTime deadlineBuffer = deadline.minusHours(1);
 
+                column = (int) ChronoUnit.DAYS.between(startDate, deadline);
+
+                LocalDateTime startTime = deadlineBuffer;
+                LocalDateTime endTime = deadline;
+
+                if (deadline.getDayOfMonth() != deadlineBuffer.getDayOfMonth()) {
+                    if (deadline.getHour() == 0 && deadline.getMinute() == 0) {
+                        column -= 1;
+                        endTime = LocalDateTime.of(deadlineBuffer.getYear(), deadlineBuffer.getMonth(), deadlineBuffer.getDayOfMonth(), 23, 59);
+                    } else {
+                        startTime = LocalDateTime.of(deadline.getYear(), deadline.getMonth(), deadline.getDayOfMonth(), 0, 0);
+                    }
+                }
+
+                startRow = getRowIndex(startTime, true);
+                endRow = getRowIndex(endTime, false);
+
+                double[] sizeAndOffset = getEventHeightAndOffset(startTime, endTime);
+
+                eventLabel = new EventLabel(assignment, sizeAndOffset[0], sizeAndOffset[1]);
                 eventLabel.getStyleClass().add("assignment-label");
+            } else {
+                System.out.println("An event with an unknown type was found");
+                continue;
             }
+
+            column += 1;
 
             if (column < 1 || column > (timetableGrid.getColumnCount() - 1)) {
                 System.out.println("An event with a date outside the timetable range was found");
                 continue;
             }
+            // This code is probably redundant
             if (startRow == -1 || endRow == -1) {
                 System.out.println("An invalid event was found");
                 continue;
             }
 
+            Set<EventLabel> overlappingEvents = getEventLabelsInRange(column, startRow, endRow);;
+
+            if (!overlappingEvents.isEmpty()) {
+                int maxLabelPosition = overlappingEvents.stream()
+                        .mapToInt(EventLabel::getNumberOfLabels)
+                        .max()
+                        .orElse(1);
+
+                AtomicInteger i = new AtomicInteger(1);
+                boolean added = false;
+                for (; i.get() <= maxLabelPosition; i.incrementAndGet()) {
+                    if (overlappingEvents.stream().noneMatch(eventLabel1 -> eventLabel1.getLabelPosition() == i.get())) {
+                        eventLabel.updateLabelPosition(i.get(), maxLabelPosition);
+                        added = true;
+                        break;
+                    }
+                }
+
+                if (!added) {
+                    eventLabel.updateLabelPosition(maxLabelPosition + 1, maxLabelPosition + 1);
+                    overlappingEvents.forEach(eventLabel1 -> eventLabel1.updateLabelPosition(eventLabel1.getLabelPosition(), maxLabelPosition + 1));
+                }
+            }
+
+            GridPane.setHalignment(eventLabel, javafx.geometry.HPos.LEFT);
+            GridPane.setValignment(eventLabel, javafx.geometry.VPos.TOP);
+
             // Calling eventLabel.getEvent() instead of just event should avoid storing the event twice
             eventLabel.setOnMouseClicked(mouseEvent -> handleEditEvent(eventLabel.getEvent()));
-            timetableGrid.add(eventLabel, column + 1, startRow, 1, endRow - startRow + 1);
+            timetableGrid.add(eventLabel, column, startRow, 1, endRow - startRow + 1);
         }
+
+        updateEventHeight();
+        updateEventWidth();
     }
 
     private void clearTimetable() {
@@ -251,6 +340,58 @@ public class TimetableController implements ControllerAware {
         int minutes = dateTime.getMinute();
         double timeInHours = hours + minutes / 60.0;
         return isStart ? (int) (timeInHours / timeStep + 1) : (int) Math.ceil(timeInHours / timeStep);
+    }
+
+    // First value is height, second is offset
+    private double[] getEventHeightAndOffset(LocalDateTime start, LocalDateTime end) {
+        double timeStep = 24.0 / (timetableGrid.getRowCount() - 1);
+        double startHours = start.getHour() + start.getMinute() / 60.0;
+        double endHours = end.getHour() + end.getMinute() / 60.0;
+
+        double height = (endHours - startHours) / timeStep;
+        double offset = (startHours % timeStep) / timeStep;
+
+        return new double[]{height, offset};
+    }
+
+    private void updateEventHeight() {
+        cellHeight = timetableGrid.getHeight() / timetableGrid.getRowCount();
+        timetableGrid.getChildren().stream()
+                .filter(node -> node instanceof EventLabel)
+                .forEach(node -> ((EventLabel) node).updateLabelHeight(cellHeight));
+    }
+
+    private void updateEventWidth() {
+        // 50 is the width of the first column
+        cellWidth = (timetableGrid.getWidth() - 50) / (timetableGrid.getColumnCount() - 1);
+        timetableGrid.getChildren().stream()
+                .filter(node -> node instanceof EventLabel)
+                .forEach(node -> ((EventLabel) node).updateLabelWidth(cellWidth));
+    }
+
+    private Set<EventLabel> getEventLabelsInRange(int column, int startRow, int endRow) {
+        Set<EventLabel> uniqueEventLabels = new HashSet<>();
+
+        for (Node node : timetableGrid.getChildren()) {
+            Integer colIndex = GridPane.getColumnIndex(node);
+            Integer rowIndex = GridPane.getRowIndex(node);
+            Integer rowSpan = GridPane.getRowSpan(node);
+
+            if (colIndex != null && rowIndex != null && rowSpan != null) {
+                int nodeEndRow = rowIndex + rowSpan - 1;
+
+                if (colIndex == column &&
+                        ((rowIndex >= startRow && rowIndex <= endRow) || (nodeEndRow >= startRow && nodeEndRow <= endRow) ||
+                                (rowIndex <= startRow && nodeEndRow >= endRow))) {
+
+                    if (node instanceof EventLabel eventLabel) {
+                        uniqueEventLabels.add(eventLabel);
+                    }
+                }
+            }
+        }
+
+        return uniqueEventLabels;
     }
 
     // Not to be implemented yet

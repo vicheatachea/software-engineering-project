@@ -1,4 +1,4 @@
 package dto;
 
-public record LocationDTO(String name, String campus, String building) {
+public record LocationDTO(Long id, String name, String campus, String building) {
 }
