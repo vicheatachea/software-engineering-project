@@ -1,6 +1,5 @@
 package dao;
 
-import entity.SubjectEntity;
 import entity.TimetableEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
