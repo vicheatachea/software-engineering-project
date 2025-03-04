@@ -60,7 +60,7 @@ public class MainPageController implements Initializable {
                     loadContent("/layouts/pages/main/timetable.fxml", null);
                     break;
                 case "groups":
-                    loadContent("/layouts/pages/main/groups.fxml", null);
+                    loadContent("/layouts/pages/main/general-page.fxml", "groups");
                     break;
                 case "subjects":
                     loadContent("/layouts/pages/main/general-page.fxml", "subjects");
@@ -84,6 +84,9 @@ public class MainPageController implements Initializable {
 
             if (name != null) {
                 switch (name) {
+                    case "groups":
+                        fxmlLoader.setController(new GroupsController());
+                        break;
                     case "subjects":
                         fxmlLoader.setController(new SubjectsController());
                         break;
