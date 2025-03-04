@@ -118,7 +118,7 @@ public class LocationsController implements ControllerAware {
         String building = buildingTextField.getText();
         String campus = campusTextField.getText();
 
-        LocationDTO locationDTO = new LocationDTO(null, name, campus, building);
+        LocationDTO locationDTO = new LocationDTO(name, campus, building);
         locationController.saveLocation(locationDTO);
         loadLocations();
         clearFields();
@@ -132,7 +132,7 @@ public class LocationsController implements ControllerAware {
             String building = buildingTextField.getText();
             String campus = campusTextField.getText();
 
-            LocationDTO locationDTO = new LocationDTO(locations.get(selectedIndex).id(), name, campus, building);
+            LocationDTO locationDTO = new LocationDTO(locations.get(selectedIndex).name(), campus, building);
             locationController.saveLocation(locationDTO);
             loadLocations();
 
