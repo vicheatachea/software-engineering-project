@@ -166,4 +166,12 @@ public class UserModel {
 		userDAO.deleteAll();
 		timetableDAO.deleteAll();
 	}
+
+    public boolean isCurrentUserTeacher() {
+		return UserPreferences.getUserRole().equals(Role.TEACHER);
+    }
+
+	public long fetchCurrentUserId() {
+		return UserPreferences.getUserId();
+	}
 }
