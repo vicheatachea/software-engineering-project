@@ -9,6 +9,8 @@ import entity.UserEntity;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.prefs.BackingStoreException;
 
 public class UserModel {
@@ -24,6 +26,14 @@ public class UserModel {
 		}
 
 		return convertToDTO(user);
+	}
+
+	public List<UserDTO> fetchAllStudents() {
+		List<UserDTO> users = new ArrayList<>();
+		for (UserEntity user : userDAO.findAll()) {
+			users.add(convertToDTO(user));
+		}
+		return users;
 	}
 
 	public boolean authenticate(String username, String password) {
@@ -125,6 +135,7 @@ public class UserModel {
 			return false;
 		}
 	}
+
 
 	private UserDTO convertToDTO(UserEntity user) {
 		return new UserDTO(user.getUsername(),

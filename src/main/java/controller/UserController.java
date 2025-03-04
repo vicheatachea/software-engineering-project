@@ -3,6 +3,8 @@ package controller;
 import dto.UserDTO;
 import model.UserModel;
 
+import java.util.List;
+
 public class UserController {
 	private final UserModel userModel = new UserModel();
 
@@ -20,6 +22,10 @@ public class UserController {
 
 	public UserDTO getLoggedInUser() {
 		return userModel.getLoggedInUser();
+	}
+
+	public List<UserDTO> fetchAllStudents() {
+		return userModel.fetchAllStudents();
 	}
 
 	public void updateUser(UserDTO userDTO) {
