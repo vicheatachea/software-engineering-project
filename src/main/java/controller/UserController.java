@@ -30,6 +30,10 @@ public class UserController {
 		userModel.logout();
 	}
 
+	public void deleteAllUsers() {
+		userModel.deleteAllUsers();
+	}
+
 	public boolean isUsernameTaken(String username) {
 		return userModel.isUsernameTaken(username);
 	}

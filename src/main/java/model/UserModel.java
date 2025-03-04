@@ -57,6 +57,11 @@ public class UserModel {
 
 		UserEntity user = userDAO.findById(UserPreferences.getUserId());
 
+		if (user == null) {
+			logout();
+			throw new IllegalArgumentException("User not found");
+		}
+
 		if (!isValid(userDTO)) {
 			throw new IllegalArgumentException("Invalid user data");
 		}
@@ -100,7 +105,7 @@ public class UserModel {
 	}
 
 	private boolean isSocialNumberValid(String socialNumber) {
-		return socialNumber != null;
+		return socialNumber != null && socialNumber.length() == 11;
 	}
 
 	private boolean isRoleValid(String role) {
@@ -144,5 +149,10 @@ public class UserModel {
 
 	public boolean isUsernameTaken(String username) {
 		return userDAO.findByUsername(username) != null;
+	}
+
+	public void deleteAllUsers() {
+		userDAO.deleteAll();
+		timetableDAO.deleteAll();
 	}
 }
