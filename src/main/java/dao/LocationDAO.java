@@ -56,6 +56,21 @@ public class LocationDAO {
 		}
 	}
 
+	public LocationEntity findByName(String name) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.createQuery("SELECT l FROM LocationEntity l WHERE l.name = :name", LocationEntity.class)
+			         .setParameter("name", name)
+			         .getSingleResult();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
 	public void delete(LocationEntity location) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();

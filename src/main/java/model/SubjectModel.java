@@ -33,6 +33,16 @@ public class SubjectModel {
 		return subjectDTOs;
 	}
 
+	public SubjectDTO fetchSubjectByCode(SubjectDTO subjectDTO) {
+		SubjectEntity subject = subjectDAO.findByCode(subjectDTO.code());
+
+		if (subject == null) {
+			throw new IllegalArgumentException("Subject not found");
+		}
+
+		return convertToSubjectDTO(subject);
+	}
+
 	public void saveSubject(SubjectDTO subjectDTO) {
 		SubjectEntity subject = convertToSubjectEntity(subjectDTO);
 		subjectDAO.persist(subject);
@@ -41,6 +51,10 @@ public class SubjectModel {
 	public void deleteSubject(SubjectDTO subjectDTO) {
 		SubjectEntity subject = convertToSubjectEntity(subjectDTO);
 		subjectDAO.delete(subject);
+	}
+
+	public void deleteAllSubjects() {
+		subjectDAO.deleteAll();
 	}
 
 	private SubjectDTO convertToSubjectDTO(SubjectEntity subject) {

@@ -1,13 +1,22 @@
 package controller;
 
-public class TimetableController {
-    // Fetch timetable id from current user
-    public Long fetchTimetableForUser() {
-        return null;
-    }
+import model.TimetableModel;
 
-    // Fetch timetable id for a group by group name
-    public Long fetchTimetableForGroup(String groupName) {
-        return null;
-    }
+public class TimetableController {
+
+	private static final TimetableModel timetableModel = new TimetableModel();
+
+	// Fetch timetable id from current user
+	public Long fetchTimetableForUser() {
+		return timetableModel.fetchTimetableForUser();
+	}
+
+	// Fetch timetable id for a group by group name
+	public Long fetchTimetableForGroup(String groupName) {
+		return timetableModel.fetchTimetableForGroup(groupName);
+	}
+
+	public void deleteAllTimetables() {
+		timetableModel.deleteAllTimetables();
+	}
 }

@@ -3,28 +3,35 @@ package controller;
 import dto.SubjectDTO;
 import model.SubjectModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SubjectController {
-    private final SubjectModel subjectModel = new SubjectModel();
+	private final SubjectModel subjectModel = new SubjectModel();
 
-    // Fetch all available subjects
-    public List<SubjectDTO> fetchAllSubjects() {
-        return subjectModel.fetchAllSubjects();
-    }
+	// Fetch all available subjects
+	public List<SubjectDTO> fetchAllSubjects() {
+		return subjectModel.fetchAllSubjects();
+	}
 
-    public List<SubjectDTO> fetchSubjectsByUser() {
-        return subjectModel.fetchSubjectsByUser();
-    }
+	public List<SubjectDTO> fetchSubjectsByUser() {
+		return subjectModel.fetchSubjectsByUser();
+	}
 
-    // Adds/Updates a subject
-    public void saveSubject(SubjectDTO subjectDTO) {
-        subjectModel.saveSubject(subjectDTO);
-    }
+	public SubjectDTO fetchSubjectByCode(SubjectDTO subjectDTO) {
+		return subjectModel.fetchSubjectByCode(subjectDTO);
+	}
 
-    // Deletes a subject
-    public void deleteSubject(SubjectDTO subjectDTO) {
-        subjectModel.deleteSubject(subjectDTO);
-    }
+	// Adds/Updates a subject
+	public void saveSubject(SubjectDTO subjectDTO) {
+		subjectModel.saveSubject(subjectDTO);
+	}
+
+	// Deletes a subject
+	public void deleteSubject(SubjectDTO subjectDTO) {
+		subjectModel.deleteSubject(subjectDTO);
+	}
+
+	public void deleteAllSubjects() {
+		subjectModel.deleteAllSubjects();
+	}
 }

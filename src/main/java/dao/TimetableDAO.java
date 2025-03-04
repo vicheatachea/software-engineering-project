@@ -126,20 +126,51 @@ public class TimetableDAO {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
+			// Delete related user group
+			em.createQuery("DELETE FROM UserGroupEntity").executeUpdate();
 			// Delete related assignments
 			em.createQuery("DELETE FROM AssignmentEntity").executeUpdate();
 			// Delete related teaching sessions
 			em.createQuery("DELETE FROM TeachingSessionEntity").executeUpdate();
 			// Delete related user
 			em.createQuery("DELETE FROM UserEntity").executeUpdate();
-			// Delete related user group
-			em.createQuery("DELETE FROM UserGroupEntity").executeUpdate();
 			// Finally, delete the timetable
 			em.createQuery("DELETE FROM TimetableEntity").executeUpdate();
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
 			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public TimetableEntity findByUserId(long userId) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.createQuery("SELECT u.timetable FROM UserEntity u WHERE u.id = :userId", TimetableEntity.class)
+			         .setParameter("userId", userId)
+			         .getSingleResult();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public TimetableEntity findByGroupName(String groupName) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.createQuery("SELECT g.timetable FROM UserGroupEntity g WHERE g.name = :groupName",
+			                      TimetableEntity.class)
+			         .setParameter("groupName", groupName)
+			         .getSingleResult();
+		} catch (Exception e) {
+			return null;
 		} finally {
 			if (em.isOpen()) {
 				em.close();

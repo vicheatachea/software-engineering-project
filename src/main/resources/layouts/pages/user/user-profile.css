@@ -1,8 +1,8 @@
 .user-profile-vbox {
     -fx-background-color: #FFE0E9;
     -fx-padding: 30px;
-    -fx-border-radius: 15px;
-    -fx-background-radius: 15px;
+    -fx-border-radius: 0 0 15px 15px;
+    -fx-background-radius: 0 0 15px 15px;
 }
 
 .profile-image {

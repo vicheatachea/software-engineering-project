@@ -5,14 +5,12 @@ import dao.TimetableDAO;
 import dao.UserDAO;
 import dao.UserGroupDAO;
 import dto.GroupDTO;
-import entity.SubjectEntity;
-import entity.TimetableEntity;
-import entity.UserEntity;
-import entity.UserGroupEntity;
+import entity.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 public class GroupModel {
 
@@ -50,14 +48,20 @@ public class GroupModel {
 
 	// Fetch a group DTO by the group name
 	public GroupDTO fetchGroupByName(String groupName) {
-		return null;
+		UserGroupEntity group = userGroupDAO.findByName(groupName);
+
+		if (group == null) {
+			throw new IllegalArgumentException("Group does not exist.");
+		}
+
+		return ConvertToGroupDTO(group);
 	}
 
 	public void addGroup(GroupDTO groupDTO) {
 
 		UserEntity teacher = userDAO.findTeacherById(groupDTO.teacherId());
 
-		SubjectEntity subject = subjectDAO.findByName(groupDTO.subjectName());
+		SubjectEntity subject = subjectDAO.findByCode(groupDTO.subjectCode());
 
 		TimetableEntity timetable = new TimetableEntity();
 
@@ -135,5 +139,19 @@ public class GroupModel {
 	private GroupDTO ConvertToGroupDTO(UserGroupEntity group) {
 		return new GroupDTO(group.getName(), group.getCode(), group.getCapacity(), group.getTeacher().getId(),
 		                    group.getSubject().getName());
+	}
+
+	public boolean isUserGroupOwner(String groupName) {
+		UserGroupEntity group = userGroupDAO.findByName(groupName);
+
+		if (UserPreferences.getUserRole() != Role.TEACHER) {
+			return false;
+		}
+
+		if (group == null) {
+			throw new IllegalArgumentException("Group does not exist.");
+		}
+
+		return Objects.equals(group.getTeacher().getId(), UserPreferences.getUserId());
 	}
 }

@@ -1,4 +1,4 @@
 package dto;
 
-public record GroupDTO(String name, String code, int capacity, Long teacherId, String subjectName) {
+public record GroupDTO(String name, String code, int capacity, Long teacherId, String subjectCode) {
 }

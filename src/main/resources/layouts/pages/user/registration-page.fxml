@@ -38,6 +38,4 @@
         <Button fx:id="backToLoginButton" onAction="#goToLoginPage" styleClass="back-to-login-button" text="Back to Login" />
     </HBox>
 
-    <Button fx:id="exitButton" onAction="#handleExit" styleClass="exit-button" text="Exit" />
-
 </VBox>

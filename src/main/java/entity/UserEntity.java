@@ -34,7 +34,7 @@ public class UserEntity {
 	@Column(name = "date_of_birth", nullable = false)
 	private Timestamp dateOfBirth;
 
-	@Column(name = "social_number", nullable = false)
+	@Column(name = "social_number", nullable = false, unique = true)
 	private String socialNumber;
 
 	@Enumerated(EnumType.STRING)
@@ -55,9 +55,6 @@ public class UserEntity {
 	           inverseJoinColumns = @JoinColumn(name = "teaching_session_id"))
 	private Set<TeachingSessionEntity> teachingSessions;
 
-	public UserEntity() {
-	}
-
 	public UserEntity(String firstName, String lastName, String username, String password, Timestamp dateOfBirth,
 	                  String socialNumber, Role role, TimetableEntity timetable) {
 		this.firstName = firstName;
@@ -68,6 +65,10 @@ public class UserEntity {
 		this.socialNumber = socialNumber;
 		this.role = role;
 		this.timetable = timetable;
+	}
+
+	public UserEntity() {
+
 	}
 
 	public void setId(Long id) {
@@ -131,8 +132,12 @@ public class UserEntity {
 	}
 
 	public void setPassword(String password) {
+		generateSalt();
+		this.password = PasswordHashUtil.hashPassword(password, getSalt());
+	}
+
+	public void generateSalt() {
 		this.salt = PasswordHashUtil.generateSalt();
-		this.password = PasswordHashUtil.hashPassword(password, this.salt);
 	}
 
 	public String getSalt() {

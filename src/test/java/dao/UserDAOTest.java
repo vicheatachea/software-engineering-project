@@ -124,8 +124,8 @@ class UserDAOTest {
 
 		userDao.persist(user);
 
-		assertTrue(userDao.authenticate(user.getUsername(), "password"));
-		assertFalse(userDao.authenticate(user.getUsername(), "wrongpassword"));
+		assertEquals(user.getId(), userDao.authenticate(user.getUsername(), "password").getId());
+		assertThrows(IllegalArgumentException.class, () -> userDao.authenticate(user.getUsername(), "wrongpassword"));
 	}
 
 	@Test
