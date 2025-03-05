@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 
 public class UserProfileController {
 	private UserController userController;
-	private Stage stage;
 
 	@FXML
 	private ImageView profileImageView;
@@ -25,13 +24,10 @@ public class UserProfileController {
 		this.userController = userController;
 	}
 
-	public void setStage(Stage stage) {
-		this.stage = stage;
-	}
-
 	@FXML
 	private void handleLogout() {
 		userController.logout();
+		Stage stage = (Stage) nameLabel.getScene().getWindow();
 		stage.close();
 	}
 
@@ -57,6 +53,8 @@ public class UserProfileController {
 		nameLabel.setText(userDTO.firstName() + " " + userDTO.lastName());
 		roleLabel.setText(userDTO.role());
 		socialNumberLabel.setText(userDTO.socialNumber());
+
+
 	}
 
 

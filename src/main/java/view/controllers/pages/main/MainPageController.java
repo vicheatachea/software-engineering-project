@@ -32,13 +32,13 @@ public class MainPageController implements Initializable {
 	@FXML
 	private StackPane mainContent;
 
-    public MainPageController() {
-        this.baseController = new BaseController();
-    }
+	public MainPageController() {
+		this.baseController = new BaseController();
+	}
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -47,6 +47,9 @@ public class MainPageController implements Initializable {
 
         sidebarController.currentViewProperty().addListener((observableValue, oldValue, newValue) -> {
             switch (newValue) {
+                case "notifications":
+                    showNotificationPopup();
+                    break;
                 case "account":
                     if (baseController.getUserController().isUserLoggedIn()) {
                         showUserProfilePopup();
@@ -112,6 +115,28 @@ public class MainPageController implements Initializable {
 		}
 	}
 
+	private void showNotificationPopup() {
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/notifications-page.fxml"));
+			Parent parent = fxmlLoader.load();
+
+			//NotificationsController notificationsController = fxmlLoader.getController();
+			//notificationsController.setUserController(baseController.getUserController());
+
+			Stage notificationStage = new Stage();
+			notificationStage.initModality(Modality.APPLICATION_MODAL);
+			notificationStage.initOwner(stage);
+			notificationStage.setTitle("Notifications");
+			notificationStage.setScene(new Scene(parent));
+			notificationStage.showAndWait();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+
 	private void showLoginPopup() {
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/login-page.fxml"));
@@ -127,6 +152,9 @@ public class MainPageController implements Initializable {
 			loginStage.setTitle("Login");
 			loginStage.setScene(new Scene(parent));
 			loginStage.showAndWait();
+
+			sidebarController.updateAccountButtonText(baseController.getUserController().isUserLoggedIn());
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -137,10 +165,9 @@ public class MainPageController implements Initializable {
 			FXMLLoader fxmlLoader =
 					new FXMLLoader(getClass().getResource("/layouts/pages/user/user-profile-page.fxml"));
 			Parent parent = fxmlLoader.load();
-
+			
 			UserProfileController userProfileController = fxmlLoader.getController();
 			userProfileController.setUserController(baseController.getUserController());
-			userProfileController.setStage(stage);
 			userProfileController.updateUserInfo();
 
 			Stage userProfileStage = new Stage();
@@ -149,6 +176,9 @@ public class MainPageController implements Initializable {
 			userProfileStage.setTitle("User Profile");
 			userProfileStage.setScene(new Scene(parent));
 			userProfileStage.showAndWait();
+
+			sidebarController.updateAccountButtonText(baseController.getUserController().isUserLoggedIn());
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
