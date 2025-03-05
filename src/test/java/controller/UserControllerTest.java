@@ -116,7 +116,7 @@ class UserControllerTest {
 
 		UserDTO updatedUserDTO =
 				new UserDTO("updated user", "updated password", "updated first name", "updated last name",
-				            LocalDateTime.now().minusMonths(6), "123456789AB", "TEACHER");
+				            LocalDateTime.now().minusYears(18), "123456789AB", "TEACHER");
 
 		userController.updateUser(updatedUserDTO);
 
