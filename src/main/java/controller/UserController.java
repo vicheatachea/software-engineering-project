@@ -43,4 +43,12 @@ public class UserController {
 	public boolean isUsernameTaken(String username) {
 		return userModel.isUsernameTaken(username);
 	}
+
+	public boolean isCurrentUserTeacher() {
+		return userModel.isCurrentUserTeacher();
+	}
+
+	public long fetchCurrentUserId() {
+		return userModel.fetchCurrentUserId();
+	}
 }

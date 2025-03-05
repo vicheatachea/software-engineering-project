@@ -1,3 +1,4 @@
+package main;
 import datasource.MariaDBConnection;
 import view.View;
 

@@ -54,7 +54,7 @@ public class LocationsController implements ControllerAware {
 
         for (String key : components) {
             HBox componentBox = new HBox();
-            Label label = new Label(key);
+            Label label = new Label(key + ":");
             TextField textField = new TextField();
 
             textField.setPromptText("Enter " + key);
@@ -118,6 +118,17 @@ public class LocationsController implements ControllerAware {
         String building = buildingTextField.getText();
         String campus = campusTextField.getText();
 
+        for (LocationDTO location : locations) {
+            if (location.name().equals(name)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Location with this name already exists.");
+                alert.showAndWait();
+                return;
+            }
+        }
+
         LocationDTO locationDTO = new LocationDTO(name, campus, building);
         locationController.saveLocation(locationDTO);
         loadLocations();
@@ -126,13 +137,22 @@ public class LocationsController implements ControllerAware {
 
     @FXML
     private void handleSave() {
+        if (areFieldsEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("All fields are required.");
+            alert.showAndWait();
+            return;
+        }
+
         int selectedIndex = itemView.getSelectionModel().getSelectedIndex();
         if (selectedIndex != -1) {
             String name = nameTextField.getText();
             String building = buildingTextField.getText();
             String campus = campusTextField.getText();
 
-            LocationDTO locationDTO = new LocationDTO(locations.get(selectedIndex).name(), campus, building);
+            LocationDTO locationDTO = new LocationDTO(name, campus, building);
             locationController.saveLocation(locationDTO);
             loadLocations();
 
@@ -195,6 +215,8 @@ public class LocationsController implements ControllerAware {
     private void changeButtonVisibility(boolean editingMode) {
         // In editing mode, the add button is not visible, and the edit and delete buttons are visible
         isEditingMode = editingMode;
+
+        nameTextField.setDisable(editingMode);
 
         addButton.setVisible(!editingMode);
         addButton.setManaged(!editingMode);

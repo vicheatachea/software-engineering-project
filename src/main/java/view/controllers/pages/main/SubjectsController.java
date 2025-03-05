@@ -53,7 +53,7 @@ public class SubjectsController implements ControllerAware {
 
         for (String key : components) {
             HBox componentBox = new HBox();
-            Label label = new Label(key);
+            Label label = new Label(key + ":");
             TextField textField = new TextField();
 
             textField.setPromptText("Enter " + key);
@@ -115,6 +115,17 @@ public class SubjectsController implements ControllerAware {
         String name = nameTextField.getText();
         String code = codeTextField.getText();
 
+        for (SubjectDTO subject : subjects) {
+            if (subject.code().equals(code)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Subject with this code already exists.");
+                alert.showAndWait();
+                return;
+            }
+        }
+
         SubjectDTO subject = new SubjectDTO(name, code);
         subjectController.saveSubject(subject);
         loadSubjects();
@@ -123,12 +134,21 @@ public class SubjectsController implements ControllerAware {
 
     @FXML
     private void handleSave() {
+        if (areFieldsEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("All fields are required.");
+            alert.showAndWait();
+            return;
+        }
+
         int selectedIndex = itemView.getSelectionModel().getSelectedIndex();
         if (selectedIndex != -1) {
             String name = nameTextField.getText();
             String code = codeTextField.getText();
 
-            SubjectDTO subject = new SubjectDTO(subjects.get(selectedIndex).name(), code);
+            SubjectDTO subject = new SubjectDTO(name, code);
             subjectController.saveSubject(subject);
             loadSubjects();
 
@@ -189,6 +209,8 @@ public class SubjectsController implements ControllerAware {
     private void changeButtonVisibility(boolean editingMode) {
         // In editing mode, the add button is not visible, and the edit and delete buttons are visible
         isEditingMode = editingMode;
+
+        codeTextField.setDisable(editingMode);
 
         addButton.setVisible(!editingMode);
         addButton.setManaged(!editingMode);
