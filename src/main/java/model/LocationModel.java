@@ -24,9 +24,31 @@ public class LocationModel {
 		return locations;
 	}
 
-	public void saveLocation(LocationDTO locationDTO) {
+	public void addLocation(LocationDTO locationDTO) {
 		LocationEntity location = convertToLocationEntity(locationDTO);
 		locationDAO.persist(location);
+	}
+
+	public void updateLocation(LocationDTO location, String currentName) {
+		LocationEntity locationEntity = locationDAO.findByName(currentName);
+
+		if (locationEntity == null) {
+			throw new IllegalArgumentException("Location not found");
+		}
+
+		if (locationDAO.findByName(location.name()) != null) {
+			throw new IllegalArgumentException("Location already exists");
+		}
+
+		if (location.name().isEmpty() || location.campus().isEmpty() || location.building().isEmpty()) {
+			throw new IllegalArgumentException("Location name, campus, and building cannot be empty");
+		}
+
+		locationEntity.setName(location.name());
+		locationEntity.setCampus(location.campus());
+		locationEntity.setBuilding(location.building());
+
+		locationDAO.update(locationEntity);
 	}
 
 	public void deleteLocation(LocationDTO locationDTO) {
