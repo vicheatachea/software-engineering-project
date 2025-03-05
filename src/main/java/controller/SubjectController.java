@@ -17,6 +17,10 @@ public class SubjectController {
 		return subjectModel.fetchSubjectsByUser();
 	}
 
+	public SubjectDTO fetchSubjectByCode(SubjectDTO subjectDTO) {
+		return subjectModel.fetchSubjectByCode(subjectDTO);
+	}
+
 	// Adds/Updates a subject
 	public void saveSubject(SubjectDTO subjectDTO) {
 		subjectModel.saveSubject(subjectDTO);
@@ -25,5 +29,9 @@ public class SubjectController {
 	// Deletes a subject
 	public void deleteSubject(SubjectDTO subjectDTO) {
 		subjectModel.deleteSubject(subjectDTO);
+	}
+
+	public void deleteAllSubjects() {
+		subjectModel.deleteAllSubjects();
 	}
 }

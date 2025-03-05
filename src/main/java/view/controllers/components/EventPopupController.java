@@ -123,7 +123,7 @@ public class EventPopupController {
                 LocalDateTime startDateTime = teachingSession.startDate();
                 LocalDateTime endDateTime = teachingSession.endDate();
                 String location = teachingSession.locationName();
-                String subject = teachingSession.subjectName();
+                String subject = teachingSession.subjectCode();
                 String description = teachingSession.description();
 
                 eventComboBox.setValue("Class");
@@ -138,7 +138,7 @@ public class EventPopupController {
                 LocalDateTime deadlineDateTime = assignment.deadline();
                 String assignmentName = assignment.assignmentName();
                 String assignmentType = assignment.type();
-                String subject = assignment.subjectName();
+                String subject = assignment.subjectCode();
                 String description = assignment.description();
 
                 eventComboBox.setValue("Assignment");

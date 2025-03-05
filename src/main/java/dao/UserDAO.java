@@ -106,6 +106,20 @@ public class UserDAO {
 		}
 	}
 
+	public List<UserEntity> findAllStudents() {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.createQuery("SELECT u FROM UserEntity u WHERE u.role = 'STUDENT'", UserEntity.class)
+			         .getResultList();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
 	public UserEntity authenticate(String username, String password) {
 		UserEntity user = findByUsername(username);
 		if (user == null) {

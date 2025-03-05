@@ -15,4 +15,8 @@ public class TimetableController {
 	public Long fetchTimetableForGroup(String groupName) {
 		return timetableModel.fetchTimetableForGroup(groupName);
 	}
+
+	public void deleteAllTimetables() {
+		timetableModel.deleteAllTimetables();
+	}
 }

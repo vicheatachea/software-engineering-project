@@ -9,6 +9,8 @@ import entity.UserEntity;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.prefs.BackingStoreException;
 
 public class UserModel {
@@ -24,6 +26,14 @@ public class UserModel {
 		}
 
 		return convertToDTO(user);
+	}
+
+	public List<UserDTO> fetchAllStudents() {
+		List<UserDTO> users = new ArrayList<>();
+		for (UserEntity user : userDAO.findAll()) {
+			users.add(convertToDTO(user));
+		}
+		return users;
 	}
 
 	public boolean authenticate(String username, String password) {
@@ -56,6 +66,11 @@ public class UserModel {
 	public void update(UserDTO userDTO) {
 
 		UserEntity user = userDAO.findById(UserPreferences.getUserId());
+
+		if (user == null) {
+			logout();
+			throw new IllegalArgumentException("User not found");
+		}
 
 		if (!isValid(userDTO)) {
 			throw new IllegalArgumentException("Invalid user data");
@@ -100,7 +115,7 @@ public class UserModel {
 	}
 
 	private boolean isSocialNumberValid(String socialNumber) {
-		return socialNumber != null;
+		return socialNumber != null && socialNumber.length() == 11;
 	}
 
 	private boolean isRoleValid(String role) {
@@ -120,6 +135,7 @@ public class UserModel {
 			return false;
 		}
 	}
+
 
 	private UserDTO convertToDTO(UserEntity user) {
 		return new UserDTO(user.getUsername(),
@@ -144,5 +160,18 @@ public class UserModel {
 
 	public boolean isUsernameTaken(String username) {
 		return userDAO.findByUsername(username) != null;
+	}
+
+	public void deleteAllUsers() {
+		userDAO.deleteAll();
+		timetableDAO.deleteAll();
+	}
+
+    public boolean isCurrentUserTeacher() {
+		return UserPreferences.getUserRole().equals(Role.TEACHER);
+    }
+
+	public long fetchCurrentUserId() {
+		return UserPreferences.getUserId();
 	}
 }
