@@ -25,6 +25,12 @@ public class LocationModel {
 	}
 
 	public void addLocation(LocationDTO locationDTO) {
+		LocationEntity existingLocation = locationDAO.findByName(locationDTO.name());
+
+		if(existingLocation != null) {
+			throw new IllegalArgumentException("Location already exists");
+		}
+
 		LocationEntity location = convertToLocationEntity(locationDTO);
 		locationDAO.persist(location);
 	}
