@@ -36,10 +36,6 @@ public class LocationModel {
 			throw new IllegalArgumentException("Location not found");
 		}
 
-		if (locationDAO.findByName(location.name()) != null) {
-			throw new IllegalArgumentException("Location already exists");
-		}
-
 		if (location.name().isEmpty() || location.campus().isEmpty() || location.building().isEmpty()) {
 			throw new IllegalArgumentException("Location name, campus, and building cannot be empty");
 		}
