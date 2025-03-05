@@ -84,7 +84,7 @@ public class UserModel {
 		user.setSocialNumber(userDTO.socialNumber());
 		user.setRole(Role.valueOf(userDTO.role()));
 
-		userDAO.persist(user);
+		userDAO.update(user);
 	}
 
 	public boolean isValid(UserDTO userDTO) {

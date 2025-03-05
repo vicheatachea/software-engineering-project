@@ -22,4 +22,8 @@ public class LocationController {
 	public void deleteLocation(LocationDTO locationDTO) {
 		locationModel.deleteLocation(locationDTO);
 	}
+
+	public void deleteAllLocations() {
+		locationModel.deleteAllLocations();
+	}
 }

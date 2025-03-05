@@ -29,6 +29,11 @@ class SubjectDAOTest {
 	@BeforeEach
 	void setUp() {
 		subjectDAO.deleteAll();
+		try {
+			Thread.sleep(0);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Test
@@ -51,7 +56,7 @@ class SubjectDAOTest {
 
 		subject.setName("Advanced Math");
 		subject.setCode("Mathematics-201");
-		subjectDAO.persist(subject);
+		subjectDAO.update(subject);
 
 		SubjectEntity foundSubject = subjectDAO.findById(subject.getId());
 

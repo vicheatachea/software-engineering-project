@@ -35,6 +35,11 @@ class UserDAOTest {
 	void setUp() {
 		userDao.deleteAll();
 		timetableDAO.deleteAll();
+		try {
+			Thread.sleep(0);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Test
@@ -62,7 +67,7 @@ class UserDAOTest {
 	}
 
 	@Test
-	void persistUpdate() {
+	void Update() {
 		Timestamp DoB = Timestamp.valueOf("2000-01-01 00:00:00");
 
 		TimetableEntity timetable = new TimetableEntity();
@@ -82,7 +87,7 @@ class UserDAOTest {
 		user.setSocialNumber("987654321AB");
 		user.setRole(Role.TEACHER);
 
-		userDao.persist(user);
+		userDao.update(user);
 
 		UserEntity foundUser = userDao.findByUsername("JaneSmith");
 

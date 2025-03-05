@@ -41,4 +41,8 @@ public class LocationModel {
 	private LocationEntity convertToLocationEntity(LocationDTO locationDTO) {
 		return new LocationEntity(locationDTO.name(), locationDTO.campus(), locationDTO.building());
 	}
+
+	public void deleteAllLocations() {
+		locationDAO.deleteAll();
+	}
 }

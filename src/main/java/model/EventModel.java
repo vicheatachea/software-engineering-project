@@ -38,7 +38,8 @@ public class EventModel {
 		List<Event> events = new ArrayList<>();
 
 		List<TeachingSessionEntity> teachingSessions =
-				teachingSessionDAO.findAllByTimetableIdDuringPeriod(timetableId, startDate, endDate);
+				teachingSessionDAO.findAllByTimetableIdDuringPeriod(timetableId, Timestamp.valueOf(startDate),
+				                                                    Timestamp.valueOf(endDate));
 
 		if (teachingSessions != null) {
 			for (TeachingSessionEntity teachingSession : teachingSessions) {
@@ -47,7 +48,8 @@ public class EventModel {
 		}
 
 		List<AssignmentEntity> assignments =
-				assignmentDAO.findAllByTimetableIdDuringPeriod(timetableId, startDate, endDate);
+				assignmentDAO.findAllByTimetableIdDuringPeriod(timetableId, Timestamp.valueOf(startDate),
+				                                               Timestamp.valueOf(endDate));
 
 		if (assignments != null) {
 			for (AssignmentEntity assignment : assignments) {
@@ -72,10 +74,10 @@ public class EventModel {
 	public void updateEvent(Event event) {
 		if (event instanceof TeachingSessionDTO teachingSessionDTO) {
 			TeachingSessionEntity entity = convertToTeachingSessionEntity(teachingSessionDTO);
-			teachingSessionDAO.persist(entity);
+			teachingSessionDAO.update(entity);
 		} else if (event instanceof AssignmentDTO assignmentDTO) {
 			AssignmentEntity entity = convertToAssignmentEntity(assignmentDTO);
-			assignmentDAO.persist(entity);
+			assignmentDAO.update(entity);
 		}
 	}
 
@@ -93,7 +95,16 @@ public class EventModel {
 	private AssignmentEntity convertToAssignmentEntity(AssignmentDTO dto) {
 		AssignmentEntity entity = new AssignmentEntity();
 
-		entity.setId(dto.id());
+
+		if (dto.id() != null) {
+			entity.setId(dto.id());
+		}
+		if (dto.description() != null) {
+			entity.setDescription(dto.description());
+		}
+		if (dto.assignmentName() != null) {
+			entity.setName(dto.assignmentName());
+		}
 		entity.setType(dto.type());
 		entity.setPublishingDate(Timestamp.valueOf(dto.publishingDate()));
 
@@ -110,13 +121,10 @@ public class EventModel {
 	}
 
 	private AssignmentDTO convertToAssignmentDTO(AssignmentEntity entity) {
-		return new AssignmentDTO(entity.getId(),
-		                         entity.getType(),
-		                         entity.getPublishingDate().toLocalDateTime(),
-		                         entity.getDeadline().toLocalDateTime(),
-		                         entity.getName(),
-		                         entity.getSubject().getName(),
-		                         entity.getDescription(),
+		return new AssignmentDTO(entity.getId(), entity.getType(), entity.getPublishingDate().toLocalDateTime(),
+		                         entity.getDeadline().toLocalDateTime(), entity.getName(),
+		                         entity.getSubject().getCode(),
+		                         entity.getDescription() == null ? null : entity.getDescription(),
 		                         entity.getTimetable().getId());
 	}
 
@@ -126,6 +134,11 @@ public class EventModel {
 		if (dto.id() != null) {
 			entity.setId(dto.id());
 		}
+
+		if (dto.description() != null) {
+			entity.setDescription(dto.description());
+		}
+
 		entity.setStartDate(Timestamp.valueOf(dto.startDate()));
 		entity.setEndDate(Timestamp.valueOf(dto.endDate()));
 
@@ -148,9 +161,14 @@ public class EventModel {
 		return new TeachingSessionDTO(entity.getId(),
 		                              entity.getStartDate().toLocalDateTime(),
 		                              entity.getEndDate().toLocalDateTime(),
-		                              entity.getLocation().getName(),
-		                              entity.getSubject().getName(),
-		                              entity.getDescription(),
+		                              entity.getLocation() == null ? null : entity.getLocation().getName(),
+		                              entity.getSubject().getCode(),
+		                              entity.getDescription() == null ? null : entity.getDescription(),
 		                              entity.getTimetable().getId());
+	}
+
+	public void deleteAllEvents() {
+		assignmentDAO.deleteAll();
+		teachingSessionDAO.deleteAll();
 	}
 }
