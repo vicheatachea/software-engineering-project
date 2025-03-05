@@ -29,6 +29,31 @@ public class TeachingSessionDAO {
 
 	public void update(TeachingSessionEntity entity) {
 		EntityManager em = emf.createEntityManager();
+		TeachingSessionEntity teachingSession = em.find(TeachingSessionEntity.class, entity.getId());
+
+		if (teachingSession == null) {
+			throw new IllegalArgumentException("Teaching session not found");
+		}
+
+		if (entity.getStartDate() != teachingSession.getStartDate()) {
+			teachingSession.setStartDate(entity.getStartDate());
+		}
+		if (entity.getEndDate() != teachingSession.getEndDate()) {
+			teachingSession.setEndDate(entity.getEndDate());
+		}
+		if (entity.getDescription() != null) {
+			teachingSession.setDescription(entity.getDescription());
+		}
+		if (entity.getLocation() != null) {
+			teachingSession.setLocation(entity.getLocation());
+		}
+		if (entity.getTimetable() != teachingSession.getTimetable()) {
+			teachingSession.setTimetable(entity.getTimetable());
+		}
+		if (entity.getSubject() != teachingSession.getSubject()) {
+			teachingSession.setSubject(entity.getSubject());
+		}
+
 		em.getTransaction().begin();
 		try {
 			em.merge(entity);
@@ -127,6 +152,7 @@ public class TeachingSessionDAO {
 		}
 	}
 
+	// TODO: Delete this method if unused
 	public void deleteById(long id) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -178,6 +204,4 @@ public class TeachingSessionDAO {
 			}
 		}
 	}
-
-
 }
