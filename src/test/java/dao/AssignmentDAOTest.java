@@ -16,6 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AssignmentDAOTest {
 
+	private static final AssignmentDAO assignmentDAO = new AssignmentDAO();
+	private static final TimetableDAO timeTableDAO = new TimetableDAO();
+	private static final SubjectDAO subjectDAO = new SubjectDAO();
+
 	@BeforeAll
 	static void ensureDatabase() throws SQLException {
 		MariaDBConnection.verifyDatabase();
@@ -23,9 +27,6 @@ class AssignmentDAOTest {
 
 	@AfterAll
 	static void tearDown() {
-		AssignmentDAO assignmentDAO = new AssignmentDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-		SubjectDAO subjectDAO = new SubjectDAO();
 		assignmentDAO.deleteAll();
 		timeTableDAO.deleteAll();
 		subjectDAO.deleteAll();
@@ -33,9 +34,6 @@ class AssignmentDAOTest {
 
 	@BeforeEach
 	void setUp() {
-		AssignmentDAO assignmentDAO = new AssignmentDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-		SubjectDAO subjectDAO = new SubjectDAO();
 		assignmentDAO.deleteAll();
 		timeTableDAO.deleteAll();
 		subjectDAO.deleteAll();
@@ -43,10 +41,6 @@ class AssignmentDAOTest {
 
 	@Test
 	void persist() {
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-		AssignmentDAO assignmentDAO = new AssignmentDAO();
-
 		SubjectEntity math = new SubjectEntity("Math", "Mathematics-101");
 		subjectDAO.persist(math);
 
@@ -55,7 +49,12 @@ class AssignmentDAOTest {
 
 		Timestamp publishingDate = Timestamp.valueOf("2025-02-11 00:00:00");
 		Timestamp deadline = Timestamp.valueOf("2025-02-25 00:00:00");
-		AssignmentEntity assignment = new AssignmentEntity("Individual", publishingDate, deadline, math, timetable);
+
+		String description = "Solve all exercises in chapter 1";
+
+		AssignmentEntity assignment =
+				new AssignmentEntity("Assignment 1", "Individual", publishingDate, deadline, description, math,
+				                     timetable);
 		assignmentDAO.persist(assignment);
 
 		AssignmentEntity foundAssignment = assignmentDAO.findById(assignment.getId());
@@ -66,10 +65,6 @@ class AssignmentDAOTest {
 
 	@Test
 	void persistUpdate() {
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-		AssignmentDAO assignmentDAO = new AssignmentDAO();
-
 		SubjectEntity math = new SubjectEntity("Math", "Mathematics-101");
 		subjectDAO.persist(math);
 
@@ -78,9 +73,14 @@ class AssignmentDAOTest {
 
 		Timestamp publishingDate = Timestamp.valueOf("2025-02-11 00:00:00");
 		Timestamp deadline = Timestamp.valueOf("2025-02-25 00:00:00");
-		AssignmentEntity assignment = new AssignmentEntity("Individual", publishingDate, deadline, math, timetable);
+
+		String description = "Solve all exercises in chapter 1";
+
+		AssignmentEntity assignment =
+				new AssignmentEntity("Assignment 1", "Individual", publishingDate, deadline, description, math,
+				                     timetable);
 		assignmentDAO.persist(assignment);
-		
+
 		Timestamp newDeadline = Timestamp.valueOf("2025-03-01 00:00:00");
 		assignment.setDeadline(newDeadline);
 		assignment.setType("Group");
@@ -94,10 +94,6 @@ class AssignmentDAOTest {
 
 	@Test
 	void findById() {
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-		AssignmentDAO assignmentDAO = new AssignmentDAO();
-
 		SubjectEntity math = new SubjectEntity("Math", "Mathematics-101");
 		subjectDAO.persist(math);
 
@@ -106,7 +102,12 @@ class AssignmentDAOTest {
 
 		Timestamp publishingDate = Timestamp.valueOf("2025-02-11 00:00:00");
 		Timestamp deadline = Timestamp.valueOf("2025-02-25 00:00:00");
-		AssignmentEntity assignment = new AssignmentEntity("Individual", publishingDate, deadline, math, timetable);
+
+		String description = "Solve all exercises in chapter 1";
+
+		AssignmentEntity assignment =
+				new AssignmentEntity("Assignment 1", "Individual", publishingDate, deadline, description, math,
+				                     timetable);
 		assignmentDAO.persist(assignment);
 
 		assertEquals(assignment, assignmentDAO.findById(assignment.getId()));
@@ -114,10 +115,6 @@ class AssignmentDAOTest {
 
 	@Test
 	void findAll() {
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-		AssignmentDAO assignmentDAO = new AssignmentDAO();
-
 		SubjectEntity math = new SubjectEntity("Math", "Mathematics-101");
 		subjectDAO.persist(math);
 		SubjectEntity physics = new SubjectEntity("Physics", "Physics-101");
@@ -128,9 +125,17 @@ class AssignmentDAOTest {
 
 		Timestamp publishingDate = Timestamp.valueOf("2025-02-11 00:00:00");
 		Timestamp deadline = Timestamp.valueOf("2025-02-25 00:00:00");
-		AssignmentEntity assignment1 = new AssignmentEntity("Individual", publishingDate, deadline, math, timetable);
+
+		String description1 = "Solve all exercises in chapter 1";
+		String description2 = "Solve all exercises in chapter 2";
+
+		AssignmentEntity assignment1 =
+				new AssignmentEntity("Assignment 1", "Individual", publishingDate, deadline, description1, math,
+				                     timetable);
 		assignmentDAO.persist(assignment1);
-		AssignmentEntity assignment2 = new AssignmentEntity("Group", publishingDate, deadline, physics, timetable);
+		AssignmentEntity assignment2 =
+				new AssignmentEntity("Assignment 2", "Group", publishingDate, deadline, description2, physics,
+				                     timetable);
 		assignmentDAO.persist(assignment2);
 
 		assertEquals(2, assignmentDAO.findAll().size());
@@ -138,10 +143,6 @@ class AssignmentDAOTest {
 
 	@Test
 	void deleteAll() {
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-		AssignmentDAO assignmentDAO = new AssignmentDAO();
-
 		SubjectEntity math = new SubjectEntity("Math", "Mathematics-101");
 		subjectDAO.persist(math);
 		SubjectEntity physics = new SubjectEntity("Physics", "Physics-101");
@@ -152,9 +153,17 @@ class AssignmentDAOTest {
 
 		Timestamp publishingDate = Timestamp.valueOf("2025-02-11 00:00:00");
 		Timestamp deadline = Timestamp.valueOf("2025-02-25 00:00:00");
-		AssignmentEntity assignment1 = new AssignmentEntity("Individual", publishingDate, deadline, math, timetable);
+
+		String description1 = "Solve all exercises in chapter 1";
+		String description2 = "Solve all exercises in chapter 2";
+
+		AssignmentEntity assignment1 =
+				new AssignmentEntity("Assignment 1", "Individual", publishingDate, deadline, description1, math,
+				                     timetable);
 		assignmentDAO.persist(assignment1);
-		AssignmentEntity assignment2 = new AssignmentEntity("Group", publishingDate, deadline, physics, timetable);
+		AssignmentEntity assignment2 =
+				new AssignmentEntity("Assignment 2", "Group", publishingDate, deadline, description2, physics,
+				                     timetable);
 		assignmentDAO.persist(assignment2);
 
 		assertEquals(2, assignmentDAO.findAll().size());
@@ -166,10 +175,6 @@ class AssignmentDAOTest {
 
 	@Test
 	void delete() {
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-		AssignmentDAO assignmentDAO = new AssignmentDAO();
-
 		SubjectEntity math = new SubjectEntity("Math", "Mathematics-101");
 		subjectDAO.persist(math);
 		SubjectEntity physics = new SubjectEntity("Physics", "Physics-101");
@@ -180,9 +185,17 @@ class AssignmentDAOTest {
 
 		Timestamp publishingDate = Timestamp.valueOf("2025-02-11 00:00:00");
 		Timestamp deadline = Timestamp.valueOf("2025-02-25 00:00:00");
-		AssignmentEntity assignment1 = new AssignmentEntity("Individual", publishingDate, deadline, math, timetable);
+
+		String description1 = "Solve all exercises in chapter 1";
+		String description2 = "Solve all exercises in chapter 2";
+
+		AssignmentEntity assignment1 =
+				new AssignmentEntity("Assignment 1", "Individual", publishingDate, deadline, description1, math,
+				                     timetable);
 		assignmentDAO.persist(assignment1);
-		AssignmentEntity assignment2 = new AssignmentEntity("Group", publishingDate, deadline, physics, timetable);
+		AssignmentEntity assignment2 =
+				new AssignmentEntity("Assignment 2", "Group", publishingDate, deadline, description2, physics,
+				                     timetable);
 		assignmentDAO.persist(assignment2);
 
 		assertEquals(2, assignmentDAO.findAll().size());

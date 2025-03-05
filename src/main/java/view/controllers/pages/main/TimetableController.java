@@ -1,7 +1,10 @@
 package view.controllers.pages.main;
 
 import controller.BaseController;
+import controller.EventController;
+import dto.AssignmentDTO;
 import dto.Event;
+import dto.TeachingSessionDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,23 +19,27 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import util.StringUtil;
 import view.controllers.ControllerAware;
+import view.controllers.components.EventLabel;
 import view.controllers.components.EventPopupController;
 import view.controllers.components.HeaderLabel;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
+import java.util.List;
 import java.util.Objects;
 
 public class TimetableController implements ControllerAware {
     private static final int NUMBER_OF_BUTTONS = 2;
     BaseController baseController;
+    EventController eventController;
 
     LocalDate currentDate;
-    LocalDate startDate;
-    LocalDate endDate;
+    LocalDateTime startDate;
+    LocalDateTime endDate;
     int currentWeek;
 
     @FXML
@@ -54,12 +61,15 @@ public class TimetableController implements ControllerAware {
             handleDatePick();
 
             updateTimetableHeaders();
+            updateTimetableHours();
+            loadTimetable();
         });
     }
 
     @Override
     public void setBaseController(BaseController baseController) {
         this.baseController = baseController;
+        this.eventController = baseController.getEventController();
     }
 
     private void addButtons() {
@@ -91,9 +101,10 @@ public class TimetableController implements ControllerAware {
             return;
         }
 
+        LocalDateTime previousStartDate = startDate;
         currentDate = newDate;
-        startDate = newDate.with(DayOfWeek.MONDAY);
-        endDate = newDate.with(DayOfWeek.SUNDAY);
+        startDate = newDate.with(DayOfWeek.MONDAY).atStartOfDay();
+        endDate = newDate.with(DayOfWeek.SUNDAY).atTime(23, 59, 59);
         currentWeek = newDate.get(WeekFields.ISO.weekOfWeekBasedYear());
 
         String startDay = formatNumber(startDate.getDayOfMonth());
@@ -115,15 +126,18 @@ public class TimetableController implements ControllerAware {
 
         weekLabel.setText("Week " + currentWeek);
 
-        updateTimetableHeaders();
+        if (!Objects.equals(previousStartDate, startDate)) {
+            updateTimetableHeaders();
+            loadTimetable();
+        }
     }
 
     private void handleNewEvent() {
         openEventPopup(null);
     }
 
-    private void handleEditEvent() {
-
+    private void handleEditEvent(Event event) {
+        openEventPopup(event);
     }
 
     private void openEventPopup(Event event) {
@@ -158,15 +172,85 @@ public class TimetableController implements ControllerAware {
             String month = formatNumber(startDate.plusDays(i).getMonthValue());
 
             HeaderLabel header = new HeaderLabel(StringUtil.capitaliseFirst(weekDay), monthDay, month);
-            timetableGrid.add(header, i, 0);
+            timetableGrid.add(header, i + 1, 0);
 
             GridPane.setHalignment(header, javafx.geometry.HPos.CENTER);
             GridPane.setValignment(header, javafx.geometry.VPos.CENTER);
         }
     }
 
+    private void updateTimetableHours() {
+        int rowCount = timetableGrid.getRowCount();
+        double timeStep = 24.0 / (rowCount - 1);
+
+        for (int i = 0; i < rowCount; i++) {
+            int hours = (int) (i * timeStep);
+            int minutes = (int) ((i * timeStep - hours) * 60);
+
+            Label timeLabel = new Label(formatNumber(hours) + ":" + formatNumber(minutes));
+            timetableGrid.add(timeLabel, 0, i);
+
+            GridPane.setHalignment(timeLabel, javafx.geometry.HPos.CENTER);
+            GridPane.setValignment(timeLabel, javafx.geometry.VPos.BOTTOM);
+        }
+    }
+
     private String formatNumber(int number) {
         return String.format("%02d", number);
+    }
+
+    private void loadTimetable() {
+        clearTimetable();
+        List<Event> events = eventController.fetchEventsByUser(startDate, endDate);
+
+        for (Event event : events) {
+            int column = -1, startRow = -1, endRow = -1;
+            EventLabel eventLabel = new EventLabel(event);
+
+            if (event instanceof TeachingSessionDTO teachingSession) {
+                column = (int) ChronoUnit.DAYS.between(startDate, teachingSession.startDate());
+                startRow = getRowIndex(teachingSession.startDate(), true);
+                endRow = getRowIndex(teachingSession.endDate(), false);
+
+                eventLabel.getStyleClass().add("teaching-session-label");
+            } else if (event instanceof AssignmentDTO assignment) {
+                column = (int) ChronoUnit.DAYS.between(startDate, assignment.deadline());
+                LocalDateTime deadline = assignment.deadline();
+                startRow = getRowIndex(deadline.minusHours(1), true);
+                endRow = getRowIndex(deadline, false);
+
+                eventLabel.getStyleClass().add("assignment-label");
+            }
+
+            if (column < 1 || column > (timetableGrid.getColumnCount() - 1)) {
+                System.out.println("An event with a date outside the timetable range was found");
+                continue;
+            }
+            if (startRow == -1 || endRow == -1) {
+                System.out.println("An invalid event was found");
+                continue;
+            }
+
+            // Calling eventLabel.getEvent() instead of just event should avoid storing the event twice
+            eventLabel.setOnMouseClicked(mouseEvent -> handleEditEvent(eventLabel.getEvent()));
+            timetableGrid.add(eventLabel, column + 1, startRow, 1, endRow - startRow + 1);
+        }
+    }
+
+    private void clearTimetable() {
+        timetableGrid.getChildren().removeIf(node -> {
+            Integer column = GridPane.getColumnIndex(node);
+            Integer row = GridPane.getRowIndex(node);
+            return node instanceof Label && (column != null && column > 0) && (row != null && row > 0);
+        });
+    }
+
+    private int getRowIndex(LocalDateTime dateTime, boolean isStart) {
+        double timeStep = 24.0 / (timetableGrid.getRowCount() - 1);
+        int hours = dateTime.getHour();
+        int minutes = dateTime.getMinute();
+        double timeInHours = hours + minutes / 60.0;
+        return isStart ? (int) (timeInHours / timeStep + 1) : (int) Math.ceil(timeInHours / timeStep);
     }
 
     // Not to be implemented yet
@@ -177,11 +261,6 @@ public class TimetableController implements ControllerAware {
     // If number of columns is odd remove last, otherwise remove first
     // Not to be implemented yet
     private void removeColumn() {
-
-    }
-
-    // Fetch data for an entire week
-    private void loadTimetable() {
 
     }
 }

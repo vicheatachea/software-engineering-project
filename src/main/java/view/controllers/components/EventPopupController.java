@@ -20,6 +20,7 @@ public class EventPopupController {
     private GroupController groupController;
     private LocationController locationController;
     private SubjectController subjectController;
+    private TimetableController timetableController;
 
     private Event event;
     private final RowConstraints hiddenRow = new RowConstraints(0);
@@ -73,6 +74,7 @@ public class EventPopupController {
         this.groupController = baseController.getGroupController();
         this.locationController = baseController.getLocationController();
         this.subjectController = baseController.getSubjectController();
+        this.timetableController = baseController.getTimetableController();
     }
 
     @FXML
@@ -83,11 +85,6 @@ public class EventPopupController {
         eventComboBox.getItems().addAll("Class", "Assignment");
         scheduleComboBox.getItems().addAll("Myself", "Group");
         assignmentComboBox.getItems().addAll("Individual", "Group");
-
-        // TODO: Remove these lines of dummy data, used for testing
-//        subjectComboBox.getItems().addAll("Math", "Science", "English", "History", "Geography");
-//        locationComboBox.getItems().addAll("Room 1", "Room 2", "Room 3", "Room 4", "Room 5");
-//        groupComboBox.getItems().addAll("Group 1", "Group 2", "Group 3", "Group 4", "Group 5");
 
         eventComboBox.addEventHandler(ActionEvent.ACTION, event -> handleEventChange());
         scheduleComboBox.addEventHandler(ActionEvent.ACTION, event -> handleScheduleChange());
@@ -119,6 +116,8 @@ public class EventPopupController {
             }
 
             eventComboBox.setDisable(true);
+            scheduleComboBox.setDisable(true);
+            groupComboBox.setDisable(true);
 
             if (event instanceof TeachingSessionDTO teachingSession) {
                 LocalDateTime startDateTime = teachingSession.startDate();
@@ -271,6 +270,33 @@ public class EventPopupController {
         String subject = (String) subjectComboBox.getValue();
         String description = descriptionTextArea.getText();
 
+        Long timetableId;
+
+        if (scheduleFor.equals("Myself")) {
+            timetableId = timetableController.fetchTimetableForUser();
+        } else {
+            String groupName = (String) groupComboBox.getValue();
+
+            if (checkNullOrEmpty(groupName, "Please select a group")) {
+                return;
+            }
+            if (!groupController.isUserGroupOwner(groupName)) {
+                if (event == null) {
+                    displayErrorAlert("Permission Error", "You do not have permission to add events for this group");
+                } else {
+                    displayErrorAlert("Permission Error", "You do not have permission to update events for this group");
+                }
+                return;
+            }
+
+            timetableId = timetableController.fetchTimetableForGroup(groupName);
+        }
+
+        if (timetableId == null) {
+            System.out.println("Timetable ID not found");
+            return;
+        }
+
         switch (eventType) {
             case "Class":
                 LocalDateTime startDateTime = LocalDateTime.of(startDate, startLocalTime);
@@ -278,7 +304,7 @@ public class EventPopupController {
 
                 String location = (String) locationComboBox.getValue();
 
-                newEvent = new TeachingSessionDTO(id, startDateTime, endDateTime, location, subject, description);
+                newEvent = new TeachingSessionDTO(id, startDateTime, endDateTime, location, subject, description, timetableId);
                 break;
             case "Assignment":
                 LocalDate endDate = endDatePicker.getValue();
@@ -288,33 +314,19 @@ public class EventPopupController {
                 String assignmentName = nameTextField.getText();
                 String assignmentType = (String) assignmentComboBox.getValue();
 
-                newEvent = new AssignmentDTO(id, assignmentType, publishingDateTime, deadlineDateTime, assignmentName, subject, description);
+                newEvent = new AssignmentDTO(id, assignmentType, publishingDateTime, deadlineDateTime, assignmentName, subject, description, timetableId);
                 break;
         }
 
         if (newEvent == null) {
-            displayErrorAlert("Event type not recognised");
+            displayErrorAlert("Configuration Error", "Event type not recognised");
             return;
         }
 
-        if (scheduleFor.equals("Myself")) {
-            if (event == null) {
-                eventController.addEventForUser(newEvent);
-            } else {
-                eventController.updateEventForUser(newEvent);
-            }
+        if (event == null) {
+            eventController.addEvent(newEvent);
         } else {
-            String groupName = (String) groupComboBox.getValue();
-
-            if (checkNullOrEmpty(groupName, "Please select a group")) {
-                return;
-            }
-
-            if (event == null) {
-                eventController.addEventForGroup(newEvent, groupName);
-            } else {
-                eventController.updateEventForGroup(newEvent, groupName);
-            }
+            eventController.updateEvent(newEvent);
         }
     }
 
@@ -327,21 +339,31 @@ public class EventPopupController {
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.OK) {
-            // TODO: Call controller to delete event
+            if (scheduleComboBox.getValue() == "Myself") {
+                eventController.deleteEvent(event);
+            } else {
+                String groupName = (String) groupComboBox.getValue();
+
+                if (!groupController.isUserGroupOwner(groupName)) {
+                    displayErrorAlert("Permission Error", "You do not have permission to delete events for this group");
+                    return;
+                }
+                eventController.deleteEvent(event);
+            }
         }
     }
 
     private boolean checkNullOrEmpty(Object object, String message) {
         if (object == null || object instanceof String && ((String) object).isEmpty()) {
-            displayErrorAlert(message);
+            displayErrorAlert("Configuration Error", message);
             return true;
         }
         return false;
     }
 
-    private void displayErrorAlert(String message) {
+    private void displayErrorAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Configuration Error");
+        alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();

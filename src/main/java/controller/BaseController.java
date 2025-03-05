@@ -10,6 +10,7 @@ public class BaseController {
     private final GroupController groupController = new GroupController();
     private final LocationController locationController = new LocationController();
     private final SubjectController subjectController = new SubjectController();
+    private final TimetableController timetableController = new TimetableController();
     private final UserController userController = new UserController();
 
     public EventController getEventController() {
@@ -26,6 +27,10 @@ public class BaseController {
 
     public SubjectController getSubjectController() {
         return subjectController;
+    }
+
+    public TimetableController getTimetableController() {
+        return timetableController;
     }
 
     public UserController getUserController() {

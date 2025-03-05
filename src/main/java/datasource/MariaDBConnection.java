@@ -17,29 +17,11 @@ public class MariaDBConnection {
 	private static final String USER = "stms_user";
 	private static final String PASSWORD = "password";
 	private static final String BASE_URL = "jdbc:mariadb://localhost:3306/";
-	private static final String URL = "jdbc:mariadb://localhost:3306/stms";
 
 	private static final Logger logger = LoggerFactory.getLogger(MariaDBConnection.class);
 
-	public static Connection getConnection() throws SQLException {
-		if (conn == null || conn.isClosed()) {
-			try {
-				try (Connection baseConn = DriverManager.getConnection(BASE_URL, USER, PASSWORD)) {
-					baseConn.createStatement().executeUpdate("CREATE DATABASE IF NOT EXISTS `stms`");
-				}
-
-				conn = DriverManager.getConnection(URL, USER, PASSWORD);
-				logger.info("Connected to database: {}", URL);
-			} catch (SQLException e) {
-				logger.error("Error creating database: {}", e.getMessage());
-				throw e;
-			}
-		}
-		return conn;
-	}
-
 	public static void verifyDatabase() throws SQLException {
-		try (Connection conn = getConnection()) {
+		try (Connection conn = DriverManager.getConnection(BASE_URL, USER, PASSWORD)) {
 			conn.createStatement().executeUpdate("CREATE DATABASE IF NOT EXISTS `stms`");
 			conn.createStatement().executeUpdate("USE `stms`");
 		} catch (SQLException e) {

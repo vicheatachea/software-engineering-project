@@ -16,6 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserDAOTest {
 
+	private static final UserDAO userDao = new UserDAO();
+	private static final TimetableDAO timetableDAO = new TimetableDAO();
+
 	@BeforeAll
 	static void ensureDatabase() throws SQLException {
 		MariaDBConnection.verifyDatabase();
@@ -23,26 +26,19 @@ class UserDAOTest {
 
 	@AfterAll
 	static void tearDown() {
-		UserDAO userDao = new UserDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
 		userDao.deleteAll();
-		timeTableDAO.deleteAll();
+		timetableDAO.deleteAll();
 	}
 
 
 	@BeforeEach
 	void setUp() {
-		UserDAO userDao = new UserDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
 		userDao.deleteAll();
-		timeTableDAO.deleteAll();
+		timetableDAO.deleteAll();
 	}
 
 	@Test
 	void persist() {
-		UserDAO userDao = new UserDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		Timestamp DoB = Timestamp.valueOf("2000-01-01 00:00:00");
 
 		TimetableEntity timetable = new TimetableEntity();
@@ -64,12 +60,9 @@ class UserDAOTest {
 		assertEquals(user.getRole(), foundUser.getRole());
 		assertEquals(user.getTimetable(), foundUser.getTimetable());
 	}
-	
+
 	@Test
 	void persistUpdate() {
-		UserDAO userDao = new UserDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		Timestamp DoB = Timestamp.valueOf("2000-01-01 00:00:00");
 
 		TimetableEntity timetable = new TimetableEntity();
@@ -88,7 +81,7 @@ class UserDAOTest {
 		user.setDateOfBirth(Timestamp.valueOf("2001-01-01 00:00:00"));
 		user.setSocialNumber("987654321AB");
 		user.setRole(Role.TEACHER);
-		
+
 		userDao.persist(user);
 
 		UserEntity foundUser = userDao.findByUsername("JaneSmith");
@@ -104,9 +97,6 @@ class UserDAOTest {
 
 	@Test
 	void findByUsername() {
-		UserDAO userDao = new UserDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		Timestamp DoB = Timestamp.valueOf("2000-01-01 00:00:00");
 
 		TimetableEntity timetable = new TimetableEntity();
@@ -123,9 +113,6 @@ class UserDAOTest {
 
 	@Test
 	void authenticate() {
-		UserDAO userDao = new UserDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		Timestamp DoB = Timestamp.valueOf("2000-01-01 00:00:00");
 
 		TimetableEntity timetable = new TimetableEntity();
@@ -137,15 +124,12 @@ class UserDAOTest {
 
 		userDao.persist(user);
 
-		assertTrue(userDao.authenticate(user.getUsername(), "password"));
-		assertFalse(userDao.authenticate(user.getUsername(), "wrongpassword"));
+		assertEquals(user.getId(), userDao.authenticate(user.getUsername(), "password").getId());
+		assertThrows(IllegalArgumentException.class, () -> userDao.authenticate(user.getUsername(), "wrongpassword"));
 	}
 
 	@Test
 	void delete() {
-		UserDAO userDao = new UserDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		Timestamp DoB = Timestamp.valueOf("2000-01-01 00:00:00");
 
 		TimetableEntity timetable = new TimetableEntity();
@@ -164,9 +148,6 @@ class UserDAOTest {
 
 	@Test
 	void deleteAll() {
-		UserDAO userDao = new UserDAO();
-		TimetableDAO timetableDAO = new TimetableDAO();
-
 		Timestamp DoB1 = Timestamp.valueOf("2000-01-01 00:00:00");
 		Timestamp DoB2 = Timestamp.valueOf("2000-01-02 00:00:00");
 

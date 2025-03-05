@@ -1,70 +1,79 @@
-//package view.controllers.pages.user;
-//
-//import controller.Controller;
-//import javafx.fxml.FXML;
-//import javafx.fxml.FXMLLoader;
-//import javafx.scene.Parent;
-//import javafx.scene.control.TextField;
-//import javafx.scene.control.PasswordField;
-//import javafx.stage.Stage;
-//import javafx.scene.Scene;
-//
-//import java.io.IOException;
-//
-//public class LoginController {
-////    private Controller controller;
-//    private Stage stage;
-//
-//    @FXML
-//    private TextField emailField;
-//    @FXML
-//    private PasswordField passwordField;
-//
-////    public void setController(Controller controller) {
-////        this.controller = controller;
-//    }
-//
-//    public void setStage(Stage stage) {
-//        this.stage = stage;
-//    }
-//
-//    @FXML
-//    private void handleLogin() {
-//        String username = emailField.getText();
-//        String password = passwordField.getText();
-//
-//        if (authenticateUser(username, password)) {
-////            controller.setUserLoggedIn(true);
-//            stage.close(); // Close the login popup
-//        } else {
-//            System.out.println("Invalid credentials.");
-//        }
-//    }
-//
-//    private boolean authenticateUser(String username, String password) {
-//        return username.equals("admin") && password.equals("password"); // Replace with actual authentication logic
-//    }
-//
-//    @FXML
-//    private void handleRegister() {
-//        try {
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/registration-page.fxml"));
-//            Parent parent = fxmlLoader.load();
-//
-//            RegistrationController registerController = fxmlLoader.getController();
-////            registerController.setController(controller);
-//            registerController.setStage(stage); // Use the same stage as login
-//            Scene scene = emailField.getScene(); // Get current scene
-//            scene.setRoot(parent); // Replace the scene root with registration page
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @FXML
-//    private void handleExit() {
-//        Stage stage = (Stage) emailField.getScene().getWindow();
-//        stage.close();
-//    }
-//}
+package view.controllers.pages.user;
+
+import controller.BaseController;
+import controller.UserController;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import javafx.scene.control.Alert;
+
+import java.io.IOException;
+
+public class LoginController {
+    private UserController userController;
+    private Stage stage;
+
+    @FXML
+    private TextField emailField;
+    @FXML
+    private PasswordField passwordField;
+
+    public void setUserController(UserController userController) {
+        this.userController = userController;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    @FXML
+    private void handleLogin() {
+        String username = emailField.getText();
+        String password = passwordField.getText();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            showAlert("Error", "Please fill in all fields.");
+            return;
+        }
+
+        try {
+            if (userController.authenticateUser(username, password)) {
+                stage.close(); // Close the login popup
+            } else {
+                showAlert("Error", "Invalid credentials.");
+            }
+        } catch (Exception e) {
+            showAlert("Error", "An unexpected error occurred: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void goToRegisterPage() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/registration-page.fxml"));
+            Parent parent = fxmlLoader.load();
+
+            RegistrationController registrationController = fxmlLoader.getController();
+            registrationController.setUserController(userController);
+            registrationController.setStage(stage);
+
+            Scene scene = emailField.getScene();
+            scene.setRoot(parent);
+
+        } catch (IOException e) {
+            showAlert("Error", "An unexpected error occurred: " + e.getMessage());
+        }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+}

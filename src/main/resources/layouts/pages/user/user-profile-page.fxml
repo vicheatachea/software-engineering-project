@@ -11,7 +11,7 @@
 
     <Label fx:id="nameLabel" styleClass="name-label" text="Name" />
     <Label fx:id="roleLabel" styleClass="role-label" text="Role" />
-    <Label fx:id="socialNumberLabel" styleClass="social-number-label" text="Social Number" />
+    <Label fx:id="socialNumberLabel" styleClass="social-number-label" text="something" />
 
     <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="logout-button" text="Logout" />
 </VBox>

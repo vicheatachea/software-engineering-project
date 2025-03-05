@@ -20,6 +20,9 @@ public class TeachingSessionEntity {
 	@Column(name = "end_date", nullable = false)
 	private Timestamp EndDate;
 
+	@Column
+	private String description;
+
 	@ManyToOne
 	@JoinColumn(name = "location_id")
 	private LocationEntity location;
@@ -38,11 +41,11 @@ public class TeachingSessionEntity {
 	public TeachingSessionEntity() {
 	}
 
-	public TeachingSessionEntity(Timestamp StartDate, Timestamp EndDate, LocationEntity location,
-	                             TimetableEntity timetable,
-	                             SubjectEntity subject) {
+	public TeachingSessionEntity(Timestamp StartDate, Timestamp EndDate, String description, LocationEntity location,
+	                             TimetableEntity timetable, SubjectEntity subject) {
 		this.StartDate = StartDate;
 		this.EndDate = EndDate;
+		this.description = description;
 		this.location = location;
 		this.timetable = timetable;
 		this.subject = subject;
@@ -70,6 +73,14 @@ public class TeachingSessionEntity {
 
 	public Timestamp getEndDate() {
 		return EndDate;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public void setLocation(LocationEntity location) {
@@ -111,12 +122,9 @@ public class TeachingSessionEntity {
 
 		TeachingSessionEntity that = (TeachingSessionEntity) o;
 
-		return Objects.equals(id, that.id) &&
-		       Objects.equals(StartDate, that.StartDate) &&
-		       Objects.equals(EndDate, that.EndDate) &&
-		       Objects.equals(location, that.location) &&
-		       Objects.equals(timetable, that.timetable) &&
-		       Objects.equals(subject, that.subject);
+		return Objects.equals(id, that.id) && Objects.equals(StartDate, that.StartDate) &&
+		       Objects.equals(EndDate, that.EndDate) && Objects.equals(location, that.location) &&
+		       Objects.equals(timetable, that.timetable) && Objects.equals(subject, that.subject);
 	}
 
 	@Override

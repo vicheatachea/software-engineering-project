@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="notificationsVBox" alignment="CENTER" prefHeight="540.0" prefWidth="520.0" spacing="15" styleClass="notifications-vbox" stylesheets="@notifications+item-page.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.NotificationsController">
+
+    <Label fx:id="notificationLabel" styleClass="notification-label" text="Notifications" />
+
+    <ScrollPane fx:id="notificationsScrollPane" fitToWidth="true" opacity="0.3" prefHeight="443.0" prefWidth="460.0">
+        <VBox fx:id="notificationsContainer" spacing="10" styleClass="notifications-container" />
+    </ScrollPane>
+
+    <Button fx:id="markAllReadButton" onAction="#handleMarkAllRead" styleClass="mark-all-button" text="Mark All Read" />
+</VBox>

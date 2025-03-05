@@ -13,7 +13,7 @@ public class UserGroupEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String name;
 
 	@Column(nullable = false)
@@ -27,11 +27,13 @@ public class UserGroupEntity {
 	private UserEntity teacher;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "belongs_to",
-	           joinColumns = @JoinColumn(name = "group_id"),
-	           inverseJoinColumns = @JoinColumn(name = "user_id")
-	)
+	@JoinTable(name = "belongs_to", joinColumns = @JoinColumn(name = "group_id"),
+	           inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<UserEntity> students;
+
+	@ManyToOne
+	@JoinColumn(name = "subject_id")
+	private SubjectEntity subject;
 
 	@OneToOne(optional = false)
 	@JoinColumn(name = "timetable_id", nullable = false)
@@ -41,12 +43,13 @@ public class UserGroupEntity {
 	}
 
 	public UserGroupEntity(String name, String code, Integer capacity, UserEntity teacher, Set<UserEntity> students,
-	                       TimetableEntity timetable) {
+	                       SubjectEntity subject, TimetableEntity timetable) {
 		this.name = name;
 		this.code = code;
 		this.capacity = capacity;
 		this.teacher = teacher;
 		this.students = students;
+		this.subject = subject;
 		this.timetable = timetable;
 	}
 
@@ -107,6 +110,14 @@ public class UserGroupEntity {
 		return students;
 	}
 
+	public void setSubject(SubjectEntity subject) {
+		this.subject = subject;
+	}
+
+	public SubjectEntity getSubject() {
+		return subject;
+	}
+
 	public TimetableEntity getTimetable() {
 		return timetable;
 	}
@@ -124,12 +135,10 @@ public class UserGroupEntity {
 			return false;
 		}
 		UserGroupEntity userGroup = (UserGroupEntity) obj;
-		return Objects.equals(id, userGroup.id) &&
-		       Objects.equals(name, userGroup.name) &&
-		       Objects.equals(code, userGroup.code) &&
-		       Objects.equals(capacity, userGroup.capacity) &&
-		       Objects.equals(teacher, userGroup.teacher) &&
-		       Objects.equals(students, userGroup.students) &&
+		return Objects.equals(id, userGroup.id) && Objects.equals(name, userGroup.name) &&
+		       Objects.equals(code, userGroup.code) && Objects.equals(capacity, userGroup.capacity) &&
+		       Objects.equals(teacher, userGroup.teacher) && Objects.equals(students, userGroup.students) &&
+		       Objects.equals(subject, userGroup.subject) &&
 		       Objects.equals(timetable, userGroup.timetable);
 	}
 }
