@@ -88,7 +88,7 @@ class TimetableControllerTest {
 
 		SubjectDTO subjectDTO = new SubjectDTO("Math", "MATH101");
 
-		subjectController.saveSubject(subjectDTO);
+		subjectController.addSubject(subjectDTO);
 
 		GroupDTO groupDTO = new GroupDTO("testGroup", "testCode", 35, UserPreferences.getUserId(), subjectDTO.code());
 

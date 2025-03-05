@@ -68,13 +68,13 @@ class GroupControllerTest {
 
 		userController.registerUser(teacher);
 		userController.authenticateUser(teacher.username(), teacher.password());
-		Long teacherId = UserPreferences.getUserId();
+		long teacherId = UserPreferences.getUserId();
 
 		SubjectDTO subject1 = createSubject("ICT", "ICT101");
 		SubjectDTO subject2 = createSubject("ICT", "ICT102");
 
-		subjectController.saveSubject(subject1);
-		subjectController.saveSubject(subject2);
+		subjectController.addSubject(subject1);
+		subjectController.addSubject(subject2);
 
 		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, subject1.code());
 
@@ -95,15 +95,15 @@ class GroupControllerTest {
 
 		userController.registerUser(teacher);
 		userController.authenticateUser(teacher.username(), teacher.password());
-		Long teacherId = UserPreferences.getUserId();
+		long teacherId = UserPreferences.getUserId();
 		userController.logout();
 
 		userController.registerUser(student);
 		userController.authenticateUser(student.username(), student.password());
-		Long studentId = UserPreferences.getUserId();
+		long studentId = UserPreferences.getUserId();
 
 		SubjectDTO subject1 = createSubject("ICT", "ICT101");
-		subjectController.saveSubject(subject1);
+		subjectController.addSubject(subject1);
 
 		GroupDTO group1 = new GroupDTO("Group1", "TST1", 10, teacherId, subject1.code());
 		groupController.addGroup(group1);
@@ -125,10 +125,10 @@ class GroupControllerTest {
 
 		userController.registerUser(teacher);
 		userController.authenticateUser(teacher.username(), teacher.password());
-		Long teacherId = UserPreferences.getUserId();
+		long teacherId = UserPreferences.getUserId();
 
 		SubjectDTO subject1 = createSubject("ICT", "ICT101");
-		subjectController.saveSubject(subject1);
+		subjectController.addSubject(subject1);
 
 		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, subject1.code());
 
@@ -144,15 +144,15 @@ class GroupControllerTest {
 
 		userController.registerUser(teacher);
 		userController.authenticateUser(teacher.username(), teacher.password());
-		Long teacherId = UserPreferences.getUserId();
+		long teacherId = UserPreferences.getUserId();
 		userController.logout();
 
 		userController.registerUser(student);
 		userController.authenticateUser(student.username(), student.password());
-		Long studentId = UserPreferences.getUserId();
+		long studentId = UserPreferences.getUserId();
 
 		SubjectDTO subject1 = createSubject("ICT", "ICT101");
-		subjectController.saveSubject(subject1);
+		subjectController.addSubject(subject1);
 
 		GroupDTO group1 = new GroupDTO("Group1", "TST1", 10, teacherId, subject1.code());
 		groupController.addGroup(group1);
@@ -179,10 +179,10 @@ class GroupControllerTest {
 
 		userController.registerUser(teacher);
 		userController.authenticateUser(teacher.username(), teacher.password());
-		Long teacherId = UserPreferences.getUserId();
+		long teacherId = UserPreferences.getUserId();
 
 		SubjectDTO subject1 = createSubject("ICT", "ICT101");
-		subjectController.saveSubject(subject1);
+		subjectController.addSubject(subject1);
 
 		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, subject1.code());
 
@@ -198,10 +198,10 @@ class GroupControllerTest {
 
 		userController.registerUser(teacher);
 		userController.authenticateUser(teacher.username(), teacher.password());
-		Long teacherId = UserPreferences.getUserId();
+		long teacherId = UserPreferences.getUserId();
 
 		SubjectDTO subject1 = createSubject("ICT", "ICT101");
-		subjectController.saveSubject(subject1);
+		subjectController.addSubject(subject1);
 
 		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, subject1.code());
 
@@ -221,10 +221,10 @@ class GroupControllerTest {
 
 		userController.registerUser(teacher);
 		userController.authenticateUser(teacher.username(), teacher.password());
-		Long teacherId = UserPreferences.getUserId();
+		long teacherId = UserPreferences.getUserId();
 
 		SubjectDTO subject1 = createSubject("ICT", "ICT101");
-		subjectController.saveSubject(subject1);
+		subjectController.addSubject(subject1);
 
 		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, subject1.code());
 
@@ -251,7 +251,7 @@ class GroupControllerTest {
 		long studentId = UserPreferences.getUserId();
 
 		SubjectDTO subject1 = createSubject("ICT", "ICT101");
-		subjectController.saveSubject(subject1);
+		subjectController.addSubject(subject1);
 
 		GroupDTO group1 = new GroupDTO("Group1", "TST1", 10, teacherId, subject1.code());
 		groupController.addGroup(group1);
@@ -277,7 +277,7 @@ class GroupControllerTest {
 		long studentId = UserPreferences.getUserId();
 
 		SubjectDTO subject1 = createSubject("ICT", "ICT101");
-		subjectController.saveSubject(subject1);
+		subjectController.addSubject(subject1);
 
 		GroupDTO group1 = new GroupDTO("Group1", "TST1", 10, teacherId, subject1.code());
 		groupController.addGroup(group1);

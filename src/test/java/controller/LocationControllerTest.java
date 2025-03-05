@@ -48,26 +48,37 @@ class LocationControllerTest {
 		LocationDTO location1 = createLocationDTO("B2005");
 		LocationDTO location2 = createLocationDTO("B7035");
 
-		locationController.saveLocation(location1);
-		locationController.saveLocation(location2);
+		locationController.addLocation(location1);
+		locationController.addLocation(location2);
 
 		assertEquals(2, locationController.fetchAllLocations().size());
 	}
 
 	@Test
-	void saveLocation() {
+	void addLocation() {
 		LocationDTO location = createLocationDTO("B2005");
 
-		locationController.saveLocation(location);
+		locationController.addLocation(location);
 
 		assertEquals(location, locationController.fetchAllLocations().getFirst());
+	}
+
+	@Test
+	void updateLocation() {
+		LocationDTO location = createLocationDTO("B2005");
+		locationController.addLocation(location);
+
+		LocationDTO updatedLocation = createLocationDTO("B7035");
+		locationController.updateLocation(updatedLocation, location.name());
+
+		assertEquals(updatedLocation, locationController.fetchAllLocations().getFirst());
 	}
 
 	@Test
 	void deleteLocation() {
 		LocationDTO location = createLocationDTO("B2005");
 
-		locationController.saveLocation(location);
+		locationController.addLocation(location);
 
 		locationController.deleteLocation(location);
 
@@ -76,6 +87,14 @@ class LocationControllerTest {
 
 	@Test
 	void deleteAllLocations() {
+		LocationDTO location1 = createLocationDTO("B2005");
+		LocationDTO location2 = createLocationDTO("B7035");
 
+		locationController.addLocation(location1);
+		locationController.addLocation(location2);
+
+		locationController.deleteAllLocations();
+
+		assertEquals(0, locationController.fetchAllLocations().size());
 	}
 }

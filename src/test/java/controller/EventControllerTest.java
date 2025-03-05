@@ -77,10 +77,10 @@ class EventControllerTest {
 		long studentId = UserPreferences.getUserId();
 
 		LocationDTO location = new LocationDTO("B2005", "Metropolia Myllypuro", "Building B");
-		locationController.saveLocation(location);
+		locationController.addLocation(location);
 
 		SubjectDTO subject = new SubjectDTO("ICT", "ICT101");
-		subjectController.saveSubject(subject);
+		subjectController.addSubject(subject);
 
 		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, subject.code());
 		groupController.addGroup(group);
@@ -120,10 +120,10 @@ class EventControllerTest {
 		long studentId = UserPreferences.getUserId();
 
 		LocationDTO location = new LocationDTO("B2005", "Metropolia Myllypuro", "Building B");
-		locationController.saveLocation(location);
+		locationController.addLocation(location);
 
 		SubjectDTO subject = new SubjectDTO("ICT", "ICT101");
-		subjectController.saveSubject(subject);
+		subjectController.addSubject(subject);
 
 		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, subject.code());
 		groupController.addGroup(group);
@@ -138,6 +138,8 @@ class EventControllerTest {
 		                                                            "This is a teaching Session", groupTimetableId);
 
 		eventController.addEvent(teachingSession);
+
+		assertEquals(1, eventController.fetchEventsByUser(teachingSession.startDate(), teachingSession.endDate()).size());
 	}
 
 	@Test
@@ -154,10 +156,10 @@ class EventControllerTest {
 		long studentId = UserPreferences.getUserId();
 
 		LocationDTO location = new LocationDTO("B2005", "Metropolia Myllypuro", "Building B");
-		locationController.saveLocation(location);
+		locationController.addLocation(location);
 
 		SubjectDTO subject = new SubjectDTO("ICT", "ICT101");
-		subjectController.saveSubject(subject);
+		subjectController.addSubject(subject);
 
 		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, subject.code());
 		groupController.addGroup(group);
@@ -171,6 +173,8 @@ class EventControllerTest {
 		                                             subject.code(), "This is an assignment", groupTimetableId);
 
 		eventController.addEvent(assignment);
+
+		assertEquals(1, eventController.fetchEventsByUser(assignment.publishingDate(), assignment.deadline()).size());
 	}
 
 	@Test
@@ -187,10 +191,10 @@ class EventControllerTest {
 		long studentId = UserPreferences.getUserId();
 
 		LocationDTO location = new LocationDTO("B2005", "Metropolia Myllypuro", "Building B");
-		locationController.saveLocation(location);
+		locationController.addLocation(location);
 
 		SubjectDTO subject = new SubjectDTO("ICT", "ICT101");
-		subjectController.saveSubject(subject);
+		subjectController.addSubject(subject);
 
 		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, subject.code());
 		groupController.addGroup(group);
@@ -207,10 +211,13 @@ class EventControllerTest {
 		eventController.addEvent(teachingSession);
 
 		SubjectDTO newSubject = new SubjectDTO("MATH", "MATH101");
-		subjectController.saveSubject(newSubject);
+		subjectController.addSubject(newSubject);
+
+		TeachingSessionDTO foundTeachingSession = (TeachingSessionDTO) eventController
+				.fetchEventsByUser(teachingSession.startDate(), teachingSession.endDate()).getFirst();
 
 		TeachingSessionDTO updatedTeachingSession =
-				new TeachingSessionDTO(teachingSession.id(), LocalDateTime.parse("2023-12-01T10:00:00"),
+				new TeachingSessionDTO(foundTeachingSession.id(), LocalDateTime.parse("2023-12-01T10:00:00"),
 				                       LocalDateTime.parse("2023-12-03T13:54:34"), null, newSubject.code(),
 				                       "This is an updated teaching Session", groupTimetableId);
 
@@ -220,6 +227,8 @@ class EventControllerTest {
 				.fetchEventsByUser(updatedTeachingSession.startDate(), updatedTeachingSession.endDate()).getFirst();
 
 
+		assertEquals(1, eventController
+				.fetchEventsByUser(updatedTeachingSession.startDate(), updatedTeachingSession.endDate()).size());
 		assertEquals(updatedTeachingSession.subjectCode(), fetchedTeachingSession.subjectCode());
 		assertEquals(updatedTeachingSession.description(), fetchedTeachingSession.description());
 		assertEquals(updatedTeachingSession.startDate(), fetchedTeachingSession.startDate());
@@ -240,10 +249,10 @@ class EventControllerTest {
 		long studentId = UserPreferences.getUserId();
 
 		LocationDTO location = new LocationDTO("B2005", "Metropolia Myllypuro", "Building B");
-		locationController.saveLocation(location);
+		locationController.addLocation(location);
 
 		SubjectDTO subject = new SubjectDTO("ICT", "ICT101");
-		subjectController.saveSubject(subject);
+		subjectController.addSubject(subject);
 
 		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, subject.code());
 		groupController.addGroup(group);
@@ -258,15 +267,19 @@ class EventControllerTest {
 
 		eventController.addEvent(assignment);
 
+		AssignmentDTO foundAssignment =
+				(AssignmentDTO) eventController.fetchEventsByUser(assignment.publishingDate(), assignment.deadline())
+				                               .getFirst();
+
 		SubjectDTO newSubject = new SubjectDTO("MATH", "MATH101");
-		subjectController.saveSubject(newSubject);
+		subjectController.addSubject(newSubject);
 
 		AssignmentDTO updatedAssignment =
-				new AssignmentDTO(assignment.id(), "Group", LocalDateTime.parse("2023-12-01T10:00:00"),
+				new AssignmentDTO(foundAssignment.id(), "Group", LocalDateTime.parse("2023-12-01T10:00:00"),
 				                  LocalDateTime.parse("2023-12-03T13:54:34"), "Assignment 2", newSubject.code(),
 				                  "This is an updated assignment", groupTimetableId);
 
-		eventController.updateEvent(updatedAssignment);
+			eventController.updateEvent(updatedAssignment);
 
 		AssignmentDTO fetchedAssignment = (AssignmentDTO) eventController
 				.fetchEventsByUser(updatedAssignment.publishingDate(), updatedAssignment.deadline()).getFirst();
@@ -292,10 +305,10 @@ class EventControllerTest {
 		long studentId = UserPreferences.getUserId();
 
 		LocationDTO location = new LocationDTO("B2005", "Metropolia Myllypuro", "Building B");
-		locationController.saveLocation(location);
+		locationController.addLocation(location);
 
 		SubjectDTO subject = new SubjectDTO("ICT", "ICT101");
-		subjectController.saveSubject(subject);
+		subjectController.addSubject(subject);
 
 		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, subject.code());
 		groupController.addGroup(group);
@@ -311,9 +324,8 @@ class EventControllerTest {
 
 		eventController.addEvent(teachingSession);
 
-		teachingSession =
-				(TeachingSessionDTO) eventController.fetchEventsByUser(teachingSession.startDate(), teachingSession.endDate())
-				                                   .getFirst();
+		teachingSession = (TeachingSessionDTO) eventController
+				.fetchEventsByUser(teachingSession.startDate(), teachingSession.endDate()).getFirst();
 
 		eventController.deleteEvent(teachingSession);
 
@@ -335,10 +347,10 @@ class EventControllerTest {
 		long studentId = UserPreferences.getUserId();
 
 		LocationDTO location = new LocationDTO("B2005", "Metropolia Myllypuro", "Building B");
-		locationController.saveLocation(location);
+		locationController.addLocation(location);
 
 		SubjectDTO subject = new SubjectDTO("ICT", "ICT101");
-		subjectController.saveSubject(subject);
+		subjectController.addSubject(subject);
 
 		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, subject.code());
 		groupController.addGroup(group);
