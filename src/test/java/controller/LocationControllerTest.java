@@ -64,6 +64,19 @@ class LocationControllerTest {
 	}
 
 	@Test
+	void addDuplicateLocation() {
+		LocationDTO location = createLocationDTO("B2005");
+
+		locationController.addLocation(location);
+
+		try {
+			locationController.addLocation(location);
+		} catch (IllegalArgumentException e) {
+			assertEquals("Location already exists", e.getMessage());
+		}
+	}
+
+	@Test
 	void updateLocation() {
 		LocationDTO location = createLocationDTO("B2005");
 		locationController.addLocation(location);
