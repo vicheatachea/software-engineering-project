@@ -2,7 +2,6 @@ package model;
 
 import dao.SubjectDAO;
 import dto.SubjectDTO;
-import entity.Role;
 import entity.SubjectEntity;
 
 import java.util.ArrayList;
@@ -92,10 +91,6 @@ public class SubjectModel {
 	}
 
 	public void deleteAllSubjects() {
-		if (!userModel.isCurrentUserTeacher()) {
-			throw new IllegalArgumentException("Only teacher can delete all subjects");
-		}
-
 		subjectDAO.deleteAll();
 	}
 
