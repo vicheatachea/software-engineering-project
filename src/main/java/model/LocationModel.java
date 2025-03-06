@@ -3,7 +3,6 @@ package model;
 import dao.LocationDAO;
 import dto.LocationDTO;
 import entity.LocationEntity;
-import entity.Role;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,10 +88,6 @@ public class LocationModel {
 	}
 
 	public void deleteAllLocations() {
-		if (!userModel.isCurrentUserTeacher()) {
-			throw new IllegalArgumentException("Only teachers can delete all locations.");
-		}
-
 		locationDAO.deleteAll();
 	}
 }
