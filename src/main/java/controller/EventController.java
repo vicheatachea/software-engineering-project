@@ -28,4 +28,8 @@ public class EventController {
 	public void deleteEvent(Event event) {
 		eventModel.deleteEvent(event);
 	}
+
+	public void deleteAllEvents() {
+		eventModel.deleteAllEvents();
+	}
 }

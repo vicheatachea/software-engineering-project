@@ -37,6 +37,11 @@ class AssignmentDAOTest {
 		assignmentDAO.deleteAll();
 		timeTableDAO.deleteAll();
 		subjectDAO.deleteAll();
+		try {
+			Thread.sleep(0);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Test
@@ -64,7 +69,7 @@ class AssignmentDAOTest {
 	}
 
 	@Test
-	void persistUpdate() {
+	void Update() {
 		SubjectEntity math = new SubjectEntity("Math", "Mathematics-101");
 		subjectDAO.persist(math);
 
@@ -84,7 +89,7 @@ class AssignmentDAOTest {
 		Timestamp newDeadline = Timestamp.valueOf("2025-03-01 00:00:00");
 		assignment.setDeadline(newDeadline);
 		assignment.setType("Group");
-		assignmentDAO.persist(assignment);
+		assignmentDAO.update(assignment);
 
 		AssignmentEntity updatedAssignment = assignmentDAO.findById(assignment.getId());
 		assertEquals("Group", updatedAssignment.getType());

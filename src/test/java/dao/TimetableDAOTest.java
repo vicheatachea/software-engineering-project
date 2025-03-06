@@ -22,6 +22,11 @@ class TimetableDAOTest {
 	@BeforeEach
 	void setUp() {
 		timetableDAO.deleteAll();
+		try {
+			Thread.sleep(0);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@AfterAll

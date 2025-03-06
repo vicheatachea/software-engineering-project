@@ -37,6 +37,11 @@ class UserGroupDAOTest {
 		userGroupDAO.deleteAll();
 		userDAO.deleteAll();
 		timetableDAO.deleteAll();
+		try {
+			Thread.sleep(0);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Test
@@ -77,7 +82,7 @@ class UserGroupDAOTest {
 
 		userDAO.persist(teacher);
 
-		SubjectEntity subject = new SubjectEntity("ICT", "ICT3005");
+		SubjectEntity subject = new SubjectEntity("ICT", "ICT1001");
 
 		subjectDAO.persist(subject);
 
@@ -139,7 +144,7 @@ class UserGroupDAOTest {
 
 		userDAO.persist(teacher);
 
-		SubjectEntity subject = new SubjectEntity("ICT", "ICT3005");
+		SubjectEntity subject = new SubjectEntity("ICT", "ICT1002");
 		subjectDAO.persist(subject);
 
 		UserGroupEntity userGroup =
@@ -202,7 +207,7 @@ class UserGroupDAOTest {
 
 		userDAO.persist(teacher);
 
-		SubjectEntity subject = new SubjectEntity("ICT", "ICT3005");
+		SubjectEntity subject = new SubjectEntity("ICT", "ICT1003");
 
 		subjectDAO.persist(subject);
 
@@ -294,7 +299,7 @@ class UserGroupDAOTest {
 		userDAO.persist(teacher);
 		userDAO.persist(teacher2);
 
-		SubjectEntity subject = new SubjectEntity("ICT", "ICT3005");
+		SubjectEntity subject = new SubjectEntity("ICT", "ICT1004");
 		subjectDAO.persist(subject);
 
 		UserGroupEntity userGroup1 =
@@ -348,7 +353,7 @@ class UserGroupDAOTest {
 
 		userDAO.persist(teacher);
 
-		SubjectEntity subject = new SubjectEntity("ICT", "ICT3005");
+		SubjectEntity subject = new SubjectEntity("ICT", "ICT1005");
 		subjectDAO.persist(subject);
 
 		UserGroupEntity userGroup =

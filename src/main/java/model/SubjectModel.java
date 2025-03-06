@@ -33,14 +33,41 @@ public class SubjectModel {
 		return subjectDTOs;
 	}
 
-	public void saveSubject(SubjectDTO subjectDTO) {
+	public SubjectDTO fetchSubjectByCode(SubjectDTO subjectDTO) {
+		SubjectEntity subject = subjectDAO.findByCode(subjectDTO.code());
+
+		if (subject == null) {
+			throw new IllegalArgumentException("Subject not found");
+		}
+
+		return convertToSubjectDTO(subject);
+	}
+
+	public void addSubject(SubjectDTO subjectDTO) {
 		SubjectEntity subject = convertToSubjectEntity(subjectDTO);
 		subjectDAO.persist(subject);
+	}
+
+	public void updateSubject(SubjectDTO subjectDTO, String currentCode) {
+		SubjectEntity subject = subjectDAO.findByCode(currentCode);
+
+		if (subject == null) {
+			throw new IllegalArgumentException("Subject not found");
+		}
+
+		subject.setName(subjectDTO.name());
+		subject.setCode(subjectDTO.code());
+
+		subjectDAO.update(subject);
 	}
 
 	public void deleteSubject(SubjectDTO subjectDTO) {
 		SubjectEntity subject = convertToSubjectEntity(subjectDTO);
 		subjectDAO.delete(subject);
+	}
+
+	public void deleteAllSubjects() {
+		subjectDAO.deleteAll();
 	}
 
 	private SubjectDTO convertToSubjectDTO(SubjectEntity subject) {

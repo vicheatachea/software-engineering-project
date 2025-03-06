@@ -3,6 +3,8 @@ package controller;
 import dto.UserDTO;
 import model.UserModel;
 
+import java.util.List;
+
 public class UserController {
 	private final UserModel userModel = new UserModel();
 
@@ -22,6 +24,10 @@ public class UserController {
 		return userModel.getLoggedInUser();
 	}
 
+	public List<UserDTO> fetchAllStudents() {
+		return userModel.fetchAllStudents();
+	}
+
 	public void updateUser(UserDTO userDTO) {
 		userModel.update(userDTO);
 	}
@@ -30,7 +36,19 @@ public class UserController {
 		userModel.logout();
 	}
 
+	public void deleteAllUsers() {
+		userModel.deleteAllUsers();
+	}
+
 	public boolean isUsernameTaken(String username) {
 		return userModel.isUsernameTaken(username);
+	}
+
+	public boolean isCurrentUserTeacher() {
+		return userModel.isCurrentUserTeacher();
+	}
+
+	public long fetchCurrentUserId() {
+		return userModel.fetchCurrentUserId();
 	}
 }

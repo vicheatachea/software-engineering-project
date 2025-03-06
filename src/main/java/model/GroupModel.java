@@ -61,7 +61,7 @@ public class GroupModel {
 
 		UserEntity teacher = userDAO.findTeacherById(groupDTO.teacherId());
 
-		SubjectEntity subject = subjectDAO.findByName(groupDTO.subjectName());
+		SubjectEntity subject = subjectDAO.findByCode(groupDTO.subjectCode());
 
 		TimetableEntity timetable = new TimetableEntity();
 
@@ -138,7 +138,7 @@ public class GroupModel {
 
 	private GroupDTO ConvertToGroupDTO(UserGroupEntity group) {
 		return new GroupDTO(group.getName(), group.getCode(), group.getCapacity(), group.getTeacher().getId(),
-		                    group.getSubject().getName());
+		                    group.getSubject().getCode());
 	}
 
 	public boolean isUserGroupOwner(String groupName) {

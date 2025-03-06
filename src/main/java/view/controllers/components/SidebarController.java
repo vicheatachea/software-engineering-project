@@ -27,16 +27,18 @@ public class SidebarController {
 
     @FXML
     private void initialize() {
-        //addButton("\uD83D\uDD14", "notifications");
+        // addButton("\uD83D\uDD14", "notifications");
+        // addButton("\uD83C\uDFE0 Home", "home");
         addNotificationButton();
         addButton("\uD83D\uDC64 Account", "account");
-        addButton("\uD83C\uDFE0 Home", "home");
         addButton("\uD83D\uDCC6 Timetable", "timetable");
         addButton("\uD83D\uDC65 Groups", "groups");
+        addButton("\uD83D\uDCDA Subjects", "subjects");
+        addButton("\uD83C\uDFE2 Locations", "locations");
         addButton("\uD83D\uDEE0 Settings", "settings");
         addButton("\uD83D\uDEAA Quit", "quit");
 
-        Platform.runLater(() -> currentView.set("home"));
+        Platform.runLater(() -> currentView.set("timetable"));
     }
 
     public StringProperty currentViewProperty() {

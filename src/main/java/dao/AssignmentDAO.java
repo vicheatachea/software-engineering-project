@@ -5,7 +5,7 @@ import entity.UserGroupEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class AssignmentDAO {
@@ -16,11 +16,32 @@ public class AssignmentDAO {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
-			if (assignment.getId() == null || findById(assignment.getId()) == null) {
-				em.persist(assignment);
-			} else {
-				em.merge(assignment);
+			em.persist(assignment);
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
 			}
+		}
+	}
+
+	public void update(AssignmentEntity assignment) {
+		EntityManager em = emf.createEntityManager();
+		AssignmentEntity existingAssignment = em.find(AssignmentEntity.class, assignment.getId());
+
+		if (existingAssignment != null) {
+			existingAssignment.setName(assignment.getName());
+			existingAssignment.setDescription(assignment.getDescription());
+			existingAssignment.setDeadline(assignment.getDeadline());
+			existingAssignment.setTimetable(assignment.getTimetable());
+		}
+
+		em.getTransaction().begin();
+		try {
+			em.merge(assignment);
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
@@ -58,6 +79,7 @@ public class AssignmentDAO {
 		}
 	}
 
+	// TODO: Delete this method if unused in the view
 	public void deleteById(Long id) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -80,6 +102,7 @@ public class AssignmentDAO {
 	public void delete(AssignmentEntity assignment) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
+		assignment = findById(assignment.getId());
 		try {
 			em.remove(em.contains(assignment) ? assignment : em.merge(assignment));
 			em.getTransaction().commit();
@@ -109,6 +132,7 @@ public class AssignmentDAO {
 		}
 	}
 
+	// TODO: Delete this method if unused in the view
 	public void deleteByGroupName(AssignmentEntity assignment, String groupName) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -132,8 +156,8 @@ public class AssignmentDAO {
 		}
 	}
 
-	public List<AssignmentEntity> findAllByTimetableIdDuringPeriod(Long timetableId, LocalDateTime start,
-	                                                               LocalDateTime end) {
+	public List<AssignmentEntity> findAllByTimetableIdDuringPeriod(Long timetableId, Timestamp start,
+	                                                               Timestamp end) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT a FROM AssignmentEntity a WHERE a.timetable.id = :timetableId AND " +

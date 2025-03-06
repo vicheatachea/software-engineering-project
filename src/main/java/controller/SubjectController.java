@@ -17,13 +17,25 @@ public class SubjectController {
 		return subjectModel.fetchSubjectsByUser();
 	}
 
-	// Adds/Updates a subject
-	public void saveSubject(SubjectDTO subjectDTO) {
-		subjectModel.saveSubject(subjectDTO);
+	public SubjectDTO fetchSubjectByCode(SubjectDTO subjectDTO) {
+		return subjectModel.fetchSubjectByCode(subjectDTO);
+	}
+
+	// Adds a subject
+	public void addSubject(SubjectDTO subjectDTO) {
+		subjectModel.addSubject(subjectDTO);
+	}
+
+	public void updateSubject(SubjectDTO subjectDTO, String currentCode) {
+		subjectModel.updateSubject(subjectDTO, currentCode);
 	}
 
 	// Deletes a subject
 	public void deleteSubject(SubjectDTO subjectDTO) {
 		subjectModel.deleteSubject(subjectDTO);
+	}
+
+	public void deleteAllSubjects() {
+		subjectModel.deleteAllSubjects();
 	}
 }

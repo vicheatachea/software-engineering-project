@@ -17,11 +17,23 @@ public class UserDAO {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
-			if (user.getId() == null || findById(user.getId()) == null) {
-				em.persist(user);
-			} else {
-				em.merge(user);
+			em.persist(user);
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			throw e;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
 			}
+		}
+	}
+
+	public void update(UserEntity user) {
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		try {
+			em.merge(user);
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
@@ -106,6 +118,21 @@ public class UserDAO {
 		}
 	}
 
+	// TODO: Delete this method if unused
+	public List<UserEntity> findAllStudents() {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.createQuery("SELECT u FROM UserEntity u WHERE u.role = 'STUDENT'", UserEntity.class)
+			         .getResultList();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
 	public UserEntity authenticate(String username, String password) {
 		UserEntity user = findByUsername(username);
 		if (user == null) {
@@ -122,6 +149,7 @@ public class UserDAO {
 
 	public void delete(UserEntity user) {
 		EntityManager em = emf.createEntityManager();
+		user = findByUsername(user.getUsername());
 		em.getTransaction().begin();
 		try {
 			em.remove(em.contains(user) ? user : em.merge(user));

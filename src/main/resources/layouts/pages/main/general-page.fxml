@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <VBox fx:id="contentVBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label fx:id="titleLabel" alignment="CENTER" text="Label">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="30.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="newButton" minWidth="70.0" mnemonicParsing="false" onAction="#handleNew" text="New Note" />
+                        <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="addButton" minWidth="70.0" mnemonicParsing="false" onAction="#handleAdd" text="Add Note" />
+                        <Button fx:id="saveButton" minWidth="90.0" mnemonicParsing="false" onAction="#handleSave" text="Save Changes" />
+                        <Region fx:id="optionalRegion" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="deleteButton" minWidth="80.0" mnemonicParsing="false" onAction="#handleDelete" text="Delete Note" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <ListView fx:id="itemView" onMouseClicked="#handleItemSelection" prefHeight="200.0" prefWidth="200.0" />
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </BorderPane.margin>
+      </HBox>
+   </center>
+</BorderPane>

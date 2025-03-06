@@ -1,6 +1,5 @@
 package dao;
 
-import entity.SubjectEntity;
 import entity.TimetableEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -127,14 +126,14 @@ public class TimetableDAO {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
+			// Delete related user group
+			em.createQuery("DELETE FROM UserGroupEntity").executeUpdate();
 			// Delete related assignments
 			em.createQuery("DELETE FROM AssignmentEntity").executeUpdate();
 			// Delete related teaching sessions
 			em.createQuery("DELETE FROM TeachingSessionEntity").executeUpdate();
 			// Delete related user
 			em.createQuery("DELETE FROM UserEntity").executeUpdate();
-			// Delete related user group
-			em.createQuery("DELETE FROM UserGroupEntity").executeUpdate();
 			// Finally, delete the timetable
 			em.createQuery("DELETE FROM TimetableEntity").executeUpdate();
 			em.getTransaction().commit();

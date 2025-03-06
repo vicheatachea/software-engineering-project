@@ -9,6 +9,8 @@ import entity.UserEntity;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.prefs.BackingStoreException;
 
 public class UserModel {
@@ -24,6 +26,14 @@ public class UserModel {
 		}
 
 		return convertToDTO(user);
+	}
+
+	public List<UserDTO> fetchAllStudents() {
+		List<UserDTO> users = new ArrayList<>();
+		for (UserEntity user : userDAO.findAll()) {
+			users.add(convertToDTO(user));
+		}
+		return users;
 	}
 
 	public boolean authenticate(String username, String password) {
@@ -54,11 +64,25 @@ public class UserModel {
 	}
 
 	public void update(UserDTO userDTO) {
-
 		UserEntity user = userDAO.findById(UserPreferences.getUserId());
+
+		if (user == null) {
+			logout();
+			throw new IllegalArgumentException("User not found");
+		}
 
 		if (!isValid(userDTO)) {
 			throw new IllegalArgumentException("Invalid user data");
+		}
+
+		if (userDAO.findByUsername(userDTO.username()) != null) {
+			throw new IllegalArgumentException("Username already exists");
+		}
+
+		if (userDTO.username().isEmpty() || userDTO.password().isEmpty() || userDTO.firstName().isEmpty() ||
+		    userDTO.lastName().isEmpty() || userDTO.dateOfBirth() == null || userDTO.socialNumber().isEmpty() ||
+		    userDTO.role().isEmpty()) {
+			throw new IllegalArgumentException("User data cannot be empty");
 		}
 
 		user.setUsername(userDTO.username());
@@ -69,7 +93,7 @@ public class UserModel {
 		user.setSocialNumber(userDTO.socialNumber());
 		user.setRole(Role.valueOf(userDTO.role()));
 
-		userDAO.persist(user);
+		userDAO.update(user);
 	}
 
 	public boolean isValid(UserDTO userDTO) {
@@ -96,11 +120,11 @@ public class UserModel {
 	}
 
 	private boolean isDateOfBirthValid(LocalDateTime dateOfBirth) {
-		return dateOfBirth != null && dateOfBirth.isBefore(LocalDateTime.now());
+		return dateOfBirth != null && dateOfBirth.isBefore(LocalDateTime.now().minusYears(1));
 	}
 
 	private boolean isSocialNumberValid(String socialNumber) {
-		return socialNumber != null;
+		return socialNumber != null && socialNumber.length() == 11;
 	}
 
 	private boolean isRoleValid(String role) {
@@ -122,27 +146,30 @@ public class UserModel {
 	}
 
 	private UserDTO convertToDTO(UserEntity user) {
-		return new UserDTO(user.getUsername(),
-		                   user.getPassword(),
-		                   user.getFirstName(),
-		                   user.getLastName(),
-		                   user.getDateOfBirth().toLocalDateTime(),
-		                   user.getSocialNumber(),
-		                   user.getRole().toString());
+		return new UserDTO(user.getUsername(), user.getPassword(), user.getFirstName(), user.getLastName(),
+		                   user.getDateOfBirth().toLocalDateTime(), user.getSocialNumber(), user.getRole().toString());
 	}
 
 	private UserEntity convertToEntity(UserDTO user, TimetableEntity timetable) {
-		return new UserEntity(user.firstName(),
-		                      user.lastName(),
-		                      user.username(),
-		                      user.password(),
-		                      Timestamp.valueOf(user.dateOfBirth()),
-		                      user.socialNumber(),
-		                      Role.valueOf(user.role()),
+		return new UserEntity(user.firstName(), user.lastName(), user.username(), user.password(),
+		                      Timestamp.valueOf(user.dateOfBirth()), user.socialNumber(), Role.valueOf(user.role()),
 		                      timetable);
 	}
 
 	public boolean isUsernameTaken(String username) {
 		return userDAO.findByUsername(username) != null;
+	}
+
+	public void deleteAllUsers() {
+		userDAO.deleteAll();
+		timetableDAO.deleteAll();
+	}
+
+	public boolean isCurrentUserTeacher() {
+		return UserPreferences.getUserRole().equals(Role.TEACHER);
+	}
+
+	public long fetchCurrentUserId() {
+		return UserPreferences.getUserId();
 	}
 }
