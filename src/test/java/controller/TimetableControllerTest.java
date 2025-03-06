@@ -4,7 +4,6 @@ import datasource.MariaDBConnection;
 import dto.GroupDTO;
 import dto.SubjectDTO;
 import dto.UserDTO;
-import model.UserPreferences;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,8 +27,8 @@ class TimetableControllerTest {
 		                   LocalDateTime.of(2000, 1, 1, 0, 0), "123456789AB", "STUDENT");
 	}
 
-	UserDTO createTeacher() {
-		return new UserDTO("testTeacher", "testPassword", "Test", "Teacher",
+	private static UserDTO createTeacher() {
+		return new UserDTO("testTimetable", "testPassword", "Test", "Teacher",
 		                   LocalDateTime.of(2000, 1, 1, 0, 0), "BA987654321", "TEACHER");
 	}
 
@@ -44,8 +43,9 @@ class TimetableControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		timetableController.deleteAllTimetables();
 		subjectController.deleteAllSubjects();
+		userController.deleteAllUsers();
+		timetableController.deleteAllTimetables();
 		try {
 			Thread.sleep(0);
 		} catch (InterruptedException e) {
@@ -55,9 +55,9 @@ class TimetableControllerTest {
 
 	@AfterAll
 	static void tearDown() {
-		timetableController.deleteAllTimetables();
 		subjectController.deleteAllSubjects();
-		userController.logout();
+		userController.deleteAllUsers();
+		timetableController.deleteAllTimetables();
 	}
 
 	@Test
@@ -77,7 +77,7 @@ class TimetableControllerTest {
 
 		userController.registerUser(student);
 
-		assertThrows(NullPointerException.class, timetableController::fetchTimetableForUser);
+		assertThrows(IllegalArgumentException.class, timetableController::fetchTimetableForUser);
 	}
 
 	@Test
@@ -90,7 +90,8 @@ class TimetableControllerTest {
 
 		subjectController.addSubject(subjectDTO);
 
-		GroupDTO groupDTO = new GroupDTO("testGroup", "testCode", 35, UserPreferences.getUserId(), subjectDTO.code());
+		GroupDTO groupDTO =
+				new GroupDTO("testGroup", "testCode", 35, userController.fetchCurrentUserId(), subjectDTO.code());
 
 		groupController.addGroup(groupDTO);
 	}
@@ -101,7 +102,10 @@ class TimetableControllerTest {
 		userController.registerUser(teacher);
 		userController.authenticateUser(teacher.username(), teacher.password());
 
-		GroupDTO groupDTO = new GroupDTO("testGroup", "testCode", 35, UserPreferences.getUserId(), "MATH101");
+		SubjectDTO subjectDTO = new SubjectDTO("Math", "MATH101");
+		subjectController.addSubject(subjectDTO);
+
+		GroupDTO groupDTO = new GroupDTO("testGroup", "testCode", 35, userController.fetchCurrentUserId(), "MATH101");
 
 		groupController.addGroup(groupDTO);
 

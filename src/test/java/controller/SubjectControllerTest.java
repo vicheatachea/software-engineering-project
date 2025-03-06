@@ -5,7 +5,6 @@ import dto.GroupDTO;
 import dto.SubjectDTO;
 import dto.TeachingSessionDTO;
 import dto.UserDTO;
-import model.UserPreferences;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,21 +48,20 @@ class SubjectControllerTest {
 	static void tearDown() {
 		subjectController.deleteAllSubjects();
 		userController.deleteAllUsers();
-		userController.logout();
 	}
 
 	SubjectDTO createSubject(String name, String code) {
 		return new SubjectDTO(name, code);
 	}
 
-	UserDTO createTeacher() {
-		return new UserDTO("testTeacher", "testPassword", "Test", "Teacher",
-		                   LocalDateTime.of(2000, 1, 1, 0, 0), "BA987654321", "TEACHER");
+	private static UserDTO createTeacher() {
+		return new UserDTO("testTeacher", "testPassword", "Test", "Teacher", LocalDateTime.of(2000, 1, 1, 0, 0),
+		                   "BA987654321", "TEACHER");
 	}
 
 	UserDTO createStudent() {
-		return new UserDTO("testUser", "testPassword", "Test", "User",
-		                   LocalDateTime.of(2000, 1, 1, 0, 0), "123456789AB", "STUDENT");
+		return new UserDTO("testSubject", "testPassword", "Test", "User", LocalDateTime.of(2000, 1, 1, 0, 0),
+		                   "123456789AB", "STUDENT");
 	}
 
 	GroupDTO createGroup(long teacherId, String subjectName) {
@@ -72,6 +70,10 @@ class SubjectControllerTest {
 
 	@Test
 	void fetchAllSubjects() {
+		UserDTO teacher = createTeacher();
+		userController.registerUser(teacher);
+		userController.authenticateUser(teacher.username(), teacher.password());
+
 		SubjectDTO subject1 = createSubject("Math", "MATH101");
 		SubjectDTO subject2 = createSubject("Physics", "PHYS101");
 
@@ -83,10 +85,16 @@ class SubjectControllerTest {
 
 	@Test
 	void fetchSubjectsByUser() {
+		// Create a student
+		UserDTO student = createStudent();
+		userController.registerUser(student);
+		userController.authenticateUser(student.username(), student.password());
 
-		// Create a subject
-		SubjectDTO subject = createSubject("Math", "MATH101");
-		subjectController.addSubject(subject);
+		// Fetch timetableId for student
+		long studentId = userController.fetchCurrentUserId();
+
+		// Log out student
+		userController.logout();
 
 		// Create a teacher and log in
 		UserDTO teacher = createTeacher();
@@ -94,20 +102,13 @@ class SubjectControllerTest {
 		userController.authenticateUser(teacher.username(), teacher.password());
 
 		// Fetch timetableId for teacher
-		long teacherId = UserPreferences.getUserId();
+		long teacherId = userController.fetchCurrentUserId();
 
-		// Log out teacher
-		userController.logout();
+		// Create a subject
+		SubjectDTO subject = createSubject("Math", "MATH101");
+		subjectController.addSubject(subject);
 
-		// Create a student
-		UserDTO student = createStudent();
-		userController.registerUser(student);
-		userController.authenticateUser(student.username(), student.password());
-
-		// Fetch timetableId for student
-		long studentId = UserPreferences.getUserId();
-
-		GroupDTO group = createGroup(teacherId, subject.name());
+		GroupDTO group = createGroup(teacherId, subject.code());
 
 		groupController.addGroup(group);
 
@@ -115,21 +116,25 @@ class SubjectControllerTest {
 
 		long groupTimetableId = timetableController.fetchTimetableForGroup(group.name());
 
-		TeachingSessionDTO teachingSessionDTO = new TeachingSessionDTO(null,
-		                                                               LocalDateTime.parse("2025-01-01T10:00:00"),
-		                                                               LocalDateTime.parse("2025-01-01T12:00:00"),
-		                                                               null,
-		                                                               subject.code(),
-		                                                               "test description",
+		TeachingSessionDTO teachingSessionDTO = new TeachingSessionDTO(null, LocalDateTime.parse("2025-01-01T10:00:00"),
+		                                                               LocalDateTime.parse("2025-01-01T12:00:00"), null,
+		                                                               subject.code(), "test description",
 		                                                               groupTimetableId);
 
 		eventController.addEvent(teachingSessionDTO);
+
+		userController.logout();
+		userController.authenticateUser(student.username(), student.password());
 
 		assertNotNull(subjectController.fetchSubjectsByUser());
 	}
 
 	@Test
 	void saveSubject() {
+		UserDTO teacher = createTeacher();
+		userController.registerUser(teacher);
+		userController.authenticateUser(teacher.username(), teacher.password());
+
 		SubjectDTO subject = createSubject("Math", "MATH101");
 		subjectController.addSubject(subject);
 		assertNotNull(subjectController.fetchAllSubjects());
@@ -137,6 +142,10 @@ class SubjectControllerTest {
 
 	@Test
 	void updateSubject() {
+		UserDTO teacher = createTeacher();
+		userController.registerUser(teacher);
+		userController.authenticateUser(teacher.username(), teacher.password());
+
 		SubjectDTO subject = createSubject("Math", "MATH101");
 		subjectController.addSubject(subject);
 
@@ -153,6 +162,10 @@ class SubjectControllerTest {
 
 	@Test
 	void deleteSubject() {
+		UserDTO teacher = createTeacher();
+		userController.registerUser(teacher);
+		userController.authenticateUser(teacher.username(), teacher.password());
+
 		SubjectDTO subject = createSubject("Math", "MATH101");
 		subjectController.addSubject(subject);
 
