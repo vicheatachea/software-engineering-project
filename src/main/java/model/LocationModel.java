@@ -3,13 +3,16 @@ package model;
 import dao.LocationDAO;
 import dto.LocationDTO;
 import entity.LocationEntity;
+import entity.Role;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class LocationModel {
 
 	private static final LocationDAO locationDAO = new LocationDAO();
+	private static final UserModel userModel = new UserModel();
 
 	public List<LocationDTO> fetchAllLocations() {
 
@@ -25,9 +28,13 @@ public class LocationModel {
 	}
 
 	public void addLocation(LocationDTO locationDTO) {
+		if (!userModel.isCurrentUserTeacher()) {
+			throw new IllegalArgumentException("Only teachers can add locations.");
+		}
+
 		LocationEntity existingLocation = locationDAO.findByName(locationDTO.name());
 
-		if(existingLocation != null) {
+		if (existingLocation != null) {
 			throw new IllegalArgumentException("Location already exists");
 		}
 
@@ -36,14 +43,25 @@ public class LocationModel {
 	}
 
 	public void updateLocation(LocationDTO location, String currentName) {
+		if (!userModel.isCurrentUserTeacher()) {
+			throw new IllegalArgumentException("Only teachers can update locations.");
+		}
+
+		if (!Objects.equals(location.name(), currentName)) {
+			LocationEntity existingLocation = locationDAO.findByName(location.name());
+			if (existingLocation != null) {
+				throw new IllegalArgumentException("Location already exists.");
+			}
+		}
+
 		LocationEntity locationEntity = locationDAO.findByName(currentName);
 
 		if (locationEntity == null) {
-			throw new IllegalArgumentException("Location not found");
+			throw new IllegalArgumentException("Location not found.");
 		}
 
 		if (location.name().isEmpty() || location.campus().isEmpty() || location.building().isEmpty()) {
-			throw new IllegalArgumentException("Location name, campus, and building cannot be empty");
+			throw new IllegalArgumentException("Location name, campus, and building cannot be empty.");
 		}
 
 		locationEntity.setName(location.name());
@@ -54,6 +72,10 @@ public class LocationModel {
 	}
 
 	public void deleteLocation(LocationDTO locationDTO) {
+		if (!userModel.isCurrentUserTeacher()) {
+			throw new IllegalArgumentException("Only teachers can delete locations.");
+		}
+
 		LocationEntity location = convertToLocationEntity(locationDTO);
 		locationDAO.delete(location);
 	}
@@ -67,6 +89,10 @@ public class LocationModel {
 	}
 
 	public void deleteAllLocations() {
+		if (!userModel.isCurrentUserTeacher()) {
+			throw new IllegalArgumentException("Only teachers can delete all locations.");
+		}
+
 		locationDAO.deleteAll();
 	}
 }
