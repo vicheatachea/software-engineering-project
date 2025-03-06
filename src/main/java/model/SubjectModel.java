@@ -2,14 +2,17 @@ package model;
 
 import dao.SubjectDAO;
 import dto.SubjectDTO;
+import entity.Role;
 import entity.SubjectEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SubjectModel {
 
 	private static final SubjectDAO subjectDAO = new SubjectDAO();
+	private static final UserModel userModel = new UserModel();
 
 	public List<SubjectDTO> fetchAllSubjects() {
 		List<SubjectDTO> subjects = new ArrayList<>();
@@ -24,7 +27,10 @@ public class SubjectModel {
 
 	public List<SubjectDTO> fetchSubjectsByUser() {
 		List<SubjectDTO> subjectDTOs = new ArrayList<>();
-		List<SubjectEntity> subjects = subjectDAO.findAllByUserId(UserPreferences.getUserId());
+
+		long userId = userModel.fetchCurrentUserId();
+
+		List<SubjectEntity> subjects = subjectDAO.findAllByUserId(userId);
 
 		for (SubjectEntity subject : subjects) {
 			subjectDTOs.add(convertToSubjectDTO(subject));
@@ -44,11 +50,26 @@ public class SubjectModel {
 	}
 
 	public void addSubject(SubjectDTO subjectDTO) {
+		if (!userModel.isCurrentUserTeacher()) {
+			throw new IllegalArgumentException("Only teacher can add subject");
+		}
+
 		SubjectEntity subject = convertToSubjectEntity(subjectDTO);
 		subjectDAO.persist(subject);
 	}
 
 	public void updateSubject(SubjectDTO subjectDTO, String currentCode) {
+		if (!userModel.isCurrentUserTeacher()) {
+			throw new IllegalArgumentException("Only teacher can update subject");
+		}
+
+		if (Objects.equals(currentCode, subjectDTO.code())) {
+			SubjectEntity existingSubject = subjectDAO.findByCode(subjectDTO.code());
+			if (existingSubject != null) {
+				throw new IllegalArgumentException("Subject already exists");
+			}
+		}
+
 		SubjectEntity subject = subjectDAO.findByCode(currentCode);
 
 		if (subject == null) {
@@ -62,11 +83,19 @@ public class SubjectModel {
 	}
 
 	public void deleteSubject(SubjectDTO subjectDTO) {
+		if (!userModel.isCurrentUserTeacher()) {
+			throw new IllegalArgumentException("Only teacher can delete subject");
+		}
+
 		SubjectEntity subject = convertToSubjectEntity(subjectDTO);
 		subjectDAO.delete(subject);
 	}
 
 	public void deleteAllSubjects() {
+		if (!userModel.isCurrentUserTeacher()) {
+			throw new IllegalArgumentException("Only teacher can delete all subjects");
+		}
+
 		subjectDAO.deleteAll();
 	}
 
