@@ -149,6 +149,17 @@ public class SubjectsController implements ControllerAware {
 			String code = codeTextField.getText();
 			String currentCode = subjects.get(selectedIndex).code();
 
+			for (SubjectDTO subject : subjects) {
+				if (subject.code().equals(code) && !code.equals(currentCode)) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Error");
+					alert.setHeaderText(null);
+					alert.setContentText("Subject with this code already exists.");
+					alert.showAndWait();
+					return;
+				}
+			}
+
 			SubjectDTO subject = new SubjectDTO(name, code);
 			subjectController.updateSubject(subject, currentCode);
 			loadSubjects();
@@ -210,8 +221,6 @@ public class SubjectsController implements ControllerAware {
 	private void changeButtonVisibility(boolean editingMode) {
 		// In editing mode, the add button is not visible, and the edit and delete buttons are visible
 		isEditingMode = editingMode;
-
-		codeTextField.setDisable(editingMode);
 
 		addButton.setVisible(!editingMode);
 		addButton.setManaged(!editingMode);
