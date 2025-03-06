@@ -153,6 +153,17 @@ public class LocationsController implements ControllerAware {
 			String campus = campusTextField.getText();
 			String currentName = locations.get(selectedIndex).name();
 
+			for (LocationDTO location : locations) {
+				if (location.name().equals(name) && !name.equals(currentName)) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Error");
+					alert.setHeaderText(null);
+					alert.setContentText("Location with this name already exists.");
+					alert.showAndWait();
+					return;
+				}
+			}
+
 			LocationDTO locationDTO = new LocationDTO(name, campus, building);
 			locationController.updateLocation(locationDTO, currentName);
 			loadLocations();
@@ -215,8 +226,6 @@ public class LocationsController implements ControllerAware {
 	private void changeButtonVisibility(boolean editingMode) {
 		// In editing mode, the add button is not visible, and the edit and delete buttons are visible
 		isEditingMode = editingMode;
-
-		nameTextField.setDisable(editingMode);
 
 		addButton.setVisible(!editingMode);
 		addButton.setManaged(!editingMode);
