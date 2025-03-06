@@ -192,6 +192,7 @@ public class GroupsController implements ControllerAware {
             String code = codeTextField.getText();
             int capacity = Integer.parseInt(capacityTextField.getText());
             String subjectCode = subjectCodeComboBox.getValue();
+            String currentName = groups.get(selectedIndex).name();
 
             long userId = userController.fetchCurrentUserId();
             if (userId == -1) {
@@ -213,7 +214,7 @@ public class GroupsController implements ControllerAware {
             }
 
             GroupDTO group = new GroupDTO(name, code, capacity, userId, subjectCode);
-            groupController.updateGroup(group);
+            groupController.updateGroup(group, currentName);
             loadGroups();
 
             itemView.getSelectionModel().select(selectedIndex);
