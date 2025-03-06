@@ -45,18 +45,20 @@ public class MainPageController implements Initializable {
         SplitPane.setResizableWithParent(sidebar, false);
         SplitPane.setResizableWithParent(mainContent, false);
 
+		sidebarController.setBaseController(baseController);
+
         sidebarController.currentViewProperty().addListener((observableValue, oldValue, newValue) -> {
             switch (newValue) {
-                case "notifications":
-                    showNotificationPopup();
-                    break;
-                case "account":
-                    if (baseController.getUserController().isUserLoggedIn()) {
-                        showUserProfilePopup();
-                    } else {
-                        showLoginPopup();
-                    }
-                    break;
+//                case "notifications":
+//                    showNotificationPopup();
+//                    break;
+//                case "account":
+//                    if (baseController.getUserController().isUserLoggedIn()) {
+//                        showUserProfilePopup();
+//                    } else {
+//                        showLoginPopup();
+//                    }
+//                    break;
                 case "home":
                     loadContent("/layouts/pages/main/home.fxml", null);
                     break;
