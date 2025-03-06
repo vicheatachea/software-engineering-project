@@ -43,9 +43,22 @@ public class SubjectModel {
 		return convertToSubjectDTO(subject);
 	}
 
-	public void saveSubject(SubjectDTO subjectDTO) {
+	public void addSubject(SubjectDTO subjectDTO) {
 		SubjectEntity subject = convertToSubjectEntity(subjectDTO);
 		subjectDAO.persist(subject);
+	}
+
+	public void updateSubject(SubjectDTO subjectDTO, String currentCode) {
+		SubjectEntity subject = subjectDAO.findByCode(currentCode);
+
+		if (subject == null) {
+			throw new IllegalArgumentException("Subject not found");
+		}
+
+		subject.setName(subjectDTO.name());
+		subject.setCode(subjectDTO.code());
+
+		subjectDAO.update(subject);
 	}
 
 	public void deleteSubject(SubjectDTO subjectDTO) {

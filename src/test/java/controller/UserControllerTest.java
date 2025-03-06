@@ -72,12 +72,21 @@ class UserControllerTest {
 	}
 
 	@Test
+	void authenticateUserWithInvalidPassword() {
+		UserDTO userDTO = createUserDTO("username", "123456789ab");
+		userController.registerUser(userDTO);
+
+		assertThrows(IllegalArgumentException.class,
+		             () -> userController.authenticateUser(userDTO.username(), "wrongPassword"));
+	}
+
+	@Test
 	void authenticateUserWithInvalidCredentials() {
 		UserDTO userDTO = createUserDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
-		assertThrows(IllegalArgumentException.class, () -> userController.authenticateUser("wrongUsername",
-		                                                                                   "wrongPassword"));
+		assertThrows(IllegalArgumentException.class,
+		             () -> userController.authenticateUser("wrongUsername", "wrongPassword"));
 	}
 
 	@Test
@@ -105,9 +114,9 @@ class UserControllerTest {
 
 		assertTrue(userController.authenticateUser(userDTO.username(), userDTO.password()));
 
-		UserDTO updatedUserDTO = new UserDTO("updated user", "updated password", "updated first name",
-		                                     "updated last name", LocalDateTime.now().minusMonths(6), "123456789AB",
-		                                     "TEACHER");
+		UserDTO updatedUserDTO =
+				new UserDTO("updated user", "updated password", "updated first name", "updated last name",
+				            LocalDateTime.now().minusYears(18), "123456789AB", "TEACHER");
 
 		userController.updateUser(updatedUserDTO);
 
@@ -120,9 +129,8 @@ class UserControllerTest {
 		userController.registerUser(userDTO);
 
 		assertTrue(userController.authenticateUser(userDTO.username(), userDTO.password()));
-		assertThrows(IllegalArgumentException.class, () -> userController.updateUser(new UserDTO("", "", "", "",
-		                                                                                         LocalDateTime.now(),
-		                                                                                         "", "")));
+		assertThrows(IllegalArgumentException.class,
+		             () -> userController.updateUser(new UserDTO("", "", "", "", LocalDateTime.now(), "", "")));
 	}
 
 	@Test
@@ -130,9 +138,8 @@ class UserControllerTest {
 		UserDTO userDTO = createUserDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
-		assertThrows(IllegalArgumentException.class, () -> userController.updateUser(new UserDTO("", "", "", "",
-		                                                                                         LocalDateTime.now(),
-		                                                                                         "", "")));
+		assertThrows(IllegalArgumentException.class,
+		             () -> userController.updateUser(new UserDTO("", "", "", "", LocalDateTime.now(), "", "")));
 	}
 
 	@Test

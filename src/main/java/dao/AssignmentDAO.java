@@ -6,7 +6,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class AssignmentDAO {
@@ -31,6 +30,15 @@ public class AssignmentDAO {
 
 	public void update(AssignmentEntity assignment) {
 		EntityManager em = emf.createEntityManager();
+		AssignmentEntity existingAssignment = em.find(AssignmentEntity.class, assignment.getId());
+
+		if (existingAssignment != null) {
+			existingAssignment.setName(assignment.getName());
+			existingAssignment.setDescription(assignment.getDescription());
+			existingAssignment.setDeadline(assignment.getDeadline());
+			existingAssignment.setTimetable(assignment.getTimetable());
+		}
+
 		em.getTransaction().begin();
 		try {
 			em.merge(assignment);
@@ -71,6 +79,7 @@ public class AssignmentDAO {
 		}
 	}
 
+	// TODO: Delete this method if unused in the view
 	public void deleteById(Long id) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -123,6 +132,7 @@ public class AssignmentDAO {
 		}
 	}
 
+	// TODO: Delete this method if unused in the view
 	public void deleteByGroupName(AssignmentEntity assignment, String groupName) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class SubjectControllerTest {
@@ -74,8 +75,8 @@ class SubjectControllerTest {
 		SubjectDTO subject1 = createSubject("Math", "MATH101");
 		SubjectDTO subject2 = createSubject("Physics", "PHYS101");
 
-		subjectController.saveSubject(subject1);
-		subjectController.saveSubject(subject2);
+		subjectController.addSubject(subject1);
+		subjectController.addSubject(subject2);
 
 		assertNotNull(subjectController.fetchAllSubjects());
 	}
@@ -85,7 +86,7 @@ class SubjectControllerTest {
 
 		// Create a subject
 		SubjectDTO subject = createSubject("Math", "MATH101");
-		subjectController.saveSubject(subject);
+		subjectController.addSubject(subject);
 
 		// Create a teacher and log in
 		UserDTO teacher = createTeacher();
@@ -130,18 +131,36 @@ class SubjectControllerTest {
 	@Test
 	void saveSubject() {
 		SubjectDTO subject = createSubject("Math", "MATH101");
-		subjectController.saveSubject(subject);
+		subjectController.addSubject(subject);
 		assertNotNull(subjectController.fetchAllSubjects());
+	}
+
+	@Test
+	void updateSubject() {
+		SubjectDTO subject = createSubject("Math", "MATH101");
+		subjectController.addSubject(subject);
+
+		SubjectDTO foundSubject = subjectController.fetchSubjectByCode(subject);
+		assertNotNull(foundSubject);
+
+		SubjectDTO updatedSubject = new SubjectDTO("Math", "MATH102");
+		subjectController.updateSubject(updatedSubject, subject.code());
+
+		SubjectDTO foundUpdatedSubject = subjectController.fetchSubjectByCode(updatedSubject);
+
+		assertEquals(foundUpdatedSubject.code(), updatedSubject.code());
 	}
 
 	@Test
 	void deleteSubject() {
 		SubjectDTO subject = createSubject("Math", "MATH101");
-		subjectController.saveSubject(subject);
+		subjectController.addSubject(subject);
 
 		SubjectDTO foundSubject = subjectController.fetchSubjectByCode(subject);
 		assertNotNull(foundSubject);
 
 		subjectController.deleteSubject(foundSubject);
+
+		assertEquals(0, subjectController.fetchAllSubjects().size());
 	}
 }

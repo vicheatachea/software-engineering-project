@@ -21,9 +21,13 @@ public class SubjectController {
 		return subjectModel.fetchSubjectByCode(subjectDTO);
 	}
 
-	// Adds/Updates a subject
-	public void saveSubject(SubjectDTO subjectDTO) {
-		subjectModel.saveSubject(subjectDTO);
+	// Adds a subject
+	public void addSubject(SubjectDTO subjectDTO) {
+		subjectModel.addSubject(subjectDTO);
+	}
+
+	public void updateSubject(SubjectDTO subjectDTO, String currentCode) {
+		subjectModel.updateSubject(subjectDTO, currentCode);
 	}
 
 	// Deletes a subject

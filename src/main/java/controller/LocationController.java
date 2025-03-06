@@ -13,9 +13,14 @@ public class LocationController {
 		return locationModel.fetchAllLocations();
 	}
 
-	// Adds/Updates a location
-	public void saveLocation(LocationDTO locationDTO) {
-		locationModel.saveLocation(locationDTO);
+	// Adds a location
+	public void addLocation(LocationDTO location) {
+		locationModel.addLocation(location);
+	}
+
+	// Updates a location
+	public void updateLocation(LocationDTO locationDTO, String currentName) {
+		locationModel.updateLocation(locationDTO, currentName);
 	}
 
 	// Deletes a location
@@ -26,4 +31,6 @@ public class LocationController {
 	public void deleteAllLocations() {
 		locationModel.deleteAllLocations();
 	}
+
+
 }

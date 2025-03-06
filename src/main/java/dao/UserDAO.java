@@ -118,6 +118,7 @@ public class UserDAO {
 		}
 	}
 
+	// TODO: Delete this method if unused
 	public List<UserEntity> findAllStudents() {
 		EntityManager em = emf.createEntityManager();
 		try {

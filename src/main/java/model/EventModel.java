@@ -142,16 +142,15 @@ public class EventModel {
 		entity.setStartDate(Timestamp.valueOf(dto.startDate()));
 		entity.setEndDate(Timestamp.valueOf(dto.endDate()));
 
-		SubjectDAO subjectDAO = new SubjectDAO();
-		TimetableDAO timeTableDAO = new TimetableDAO();
-
 		if (dto.locationName() != null) {
 			LocationDAO locationDAO = new LocationDAO();
 			entity.setLocation(locationDAO.findByName(dto.locationName()));
 		}
 
-		SubjectEntity subjectEntity = subjectDAO.findByCode(dto.subjectCode());
-		entity.setSubject(subjectEntity);
+		SubjectDAO subjectDAO = new SubjectDAO();
+		entity.setSubject(subjectDAO.findByCode(dto.subjectCode()));
+
+		TimetableDAO timeTableDAO = new TimetableDAO();
 		entity.setTimetable(timeTableDAO.findById(dto.timetableId()));
 
 		return entity;
