@@ -19,6 +19,8 @@ public class GroupModel {
 	private static final TimetableDAO timetableDAO = new TimetableDAO();
 	private static final SubjectDAO subjectDAO = new SubjectDAO();
 
+	private static final UserModel userModel = new UserModel();
+
 	// Fetch all available groups
 	public List<GroupDTO> fetchAllGroups() {
 
@@ -36,7 +38,9 @@ public class GroupModel {
 
 	// Fetch all groups for a user
 	public List<GroupDTO> fetchGroupsByUser() {
-		List<UserGroupEntity> groups = userGroupDAO.findAllByUserId(UserPreferences.getUserId());
+		long userId = userModel.fetchCurrentUserId();
+
+		List<UserGroupEntity> groups = userGroupDAO.findAllByUserId(userId);
 		List<GroupDTO> groupDTOs = new ArrayList<>();
 
 		for (UserGroupEntity group : groups) {
@@ -58,10 +62,21 @@ public class GroupModel {
 	}
 
 	public void addGroup(GroupDTO groupDTO) {
+		if (!userModel.isCurrentUserTeacher()) {
+			throw new IllegalArgumentException("Only teacher can add group");
+		}
 
 		UserEntity teacher = userDAO.findTeacherById(groupDTO.teacherId());
 
+		if (teacher == null) {
+			throw new IllegalArgumentException("Teacher does not exist.");
+		}
+
 		SubjectEntity subject = subjectDAO.findByCode(groupDTO.subjectCode());
+
+		if (subject == null) {
+			throw new IllegalArgumentException("Subject does not exist.");
+		}
 
 		TimetableEntity timetable = new TimetableEntity();
 
@@ -75,56 +90,106 @@ public class GroupModel {
 	}
 
 	// Updates group details excluding the students and timetable
-	public void updateGroup(GroupDTO groupDTO) {
+	public void updateGroup(GroupDTO groupDTO, String currentName) {
 
-		UserGroupEntity existingGroup = userGroupDAO.findByName(groupDTO.name());
+		if (!Objects.equals(currentName, groupDTO.name())) {
+			UserGroupEntity existingGroup = userGroupDAO.findByName(groupDTO.name());
+			if (existingGroup != null) {
+				throw new IllegalArgumentException("Group already exists.");
+			}
+		}
+
+		if (!userModel.isCurrentUserTeacher()) {
+			throw new IllegalArgumentException("Only teachers can update groups");
+		}
+
+		UserGroupEntity existingGroup = userGroupDAO.findByName(currentName);
 
 		if (existingGroup == null) {
 			throw new IllegalArgumentException("Group does not exist.");
-		} else {
-			existingGroup.setName(groupDTO.name());
-			existingGroup.setCode(groupDTO.code());
-			existingGroup.setCapacity(groupDTO.capacity());
-			existingGroup.setTeacher(userDAO.findTeacherById(groupDTO.teacherId()));
-			userGroupDAO.persist(existingGroup);
 		}
+
+		if (groupDTO.capacity() < existingGroup.getStudents().size()) {
+			throw new IllegalArgumentException(
+					"Group capacity cannot be less than the number of students in the group.");
+		}
+
+		if (groupDTO.capacity() < 1) {
+			throw new IllegalArgumentException("Group capacity cannot be less than 1.");
+		}
+
+		if (groupDTO.name().isEmpty() || groupDTO.code().isEmpty()) {
+			throw new IllegalArgumentException("Group name and code cannot be empty.");
+		}
+
+		existingGroup.setName(groupDTO.name());
+		existingGroup.setCode(groupDTO.code());
+		existingGroup.setCapacity(groupDTO.capacity());
+		existingGroup.setTeacher(userDAO.findTeacherById(groupDTO.teacherId()));
+		existingGroup.setSubject(subjectDAO.findByCode(groupDTO.subjectCode()));
+		existingGroup.setTimetable(existingGroup.getTimetable());
+
+		userGroupDAO.persist(existingGroup);
 	}
 
 	// Adds a student to a group
 	public void addStudentToGroup(GroupDTO groupDTO, long studentId) {
+		if (!userModel.isCurrentUserTeacher()) {
+			throw new IllegalArgumentException("Only teachers can add student to group");
+		}
 
 		UserGroupEntity existingGroup = userGroupDAO.findByName(groupDTO.name());
+
+		if (existingGroup == null) {
+			throw new IllegalArgumentException("Group does not exist.");
+		}
+
+		if (existingGroup.getStudents().size() >= existingGroup.getCapacity()) {
+			throw new IllegalArgumentException("Group is full.");
+		}
 
 		UserEntity student = userDAO.findStudentById(studentId);
 
-		if (existingGroup == null) {
-			throw new IllegalArgumentException("Group does not exist.");
-		} else {
-			existingGroup.setName(existingGroup.getName());
-			existingGroup.setCode(existingGroup.getCode());
-			existingGroup.setCapacity(existingGroup.getCapacity());
-			existingGroup.setTeacher(existingGroup.getTeacher());
-			existingGroup.getStudents().add(student);
-			existingGroup.setTimetable(existingGroup.getTimetable());
-			userGroupDAO.persist(existingGroup);
+		if (student == null) {
+			throw new IllegalArgumentException("Student does not exist.");
 		}
+
+		existingGroup.setName(existingGroup.getName());
+		existingGroup.setCode(existingGroup.getCode());
+		existingGroup.setCapacity(existingGroup.getCapacity());
+		existingGroup.setTeacher(existingGroup.getTeacher());
+		existingGroup.getStudents().add(student);
+		existingGroup.setTimetable(existingGroup.getTimetable());
+		userGroupDAO.persist(existingGroup);
+
 	}
 
 	public void removeStudentFromGroup(GroupDTO groupDTO, long studentId) {
+		if (!userModel.isCurrentUserTeacher()) {
+			throw new IllegalArgumentException("Only teachers can remove student from group");
+		}
 
 		UserGroupEntity existingGroup = userGroupDAO.findByName(groupDTO.name());
 
-		UserEntity user = userDAO.findStudentById(studentId);
-
 		if (existingGroup == null) {
 			throw new IllegalArgumentException("Group does not exist.");
-		} else {
-			existingGroup.getStudents().remove(user);
-			userGroupDAO.persist(existingGroup);
 		}
+
+		UserEntity user = userDAO.findStudentById(studentId);
+
+		if (user == null) {
+			throw new IllegalArgumentException("Student does not exist.");
+		}
+
+		existingGroup.getStudents().remove(user);
+		userGroupDAO.persist(existingGroup);
+
 	}
 
 	public void deleteGroup(GroupDTO groupDTO) {
+		if (!userModel.isCurrentUserTeacher()) {
+			throw new IllegalArgumentException("Only teachers can delete groups");
+		}
 
 		UserGroupEntity existingGroup = userGroupDAO.findByName(groupDTO.name());
 
@@ -136,15 +201,10 @@ public class GroupModel {
 		timetableDAO.delete(existingGroup.getTimetable());
 	}
 
-	private GroupDTO ConvertToGroupDTO(UserGroupEntity group) {
-		return new GroupDTO(group.getName(), group.getCode(), group.getCapacity(), group.getTeacher().getId(),
-		                    group.getSubject().getCode());
-	}
-
 	public boolean isUserGroupOwner(String groupName) {
 		UserGroupEntity group = userGroupDAO.findByName(groupName);
 
-		if (UserPreferences.getUserRole() != Role.TEACHER) {
+		if (!userModel.isCurrentUserTeacher()) {
 			return false;
 		}
 
@@ -152,6 +212,11 @@ public class GroupModel {
 			throw new IllegalArgumentException("Group does not exist.");
 		}
 
-		return Objects.equals(group.getTeacher().getId(), UserPreferences.getUserId());
+		return Objects.equals(group.getTeacher().getId(), userModel.fetchCurrentUserId());
+	}
+
+	private GroupDTO ConvertToGroupDTO(UserGroupEntity group) {
+		return new GroupDTO(group.getName(), group.getCode(), group.getCapacity(), group.getTeacher().getId(),
+		                    group.getSubject().getCode());
 	}
 }
