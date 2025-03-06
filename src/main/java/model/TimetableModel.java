@@ -36,5 +36,6 @@ public class TimetableModel {
 
 	public void deleteAllTimetables() {
 		timetableDAO.deleteAll();
+		userModel.logout();
 	}
 }
