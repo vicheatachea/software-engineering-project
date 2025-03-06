@@ -182,6 +182,7 @@ public class UserModel {
 	public void deleteAllUsers() {
 		userDAO.deleteAll();
 		timetableDAO.deleteAll();
+		logout();
 	}
 
 	public boolean isCurrentUserTeacher() {
