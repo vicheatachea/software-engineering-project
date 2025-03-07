@@ -19,12 +19,6 @@
 
             <property name="hibernate.connection.pool_size" value="100"/>
 
-            <property name="hibernate.c3p0.min_size" value="5"/>
-            <property name="hibernate.c3p0.max_size" value="100"/>
-            <property name="hibernate.c3p0.timeout" value="300"/>
-            <property name="hibernate.c3p0.max_statements" value="50"/>
-            <property name="hibernate.c3p0.idle_test_period" value="3000"/>
-
             <property name="jakarta.persistence.jdbc.url"
                       value="jdbc:mariadb://localhost:3306/stms"/>
             <property name="jakarta.persistence.jdbc.user" value="stms_user"/>
