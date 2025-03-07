@@ -36,7 +36,13 @@ pipeline {
 		}
 		stage('Publish Coverage Report') {
 			steps {
-				jacoco()
+				recordCoverage(
+            tools: [[parser: 'JACOCO']],
+            sourceCodeRetention: 'EVERY_BUILD',
+            qualityGates: [
+                [threshold: 60, metric: 'LINE', baseline: 'PROJECT']
+					]
+				)
 			}
 		}
 		stage('Build Docker Image') {
