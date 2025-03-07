@@ -28,7 +28,7 @@ public class GroupModel {
 		for (UserGroupEntity group : groups) {
 			groupDTOs.add(
 					new GroupDTO(group.getName(), group.getCode(), group.getCapacity(), group.getTeacher().getId(),
-					             group.getSubject().getName()));
+					             group.getSubject().getCode()));
 		}
 
 		return groupDTOs;
