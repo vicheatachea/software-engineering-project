@@ -124,6 +124,16 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.12</version>
+                <configuration>
+                    <excludes>
+                        <!-- Exclusions for JaCoCo report generation -->
+                        <exclude>Main.class</exclude>
+                        <exclude>**/view/**/*</exclude>
+                        <exclude>**/controller/notifications/**/*</exclude>
+                        <exclude>**/controller/BaseController.class</exclude>
+                        <exclude>**/controller/cache/**/*</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>jacoco-initialize</id>
@@ -138,14 +148,6 @@
                             <goal>report</goal>
                         </goals>
                         <configuration>
-                            <excludes>
-                                <!-- Exclusions for JaCoCo report generation -->
-                                <exclude>Main.class</exclude>
-                                <exclude>**/view/**/*</exclude>
-                                <exclude>**/controller/notifications/**/*</exclude>
-                                <exclude>**/controller/BaseController.class</exclude>
-                                <exclude>**/controller/cache/**/*</exclude>
-                            </excludes>
                         </configuration>
                     </execution>
                 </executions>
