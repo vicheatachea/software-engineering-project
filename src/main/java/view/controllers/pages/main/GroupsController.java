@@ -107,6 +107,7 @@ public class GroupsController implements ControllerAware {
 
     private void loadGroups() {
         groups = groupController.fetchAllGroups();
+        itemView.getItems().clear();
         groups.forEach(group -> itemView.getItems().add(group.name()));
     }
 
