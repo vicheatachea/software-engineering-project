@@ -10,7 +10,6 @@ import entity.UserEntity;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.prefs.BackingStoreException;
 
 public class UserModel {
 	private static final UserDAO userDAO = new UserDAO();
@@ -48,58 +47,71 @@ public class UserModel {
 
 	public boolean register(UserDTO userDTO) {
 		try {
-			if (!isValid(userDTO)) {
-				throw new IllegalArgumentException("Invalid user data");
+			isValid(userDTO);
+
+			if (userDAO.findByUsername(userDTO.username()) != null) {
+				throw new IllegalArgumentException("Username already exists");
 			}
+			if (userDAO.findBySocialNumber(userDTO.socialNumber())) {
+				throw new IllegalArgumentException("Social number already exists");
+			}
+
+			TimetableEntity timetable = new TimetableEntity();
+
+			timetableDAO.persist(timetable);
+
+			UserEntity user = convertToEntity(userDTO, timetable);
+
+			userDAO.persist(user);
+
+			return true;
 		} catch (IllegalArgumentException e) {
-			System.out.println(e.getMessage());
-			return false;
+			System.out.println("Registration failed: " + e.getMessage());
+			return false; // Registration failed
 		}
-
-		if (userDAO.findByUsername(userDTO.username()) != null) {
-			throw new IllegalArgumentException("Username already exists");
-		}
-
-		if (userDAO.findBySocialNumber(userDTO.socialNumber())) {
-			throw new IllegalArgumentException("Social number already exists");
-		}
-
-		TimetableEntity timetable = new TimetableEntity();
-
-		timetableDAO.persist(timetable);
-
-		UserEntity user = convertToEntity(userDTO, timetable);
-
-		userDAO.persist(user);
-
-		return true;
 	}
 
 	public void update(UserDTO userDTO) {
-		UserEntity user = userDAO.findById(fetchCurrentUserId());
+		try {
+			// Validate input data
+			isValid(userDTO);
 
-		if (user == null) {
-			logout();
-			throw new IllegalArgumentException("User not found");
+			// Get the current user
+			UserEntity user = userDAO.findById(fetchCurrentUserId());
+			if (user == null) {
+				logout();
+				throw new IllegalArgumentException("User not found");
+			}
+
+			// Check if username is being changed and is already taken
+			if (!user.getUsername().equals(userDTO.username()) &&
+			    userDAO.findByUsername(userDTO.username()) != null) {
+				throw new IllegalArgumentException("Username already exists");
+			}
+
+			// Check if social number is being changed and is already taken by another user
+			if (!user.getSocialNumber().equalsIgnoreCase(userDTO.socialNumber()) &&
+			    userDAO.findBySocialNumber(userDTO.socialNumber())) {
+				throw new IllegalArgumentException("Social number already exists");
+			}
+
+			// Update user fields
+			user.setUsername(userDTO.username());
+			user.setPassword(userDTO.password());
+			user.setFirstName(userDTO.firstName());
+			user.setLastName(userDTO.lastName());
+			user.setDateOfBirth(Timestamp.valueOf(userDTO.dateOfBirth()));
+			user.setSocialNumber(userDTO.socialNumber());
+
+			// Only allow role changes if necessary (or add permission check here)
+			user.setRole(Role.valueOf(userDTO.role()));
+
+			// Save changes
+			userDAO.update(user);
+		} catch (IllegalArgumentException e) {
+			System.out.println("Update failed: " + e.getMessage());
+			throw e; // Re-throw to notify caller of the failure
 		}
-
-		if (!isValid(userDTO)) {
-			throw new IllegalArgumentException("Invalid user data");
-		}
-
-		if (userDAO.findByUsername(userDTO.username()) != null) {
-			throw new IllegalArgumentException("Username already exists");
-		}
-
-		user.setUsername(userDTO.username());
-		user.setPassword(userDTO.password());
-		user.setFirstName(userDTO.firstName());
-		user.setLastName(userDTO.lastName());
-		user.setDateOfBirth(Timestamp.valueOf(userDTO.dateOfBirth()));
-		user.setSocialNumber(userDTO.socialNumber());
-		user.setRole(Role.valueOf(userDTO.role()));
-
-		userDAO.update(user);
 	}
 
 	private boolean isValid(UserDTO userDTO) {
@@ -154,19 +166,14 @@ public class UserModel {
 		return false;
 	}
 
-	public boolean logout() {
-		try {
-			UserPreferences.deleteUser();
-			return true;
-		} catch (BackingStoreException e) {
-			System.out.println("Error logging out user: " + e.getMessage());
-			return false;
-		}
+	public void logout() {
+		UserPreferences.deleteUser();
 	}
 
 	private UserDTO convertToDTO(UserEntity user) {
 		return new UserDTO(user.getUsername(), user.getPassword(), user.getFirstName(), user.getLastName(),
-		                   user.getDateOfBirth().toLocalDateTime(), user.getSocialNumber(), user.getRole().toString());
+		                   user.getDateOfBirth().toLocalDateTime(), user.getSocialNumber(),
+		                   user.getRole().toString());
 	}
 
 	private UserEntity convertToEntity(UserDTO user, TimetableEntity timetable) {
