@@ -2,9 +2,10 @@ package view.controllers.pages.main;
 
 import controller.BaseController;
 import controller.GroupController;
+import controller.SubjectController;
 import controller.UserController;
 import dto.GroupDTO;
-import dto.UserDTO;
+import dto.SubjectDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -19,13 +20,14 @@ import java.util.Optional;
 
 public class GroupsController implements ControllerAware {
     private GroupController groupController;
+    private SubjectController subjectController;
     private UserController userController;
     private List<GroupDTO> groups;
     private final LinkedHashMap<String, String> components = new LinkedHashMap<>() {{
         put("Name", "field");
         put("Code", "field");
         put("Capacity", "field");
-        put("Subject Code", "comboBox");
+        put("Subject", "comboBox");
     }};
     private boolean isEditingMode;
     private int currentIndex;
@@ -33,7 +35,7 @@ public class GroupsController implements ControllerAware {
     private TextField nameTextField;
     private TextField codeTextField;
     private TextField capacityTextField;
-    private ComboBox<String> subjectCodeComboBox;
+    private ComboBox<String> subjectComboBox;
 
     @FXML
     private Label titleLabel;
@@ -81,21 +83,25 @@ public class GroupsController implements ControllerAware {
                 }
             }
             contentVBox.getChildren().add(contentVBox.getChildren().size() - 1, componentBox);
-
-            Platform.runLater(() -> {
-                loadGroups();
-                nameTextField = (TextField) contentVBox.lookup("#nameTextField");
-                codeTextField = (TextField) contentVBox.lookup("#codeTextField");
-                capacityTextField = (TextField) contentVBox.lookup("#capacityTextField");
-                subjectCodeComboBox = (ComboBox<String>) contentVBox.lookup("#subjectCodeComboBox");
-
-                changeButtonVisibility(false);
-            });
         }
+
+        Platform.runLater(() -> {
+            loadGroups();
+            nameTextField = (TextField) contentVBox.lookup("#nameTextField");
+            codeTextField = (TextField) contentVBox.lookup("#codeTextField");
+            capacityTextField = (TextField) contentVBox.lookup("#capacityTextField");
+            subjectComboBox = (ComboBox<String>) contentVBox.lookup("#subjectComboBox");
+
+            changeButtonVisibility(false);
+
+            List<SubjectDTO> subjects = subjectController.fetchAllSubjects();
+            subjects.forEach(subject -> subjectComboBox.getItems().add(subject.code()));
+        });
     }
 
     public void setBaseController(BaseController baseController) {
         this.groupController = baseController.getGroupController();
+        this.subjectController = baseController.getSubjectController();
         this.userController = baseController.getUserController();
     }
 
@@ -137,7 +143,7 @@ public class GroupsController implements ControllerAware {
         String name = nameTextField.getText();
         String code = codeTextField.getText();
         int capacity = Integer.parseInt(capacityTextField.getText());
-        String subjectCode = subjectCodeComboBox.getValue();
+        String subjectCode = subjectComboBox.getValue();
 
         for (GroupDTO group : groups) {
             if (group.name().equals(name)) {
@@ -191,7 +197,7 @@ public class GroupsController implements ControllerAware {
             String name = nameTextField.getText();
             String code = codeTextField.getText();
             int capacity = Integer.parseInt(capacityTextField.getText());
-            String subjectCode = subjectCodeComboBox.getValue();
+            String subjectCode = subjectComboBox.getValue();
 
             long userId = userController.fetchCurrentUserId();
             if (userId == -1) {
@@ -265,7 +271,7 @@ public class GroupsController implements ControllerAware {
             nameTextField.setText(group.name());
             codeTextField.setText(group.code());
             capacityTextField.setText(String.valueOf(group.capacity()));
-            subjectCodeComboBox.setValue(group.subjectCode());
+            subjectComboBox.setValue(group.subjectCode());
 
             changeButtonVisibility(true);
             currentIndex = selectedIndex;
@@ -276,7 +282,7 @@ public class GroupsController implements ControllerAware {
         nameTextField.clear();
         codeTextField.clear();
         capacityTextField.clear();
-        subjectCodeComboBox.getSelectionModel().clearSelection();
+        subjectComboBox.getSelectionModel().clearSelection();
     }
 
     private void changeButtonVisibility(boolean editingMode) {
@@ -305,13 +311,13 @@ public class GroupsController implements ControllerAware {
             String savedCapacity = String.valueOf(groups.get(currentIndex).capacity());
             String savedSubjectCode = groups.get(currentIndex).subjectCode();
 
-            return !nameTextField.getText().equals(savedName) || !codeTextField.getText().equals(savedCode) || !capacityTextField.getText().equals(savedCapacity) || !subjectCodeComboBox.getValue().equals(savedSubjectCode);
+            return !nameTextField.getText().equals(savedName) || !codeTextField.getText().equals(savedCode) || !capacityTextField.getText().equals(savedCapacity) || !subjectComboBox.getValue().equals(savedSubjectCode);
         } else {
-            return !nameTextField.getText().isEmpty() || !codeTextField.getText().isEmpty() || !capacityTextField.getText().isEmpty() || !subjectCodeComboBox.getValue().isEmpty();
+            return !nameTextField.getText().isEmpty() || !codeTextField.getText().isEmpty() || !capacityTextField.getText().isEmpty() || !subjectComboBox.getValue().isEmpty();
         }
     }
 
     private boolean areFieldsEmpty() {
-        return nameTextField.getText().isEmpty() || codeTextField.getText().isEmpty() || capacityTextField.getText().isEmpty() || subjectCodeComboBox.getValue().isEmpty();
+        return nameTextField.getText().isEmpty() || codeTextField.getText().isEmpty() || capacityTextField.getText().isEmpty() || subjectComboBox.getValue().isEmpty();
     }
 }
