@@ -49,16 +49,6 @@ public class MainPageController implements Initializable {
 
         sidebarController.currentViewProperty().addListener((observableValue, oldValue, newValue) -> {
             switch (newValue) {
-//                case "notifications":
-//                    showNotificationPopup();
-//                    break;
-//                case "account":
-//                    if (baseController.getUserController().isUserLoggedIn()) {
-//                        showUserProfilePopup();
-//                    } else {
-//                        showLoginPopup();
-//                    }
-//                    break;
                 case "home":
                     loadContent("/layouts/pages/main/home.fxml", null);
                     break;
@@ -112,75 +102,6 @@ public class MainPageController implements Initializable {
 			mainContent.getChildren().setAll(content);
 		} catch (NullPointerException e) {
 			System.out.println("MainPageController loadContent() could not load " + fxmlFilePath);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void showNotificationPopup() {
-		try {
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/notifications-page.fxml"));
-			Parent parent = fxmlLoader.load();
-
-			//NotificationsController notificationsController = fxmlLoader.getController();
-			//notificationsController.setUserController(baseController.getUserController());
-
-			Stage notificationStage = new Stage();
-			notificationStage.initModality(Modality.APPLICATION_MODAL);
-			notificationStage.initOwner(stage);
-			notificationStage.setTitle("Notifications");
-			notificationStage.setScene(new Scene(parent));
-			notificationStage.showAndWait();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-
-
-	private void showLoginPopup() {
-		try {
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/login-page.fxml"));
-			Parent parent = fxmlLoader.load();
-
-			LoginController loginController = fxmlLoader.getController();
-			loginController.setUserController(baseController.getUserController());
-
-			Stage loginStage = new Stage();
-			loginController.setStage(loginStage);
-			loginStage.initModality(Modality.APPLICATION_MODAL);
-			loginStage.initOwner(stage);
-			loginStage.setTitle("Login");
-			loginStage.setScene(new Scene(parent));
-			loginStage.showAndWait();
-
-			sidebarController.updateAccountButtonText(baseController.getUserController().isUserLoggedIn());
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void showUserProfilePopup() {
-		try {
-			FXMLLoader fxmlLoader =
-					new FXMLLoader(getClass().getResource("/layouts/pages/user/user-profile-page.fxml"));
-			Parent parent = fxmlLoader.load();
-			
-			UserProfileController userProfileController = fxmlLoader.getController();
-			userProfileController.setUserController(baseController.getUserController());
-			userProfileController.updateUserInfo();
-
-			Stage userProfileStage = new Stage();
-			userProfileStage.initModality(Modality.APPLICATION_MODAL);
-			userProfileStage.initOwner(stage);
-			userProfileStage.setTitle("User Profile");
-			userProfileStage.setScene(new Scene(parent));
-			userProfileStage.showAndWait();
-
-			sidebarController.updateAccountButtonText(baseController.getUserController().isUserLoggedIn());
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
