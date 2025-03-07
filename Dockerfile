@@ -46,7 +46,7 @@ RUN echo '#!/bin/bash\n\
 service mariadb start\n\
 sleep 5\n\
 mysql -u root < /app/db_init.sql\n\
-# Run with classpath including all dependencies\n\
+export DISPLAY=${DISPLAY:-:0}\n\
 java -cp app.jar:lib/* Main\n' > /app/start.sh && chmod +x /app/start.sh
 
 # Set the entry point
