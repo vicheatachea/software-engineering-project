@@ -137,6 +137,16 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <excludes>
+                                <!-- Exclusions for JaCoCo report generation -->
+                                <exclude>Main.class</exclude>
+                                <exclude>**/view/**/*</exclude>
+                                <exclude>**/controller/notifications/**/*</exclude>
+                                <exclude>**/controller/BaseController.class</exclude>
+                                <exclude>**/controller/cache/**/*</exclude>
+                            </excludes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
