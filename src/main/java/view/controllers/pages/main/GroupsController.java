@@ -351,7 +351,7 @@ public class GroupsController implements ControllerAware {
 
             return !nameTextField.getText().equals(savedName) || !codeTextField.getText().equals(savedCode) || !capacityTextField.getText().equals(savedCapacity) || !subjectComboBox.getValue().equals(savedSubjectCode);
         } else {
-            return !nameTextField.getText().isEmpty() || !codeTextField.getText().isEmpty() || !capacityTextField.getText().isEmpty() || !subjectComboBox.getValue().isEmpty();
+            return !nameTextField.getText().isEmpty() || !codeTextField.getText().isEmpty() || !capacityTextField.getText().isEmpty() || subjectComboBox.getValue() != null;
         }
     }
 
