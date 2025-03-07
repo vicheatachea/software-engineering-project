@@ -60,9 +60,9 @@ public class SidebarController implements ControllerAware {
                 loginButton = (Button) userArea.lookup("#loginButton");
                 notificationsButton = (Button) userArea.lookup("#notificationsButton");
 
-                accountButton.setOnAction(_ -> showUserProfilePopup());
-                loginButton.setOnAction(_ -> showLoginPopup());
-                notificationsButton.setOnAction(_ -> showNotificationPopup());
+				accountButton.setOnAction(event -> showUserProfilePopup());
+				loginButton.setOnAction(event -> showLoginPopup());
+				notificationsButton.setOnAction(event -> showNotificationPopup());
 
                 updateUserButtons();
             } catch (IOException e) {
@@ -86,7 +86,7 @@ public class SidebarController implements ControllerAware {
 
             button.setText(name);
             button.setId(view + "Button");
-            button.setOnAction(_ -> currentView.set(view));
+            button.setOnAction(event -> currentView.set(view));
             VBox.setMargin(button, new Insets(30, 0, 0, 0));
             sidebar.getChildren().add(button);
         } catch (IOException e) {
