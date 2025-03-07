@@ -44,7 +44,7 @@ public class NotificationsController implements NotificationAware {
         events.add(event);
         loadNotification(event.toString(), time);
         if (sidebarController != null) {
-            sidebarController.incrementNotificationCount();
+//            sidebarController.incrementNotificationCount();
         }
     }
 
@@ -66,7 +66,7 @@ public class NotificationsController implements NotificationAware {
         notificationsContainer.getChildren().remove(notification);
         events.removeIf(event -> event.toString().equals(((Label) notification.getChildren().get(0)).getText()));
         if (sidebarController != null) {
-            sidebarController.incrementNotificationCount();
+//            sidebarController.incrementNotificationCount();
         }
     }
 
@@ -75,7 +75,7 @@ public class NotificationsController implements NotificationAware {
         notificationsContainer.getChildren().clear();
         events.clear();
         if (sidebarController != null) {
-            sidebarController.resetNotificationCount();
+//            sidebarController.resetNotificationCount();
         }
     }
 }
