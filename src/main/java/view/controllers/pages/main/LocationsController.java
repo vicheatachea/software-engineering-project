@@ -6,6 +6,7 @@ import dto.LocationDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -41,6 +42,8 @@ public class LocationsController implements ControllerAware {
 	private Region optionalRegion;
 	@FXML
 	private ListView<String> itemView;
+	@FXML
+	private GridPane componentGrid;
 
 	@FXML
 	public void initialize() {
@@ -52,16 +55,19 @@ public class LocationsController implements ControllerAware {
 		saveButton.setText("Save " + title);
 		deleteButton.setText("Delete " + title);
 
+		int i = 0;
 		for (String key : components) {
-			HBox componentBox = new HBox();
 			Label label = new Label(key + ":");
+			label.setFont(new javafx.scene.text.Font("Arial", 18));
+
 			TextField textField = new TextField();
+			textField.setFont(new javafx.scene.text.Font("Arial", 16));
 
 			textField.setPromptText("Enter " + key);
 			textField.setId(key.toLowerCase() + "TextField");
 
-			componentBox.getChildren().addAll(label, textField);
-			contentVBox.getChildren().add(contentVBox.getChildren().size() - 1, componentBox);
+			componentGrid.add(label, 0, i);
+			componentGrid.add(textField, 1, i);
 		}
 
 		Platform.runLater(() -> {
