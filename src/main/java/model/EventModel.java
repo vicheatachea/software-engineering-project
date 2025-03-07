@@ -21,10 +21,14 @@ public class EventModel {
 	private static final TeachingSessionDAO teachingSessionDAO = new TeachingSessionDAO();
 	private static final TimetableDAO timetableDAO = new TimetableDAO();
 
+	private static final UserModel userModel = new UserModel();
+
 	public List<Event> fetchEventsByUser(LocalDateTime startDate, LocalDateTime endDate) {
 		List<Event> events = new ArrayList<>();
 
-		List<TimetableEntity> timetables = timetableDAO.findAllByUserId(UserPreferences.getUserId());
+		long userId = userModel.fetchCurrentUserId();
+
+		List<TimetableEntity> timetables = timetableDAO.findAllByUserId(userId);
 
 		for (TimetableEntity timetable : timetables) {
 			List<Event> eventsByTimetable = fetchEventsByTimetable(startDate, endDate, timetable.getId());
@@ -62,9 +66,19 @@ public class EventModel {
 	// Add an event
 	public void addEvent(Event event) {
 		if (event instanceof TeachingSessionDTO teachingSessionDTO) {
+			try {
+				isValidTeachingSession(teachingSessionDTO);
+			} catch (IllegalArgumentException e) {
+				throw new IllegalArgumentException("Invalid teaching session data: " + e.getMessage());
+			}
 			TeachingSessionEntity entity = convertToTeachingSessionEntity(teachingSessionDTO);
 			teachingSessionDAO.persist(entity);
 		} else if (event instanceof AssignmentDTO assignmentDTO) {
+			try {
+				isValidAssignment(assignmentDTO);
+			} catch (IllegalArgumentException e) {
+				throw new IllegalArgumentException("Invalid assignment data: " + e.getMessage());
+			}
 			AssignmentEntity entity = convertToAssignmentEntity(assignmentDTO);
 			assignmentDAO.persist(entity);
 		}
@@ -73,9 +87,19 @@ public class EventModel {
 	// Update an event
 	public void updateEvent(Event event) {
 		if (event instanceof TeachingSessionDTO teachingSessionDTO) {
+			try {
+				isValidTeachingSession(teachingSessionDTO);
+			} catch (IllegalArgumentException e) {
+				throw new IllegalArgumentException("Invalid teaching session data: " + e.getMessage());
+			}
 			TeachingSessionEntity entity = convertToTeachingSessionEntity(teachingSessionDTO);
 			teachingSessionDAO.update(entity);
 		} else if (event instanceof AssignmentDTO assignmentDTO) {
+			try {
+				isValidAssignment(assignmentDTO);
+			} catch (IllegalArgumentException e) {
+				throw new IllegalArgumentException("Invalid assignment data: " + e.getMessage());
+			}
 			AssignmentEntity entity = convertToAssignmentEntity(assignmentDTO);
 			assignmentDAO.update(entity);
 		}
@@ -84,9 +108,19 @@ public class EventModel {
 	// Delete an event
 	public void deleteEvent(Event event) {
 		if (event instanceof TeachingSessionDTO teachingSessionDTO) {
+			try {
+				isValidTeachingSession(teachingSessionDTO);
+			} catch (IllegalArgumentException e) {
+				throw new IllegalArgumentException("Invalid teaching session data: " + e.getMessage());
+			}
 			TeachingSessionEntity entity = convertToTeachingSessionEntity(teachingSessionDTO);
 			teachingSessionDAO.delete(entity);
 		} else if (event instanceof AssignmentDTO assignmentDTO) {
+			try {
+				isValidAssignment(assignmentDTO);
+			} catch (IllegalArgumentException e) {
+				throw new IllegalArgumentException("Invalid assignment data: " + e.getMessage());
+			}
 			AssignmentEntity entity = convertToAssignmentEntity(assignmentDTO);
 			assignmentDAO.delete(entity);
 		}
@@ -95,16 +129,16 @@ public class EventModel {
 	private AssignmentEntity convertToAssignmentEntity(AssignmentDTO dto) {
 		AssignmentEntity entity = new AssignmentEntity();
 
-
 		if (dto.id() != null) {
 			entity.setId(dto.id());
 		}
+
 		if (dto.description() != null) {
 			entity.setDescription(dto.description());
 		}
-		if (dto.assignmentName() != null) {
-			entity.setName(dto.assignmentName());
-		}
+
+		entity.setName(dto.assignmentName());
+
 		entity.setType(dto.type());
 		entity.setPublishingDate(Timestamp.valueOf(dto.publishingDate()));
 
@@ -157,8 +191,7 @@ public class EventModel {
 	}
 
 	private TeachingSessionDTO convertToTeachingSessionDTO(TeachingSessionEntity entity) {
-		return new TeachingSessionDTO(entity.getId(),
-		                              entity.getStartDate().toLocalDateTime(),
+		return new TeachingSessionDTO(entity.getId(), entity.getStartDate().toLocalDateTime(),
 		                              entity.getEndDate().toLocalDateTime(),
 		                              entity.getLocation() == null ? null : entity.getLocation().getName(),
 		                              entity.getSubject().getCode(),
@@ -170,4 +203,50 @@ public class EventModel {
 		assignmentDAO.deleteAll();
 		teachingSessionDAO.deleteAll();
 	}
+
+	private boolean isValidTeachingSession(TeachingSessionDTO teachingSessionDTO) {
+		if (teachingSessionDTO.startDate() == null) {
+			throw new IllegalArgumentException("Start date cannot be null.");
+		}
+		if (teachingSessionDTO.endDate() == null) {
+			throw new IllegalArgumentException("End date cannot be null.");
+		}
+		if (teachingSessionDTO.startDate().isAfter(teachingSessionDTO.endDate())) {
+			throw new IllegalArgumentException("Start date cannot be after end date.");
+		}
+		if (teachingSessionDTO.subjectCode() == null || teachingSessionDTO.subjectCode().isEmpty()) {
+			throw new IllegalArgumentException("Subject code cannot be null or empty.");
+		}
+		if (teachingSessionDTO.timetableId() <= 0) {
+			throw new IllegalArgumentException("Timetable ID cannot be less than or equal to 0.");
+		}
+		return true;
+	}
+
+	private boolean isValidAssignment(AssignmentDTO assignmentDTO) {
+		if (assignmentDTO.assignmentName() == null || assignmentDTO.assignmentName().isEmpty()) {
+			throw new IllegalArgumentException("Assignment name cannot be null or empty.");
+		}
+		if (assignmentDTO.type() == null || assignmentDTO.type().isEmpty()) {
+			throw new IllegalArgumentException("Assignment type cannot be null or empty.");
+		}
+		if (assignmentDTO.publishingDate() == null) {
+			throw new IllegalArgumentException("Publishing date cannot be null.");
+		}
+		if (assignmentDTO.deadline() == null) {
+			throw new IllegalArgumentException("Deadline cannot be null.");
+		}
+		if (assignmentDTO.deadline().isBefore(assignmentDTO.publishingDate())) {
+			throw new IllegalArgumentException("Deadline cannot be before publishing date.");
+		}
+		if (assignmentDTO.subjectCode() == null || assignmentDTO.subjectCode().isEmpty()) {
+			throw new IllegalArgumentException("Subject code cannot be null or empty.");
+		}
+		if (assignmentDTO.timetableId() <= 0) {
+			throw new IllegalArgumentException("Timetable ID cannot be less than or equal to 0.");
+		}
+		return true;
+	}
+
+
 }

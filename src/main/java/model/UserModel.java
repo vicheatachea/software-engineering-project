@@ -8,7 +8,6 @@ import entity.TimetableEntity;
 import entity.UserEntity;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
@@ -18,7 +17,7 @@ public class UserModel {
 	private static final TimetableDAO timetableDAO = new TimetableDAO();
 
 	public UserDTO getLoggedInUser() {
-		UserEntity user = userDAO.findById(UserPreferences.getUserId());
+		UserEntity user = userDAO.findById(fetchCurrentUserId());
 
 		if (user == null) {
 			logout();
@@ -48,8 +47,21 @@ public class UserModel {
 	}
 
 	public boolean register(UserDTO userDTO) {
-		if (!isValid(userDTO)) {
-			throw new IllegalArgumentException("Invalid user data");
+		try {
+			if (!isValid(userDTO)) {
+				throw new IllegalArgumentException("Invalid user data");
+			}
+		} catch (IllegalArgumentException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+
+		if (userDAO.findByUsername(userDTO.username()) != null) {
+			throw new IllegalArgumentException("Username already exists");
+		}
+
+		if (userDAO.findBySocialNumber(userDTO.socialNumber())) {
+			throw new IllegalArgumentException("Social number already exists");
 		}
 
 		TimetableEntity timetable = new TimetableEntity();
@@ -64,7 +76,7 @@ public class UserModel {
 	}
 
 	public void update(UserDTO userDTO) {
-		UserEntity user = userDAO.findById(UserPreferences.getUserId());
+		UserEntity user = userDAO.findById(fetchCurrentUserId());
 
 		if (user == null) {
 			logout();
@@ -79,12 +91,6 @@ public class UserModel {
 			throw new IllegalArgumentException("Username already exists");
 		}
 
-		if (userDTO.username().isEmpty() || userDTO.password().isEmpty() || userDTO.firstName().isEmpty() ||
-		    userDTO.lastName().isEmpty() || userDTO.dateOfBirth() == null || userDTO.socialNumber().isEmpty() ||
-		    userDTO.role().isEmpty()) {
-			throw new IllegalArgumentException("User data cannot be empty");
-		}
-
 		user.setUsername(userDTO.username());
 		user.setPassword(userDTO.password());
 		user.setFirstName(userDTO.firstName());
@@ -96,43 +102,56 @@ public class UserModel {
 		userDAO.update(user);
 	}
 
-	public boolean isValid(UserDTO userDTO) {
-		return isUsernameValid(userDTO.username()) && isPasswordValid(userDTO.password()) &&
-		       isFirstNameValid(userDTO.firstName()) && isLastNameValid(userDTO.lastName()) &&
-		       isDateOfBirthValid(userDTO.dateOfBirth()) && isSocialNumberValid(userDTO.socialNumber()) &&
-		       isRoleValid(userDTO.role());
-	}
+	private boolean isValid(UserDTO userDTO) {
+		if (userDTO.username() == null || userDTO.username().isEmpty()) {
+			throw new IllegalArgumentException("Username cannot be empty.");
+		}
 
-	private boolean isUsernameValid(String username) {
-		return username != null && !username.trim().isEmpty();
-	}
+		if (userDTO.password() == null || userDTO.password().isEmpty()) {
+			throw new IllegalArgumentException("Password cannot be empty.");
+		}
 
-	private boolean isPasswordValid(String password) {
-		return password != null && password.length() >= 8;
-	}
+		if (userDTO.password().length() < 8) {
+			throw new IllegalArgumentException("Password must be at least 8 characters long.");
+		}
 
-	private boolean isFirstNameValid(String firstName) {
-		return firstName != null && !firstName.trim().isEmpty();
-	}
+		if (userDTO.firstName() == null || userDTO.firstName().isEmpty()) {
+			throw new IllegalArgumentException("First name cannot be empty.");
+		}
 
-	private boolean isLastNameValid(String lastName) {
-		return lastName != null && !lastName.trim().isEmpty();
-	}
+		if (userDTO.lastName() == null || userDTO.lastName().isEmpty()) {
+			throw new IllegalArgumentException("Last name cannot be empty.");
+		}
 
-	private boolean isDateOfBirthValid(LocalDateTime dateOfBirth) {
-		return dateOfBirth != null && dateOfBirth.isBefore(LocalDateTime.now().minusYears(1));
-	}
+		if (userDTO.dateOfBirth() == null) {
+			throw new IllegalArgumentException("Date of birth cannot be empty.");
+		}
 
-	private boolean isSocialNumberValid(String socialNumber) {
-		return socialNumber != null && socialNumber.length() == 11;
-	}
+		if (userDTO.socialNumber() == null || userDTO.socialNumber().isEmpty()) {
+			throw new IllegalArgumentException("Social number cannot be empty.");
+		}
 
-	private boolean isRoleValid(String role) {
-		return role != null && (role.equals("STUDENT") || role.equals("TEACHER"));
+		if (userDTO.socialNumber().length() != 11) {
+			throw new IllegalArgumentException("Social number must be exactly 11 characters long.");
+		}
+
+		if (userDTO.role() == null || userDTO.role().isEmpty()) {
+			throw new IllegalArgumentException("Role cannot be empty.");
+		}
+		return true;
 	}
 
 	public boolean isUserLoggedIn() {
-		return UserPreferences.getUserId() != -1;
+		if (UserPreferences.getUserId() != -1) {
+			UserEntity user = userDAO.findById(fetchCurrentUserId());
+			if (user == null) {
+				logout();
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean logout() {
@@ -163,6 +182,7 @@ public class UserModel {
 	public void deleteAllUsers() {
 		userDAO.deleteAll();
 		timetableDAO.deleteAll();
+		logout();
 	}
 
 	public boolean isCurrentUserTeacher() {

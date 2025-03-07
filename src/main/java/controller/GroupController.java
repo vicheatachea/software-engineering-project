@@ -34,8 +34,8 @@ public class GroupController {
 	}
 
 	// Update a group
-	public void updateGroup(GroupDTO groupDTO) {
-		groupModel.updateGroup(groupDTO);
+	public void updateGroup(GroupDTO groupDTO, String currentName) {
+		groupModel.updateGroup(groupDTO, currentName);
 	}
 
 	// Delete a group

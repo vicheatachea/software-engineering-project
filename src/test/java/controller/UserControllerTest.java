@@ -60,7 +60,7 @@ class UserControllerTest {
 	void registerUserWithInvalidData() {
 		UserDTO userDTO = new UserDTO("", "", "", "", LocalDateTime.now(), "", "");
 
-		assertThrows(IllegalArgumentException.class, () -> userController.registerUser(userDTO));
+		assertFalse(userController.registerUser(userDTO));
 	}
 
 	@Test

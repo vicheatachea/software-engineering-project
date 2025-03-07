@@ -235,6 +235,7 @@ public class GroupsController implements ControllerAware {
 
             String name = nameTextField.getText();
             String code = codeTextField.getText();
+            String currentName = groups.get(selectedIndex).name();
             String subjectCode = subjectComboBox.getValue();
 
             long userId = userController.fetchCurrentUserId();
@@ -257,7 +258,7 @@ public class GroupsController implements ControllerAware {
             }
 
             GroupDTO group = new GroupDTO(name, code, capacity, userId, subjectCode);
-            groupController.updateGroup(group);
+            groupController.updateGroup(group, currentName);
             loadGroups();
 
             itemView.getSelectionModel().select(selectedIndex);

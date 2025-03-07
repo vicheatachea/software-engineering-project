@@ -179,4 +179,19 @@ public class UserDAO {
 			}
 		}
 	}
+
+	public boolean findBySocialNumber(String socialNumber) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.createQuery("SELECT u FROM UserEntity u WHERE u.socialNumber = :socialNumber", UserEntity.class)
+			         .setParameter("socialNumber", socialNumber)
+			         .getSingleResult() != null;
+		} catch (NoResultException e) {
+			return false;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
 }

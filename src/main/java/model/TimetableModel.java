@@ -6,8 +6,10 @@ public class TimetableModel {
 
 	private static final TimetableDAO timetableDAO = new TimetableDAO();
 
+	private static final UserModel userModel = new UserModel();
+
 	public Long fetchTimetableForUser() {
-		long userId = UserPreferences.getUserId();
+		long userId = userModel.fetchCurrentUserId();
 
 		if (userId == -1) {
 			throw new IllegalArgumentException("User not found");
@@ -34,5 +36,6 @@ public class TimetableModel {
 
 	public void deleteAllTimetables() {
 		timetableDAO.deleteAll();
+		userModel.logout();
 	}
 }

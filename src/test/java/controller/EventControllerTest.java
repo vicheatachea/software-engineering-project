@@ -2,7 +2,6 @@ package controller;
 
 import datasource.MariaDBConnection;
 import dto.*;
-import model.UserPreferences;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +36,7 @@ class EventControllerTest {
 		eventController.deleteAllEvents();
 		locationController.deleteAllLocations();
 		subjectController.deleteAllSubjects();
+		userController.deleteAllUsers();
 		timetableController.deleteAllTimetables();
 		try {
 			Thread.sleep(0);
@@ -50,6 +50,7 @@ class EventControllerTest {
 		eventController.deleteAllEvents();
 		locationController.deleteAllLocations();
 		subjectController.deleteAllSubjects();
+		userController.deleteAllUsers();
 		timetableController.deleteAllTimetables();
 	}
 
@@ -58,23 +59,23 @@ class EventControllerTest {
 		                   "STUDENT");
 	}
 
-	UserDTO createTeacher(String username, String socialNumber) {
+	private static UserDTO createTeacher(String username, String socialNumber) {
 		return new UserDTO(username, "password", "John", "Doe", LocalDateTime.now().minusYears(32), socialNumber,
 		                   "TEACHER");
 	}
 
 	@Test
 	void fetchEventsByUser() {
-		UserDTO teacher = createTeacher("teacher", "987654321BA");
-		userController.registerUser(teacher);
-		userController.authenticateUser("teacher", "password");
-		long teacherId = UserPreferences.getUserId();
-		userController.logout();
-
 		UserDTO student = createStudent("student", "123456789AB");
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
-		long studentId = UserPreferences.getUserId();
+		long studentId = userController.fetchCurrentUserId();
+		userController.logout();
+
+		UserDTO teacher = createTeacher("teacher", "987654321BA");
+		userController.registerUser(teacher);
+		userController.authenticateUser("teacher", "password");
+		long teacherId = userController.fetchCurrentUserId();
 
 		LocationDTO location = new LocationDTO("B2005", "Metropolia Myllypuro", "Building B");
 		locationController.addLocation(location);
@@ -101,6 +102,9 @@ class EventControllerTest {
 		                                             subject.code(), "This is an assignment", groupTimetableId);
 
 		eventController.addEvent(assignment);
+
+		userController.logout();
+		userController.authenticateUser(student.username(), student.password());
 
 		assertEquals(2, eventController.fetchEventsByUser(LocalDateTime.parse("2023-09-01T10:00:00"),
 		                                                  LocalDateTime.parse("2023-11-01T12:00:00")).size());
@@ -108,16 +112,16 @@ class EventControllerTest {
 
 	@Test
 	void addEventTeachingSession() {
-		UserDTO teacher = createTeacher("teacher", "987654321BA");
-		userController.registerUser(teacher);
-		userController.authenticateUser("teacher", "password");
-		long teacherId = UserPreferences.getUserId();
-		userController.logout();
-
 		UserDTO student = createStudent("student", "123456789AB");
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
-		long studentId = UserPreferences.getUserId();
+		long studentId = userController.fetchCurrentUserId();
+		userController.logout();
+
+		UserDTO teacher = createTeacher("teacher", "987654321BA");
+		userController.registerUser(teacher);
+		userController.authenticateUser("teacher", "password");
+		long teacherId = userController.fetchCurrentUserId();
 
 		LocationDTO location = new LocationDTO("B2005", "Metropolia Myllypuro", "Building B");
 		locationController.addLocation(location);
@@ -139,21 +143,25 @@ class EventControllerTest {
 
 		eventController.addEvent(teachingSession);
 
-		assertEquals(1, eventController.fetchEventsByUser(teachingSession.startDate(), teachingSession.endDate()).size());
+		userController.logout();
+		userController.authenticateUser(student.username(), student.password());
+
+		assertEquals(1,
+		             eventController.fetchEventsByUser(teachingSession.startDate(), teachingSession.endDate()).size());
 	}
 
 	@Test
 	void addEventAssignment() {
-		UserDTO teacher = createTeacher("teacher", "987654321BA");
-		userController.registerUser(teacher);
-		userController.authenticateUser("teacher", "password");
-		long teacherId = UserPreferences.getUserId();
-		userController.logout();
-
 		UserDTO student = createStudent("student", "123456789AB");
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
-		long studentId = UserPreferences.getUserId();
+		long studentId = userController.fetchCurrentUserId();
+		userController.logout();
+
+		UserDTO teacher = createTeacher("teacher", "987654321BA");
+		userController.registerUser(teacher);
+		userController.authenticateUser("teacher", "password");
+		long teacherId = userController.fetchCurrentUserId();
 
 		LocationDTO location = new LocationDTO("B2005", "Metropolia Myllypuro", "Building B");
 		locationController.addLocation(location);
@@ -174,21 +182,24 @@ class EventControllerTest {
 
 		eventController.addEvent(assignment);
 
+		userController.logout();
+		userController.authenticateUser(student.username(), student.password());
+
 		assertEquals(1, eventController.fetchEventsByUser(assignment.publishingDate(), assignment.deadline()).size());
 	}
 
 	@Test
 	void updateEventTeachingSession() {
-		UserDTO teacher = createTeacher("teacher", "987654321BA");
-		userController.registerUser(teacher);
-		userController.authenticateUser("teacher", "password");
-		long teacherId = UserPreferences.getUserId();
-		userController.logout();
-
 		UserDTO student = createStudent("student", "123456789AB");
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
-		long studentId = UserPreferences.getUserId();
+		long studentId = userController.fetchCurrentUserId();
+		userController.logout();
+
+		UserDTO teacher = createTeacher("teacher", "987654321BA");
+		userController.registerUser(teacher);
+		userController.authenticateUser("teacher", "password");
+		long teacherId = userController.fetchCurrentUserId();
 
 		LocationDTO location = new LocationDTO("B2005", "Metropolia Myllypuro", "Building B");
 		locationController.addLocation(location);
@@ -213,6 +224,9 @@ class EventControllerTest {
 		SubjectDTO newSubject = new SubjectDTO("MATH", "MATH101");
 		subjectController.addSubject(newSubject);
 
+		userController.logout();
+		userController.authenticateUser(student.username(), student.password());
+
 		TeachingSessionDTO foundTeachingSession = (TeachingSessionDTO) eventController
 				.fetchEventsByUser(teachingSession.startDate(), teachingSession.endDate()).getFirst();
 
@@ -221,11 +235,16 @@ class EventControllerTest {
 				                       LocalDateTime.parse("2023-12-03T13:54:34"), null, newSubject.code(),
 				                       "This is an updated teaching Session", groupTimetableId);
 
+		userController.logout();
+		userController.authenticateUser(teacher.username(), teacher.password());
+
 		eventController.updateEvent(updatedTeachingSession);
+
+		userController.logout();
+		userController.authenticateUser(student.username(), student.password());
 
 		TeachingSessionDTO fetchedTeachingSession = (TeachingSessionDTO) eventController
 				.fetchEventsByUser(updatedTeachingSession.startDate(), updatedTeachingSession.endDate()).getFirst();
-
 
 		assertEquals(1, eventController
 				.fetchEventsByUser(updatedTeachingSession.startDate(), updatedTeachingSession.endDate()).size());
@@ -237,16 +256,16 @@ class EventControllerTest {
 
 	@Test
 	void updateEventAssignment() {
-		UserDTO teacher = createTeacher("teacher", "987654321BA");
-		userController.registerUser(teacher);
-		userController.authenticateUser("teacher", "password");
-		long teacherId = UserPreferences.getUserId();
-		userController.logout();
-
 		UserDTO student = createStudent("student", "123456789AB");
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
-		long studentId = UserPreferences.getUserId();
+		long studentId = userController.fetchCurrentUserId();
+		userController.logout();
+
+		UserDTO teacher = createTeacher("teacher", "987654321BA");
+		userController.registerUser(teacher);
+		userController.authenticateUser("teacher", "password");
+		long teacherId = userController.fetchCurrentUserId();
 
 		LocationDTO location = new LocationDTO("B2005", "Metropolia Myllypuro", "Building B");
 		locationController.addLocation(location);
@@ -267,9 +286,15 @@ class EventControllerTest {
 
 		eventController.addEvent(assignment);
 
+		userController.logout();
+		userController.authenticateUser(student.username(), student.password());
+
 		AssignmentDTO foundAssignment =
 				(AssignmentDTO) eventController.fetchEventsByUser(assignment.publishingDate(), assignment.deadline())
 				                               .getFirst();
+
+		userController.logout();
+		userController.authenticateUser(teacher.username(), teacher.password());
 
 		SubjectDTO newSubject = new SubjectDTO("MATH", "MATH101");
 		subjectController.addSubject(newSubject);
@@ -279,7 +304,10 @@ class EventControllerTest {
 				                  LocalDateTime.parse("2023-12-03T13:54:34"), "Assignment 2", newSubject.code(),
 				                  "This is an updated assignment", groupTimetableId);
 
-			eventController.updateEvent(updatedAssignment);
+		eventController.updateEvent(updatedAssignment);
+
+		userController.logout();
+		userController.authenticateUser(student.username(), student.password());
 
 		AssignmentDTO fetchedAssignment = (AssignmentDTO) eventController
 				.fetchEventsByUser(updatedAssignment.publishingDate(), updatedAssignment.deadline()).getFirst();
@@ -293,16 +321,16 @@ class EventControllerTest {
 
 	@Test
 	void deleteEventTeachingSession() {
-		UserDTO teacher = createTeacher("teacher", "987654321BA");
-		userController.registerUser(teacher);
-		userController.authenticateUser("teacher", "password");
-		long teacherId = UserPreferences.getUserId();
-		userController.logout();
-
 		UserDTO student = createStudent("student", "123456789AB");
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
-		long studentId = UserPreferences.getUserId();
+		long studentId = userController.fetchCurrentUserId();
+		userController.logout();
+
+		UserDTO teacher = createTeacher("teacher", "987654321BA");
+		userController.registerUser(teacher);
+		userController.authenticateUser("teacher", "password");
+		long teacherId = userController.fetchCurrentUserId();
 
 		LocationDTO location = new LocationDTO("B2005", "Metropolia Myllypuro", "Building B");
 		locationController.addLocation(location);
@@ -324,10 +352,19 @@ class EventControllerTest {
 
 		eventController.addEvent(teachingSession);
 
+		userController.logout();
+		userController.authenticateUser(student.username(), student.password());
+
 		teachingSession = (TeachingSessionDTO) eventController
 				.fetchEventsByUser(teachingSession.startDate(), teachingSession.endDate()).getFirst();
 
+		userController.logout();
+		userController.authenticateUser(teacher.username(), teacher.password());
+
 		eventController.deleteEvent(teachingSession);
+
+		userController.logout();
+		userController.authenticateUser(student.username(), student.password());
 
 		assertEquals(0,
 		             eventController.fetchEventsByUser(teachingSession.startDate(), teachingSession.endDate()).size());
@@ -335,16 +372,16 @@ class EventControllerTest {
 
 	@Test
 	void deleteEventAssignment() {
-		UserDTO teacher = createTeacher("teacher", "987654321BA");
-		userController.registerUser(teacher);
-		userController.authenticateUser("teacher", "password");
-		long teacherId = UserPreferences.getUserId();
-		userController.logout();
-
 		UserDTO student = createStudent("student", "123456789AB");
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
-		long studentId = UserPreferences.getUserId();
+		long studentId = userController.fetchCurrentUserId();
+		userController.logout();
+
+		UserDTO teacher = createTeacher("teacher", "987654321BA");
+		userController.registerUser(teacher);
+		userController.authenticateUser("teacher", "password");
+		long teacherId = userController.fetchCurrentUserId();
 
 		LocationDTO location = new LocationDTO("B2005", "Metropolia Myllypuro", "Building B");
 		locationController.addLocation(location);
@@ -365,11 +402,20 @@ class EventControllerTest {
 
 		eventController.addEvent(assignment);
 
+		userController.logout();
+		userController.authenticateUser(student.username(), student.password());
+
 		assignment =
 				(AssignmentDTO) eventController.fetchEventsByUser(assignment.publishingDate(), assignment.deadline())
 				                               .getFirst();
 
+		userController.logout();
+		userController.authenticateUser(teacher.username(), teacher.password());
+
 		eventController.deleteEvent(assignment);
+
+		userController.logout();
+		userController.authenticateUser(student.username(), student.password());
 
 		assertEquals(0, eventController.fetchEventsByUser(assignment.publishingDate(), assignment.deadline()).size());
 	}
