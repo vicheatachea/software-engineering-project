@@ -140,9 +140,28 @@ public class GroupsController implements ControllerAware {
             return;
         }
 
+        int capacity;
+        try {
+             capacity = Integer.parseInt(capacityTextField.getText());
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Capacity must be a number.");
+            alert.showAndWait();
+            return;
+        }
+        if (capacity < 1) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Capacity must be greater than 0.");
+            alert.showAndWait();
+            return;
+        }
+
         String name = nameTextField.getText();
         String code = codeTextField.getText();
-        int capacity = Integer.parseInt(capacityTextField.getText());
         String subjectCode = subjectComboBox.getValue();
 
         for (GroupDTO group : groups) {
@@ -194,9 +213,28 @@ public class GroupsController implements ControllerAware {
 
         int selectedIndex = itemView.getSelectionModel().getSelectedIndex();
         if (selectedIndex != -1) {
+            int capacity;
+            try {
+                capacity = Integer.parseInt(capacityTextField.getText());
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Capacity must be a number.");
+                alert.showAndWait();
+                return;
+            }
+            if (capacity < 1) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Capacity must be greater than 0.");
+                alert.showAndWait();
+                return;
+            }
+
             String name = nameTextField.getText();
             String code = codeTextField.getText();
-            int capacity = Integer.parseInt(capacityTextField.getText());
             String subjectCode = subjectComboBox.getValue();
 
             long userId = userController.fetchCurrentUserId();
@@ -318,6 +356,6 @@ public class GroupsController implements ControllerAware {
     }
 
     private boolean areFieldsEmpty() {
-        return nameTextField.getText().isEmpty() || codeTextField.getText().isEmpty() || capacityTextField.getText().isEmpty() || subjectComboBox.getValue().isEmpty();
+        return nameTextField.getText().isEmpty() || codeTextField.getText().isEmpty() || capacityTextField.getText().isEmpty() || subjectComboBox.getValue() == null;
     }
 }
