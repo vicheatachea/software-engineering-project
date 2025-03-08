@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -151,6 +152,43 @@ class GroupControllerTest {
 		groupController.addGroup(group);
 
 		assertEquals(group, groupController.fetchGroupByName("Group1"));
+	}
+
+	@Test
+	void fetchAllStudentsByGroupName() {
+		UserDTO teacher = createTeacher("teacher", "123456789AB");
+
+		userController.registerUser(teacher);
+		userController.authenticateUser(teacher.username(), teacher.password());
+		long teacherId = userController.fetchCurrentUserId();
+
+		SubjectDTO subject = createSubject("ICT", "ICT101");
+		subjectController.addSubject(subject);
+
+		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, "ICT101");
+		groupController.addGroup(group);
+
+		List<UserDTO> students = List.of(
+				createStudent("student1", "BA123456789"),
+				createStudent("student2", "BA987654321"),
+				createStudent("student3", "BA654321987"),
+				createStudent("student4", "BA321987654"),
+				createStudent("student5", "BA789654321")
+		);
+
+		for (UserDTO student : students) {
+			userController.registerUser(student);
+			userController.authenticateUser(student.username(), student.password());
+			long studentId = userController.fetchCurrentUserId();
+			userController.logout();
+			userController.authenticateUser(teacher.username(), teacher.password());
+			groupController.addStudentToGroup(group, studentId);
+			userController.logout();
+		}
+
+		userController.fetchStudentsInGroup(group.name()).forEach(userDTO -> {
+			assertTrue(students.stream().anyMatch(student -> student.username().equals(userDTO.username())));
+		});
 	}
 
 	@Test
