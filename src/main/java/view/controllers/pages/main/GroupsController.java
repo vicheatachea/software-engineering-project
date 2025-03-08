@@ -6,6 +6,7 @@ import controller.SubjectController;
 import controller.UserController;
 import dto.GroupDTO;
 import dto.SubjectDTO;
+import dto.UserDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -15,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import view.controllers.ControllerAware;
 
 import java.awt.*;
@@ -41,6 +43,11 @@ public class GroupsController implements ControllerAware {
     private TextField codeTextField;
     private TextField capacityTextField;
     private ComboBox<String> subjectComboBox;
+
+    private ComboBox<String> addStudentComboBox = new ComboBox<>();
+    private Button addStudentButton = new Button("Add Student");
+    private ComboBox<String> removeStudentComboBox = new ComboBox<>();
+    private Button removeStudentButton = new Button("Remove Student");
 
     @FXML
     private Label titleLabel;
@@ -73,14 +80,14 @@ public class GroupsController implements ControllerAware {
 
         for (String key : components.keySet()) {
             Label label = new Label(key + ":");
-            label.setFont(new javafx.scene.text.Font("Arial", 18));
+            label.setFont(new Font("Arial", 18));
 
             componentGrid.add(label, 0, rowIndex);
 
             switch (components.get(key)) {
                 case "field" -> {
                     TextField textField = new TextField();
-                    textField.setFont(new javafx.scene.text.Font("Arial", 16));
+                    textField.setFont(new Font("Arial", 16));
                     textField.setPromptText("Enter " + key);
                     textField.setId(key.toLowerCase() + "TextField");
 
@@ -100,33 +107,27 @@ public class GroupsController implements ControllerAware {
 
         HBox addHBox = new HBox();
         Label addLabel = new Label("Add Student:");
-        addLabel.setFont(new javafx.scene.text.Font("Arial", 18));
+        addLabel.setFont(new Font("Arial", 18));
 
-        ComboBox<String> addComboBox = new ComboBox<>();
-        addComboBox.setStyle("-fx-font: 16px \"Arial\";");
-        addComboBox.setPromptText("Select Student");
-        addComboBox.setId("addStudentComboBox");
+        addStudentComboBox.setStyle("-fx-font: 16px \"Arial\";");
+        addStudentComboBox.setPromptText("Select Student");
 
-        Button addStudentButton = new Button("Add Student");
-        addStudentButton.setFont(new javafx.scene.text.Font("Arial", 16));
-        addStudentButton.setId("addStudentButton");
+        addStudentButton.setFont(new Font("Arial", 16));
+        addStudentButton.setOnAction(event -> handleAddStudent());
 
-        addHBox.getChildren().addAll(addComboBox, addStudentButton);
+        addHBox.getChildren().addAll(addStudentComboBox, addStudentButton);
 
         HBox removeHBox = new HBox();
         Label removeLabel = new Label("Remove Student:");
-        removeLabel.setFont(new javafx.scene.text.Font("Arial", 18));
+        removeLabel.setFont(new Font("Arial", 18));
 
-        ComboBox<String> removeComboBox = new ComboBox<>();
-        removeComboBox.setStyle("-fx-font: 16px \"Arial\";");
-        removeComboBox.setPromptText("Select Student");
-        removeComboBox.setId("removeStudentComboBox");
+        removeStudentComboBox.setStyle("-fx-font: 16px \"Arial\";");
+        removeStudentComboBox.setPromptText("Select Student");
 
-        Button removeStudentButton = new Button("Remove Student");
-        removeStudentButton.setFont(new javafx.scene.text.Font("Arial", 16));
-        removeStudentButton.setId("removeStudentButton");
+        removeStudentButton.setFont(new Font("Arial", 16));
+        removeStudentButton.setOnAction(event -> handleRemoveStudent());
 
-        removeHBox.getChildren().addAll(removeComboBox, removeStudentButton);
+        removeHBox.getChildren().addAll(removeStudentComboBox, removeStudentButton);
 
         componentGrid.add(addLabel, 0, rowIndex);
         componentGrid.add(addHBox, 1, rowIndex);
@@ -373,8 +374,49 @@ public class GroupsController implements ControllerAware {
             subjectComboBox.setValue(group.subjectCode());
 
             changeButtonVisibility(true);
+            updateStudentBoxes();
             currentIndex = selectedIndex;
         }
+    }
+
+    private void handleAddStudent() {
+        if (addStudentComboBox.getValue() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a student to add.");
+            alert.showAndWait();
+            return;
+        }
+
+        String groupName = itemView.getSelectionModel().getSelectedItem();
+        GroupDTO group = groupController.fetchGroupByName(groupName);
+
+        String studentUsername = addStudentComboBox.getValue();
+        groupController.addStudentToGroup(group, studentUsername);
+        updateStudentBoxes();
+    }
+
+    private void handleRemoveStudent() {
+        if (removeStudentComboBox.getValue() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a student to remove.");
+            alert.showAndWait();
+            return;
+        }
+
+        String groupName = itemView.getSelectionModel().getSelectedItem();
+        GroupDTO group = groupController.fetchGroupByName(groupName);
+
+        String studentUsername = removeStudentComboBox.getValue();
+        groupController.removeStudentFromGroup(group, studentUsername);
+        updateStudentBoxes();
+    }
+
+    private void updateStudentBoxes() {
+
     }
 
     private void clearFields() {
