@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -90,9 +91,6 @@ class SubjectControllerTest {
 		userController.registerUser(student);
 		userController.authenticateUser(student.username(), student.password());
 
-		// Fetch timetableId for student
-		long studentId = userController.fetchCurrentUserId();
-
 		// Log out student
 		userController.logout();
 
@@ -112,7 +110,7 @@ class SubjectControllerTest {
 
 		groupController.addGroup(group);
 
-		groupController.addStudentToGroup(group, studentId);
+		groupController.addStudentToGroup(group, student.username());
 
 		long groupTimetableId = timetableController.fetchTimetableForGroup(group.name());
 
@@ -123,10 +121,19 @@ class SubjectControllerTest {
 
 		eventController.addEvent(teachingSessionDTO);
 
+		List<SubjectDTO> foundTeacherSubject = subjectController.fetchSubjectsByUser();
+
+		assertNotNull(foundTeacherSubject);
+
 		userController.logout();
+
 		userController.authenticateUser(student.username(), student.password());
 
-		assertNotNull(subjectController.fetchSubjectsByUser());
+		List<SubjectDTO> foundStudentSubject = subjectController.fetchSubjectsByUser();
+
+		assertNotNull(foundStudentSubject);
+
+		assertEquals(foundTeacherSubject, foundStudentSubject);
 	}
 
 	@Test

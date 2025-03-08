@@ -68,6 +68,7 @@ public class LocationsController implements ControllerAware {
 
 			componentGrid.add(label, 0, i);
 			componentGrid.add(textField, 1, i);
+			i++;
 		}
 
 		Platform.runLater(() -> {

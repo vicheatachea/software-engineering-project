@@ -1,9 +1,11 @@
 package controller;
 
 import dto.GroupDTO;
+import dto.UserDTO;
 import model.GroupModel;
 
 import java.util.List;
+import java.util.Set;
 
 public class GroupController {
 	private final GroupModel groupModel = new GroupModel();
@@ -44,12 +46,17 @@ public class GroupController {
 	}
 
 	// Add a student to a group
-	public void addStudentToGroup(GroupDTO groupDTO, long studentId) {
-		groupModel.addStudentToGroup(groupDTO, studentId);
+	public void addStudentToGroup(GroupDTO groupDTO, String studentUsername) {
+		groupModel.addStudentToGroup(groupDTO, studentUsername);
 	}
 
 	// Remove a student from a group
-	public void removeStudentFromGroup(GroupDTO groupDTO, long studentId) {
-		groupModel.removeStudentFromGroup(groupDTO, studentId);
+	public void removeStudentFromGroup(GroupDTO groupDTO, String studentUsername) {
+		groupModel.removeStudentFromGroup(groupDTO, studentUsername);
+	}
+
+	public Set<UserDTO> fetchAllStudentsByGroup(GroupDTO groupDTO) {
+		// Placeholder
+		return null;
 	}
 }

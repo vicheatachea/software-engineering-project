@@ -16,13 +16,14 @@ class UserControllerTest {
 
 	private static final UserController userController = new UserController();
 
-	UserDTO createUserDTO(String username, String socialNumber) {
-		String password = "testPassword";
-		String firstName = "Test";
-		String lastName = "User";
-		LocalDateTime dateOfBirth = LocalDateTime.of(2000, 1, 1, 0, 0);
-		String role = "STUDENT";
-		return new UserDTO(username, password, firstName, lastName, dateOfBirth, socialNumber, role);
+	UserDTO createStudentDTO(String username, String socialNumber) {
+		return new UserDTO(username, "testPassword", "Test", "User", LocalDateTime.of(2000, 1, 1, 0, 0), socialNumber,
+		                   "STUDENT");
+	}
+
+	UserDTO createTeacherDTO(String username, String socialNumber) {
+		return new UserDTO(username, "testPassword", "Test", "User", LocalDateTime.of(2000, 1, 1, 0, 0), socialNumber,
+		                   "TEACHER");
 	}
 
 	@BeforeAll
@@ -51,7 +52,7 @@ class UserControllerTest {
 
 	@Test
 	void registerUser() {
-		UserDTO userDTO = createUserDTO("username", "123456789ab");
+		UserDTO userDTO = createStudentDTO("username", "123456789ab");
 
 		assertTrue(userController.registerUser(userDTO));
 	}
@@ -65,7 +66,7 @@ class UserControllerTest {
 
 	@Test
 	void authenticateUser() {
-		UserDTO userDTO = createUserDTO("username", "123456789ab");
+		UserDTO userDTO = createStudentDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
 		assertTrue(userController.authenticateUser(userDTO.username(), userDTO.password()));
@@ -73,7 +74,7 @@ class UserControllerTest {
 
 	@Test
 	void authenticateUserWithInvalidPassword() {
-		UserDTO userDTO = createUserDTO("username", "123456789ab");
+		UserDTO userDTO = createStudentDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
 		assertThrows(IllegalArgumentException.class,
@@ -82,7 +83,7 @@ class UserControllerTest {
 
 	@Test
 	void authenticateUserWithInvalidCredentials() {
-		UserDTO userDTO = createUserDTO("username", "123456789ab");
+		UserDTO userDTO = createStudentDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
 		assertThrows(IllegalArgumentException.class,
@@ -91,7 +92,7 @@ class UserControllerTest {
 
 	@Test
 	void isUserLoggedIn() {
-		UserDTO userDTO = createUserDTO("username", "123456789ab");
+		UserDTO userDTO = createStudentDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
 		assertTrue(userController.authenticateUser(userDTO.username(), userDTO.password()));
@@ -99,8 +100,16 @@ class UserControllerTest {
 	}
 
 	@Test
+	void isUserLoggedInWithoutAuthentication() {
+		UserDTO userDTO = createStudentDTO("username", "123456789ab");
+		userController.registerUser(userDTO);
+
+		assertFalse(userController.isUserLoggedIn());
+	}
+
+	@Test
 	void getLoggedInUser() {
-		UserDTO userDTO = createUserDTO("username", "123456789ab");
+		UserDTO userDTO = createStudentDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
 		assertTrue(userController.authenticateUser(userDTO.username(), userDTO.password()));
@@ -109,7 +118,7 @@ class UserControllerTest {
 
 	@Test
 	void updateUser() {
-		UserDTO userDTO = createUserDTO("username", "123456789ab");
+		UserDTO userDTO = createStudentDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
 		assertTrue(userController.authenticateUser(userDTO.username(), userDTO.password()));
@@ -125,7 +134,7 @@ class UserControllerTest {
 
 	@Test
 	void updateUserWithInvalidData() {
-		UserDTO userDTO = createUserDTO("username", "123456789ab");
+		UserDTO userDTO = createStudentDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
 		assertTrue(userController.authenticateUser(userDTO.username(), userDTO.password()));
@@ -135,7 +144,7 @@ class UserControllerTest {
 
 	@Test
 	void updateUserWithUserNotLoggedIn() {
-		UserDTO userDTO = createUserDTO("username", "123456789ab");
+		UserDTO userDTO = createStudentDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
 		assertThrows(IllegalArgumentException.class,
@@ -144,7 +153,7 @@ class UserControllerTest {
 
 	@Test
 	void logout() {
-		UserDTO userDTO = createUserDTO("username", "123456789ab");
+		UserDTO userDTO = createStudentDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
 		assertTrue(userController.authenticateUser(userDTO.username(), userDTO.password()));
@@ -157,7 +166,7 @@ class UserControllerTest {
 
 	@Test
 	void isUsernameTaken() {
-		UserDTO userDTO = createUserDTO("username", "123456789ab");
+		UserDTO userDTO = createStudentDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
 		assertTrue(userController.isUsernameTaken(userDTO.username()));
@@ -166,15 +175,32 @@ class UserControllerTest {
 
 	@Test
 	void fetchAllStudents() {
-		UserDTO userDTO = createUserDTO("username", "123456789ab");
+		UserDTO userDTO = createStudentDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
-		UserDTO userDTO2 = createUserDTO("username2", "ba987654321");
+		UserDTO userDTO2 = createStudentDTO("username2", "ba987654321");
 		userController.registerUser(userDTO2);
 
 		assertTrue(userController.authenticateUser(userDTO.username(), userDTO.password()));
 		assertTrue(userController.authenticateUser(userDTO2.username(), userDTO2.password()));
 
 		assertFalse(userController.fetchAllStudents().isEmpty());
+	}
+
+	@Test
+	void isCurrentUserTeacher() {
+		UserDTO userDTO = createStudentDTO("username", "123456789ab");
+		userController.registerUser(userDTO);
+
+		assertTrue(userController.authenticateUser(userDTO.username(), userDTO.password()));
+
+		assertFalse(userController.isCurrentUserTeacher());
+
+		UserDTO teacherDTO = createTeacherDTO("teacherUsername", "ba987654321");
+		userController.registerUser(teacherDTO);
+
+		assertTrue(userController.authenticateUser(teacherDTO.username(), teacherDTO.password()));
+
+		assertTrue(userController.isCurrentUserTeacher());
 	}
 }

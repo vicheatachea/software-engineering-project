@@ -65,7 +65,7 @@ public class SubjectDAO {
 					         "SELECT DISTINCT s FROM SubjectEntity s WHERE " +
 					         "s IN (SELECT g.subject FROM UserGroupEntity g JOIN g.students u WHERE u.id = :userId) " +
 					         "OR " +
-					         "s IN (SELECT ts.subject FROM TeachingSessionEntity ts JOIN ts.teachers t WHERE t.id = :userId)",
+					         "s IN (SELECT g.subject FROM UserGroupEntity g WHERE g.teacher.id = :userId) ",
 					         SubjectEntity.class)
 			         .setParameter("userId", userId)
 			         .getResultList();

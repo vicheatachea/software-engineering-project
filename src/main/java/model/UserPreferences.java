@@ -5,7 +5,11 @@ import entity.Role;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-public class UserPreferences {
+public final class UserPreferences {
+	private UserPreferences() {
+		// Prevent instantiation
+	}
+
 	private static final String USER_ID_KEY = "user_id";
 	private static final String ROLE = "role";
 	private static final Preferences preferences = Preferences.userNodeForPackage(UserPreferences.class);
@@ -27,7 +31,14 @@ public class UserPreferences {
 	}
 
 	// Delete the user ID
-	public static void deleteUser() throws BackingStoreException {
-		preferences.clear();
+	public static void deleteUser() {
+		try {
+			preferences.clear();
+		} catch (BackingStoreException e) {
+			throw new IllegalArgumentException("Failed to delete user preferences");
+		} finally {
+			preferences.put(USER_ID_KEY, "-1");
+			preferences.put(ROLE, "STUDENT");
+		}
 	}
 }
