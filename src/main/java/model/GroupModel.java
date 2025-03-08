@@ -136,7 +136,7 @@ public class GroupModel {
 	}
 
 	// Adds a student to a group
-	public void addStudentToGroup(GroupDTO groupDTO, long studentId) {
+	public void addStudentToGroup(GroupDTO groupDTO, String studentUsername) {
 		if (!userModel.isCurrentUserTeacher()) {
 			throw new IllegalArgumentException("Only teachers can add student to group");
 		}
@@ -151,7 +151,7 @@ public class GroupModel {
 			throw new IllegalArgumentException("Group is full.");
 		}
 
-		UserEntity student = userDAO.findStudentById(studentId);
+		UserEntity student = userDAO.findByUsername(studentUsername);
 
 		if (student == null) {
 			throw new IllegalArgumentException("Student does not exist.");
@@ -167,7 +167,7 @@ public class GroupModel {
 
 	}
 
-	public void removeStudentFromGroup(GroupDTO groupDTO, long studentId) {
+	public void removeStudentFromGroup(GroupDTO groupDTO, String studentUsername) {
 		if (!userModel.isCurrentUserTeacher()) {
 			throw new IllegalArgumentException("Only teachers can remove student from group");
 		}
@@ -178,7 +178,7 @@ public class GroupModel {
 			throw new IllegalArgumentException("Group does not exist.");
 		}
 
-		UserEntity user = userDAO.findStudentById(studentId);
+		UserEntity user = userDAO.findByUsername(studentUsername);
 
 		if (user == null) {
 			throw new IllegalArgumentException("Student does not exist.");
