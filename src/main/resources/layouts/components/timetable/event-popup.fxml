@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.components.EventPopupController">
+<VBox styleClass="event-popup-vbox" stylesheets="@event-popup.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.components.EventPopupController">
    <children>
       <GridPane fx:id="popupGridPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" vgap="30.0">
         <columnConstraints>
@@ -33,16 +33,16 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Event Type" />
-            <Label fx:id="startLabel" text="Start Date" GridPane.rowIndex="1" />
-            <Label fx:id="endLabel" text="End Date" GridPane.rowIndex="2" />
-            <Label text="Schedule for" GridPane.rowIndex="3" />
-            <Label fx:id="groupLabel" text="Group" GridPane.rowIndex="4" />
-            <Label text="Subject" GridPane.rowIndex="5" />
-            <Label fx:id="nameLabel" text="Name" GridPane.rowIndex="6" />
-            <Label fx:id="assignmentLabel" text="Assignment Type" GridPane.rowIndex="7" />
-            <Label fx:id="locationLabel" text="Location" GridPane.rowIndex="8" />
-            <Label text="Description" GridPane.rowIndex="9" />
+            <Label styleClass="event-label" text="Event Type" />
+            <Label fx:id="startLabel" styleClass="start-label" text="Start Date" GridPane.rowIndex="1" />
+            <Label fx:id="endLabel" styleClass="end-label" text="End Date" GridPane.rowIndex="2" />
+            <Label styleClass="schedule-for" text="Schedule For" GridPane.rowIndex="3" />
+            <Label fx:id="groupLabel" styleClass="group-label" text="Group" GridPane.rowIndex="4" />
+            <Label styleClass="subject-label" text="Subject" GridPane.rowIndex="5" />
+            <Label fx:id="nameLabel" styleClass="name-label" text="Name" GridPane.rowIndex="6" />
+            <Label fx:id="assignmentLabel" styleClass="assignment-label" text="Assignment Type" GridPane.rowIndex="7" />
+            <Label fx:id="locationLabel" styleClass="location-label" text="Location" GridPane.rowIndex="8" />
+            <Label styleClass="description-label" text="Description" GridPane.rowIndex="9" />
             <HBox fx:id="startHBox" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
                   <DatePicker fx:id="startDatePicker" />

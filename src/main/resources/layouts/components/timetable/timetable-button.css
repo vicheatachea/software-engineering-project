@@ -2,5 +2,8 @@
     -fx-background-color: #e36486;
     -fx-text-fill: white;
     -fx-background-radius: 10px;
-    -fx-border-radius: 10px;
+}
+
+.timetable-button .effect{
+    -fx-effect: dropshadow(gaussian, rgba(246,144,166,0.8), 2, 0.5, 1.5, 1.5);
 }

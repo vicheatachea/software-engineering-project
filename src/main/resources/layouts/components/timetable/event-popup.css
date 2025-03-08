@@ -1,0 +1,23 @@
+.event-popup-vbox {
+        -fx-background-color: #FFE0E9;
+        -fx-padding: 30px;
+        -fx-border-radius: 0 0 10px 10px;
+        -fx-background-radius: 0 0 10px 10px;
+}
+
+.event-label,
+.start-label,
+.end-label,
+.location-label,
+.description-label,
+.schedule-for,
+.group-label,
+.name-label,
+.subject-label,
+.assignment-label,
+.location-button{
+    --block-font-family: 'Verdana';
+    -fx-text-fill: #e36486;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}

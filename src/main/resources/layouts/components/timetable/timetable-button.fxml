@@ -3,4 +3,4 @@
 <?import javafx.scene.control.Button?>
 
 
-<Button mnemonicParsing="false" stylesheets="@timetable-button.css" text="Button" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" />
+<Button mnemonicParsing="false" stylesheets="@timetable-button.css"  styleClass="timetable-button" text="Button" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" />
