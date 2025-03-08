@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@general-page.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <HBox BorderPane.alignment="CENTER">
          <children>
@@ -38,16 +38,16 @@
                   </GridPane>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="newButton" minWidth="70.0" mnemonicParsing="false" onAction="#handleNew" text="New Note">
+                        <Button fx:id="newButton" minWidth="120.0" mnemonicParsing="false" onAction="#handleNew" text="New Note">
                            <font>
                               <Font size="18.0" />
                            </font></Button>
                         <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="addButton" minWidth="70.0" mnemonicParsing="false" onAction="#handleAdd" text="Add Note">
+                        <Button fx:id="addButton" minWidth="120.0" mnemonicParsing="false" onAction="#handleAdd" text="Add Note">
                            <font>
                               <Font size="18.0" />
                            </font></Button>
-                        <Button fx:id="saveButton" minWidth="90.0" mnemonicParsing="false" onAction="#handleSave" text="Save Changes">
+                        <Button fx:id="saveButton" minWidth="120.0" mnemonicParsing="false" onAction="#handleSave" text="Save Changes">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -55,7 +55,7 @@
                               <Insets />
                            </HBox.margin></Button>
                         <Region fx:id="optionalRegion" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="deleteButton" minWidth="80.0" mnemonicParsing="false" onAction="#handleDelete" text="Delete Note">
+                        <Button fx:id="deleteButton" minWidth="140.0" mnemonicParsing="false" onAction="#handleDelete" text="Delete Note">
                            <font>
                               <Font size="18.0" />
                            </font></Button>
