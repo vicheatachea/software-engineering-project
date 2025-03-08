@@ -23,6 +23,7 @@ import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class GroupsController implements ControllerAware {
     private GroupController groupController;
@@ -416,7 +417,20 @@ public class GroupsController implements ControllerAware {
     }
 
     private void updateStudentBoxes() {
+        addStudentComboBox.getItems().clear();
+        removeStudentComboBox.getItems().clear();
 
+        UserDTO currentUser = userController.getLoggedInUser();
+        List<UserDTO> students = userController.fetchAllStudents();
+        Set<UserDTO> groupStudents = groupController.fetchAllStudentsByGroup(groups.get(currentIndex));
+
+        students.forEach(student -> {
+            if (!student.username().equals(currentUser.username()) && student.role().equals("STUDENT")) {
+                addStudentComboBox.getItems().add(student.username());
+            }
+        });
+
+        groupStudents.forEach(student -> removeStudentComboBox.getItems().add(student.username()));
     }
 
     private void clearFields() {
