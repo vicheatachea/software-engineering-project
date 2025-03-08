@@ -1,0 +1,6 @@
+.timetable-button {
+    -fx-background-color: #e36486;
+    -fx-text-fill: white;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+}

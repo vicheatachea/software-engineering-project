@@ -1,8 +1,9 @@
 .user-profile-vbox {
-    -fx-background-color: #FFE0E9;
+    -fx-background-color: linear-gradient(to bottom, #FFE0E9, #F690A6);
     -fx-padding: 30px;
-    -fx-border-radius: 0 0 15px 15px;
-    -fx-background-radius: 0 0 15px 15px;
+    -fx-align-items: center;
+    -fx-border-radius: 0 0 10px 10px;
+    -fx-background-radius: 0 0 10px 10px;
 }
 
 .profile-image {
@@ -10,15 +11,22 @@
     -fx-background-radius: 50%;
 }
 
-.name-label, .role-label, .social-number-label {
+.name-label,
+.role-label,
+.email-label {
     -fx-font-size: 18px;
-    -fx-text-fill: #ff6b81;
+    -fx-text-fill: #e36486;
+    -fx-alignment: center;
 }
 
 .logout-button {
-    -fx-background-color: #FF6B81;
+    -fx-background-color: #e36486;
     -fx-text-fill: white;
     -fx-background-radius: 10px;
     -fx-pref-width: 140px;
     -fx-pref-height: 35px;
+}
+
+.logout-button .effect {
+    -fx-effect: dropshadow(gaussian, rgba(246,144,166,0.8), 2, 0.5, 1.5, 1.5);
 }
