@@ -9,14 +9,12 @@ import dto.SubjectDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import view.controllers.ControllerAware;
 
 import java.awt.*;
@@ -37,6 +35,7 @@ public class GroupsController implements ControllerAware {
     }};
     private boolean isEditingMode;
     private int currentIndex;
+    private int rowIndex = 0;
 
     private TextField nameTextField;
     private TextField codeTextField;
@@ -72,12 +71,11 @@ public class GroupsController implements ControllerAware {
         saveButton.setText("Save " + title);
         deleteButton.setText("Delete " + title);
 
-        int i = 0;
         for (String key : components.keySet()) {
             Label label = new Label(key + ":");
             label.setFont(new javafx.scene.text.Font("Arial", 18));
 
-            componentGrid.add(label, 0, i);
+            componentGrid.add(label, 0, rowIndex);
 
             switch (components.get(key)) {
                 case "field" -> {
@@ -86,7 +84,7 @@ public class GroupsController implements ControllerAware {
                     textField.setPromptText("Enter " + key);
                     textField.setId(key.toLowerCase() + "TextField");
 
-                    componentGrid.add(textField, 1, i);
+                    componentGrid.add(textField, 1, rowIndex);
                 }
                 case "comboBox" -> {
                     ComboBox<String> comboBox = new ComboBox<>();
@@ -94,10 +92,10 @@ public class GroupsController implements ControllerAware {
                     comboBox.setPromptText("Select " + key);
                     comboBox.setId(key.toLowerCase() + "ComboBox");
 
-                    componentGrid.add(comboBox, 1, i);
+                    componentGrid.add(comboBox, 1, rowIndex);
                 }
             }
-            i++;
+            rowIndex++;
         }
 
         HBox addHBox = new HBox();
@@ -130,10 +128,10 @@ public class GroupsController implements ControllerAware {
 
         removeHBox.getChildren().addAll(removeComboBox, removeStudentButton);
 
-        componentGrid.add(addLabel, 0, i);
-        componentGrid.add(addHBox, 1, i);
-        componentGrid.add(removeLabel, 0, i + 1);
-        componentGrid.add(removeHBox, 1, i + 1);
+        componentGrid.add(addLabel, 0, rowIndex);
+        componentGrid.add(addHBox, 1, rowIndex);
+        componentGrid.add(removeLabel, 0, rowIndex + 1);
+        componentGrid.add(removeHBox, 1, rowIndex + 1);
 
         Platform.runLater(() -> {
             loadGroups();
@@ -389,6 +387,13 @@ public class GroupsController implements ControllerAware {
     private void changeButtonVisibility(boolean editingMode) {
         // In editing mode, the add button is not visible, and the edit and delete buttons are visible
         isEditingMode = editingMode;
+
+        for (Node child : componentGrid.getChildren()) {
+            if (GridPane.getRowIndex(child) == rowIndex || GridPane.getRowIndex(child) == rowIndex + 1) {
+                child.setManaged(editingMode);
+                child.setVisible(editingMode);
+            }
+        }
 
         addButton.setVisible(!editingMode);
         addButton.setManaged(!editingMode);
