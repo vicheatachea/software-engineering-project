@@ -48,8 +48,7 @@ public class UserGroupDAO {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT g FROM UserGroupEntity g WHERE g.name = :groupName", UserGroupEntity.class)
-					.setParameter("groupName", groupName)
-					.getSingleResult();
+			         .setParameter("groupName", groupName).getSingleResult();
 		} catch (Exception e) {
 			return null;
 		} finally {
@@ -62,9 +61,12 @@ public class UserGroupDAO {
 	public List<UserGroupEntity> findAllByUserId(Long userId) {
 		EntityManager em = emf.createEntityManager();
 		try {
-			return em.createQuery("SELECT g FROM UserGroupEntity g JOIN g.students s WHERE s.id = :userId", UserGroupEntity.class)
-					.setParameter("userId", userId)
-					.getResultList();
+			return em.createQuery("SELECT DISTINCT g FROM UserGroupEntity g " + "WHERE g.teacher.id = :userId " +
+			                      "OR " +
+			                      "g IN (SELECT g2 FROM UserGroupEntity g2 JOIN g2.students s WHERE s.id = :userId)",
+			                      UserGroupEntity.class)
+			         .setParameter("userId", userId)
+			         .getResultList();
 		} catch (Exception e) {
 			return null;
 		} finally {
