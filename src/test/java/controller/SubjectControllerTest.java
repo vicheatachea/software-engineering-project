@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -123,10 +124,19 @@ class SubjectControllerTest {
 
 		eventController.addEvent(teachingSessionDTO);
 
+		List<SubjectDTO> foundTeacherSubject = subjectController.fetchSubjectsByUser();
+
+		assertNotNull(foundTeacherSubject);
+
 		userController.logout();
+
 		userController.authenticateUser(student.username(), student.password());
 
-		assertNotNull(subjectController.fetchSubjectsByUser());
+		List<SubjectDTO> foundStudentSubject = subjectController.fetchSubjectsByUser();
+
+		assertNotNull(foundStudentSubject);
+
+		assertEquals(foundTeacherSubject, foundStudentSubject);
 	}
 
 	@Test
