@@ -5,7 +5,10 @@ import dao.TimetableDAO;
 import dao.UserDAO;
 import dao.UserGroupDAO;
 import dto.GroupDTO;
-import entity.*;
+import entity.SubjectEntity;
+import entity.TimetableEntity;
+import entity.UserEntity;
+import entity.UserGroupEntity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
