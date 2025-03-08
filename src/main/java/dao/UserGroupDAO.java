@@ -48,7 +48,8 @@ public class UserGroupDAO {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT g FROM UserGroupEntity g WHERE g.name = :groupName", UserGroupEntity.class)
-			         .setParameter("groupName", groupName).getSingleResult();
+			         .setParameter("groupName", groupName)
+			         .getSingleResult();
 		} catch (Exception e) {
 			return null;
 		} finally {

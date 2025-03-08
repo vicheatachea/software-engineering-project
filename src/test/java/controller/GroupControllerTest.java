@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -108,7 +109,6 @@ class GroupControllerTest {
 
 		userController.registerUser(student);
 		userController.authenticateUser(student.username(), student.password());
-		long studentId = userController.fetchCurrentUserId();
 		userController.logout();
 
 		userController.registerUser(teacher);
@@ -124,8 +124,8 @@ class GroupControllerTest {
 		GroupDTO group2 = new GroupDTO("Group2", "TST2", 10, teacherId, subject1.code());
 		groupController.addGroup(group2);
 
-		groupController.addStudentToGroup(group1, studentId);
-		groupController.addStudentToGroup(group2, studentId);
+		groupController.addStudentToGroup(group1, student.username());
+		groupController.addStudentToGroup(group2, student.username());
 
 		userController.logout();
 		userController.authenticateUser(student.username(), student.password());
@@ -154,13 +154,48 @@ class GroupControllerTest {
 	}
 
 	@Test
+	void fetchAllStudentsByGroupName() {
+		UserDTO teacher = createTeacher("teacher", "123456789AB");
+
+		userController.registerUser(teacher);
+		userController.authenticateUser(teacher.username(), teacher.password());
+		long teacherId = userController.fetchCurrentUserId();
+
+		SubjectDTO subject = createSubject("ICT", "ICT101");
+		subjectController.addSubject(subject);
+
+		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, "ICT101");
+		groupController.addGroup(group);
+
+		List<UserDTO> students = List.of(
+				createStudent("student1", "BA123456789"),
+				createStudent("student2", "BA987654321"),
+				createStudent("student3", "BA654321987"),
+				createStudent("student4", "BA321987654"),
+				createStudent("student5", "BA789654321")
+		);
+
+		for (UserDTO student : students) {
+			userController.registerUser(student);
+			userController.authenticateUser(student.username(), student.password());
+			userController.logout();
+			userController.authenticateUser(teacher.username(), teacher.password());
+			groupController.addStudentToGroup(group, student.username());
+			userController.logout();
+		}
+
+		userController.fetchStudentsInGroup(group.name()).forEach(userDTO -> {
+			assertTrue(students.stream().anyMatch(student -> student.username().equals(userDTO.username())));
+		});
+	}
+
+	@Test
 	void isUserGroupOwner() {
 		UserDTO teacher = createTeacher("teacher", "123456789AB");
 		UserDTO student = createStudent("student", "BA123456789");
 
 		userController.registerUser(student);
 		userController.authenticateUser(student.username(), student.password());
-		long studentId = userController.fetchCurrentUserId();
 		userController.logout();
 
 		userController.registerUser(teacher);
@@ -176,8 +211,8 @@ class GroupControllerTest {
 		GroupDTO group2 = new GroupDTO("Group2", "TST2", 10, teacherId, subject1.code());
 		groupController.addGroup(group2);
 
-		groupController.addStudentToGroup(group1, studentId);
-		groupController.addStudentToGroup(group2, studentId);
+		groupController.addStudentToGroup(group1, student.username());
+		groupController.addStudentToGroup(group2, student.username());
 
 		assertTrue(groupController.isUserGroupOwner("Group1"));
 		assertTrue(groupController.isUserGroupOwner("Group2"));
@@ -253,7 +288,6 @@ class GroupControllerTest {
 
 		userController.registerUser(student);
 		userController.authenticateUser(student.username(), student.password());
-		long studentId = userController.fetchCurrentUserId();
 		userController.logout();
 
 		userController.registerUser(teacher);
@@ -266,7 +300,7 @@ class GroupControllerTest {
 		GroupDTO group1 = new GroupDTO("Group1", "TST1", 10, teacherId, subject1.code());
 		groupController.addGroup(group1);
 
-		groupController.addStudentToGroup(group1, studentId);
+		groupController.addStudentToGroup(group1, student.username());
 
 		userController.logout();
 		userController.authenticateUser(student.username(), student.password());
@@ -282,7 +316,6 @@ class GroupControllerTest {
 
 		userController.registerUser(student);
 		userController.authenticateUser(student.username(), student.password());
-		long studentId = userController.fetchCurrentUserId();
 		userController.logout();
 
 		userController.registerUser(teacher);
@@ -295,7 +328,7 @@ class GroupControllerTest {
 		GroupDTO group1 = new GroupDTO("Group1", "TST1", 10, teacherId, subject1.code());
 		groupController.addGroup(group1);
 
-		groupController.addStudentToGroup(group1, studentId);
+		groupController.addStudentToGroup(group1, student.username());
 		userController.logout();
 
 		userController.authenticateUser(student.username(), student.password());
@@ -306,7 +339,7 @@ class GroupControllerTest {
 		userController.logout();
 		userController.authenticateUser(teacher.username(), teacher.password());
 
-		groupController.removeStudentFromGroup(group1, studentId);
+		groupController.removeStudentFromGroup(group1, student.username());
 
 		userController.logout();
 		userController.authenticateUser(student.username(), student.password());

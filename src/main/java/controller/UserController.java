@@ -4,6 +4,7 @@ import dto.UserDTO;
 import model.UserModel;
 
 import java.util.List;
+import java.util.Set;
 
 public class UserController {
 	private final UserModel userModel = new UserModel();
@@ -26,6 +27,10 @@ public class UserController {
 
 	public List<UserDTO> fetchAllStudents() {
 		return userModel.fetchAllStudents();
+	}
+
+	public Set<UserDTO> fetchStudentsInGroup(String groupName) {
+		return userModel.fetchStudentsInGroup(groupName);
 	}
 
 	public void updateUser(UserDTO userDTO) {

@@ -69,7 +69,6 @@ class EventControllerTest {
 		UserDTO student = createStudent("student", "123456789AB");
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
-		long studentId = userController.fetchCurrentUserId();
 		userController.logout();
 
 		UserDTO teacher = createTeacher("teacher", "987654321BA");
@@ -88,7 +87,7 @@ class EventControllerTest {
 
 		long groupTimetableId = timetableController.fetchTimetableForGroup(group.name());
 
-		groupController.addStudentToGroup(group, studentId);
+		groupController.addStudentToGroup(group, student.username());
 
 		TeachingSessionDTO teachingSession = new TeachingSessionDTO(null, LocalDateTime.parse("2023-10-01T10:00:00"),
 		                                                            LocalDateTime.parse("2023-10-01T12:00:00"),
@@ -115,7 +114,6 @@ class EventControllerTest {
 		UserDTO student = createStudent("student", "123456789AB");
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
-		long studentId = userController.fetchCurrentUserId();
 		userController.logout();
 
 		UserDTO teacher = createTeacher("teacher", "987654321BA");
@@ -134,7 +132,7 @@ class EventControllerTest {
 
 		long groupTimetableId = timetableController.fetchTimetableForGroup(group.name());
 
-		groupController.addStudentToGroup(group, studentId);
+		groupController.addStudentToGroup(group, student.username());
 
 		TeachingSessionDTO teachingSession = new TeachingSessionDTO(null, LocalDateTime.parse("2023-10-01T10:00:00"),
 		                                                            LocalDateTime.parse("2023-10-01T12:00:00"),
@@ -155,7 +153,6 @@ class EventControllerTest {
 		UserDTO student = createStudent("student", "123456789AB");
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
-		long studentId = userController.fetchCurrentUserId();
 		userController.logout();
 
 		UserDTO teacher = createTeacher("teacher", "987654321BA");
@@ -174,7 +171,7 @@ class EventControllerTest {
 
 		long groupTimetableId = timetableController.fetchTimetableForGroup(group.name());
 
-		groupController.addStudentToGroup(group, studentId);
+		groupController.addStudentToGroup(group, student.username());
 
 		AssignmentDTO assignment = new AssignmentDTO(null, "Individual", LocalDateTime.parse("2023-10-01T10:00:00"),
 		                                             LocalDateTime.parse("2023-10-01T12:00:00"), "Assignment 1",
@@ -193,7 +190,6 @@ class EventControllerTest {
 		UserDTO student = createStudent("student", "123456789AB");
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
-		long studentId = userController.fetchCurrentUserId();
 		userController.logout();
 
 		UserDTO teacher = createTeacher("teacher", "987654321BA");
@@ -212,7 +208,7 @@ class EventControllerTest {
 
 		long groupTimetableId = timetableController.fetchTimetableForGroup(group.name());
 
-		groupController.addStudentToGroup(group, studentId);
+		groupController.addStudentToGroup(group, student.username());
 
 		TeachingSessionDTO teachingSession = new TeachingSessionDTO(null, LocalDateTime.parse("2023-10-01T10:00:00"),
 		                                                            LocalDateTime.parse("2023-10-01T12:00:00"),
@@ -259,7 +255,6 @@ class EventControllerTest {
 		UserDTO student = createStudent("student", "123456789AB");
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
-		long studentId = userController.fetchCurrentUserId();
 		userController.logout();
 
 		UserDTO teacher = createTeacher("teacher", "987654321BA");
@@ -278,7 +273,7 @@ class EventControllerTest {
 
 		long groupTimetableId = timetableController.fetchTimetableForGroup(group.name());
 
-		groupController.addStudentToGroup(group, studentId);
+		groupController.addStudentToGroup(group, student.username());
 
 		AssignmentDTO assignment = new AssignmentDTO(null, "Individual", LocalDateTime.parse("2023-10-01T10:00:00"),
 		                                             LocalDateTime.parse("2023-10-01T12:00:00"), "Assignment 1",
@@ -324,7 +319,6 @@ class EventControllerTest {
 		UserDTO student = createStudent("student", "123456789AB");
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
-		long studentId = userController.fetchCurrentUserId();
 		userController.logout();
 
 		UserDTO teacher = createTeacher("teacher", "987654321BA");
@@ -343,7 +337,7 @@ class EventControllerTest {
 
 		long groupTimetableId = timetableController.fetchTimetableForGroup(group.name());
 
-		groupController.addStudentToGroup(group, studentId);
+		groupController.addStudentToGroup(group, student.username());
 
 		TeachingSessionDTO teachingSession = new TeachingSessionDTO(null, LocalDateTime.parse("2023-10-01T10:00:00"),
 		                                                            LocalDateTime.parse("2023-10-01T12:00:00"),
@@ -375,7 +369,6 @@ class EventControllerTest {
 		UserDTO student = createStudent("student", "123456789AB");
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
-		long studentId = userController.fetchCurrentUserId();
 		userController.logout();
 
 		UserDTO teacher = createTeacher("teacher", "987654321BA");
@@ -394,7 +387,7 @@ class EventControllerTest {
 
 		long groupTimetableId = timetableController.fetchTimetableForGroup(group.name());
 
-		groupController.addStudentToGroup(group, studentId);
+		groupController.addStudentToGroup(group, student.username());
 
 		AssignmentDTO assignment = new AssignmentDTO(null, "Individual", LocalDateTime.parse("2023-10-01T10:00:00"),
 		                                             LocalDateTime.parse("2023-10-01T12:00:00"), "Assignment 1",
