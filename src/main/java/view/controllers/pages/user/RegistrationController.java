@@ -33,6 +33,7 @@ public class RegistrationController {
 	@FXML
 	private ComboBox<String> roleComboBox;
 
+
 	public void setUserController(UserController userController) {
 		this.userController = userController;
 	}
