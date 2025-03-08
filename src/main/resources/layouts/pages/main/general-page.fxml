@@ -5,12 +5,15 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@general-page.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <HBox BorderPane.alignment="CENTER">
          <children>
@@ -18,23 +21,56 @@
                <children>
                   <Label fx:id="titleLabel" alignment="CENTER" text="Label">
                      <font>
-                        <Font size="24.0" />
+                        <Font size="36.0" />
                      </font>
+                     <VBox.margin>
+                        <Insets bottom="30.0" top="30.0" />
+                     </VBox.margin>
+                  </Label>
+                  <GridPane fx:id="componentGrid" hgap="30.0" vgap="20.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" />
+                      <ColumnConstraints hgrow="ALWAYS" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="newButton" minWidth="120.0" mnemonicParsing="false" onAction="#handleNew" text="New Note">
+                           <font>
+                              <Font size="18.0" />
+                           </font></Button>
+                        <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="addButton" minWidth="120.0" mnemonicParsing="false" onAction="#handleAdd" text="Add Note">
+                           <font>
+                              <Font size="18.0" />
+                           </font></Button>
+                        <Button fx:id="saveButton" minWidth="120.0" mnemonicParsing="false" onAction="#handleSave" text="Save Changes">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin></Button>
+                        <Region fx:id="optionalRegion" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="deleteButton" minWidth="140.0" mnemonicParsing="false" onAction="#handleDelete" text="Delete Note">
+                           <font>
+                              <Font size="18.0" />
+                           </font></Button>
+                     </children>
                      <VBox.margin>
                         <Insets top="30.0" />
                      </VBox.margin>
-                  </Label>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Button fx:id="newButton" minWidth="70.0" mnemonicParsing="false" onAction="#handleNew" text="New Note" />
-                        <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="addButton" minWidth="70.0" mnemonicParsing="false" onAction="#handleAdd" text="Add Note" />
-                        <Button fx:id="saveButton" minWidth="90.0" mnemonicParsing="false" onAction="#handleSave" text="Save Changes" />
-                        <Region fx:id="optionalRegion" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="deleteButton" minWidth="80.0" mnemonicParsing="false" onAction="#handleDelete" text="Delete Note" />
-                     </children>
                   </HBox>
                </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets left="80.0" right="80.0" />
+               </HBox.margin>
             </VBox>
             <ListView fx:id="itemView" onMouseClicked="#handleItemSelection" prefHeight="200.0" prefWidth="200.0" />
          </children>

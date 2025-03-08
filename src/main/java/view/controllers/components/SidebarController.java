@@ -60,9 +60,9 @@ public class SidebarController implements ControllerAware {
                 loginButton = (Button) userArea.lookup("#loginButton");
                 notificationsButton = (Button) userArea.lookup("#notificationsButton");
 
-				accountButton.setOnAction(event -> showUserProfilePopup());
-				loginButton.setOnAction(event -> showLoginPopup());
-				notificationsButton.setOnAction(event -> showNotificationPopup());
+                accountButton.setOnAction(event -> showUserProfilePopup());
+                loginButton.setOnAction(event -> showLoginPopup());
+                notificationsButton.setOnAction(event -> showNotificationPopup());
 
                 updateUserButtons();
             } catch (IOException e) {
