@@ -2,18 +2,23 @@ package model;
 
 import dao.TimetableDAO;
 import dao.UserDAO;
+import dao.UserGroupDAO;
 import dto.UserDTO;
 import entity.Role;
 import entity.TimetableEntity;
 import entity.UserEntity;
+import entity.UserGroupEntity;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class UserModel {
 	private static final UserDAO userDAO = new UserDAO();
 	private static final TimetableDAO timetableDAO = new TimetableDAO();
+	private static final UserGroupDAO groupDAO = new UserGroupDAO();
 
 	public UserDTO getLoggedInUser() {
 		UserEntity user = userDAO.findById(fetchCurrentUserId());
@@ -32,6 +37,22 @@ public class UserModel {
 			users.add(convertToDTO(user));
 		}
 		return users;
+	}
+
+	public Set<UserDTO> fetchStudentsInGroup(String groupName) {
+		UserGroupEntity group = groupDAO.findByName(groupName);
+
+		if (group == null) {
+			throw new IllegalArgumentException("Group does not exist.");
+		}
+
+		Set<UserDTO> students = new HashSet<>();
+
+		for (UserEntity student : group.getStudents()) {
+			students.add(convertToDTO(student));
+		}
+
+		return students;
 	}
 
 	public boolean authenticate(String username, String password) {
@@ -170,13 +191,13 @@ public class UserModel {
 		UserPreferences.deleteUser();
 	}
 
-	private UserDTO convertToDTO(UserEntity user) {
+	UserDTO convertToDTO(UserEntity user) {
 		return new UserDTO(user.getUsername(), user.getPassword(), user.getFirstName(), user.getLastName(),
 		                   user.getDateOfBirth().toLocalDateTime(), user.getSocialNumber(),
 		                   user.getRole().toString());
 	}
 
-	private UserEntity convertToEntity(UserDTO user, TimetableEntity timetable) {
+	UserEntity convertToEntity(UserDTO user, TimetableEntity timetable) {
 		return new UserEntity(user.firstName(), user.lastName(), user.username(), user.password(),
 		                      Timestamp.valueOf(user.dateOfBirth()), user.socialNumber(), Role.valueOf(user.role()),
 		                      timetable);
