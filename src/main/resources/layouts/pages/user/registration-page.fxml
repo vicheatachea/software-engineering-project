@@ -6,36 +6,89 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.collections.FXCollections?>
-
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
 
 <VBox fx:id="registrationVBox" alignment="CENTER" prefHeight="540.0" prefWidth="520.0" spacing="15" styleClass="registration-vbox" stylesheets="@registration-page.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.RegistrationController">
 
-    <Label fx:id="registerLabel" contentDisplay="CENTER" styleClass="register-label" text="Register" textFill="#ff6b81" />
+    <Label fx:id="registerLabel" contentDisplay="CENTER" prefHeight="40.0" prefWidth="76.0" styleClass="register-label" text="Register" textFill="#e36486">
+      <font>
+         <Font name="Verdana Bold" size="14.0" />
+      </font></Label>
 
-    <TextField fx:id="firstNameField" prefHeight="40.0" promptText="First Name" styleClass="first-name-field" />
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label prefHeight="17.0" prefWidth="153.0" styleClass="prompt-label" text="First Name" textFill="#e36486">
+         <font>
+            <Font name="Verdana Bold" size="13.0" />
+         </font></Label>
+        <TextField fx:id="firstNameField" prefHeight="40.0" styleClass="first-name-field" />
+    </HBox>
 
-    <TextField fx:id="lastNameField" prefHeight="40.0" promptText="Last Name" styleClass="last-name-field" />
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label prefHeight="17.0" prefWidth="151.0" styleClass="prompt-label" text="Last Name" textFill="#e36486">
+         <font>
+            <Font name="Verdana Bold" size="13.0" />
+         </font></Label>
+        <TextField fx:id="lastNameField" prefHeight="40.0" styleClass="last-name-field" />
+    </HBox>
 
-    <TextField fx:id="socialNumberField" prefHeight="40.0" promptText="Social Number" styleClass="social-number-field" />
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label prefHeight="17.0" prefWidth="150.0" styleClass="prompt-label" text="Social Number" textFill="#e36486">
+         <font>
+            <Font name="Verdana Bold" size="13.0" />
+         </font></Label>
+        <TextField fx:id="socialNumberField" prefHeight="40.0" styleClass="social-number-field" />
+    </HBox>
 
-    <TextField fx:id="emailField" prefHeight="40.0" promptText="Email" styleClass="email-field" />
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label prefHeight="17.0" prefWidth="150.0" styleClass="prompt-label" text="Email" textFill="#e36486">
+         <font>
+            <Font name="Verdana Bold" size="13.0" />
+         </font></Label>
+        <TextField fx:id="emailField" prefHeight="40.0" styleClass="email-field" />
+    </HBox>
 
-    <TextField fx:id="usernameField" prefHeight="40.0" promptText="Type Username" styleClass="username-field" />
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label prefHeight="17.0" prefWidth="154.0" styleClass="prompt-label" text="Username" textFill="#e36486">
+         <font>
+            <Font name="Verdana Bold" size="13.0" />
+         </font></Label>
+        <TextField fx:id="usernameField" prefHeight="40.0" styleClass="username-field" />
+    </HBox>
 
-    <PasswordField fx:id="passwordField" prefHeight="40.0" promptText="Password" styleClass="password-field" />
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label prefHeight="17.0" prefWidth="156.0" styleClass="prompt-label" text="Password" textFill="#e36486">
+         <font>
+            <Font name="Verdana Bold" size="13.0" />
+         </font></Label>
+        <PasswordField fx:id="passwordField" prefHeight="40.0" styleClass="password-field" />
+    </HBox>
 
     <HBox fx:id="dobRoleHBox" alignment="CENTER" spacing="10">
         <DatePicker fx:id="dobPicker" prefHeight="41.0" prefWidth="200.0" promptText="Date of Birth" showWeekNumbers="true" styleClass="dob-field" />
-        <ComboBox fx:id="roleComboBox" prefHeight="41.0" prefWidth="200.0" promptText="Select Role"
-                  styleClass="role-field" />
+        <ComboBox fx:id="roleComboBox" prefHeight="41.0" prefWidth="200.0" promptText="Select Role" styleClass="role-field" />
     </HBox>
 
     <HBox fx:id="buttonsHBox" alignment="CENTER" spacing="10">
-        <Button fx:id="registerButton" onAction="#handleRegister" styleClass="register-button" text="Register" />
-        <Button fx:id="backToLoginButton" onAction="#goToLoginPage" styleClass="back-to-login-button" text="Back to Login" />
+        <Button fx:id="registerButton" onAction="#handleRegister" styleClass="register-button" text="Register">
+            <effect>
+                <DropShadow height="2.0" offsetX="1.5" offsetY="1.5" radius="0.5" spread="1.0" width="2.0">
+                    <color>
+                        <Color red="0.9647058844566345" green="0.5647059082984924" blue="0.6509804129600525" />
+                    </color>
+                </DropShadow>
+            </effect></Button>
+        <Button fx:id="backToLoginButton" onAction="#goToLoginPage" styleClass="back-to-login-button" text="Back to Login">
+            <effect>
+                <DropShadow height="2.0" offsetX="1.5" offsetY="1.5" radius="0.5" spread="1.0" width="2.0">
+                    <color>
+                        <Color red="0.9647058844566345" green="0.5647059082984924" blue="0.6509804129600525" />
+                    </color>
+                </DropShadow>
+            </effect></Button>
     </HBox>
 
 </VBox>
