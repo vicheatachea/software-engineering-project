@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import view.controllers.ControllerAware;
@@ -98,6 +99,41 @@ public class GroupsController implements ControllerAware {
             }
             i++;
         }
+
+        HBox addHBox = new HBox();
+        Label addLabel = new Label("Add Student:");
+        addLabel.setFont(new javafx.scene.text.Font("Arial", 18));
+
+        ComboBox<String> addComboBox = new ComboBox<>();
+        addComboBox.setStyle("-fx-font: 16px \"Arial\";");
+        addComboBox.setPromptText("Select Student");
+        addComboBox.setId("addStudentComboBox");
+
+        Button addStudentButton = new Button("Add Student");
+        addStudentButton.setFont(new javafx.scene.text.Font("Arial", 16));
+        addStudentButton.setId("addStudentButton");
+
+        addHBox.getChildren().addAll(addComboBox, addStudentButton);
+
+        HBox removeHBox = new HBox();
+        Label removeLabel = new Label("Remove Student:");
+        removeLabel.setFont(new javafx.scene.text.Font("Arial", 18));
+
+        ComboBox<String> removeComboBox = new ComboBox<>();
+        removeComboBox.setStyle("-fx-font: 16px \"Arial\";");
+        removeComboBox.setPromptText("Select Student");
+        removeComboBox.setId("removeStudentComboBox");
+
+        Button removeStudentButton = new Button("Remove Student");
+        removeStudentButton.setFont(new javafx.scene.text.Font("Arial", 16));
+        removeStudentButton.setId("removeStudentButton");
+
+        removeHBox.getChildren().addAll(removeComboBox, removeStudentButton);
+
+        componentGrid.add(addLabel, 0, i);
+        componentGrid.add(addHBox, 1, i);
+        componentGrid.add(removeLabel, 0, i + 1);
+        componentGrid.add(removeHBox, 1, i + 1);
 
         Platform.runLater(() -> {
             loadGroups();
