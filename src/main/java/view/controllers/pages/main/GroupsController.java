@@ -272,6 +272,17 @@ public class GroupsController implements ControllerAware {
                 return;
             }
 
+            for (GroupDTO group : groups) {
+                if (group.name().equals(name) && !name.equals(currentName)) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("A group with the same name already exists.");
+                    alert.showAndWait();
+                    return;
+                }
+            }
+
             GroupDTO group = new GroupDTO(name, code, capacity, userId, subjectCode);
             groupController.updateGroup(group, currentName);
             loadGroups();
@@ -342,8 +353,6 @@ public class GroupsController implements ControllerAware {
     private void changeButtonVisibility(boolean editingMode) {
         // In editing mode, the add button is not visible, and the edit and delete buttons are visible
         isEditingMode = editingMode;
-
-        nameTextField.setDisable(editingMode);
 
         addButton.setVisible(!editingMode);
         addButton.setManaged(!editingMode);
