@@ -5,6 +5,7 @@ import dto.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -87,6 +88,7 @@ public class EventPopupController {
 
         eventComboBox.addEventHandler(ActionEvent.ACTION, event -> handleEventChange());
         scheduleComboBox.addEventHandler(ActionEvent.ACTION, event -> handleScheduleChange());
+        groupComboBox.addEventHandler(ActionEvent.ACTION, event -> handleGroupChange());
 
         Platform.runLater(() -> {
             // Fetch data from the database
@@ -184,6 +186,15 @@ public class EventPopupController {
             case "Group":
                 toggleScheduleView(true);
                 break;
+        }
+    }
+
+    private void handleGroupChange() {
+        String groupName = (String) groupComboBox.getValue();
+
+        if (groupName != null) {
+            GroupDTO group = groupController.fetchGroupByName(groupName);
+            subjectComboBox.setValue(group.subjectCode());
         }
     }
 
@@ -373,5 +384,7 @@ public class EventPopupController {
                 child.setManaged(isGroup);
             }
         }
+        subjectComboBox.setValue(null);
+        subjectComboBox.setDisable(isGroup);
     }
 }
