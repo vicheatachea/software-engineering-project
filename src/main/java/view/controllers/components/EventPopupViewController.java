@@ -131,8 +131,16 @@ public class EventPopupViewController {
                 startTimeField.setText(TimeFormatterUtil.getTimeFromDateTime(startDateTime));
                 endTimeField.setText(TimeFormatterUtil.getTimeFromDateTime(endDateTime));
                 locationComboBox.setValue(location);
-                subjectComboBox.setValue(subject);
                 descriptionTextArea.setText(description);
+
+                if (teachingSession.timetableId() == timetableController.fetchTimetableForUser()) {
+                    scheduleComboBox.setValue("Myself");
+                } else {
+                    scheduleComboBox.setValue("Group");
+//                    groupComboBox.setValue(groupController.fetchGroupByTimetable(teachingSession.timetableId()).name());
+                    subjectComboBox.setDisable(true);
+                }
+                subjectComboBox.setValue(subject);
             } else if (event instanceof AssignmentDTO assignment) {
                 LocalDateTime publishingDateTime = assignment.publishingDate();
                 LocalDateTime deadlineDateTime = assignment.deadline();
@@ -148,8 +156,16 @@ public class EventPopupViewController {
                 endTimeField.setText(TimeFormatterUtil.getTimeFromDateTime(deadlineDateTime));
                 nameTextField.setText(assignmentName);
                 assignmentComboBox.setValue(assignmentType);
-                subjectComboBox.setValue(subject);
                 descriptionTextArea.setText(description);
+
+                if (assignment.timetableId() == timetableController.fetchTimetableForUser()) {
+                    scheduleComboBox.setValue("Myself");
+                } else {
+                    scheduleComboBox.setValue("Group");
+//                    groupComboBox.setValue(groupController.fetchGroupByTimetable(assignment.timetableId()).name());
+                    subjectComboBox.setDisable(true);
+                }
+                subjectComboBox.setValue(subject);
             }
         });
     }
