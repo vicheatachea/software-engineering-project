@@ -168,7 +168,7 @@ public class TimetableViewController implements ControllerAware {
             Parent content = loader.load();
 
             EventPopupViewController popupViewController = loader.getController();
-            popupViewController.setUp(event, baseController);
+            popupViewController.setUp(event, baseController, this);
 
             Stage popupStage = new Stage();
             popupStage.setScene(new Scene(content));
@@ -224,7 +224,7 @@ public class TimetableViewController implements ControllerAware {
         return String.format("%02d", number);
     }
 
-    private void loadTimetable() {
+    public void loadTimetable() {
         if (!userController.isUserLoggedIn()) {
             return;
         }

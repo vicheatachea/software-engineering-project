@@ -9,7 +9,9 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import util.TimeFormatterUtil;
+import view.controllers.pages.main.TimetableViewController;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,6 +23,7 @@ public class EventPopupViewController {
     private LocationController locationController;
     private SubjectController subjectController;
     private TimetableController timetableController;
+    private TimetableViewController timetableViewController;
 
     private Event event;
     private final TimeTextField startTimeField = new TimeTextField();
@@ -67,13 +70,14 @@ public class EventPopupViewController {
     @FXML
     private Button deleteButton;
 
-    public void setUp(Event event, BaseController baseController) {
+    public void setUp(Event event, BaseController baseController, TimetableViewController timetableViewController) {
         this.event = event;
         this.eventController = baseController.getEventController();
         this.groupController = baseController.getGroupController();
         this.locationController = baseController.getLocationController();
         this.subjectController = baseController.getSubjectController();
         this.timetableController = baseController.getTimetableController();
+        this.timetableViewController = timetableViewController;
     }
 
     @FXML
@@ -320,6 +324,7 @@ public class EventPopupViewController {
         } else {
             eventController.updateEvent(newEvent);
         }
+        leaveAndUpdate();
     }
 
     @FXML
@@ -342,6 +347,7 @@ public class EventPopupViewController {
                 }
                 eventController.deleteEvent(event);
             }
+            leaveAndUpdate();
         }
     }
 
@@ -401,5 +407,11 @@ public class EventPopupViewController {
         }
         subjectComboBox.setValue(null);
         subjectComboBox.setDisable(isGroup);
+    }
+
+    private void leaveAndUpdate() {
+        timetableViewController.loadTimetable();
+        Stage stage = (Stage) popupGridPane.getScene().getWindow();
+        stage.close();
     }
 }
