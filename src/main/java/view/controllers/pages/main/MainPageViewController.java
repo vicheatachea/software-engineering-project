@@ -5,23 +5,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import view.controllers.ControllerAware;
 import view.controllers.components.SidebarController;
-import view.controllers.pages.user.LoginController;
-import view.controllers.pages.user.UserProfileController;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainPageController implements Initializable {
+public class MainPageViewController implements Initializable {
 	Stage stage;
 	BaseController baseController;
 
@@ -32,7 +27,7 @@ public class MainPageController implements Initializable {
 	@FXML
 	private StackPane mainContent;
 
-	public MainPageController() {
+	public MainPageViewController() {
 		this.baseController = new BaseController();
 	}
 
