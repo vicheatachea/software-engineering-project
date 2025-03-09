@@ -424,13 +424,17 @@ public class GroupsController implements ControllerAware {
         List<UserDTO> students = userController.fetchAllStudents();
         Set<UserDTO> groupStudents = groupController.fetchAllStudentsByGroup(groups.get(currentIndex));
 
-        students.forEach(student -> {
-            if (!student.username().equals(currentUser.username()) && student.role().equals("STUDENT")) {
-                addStudentComboBox.getItems().add(student.username());
-            }
-        });
+        if (students != null) {
+            students.forEach(student -> {
+                if (!student.username().equals(currentUser.username()) && student.role().equals("STUDENT")) {
+                    addStudentComboBox.getItems().add(student.username());
+                }
+            });
+        }
 
-        groupStudents.forEach(student -> removeStudentComboBox.getItems().add(student.username()));
+        if (groupStudents != null) {
+            groupStudents.forEach(student -> removeStudentComboBox.getItems().add(student.username()));
+        }
     }
 
     private void clearFields() {
