@@ -10,7 +10,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import view.controllers.ControllerAware;
-import view.controllers.components.SidebarController;
+import view.controllers.components.SidebarViewController;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,7 +21,7 @@ public class MainPageViewController implements Initializable {
 	BaseController baseController;
 
 	@FXML
-	private SidebarController sidebarController;
+	private SidebarViewController sidebarController;
 	@FXML
 	private VBox sidebar;
 	@FXML
@@ -76,13 +76,13 @@ public class MainPageViewController implements Initializable {
             if (name != null) {
                 switch (name) {
                     case "groups":
-                        fxmlLoader.setController(new GroupsController());
+                        fxmlLoader.setController(new GroupsViewController());
                         break;
                     case "subjects":
-                        fxmlLoader.setController(new SubjectsController());
+                        fxmlLoader.setController(new SubjectsViewController());
                         break;
                     case "locations":
-                        fxmlLoader.setController(new LocationsController());
+                        fxmlLoader.setController(new LocationsViewController());
                         break;
                 }
             }
