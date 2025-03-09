@@ -9,7 +9,6 @@ import dto.SubjectDTO;
 import dto.UserDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -19,13 +18,12 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import view.controllers.ControllerAware;
 
-import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public class GroupsController implements ControllerAware {
+public class GroupsViewController implements ControllerAware {
     private GroupController groupController;
     private SubjectController subjectController;
     private UserController userController;

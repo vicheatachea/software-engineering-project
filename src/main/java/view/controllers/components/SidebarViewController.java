@@ -13,17 +13,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.Node;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import view.controllers.ControllerAware;
-import view.controllers.pages.user.LoginController;
-import view.controllers.pages.user.NotificationsController;
-import view.controllers.pages.user.UserProfileController;
+import view.controllers.pages.user.LoginViewController;
+import view.controllers.pages.user.NotificationsViewController;
+import view.controllers.pages.user.UserProfileViewController;
 
 import java.io.IOException;
 
-public class SidebarController implements ControllerAware {
+public class SidebarViewController implements ControllerAware {
     private final StringProperty currentView = new SimpleStringProperty();
     private int notificationCount = 0;
 
@@ -116,11 +115,11 @@ public class SidebarController implements ControllerAware {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/login-page.fxml"));
             Parent parent = fxmlLoader.load();
 
-            LoginController loginController = fxmlLoader.getController();
-            loginController.setUserController(userController);
+            LoginViewController loginViewController = fxmlLoader.getController();
+            loginViewController.setUserController(userController);
 
             Stage loginStage = new Stage();
-            loginController.setStage(loginStage);
+            loginViewController.setStage(loginStage);
             loginStage.initModality(Modality.APPLICATION_MODAL);
             loginStage.initOwner(sidebar.getScene().getWindow());
             loginStage.setTitle("Login");
@@ -136,9 +135,9 @@ public class SidebarController implements ControllerAware {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/user-profile-page.fxml"));
             Parent parent = fxmlLoader.load();
 
-            UserProfileController userProfileController = fxmlLoader.getController();
-            userProfileController.setUserController(userController);
-            userProfileController.updateUserInfo();
+            UserProfileViewController userProfileViewController = fxmlLoader.getController();
+            userProfileViewController.setUserController(userController);
+            userProfileViewController.updateUserInfo();
 
             Stage userProfileStage = new Stage();
             userProfileStage.initModality(Modality.APPLICATION_MODAL);
@@ -156,7 +155,7 @@ public class SidebarController implements ControllerAware {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/notifications-page.fxml"));
             Parent parent = fxmlLoader.load();
 
-            NotificationsController notificationsController = fxmlLoader.getController();
+            NotificationsViewController notificationsViewController = fxmlLoader.getController();
 
 
             Stage notificationStage = new Stage();

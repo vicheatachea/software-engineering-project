@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
-public class RegistrationController {
+public class RegistrationViewController {
 	private UserController userController;
 	private Stage stage;
 
@@ -100,9 +100,9 @@ public class RegistrationController {
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/login-page.fxml"));
 			Parent parent = fxmlLoader.load();
 
-			LoginController loginController = fxmlLoader.getController();
-			loginController.setUserController(userController);
-			loginController.setStage(stage);
+			LoginViewController loginViewController = fxmlLoader.getController();
+			loginViewController.setUserController(userController);
+			loginViewController.setStage(stage);
 
 			Scene scene = firstNameField.getScene();
 			scene.setRoot(parent);

@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-public class UserProfileController {
+public class UserProfileViewController {
 	private UserController userController;
 
 	@FXML

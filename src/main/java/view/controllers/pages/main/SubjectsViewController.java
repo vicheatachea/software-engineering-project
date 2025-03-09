@@ -7,7 +7,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import view.controllers.ControllerAware;
@@ -15,7 +14,7 @@ import view.controllers.ControllerAware;
 import java.util.List;
 import java.util.Optional;
 
-public class SubjectsController implements ControllerAware {
+public class SubjectsViewController implements ControllerAware {
 	private SubjectController subjectController;
 	private List<SubjectDTO> subjects;
 	private final List<String> components = List.of("Name", "Code");

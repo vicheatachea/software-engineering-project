@@ -1,6 +1,5 @@
 package view.controllers.pages.user;
 
-import controller.BaseController;
 import controller.UserController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +12,7 @@ import javafx.scene.control.Alert;
 
 import java.io.IOException;
 
-public class LoginController {
+public class LoginViewController {
     private UserController userController;
     private Stage stage;
 
@@ -57,9 +56,9 @@ public class LoginController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/registration-page.fxml"));
             Parent parent = fxmlLoader.load();
 
-            RegistrationController registrationController = fxmlLoader.getController();
-            registrationController.setUserController(userController);
-            registrationController.setStage(stage);
+            RegistrationViewController registrationViewController = fxmlLoader.getController();
+            registrationViewController.setUserController(userController);
+            registrationViewController.setStage(stage);
 
             Scene scene = emailField.getScene();
             scene.setRoot(parent);

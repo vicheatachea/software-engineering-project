@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class EventPopupController {
+public class EventPopupViewController {
     private EventController eventController;
     private GroupController groupController;
     private LocationController locationController;
