@@ -17,8 +17,8 @@ public class View extends Application {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/pages/main/main-page.fxml"));
             stage.setScene(new Scene(loader.load()));
-            MainPageViewController mainPageViewController = loader.getController();
-            mainPageViewController.setStage(stage);
+            MainPageViewController controller = loader.getController();
+            controller.setStage(stage);
 
             stage.setTitle("Student Timetable Management System");
             stage.setMinWidth(400);

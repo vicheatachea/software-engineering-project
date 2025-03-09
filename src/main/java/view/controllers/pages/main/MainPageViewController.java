@@ -10,7 +10,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import view.controllers.ControllerAware;
-import view.controllers.components.SidebarViewController;
+import view.controllers.components.SidebarController;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,7 +21,7 @@ public class MainPageViewController implements Initializable {
 	BaseController baseController;
 
 	@FXML
-	private SidebarViewController sidebarViewController;
+	private SidebarController sidebarController;
 	@FXML
 	private VBox sidebar;
 	@FXML
@@ -40,9 +40,9 @@ public class MainPageViewController implements Initializable {
         SplitPane.setResizableWithParent(sidebar, false);
         SplitPane.setResizableWithParent(mainContent, false);
 
-		sidebarViewController.setBaseController(baseController);
+		sidebarController.setBaseController(baseController);
 
-        sidebarViewController.currentViewProperty().addListener((observableValue, oldValue, newValue) -> {
+        sidebarController.currentViewProperty().addListener((observableValue, oldValue, newValue) -> {
             switch (newValue) {
                 case "home":
                     loadContent("/layouts/pages/main/home.fxml", null);
@@ -76,13 +76,13 @@ public class MainPageViewController implements Initializable {
             if (name != null) {
                 switch (name) {
                     case "groups":
-                        fxmlLoader.setController(new GroupsViewController());
+                        fxmlLoader.setController(new GroupsController());
                         break;
                     case "subjects":
-                        fxmlLoader.setController(new SubjectsViewController());
+                        fxmlLoader.setController(new SubjectsController());
                         break;
                     case "locations":
-                        fxmlLoader.setController(new LocationsViewController());
+                        fxmlLoader.setController(new LocationsController());
                         break;
                 }
             }
