@@ -44,6 +44,22 @@ public class UserGroupDAO {
 		}
 	}
 
+	public UserGroupEntity findByTimetableId(long timetableId) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.createQuery("SELECT g FROM UserGroupEntity g WHERE g.timetable.id = :timetableId",
+			                      UserGroupEntity.class)
+			         .setParameter("timetableId", timetableId)
+			         .getSingleResult();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
 	public UserGroupEntity findByName(String groupName) {
 		EntityManager em = emf.createEntityManager();
 		try {
