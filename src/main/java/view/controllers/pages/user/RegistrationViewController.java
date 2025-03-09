@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import view.controllers.components.SidebarViewController;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ import java.time.format.DateTimeParseException;
 
 public class RegistrationViewController {
 	private UserController userController;
-	private Stage stage;
+	private SidebarViewController sidebarViewController;
 
 	@FXML
 	private TextField firstNameField;
@@ -33,12 +34,9 @@ public class RegistrationViewController {
 	@FXML
 	private ComboBox<String> roleComboBox;
 
-	public void setUserController(UserController userController) {
+	public void setViewControllers(UserController userController, SidebarViewController sidebarViewController) {
 		this.userController = userController;
-	}
-
-	public void setStage(Stage stage) {
-		this.stage = stage;
+		this.sidebarViewController = sidebarViewController;
 	}
 
 	@FXML
@@ -83,6 +81,8 @@ public class RegistrationViewController {
 
 			if (userController.registerUser(userDTO)) {
 				userController.authenticateUser(username, password);
+				sidebarViewController.updateUserButtons();
+				Stage stage = (Stage) firstNameField.getScene().getWindow();
 				stage.close();
 			} else {
 				showAlert("Error", "Invalid user data.");
@@ -101,8 +101,7 @@ public class RegistrationViewController {
 			Parent parent = fxmlLoader.load();
 
 			LoginViewController loginViewController = fxmlLoader.getController();
-			loginViewController.setUserController(userController);
-			loginViewController.setStage(stage);
+			loginViewController.setViewControllers(userController, sidebarViewController);
 
 			Scene scene = firstNameField.getScene();
 			scene.setRoot(parent);

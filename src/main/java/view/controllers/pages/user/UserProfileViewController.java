@@ -7,9 +7,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import view.controllers.components.SidebarViewController;
 
 public class UserProfileViewController {
 	private UserController userController;
+	private SidebarViewController sidebarViewController;
 
 	@FXML
 	private ImageView profileImageView;
@@ -20,13 +22,15 @@ public class UserProfileViewController {
 	@FXML
 	private Label socialNumberLabel;
 
-	public void setUserController(UserController userController) {
+	public void setViewControllers(UserController userController, SidebarViewController sidebarViewController) {
 		this.userController = userController;
+		this.sidebarViewController = sidebarViewController;
 	}
 
 	@FXML
 	private void handleLogout() {
 		userController.logout();
+		sidebarViewController.updateUserButtons();
 		Stage stage = (Stage) nameLabel.getScene().getWindow();
 		stage.close();
 	}
@@ -56,7 +60,6 @@ public class UserProfileViewController {
 
 
 	}
-
 
 	private void showAlert(String title, String message) {
 		Alert alert = new Alert(Alert.AlertType.ERROR);

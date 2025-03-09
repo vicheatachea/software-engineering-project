@@ -9,24 +9,22 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
+import view.controllers.components.SidebarViewController;
 
 import java.io.IOException;
 
 public class LoginViewController {
     private UserController userController;
-    private Stage stage;
+    private SidebarViewController sidebarViewController;
 
     @FXML
     private TextField emailField;
     @FXML
     private PasswordField passwordField;
 
-    public void setUserController(UserController userController) {
+    public void setViewControllers(UserController userController, SidebarViewController sidebarViewController) {
         this.userController = userController;
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
+        this.sidebarViewController = sidebarViewController;
     }
 
     @FXML
@@ -41,7 +39,9 @@ public class LoginViewController {
 
         try {
             if (userController.authenticateUser(username, password)) {
-                stage.close(); // Close the login popup
+                sidebarViewController.updateUserButtons();
+                Stage stage = (Stage) emailField.getScene().getWindow();
+                stage.close();
             } else {
                 showAlert("Error", "Invalid credentials.");
             }
@@ -57,8 +57,7 @@ public class LoginViewController {
             Parent parent = fxmlLoader.load();
 
             RegistrationViewController registrationViewController = fxmlLoader.getController();
-            registrationViewController.setUserController(userController);
-            registrationViewController.setStage(stage);
+            registrationViewController.setViewControllers(userController, sidebarViewController);
 
             Scene scene = emailField.getScene();
             scene.setRoot(parent);

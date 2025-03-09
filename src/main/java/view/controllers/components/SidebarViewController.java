@@ -93,7 +93,7 @@ public class SidebarViewController implements ControllerAware {
         }
     }
 
-    private void updateUserButtons() {
+    public void updateUserButtons() {
         boolean isLoggedIn = userController.isUserLoggedIn();
         boolean isTeacher = userController.isCurrentUserTeacher();
 
@@ -116,10 +116,9 @@ public class SidebarViewController implements ControllerAware {
             Parent parent = fxmlLoader.load();
 
             LoginViewController loginViewController = fxmlLoader.getController();
-            loginViewController.setUserController(userController);
+            loginViewController.setViewControllers(userController, this);
 
             Stage loginStage = new Stage();
-            loginViewController.setStage(loginStage);
             loginStage.initModality(Modality.APPLICATION_MODAL);
             loginStage.initOwner(sidebar.getScene().getWindow());
             loginStage.setTitle("Login");
@@ -136,7 +135,7 @@ public class SidebarViewController implements ControllerAware {
             Parent parent = fxmlLoader.load();
 
             UserProfileViewController userProfileViewController = fxmlLoader.getController();
-            userProfileViewController.setUserController(userController);
+            userProfileViewController.setViewControllers(userController, this);
             userProfileViewController.updateUserInfo();
 
             Stage userProfileStage = new Stage();
