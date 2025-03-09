@@ -3,25 +3,23 @@
     -fx-padding: 30px;
     -fx-border-radius: 0 0 10px 10px;
     -fx-background-radius: 0 0 10px 10px;
-    -fx-alignment: center;
-    -fx-spacing: 15px;
 }
 
 .login-label {
+    --block-font-family: 'Verdana';
     -fx-font-size: 22px;
     -fx-font-weight: bold;
     -fx-text-fill: #e36486;
-    -fx-alignment: center;
 }
 
-.prompt-label {
-    -fx-text-fill: #e36486;
-    -fx-font-weight: bold;
+.username-label, .password-label {
+    --block-font-family: 'Verdana';
     -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e36486;
 }
 
-.email-field,
-.password-field {
+.email-field, .password-field {
     -fx-pref-width: 300px;
     -fx-pref-height: 35px;
     -fx-background-radius: 10px;
@@ -30,16 +28,11 @@
     -fx-padding: 5px;
 }
 
-.login-button,
-.register-button {
+.login-button, .register-button {
     -fx-background-color: #e36486;
     -fx-text-fill: white;
     -fx-background-radius: 10px;
     -fx-pref-width: 140px;
     -fx-pref-height: 35px;
-}
-
-.login-button .effect,
-.register-button .effect {
     -fx-effect: dropshadow(gaussian, rgba(246,144,166,0.8), 2, 0.5, 1.5, 1.5);
 }

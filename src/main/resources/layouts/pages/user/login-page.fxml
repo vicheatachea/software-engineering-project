@@ -4,59 +4,26 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.text.Font?>
 
 <VBox fx:id="loginVBox" alignment="CENTER" mouseTransparent="true" prefHeight="540.0" prefWidth="520.0" spacing="15" styleClass="login-vbox" stylesheets="@login-page.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.LoginController">
 
-    <Label fx:id="loginLabel" contentDisplay="CENTER" prefHeight="57.0" prefWidth="56.0" styleClass="login-label" text="Login" textFill="#e36486">
-      <font>
-         <Font name="Verdana Bold" size="14.0" />
-      </font></Label>
+    <Label fx:id="loginLabel" contentDisplay="CENTER" prefHeight="57.0" prefWidth="56.0" styleClass="login-label" text="Login"> </Label>
 
     <HBox alignment="CENTER_LEFT" spacing="10">
-        <Label prefHeight="17.0" prefWidth="150.0" styleClass="prompt-label" text="Username" textFill="#e36486">
-            <font>
-                <Font name="Verdana Bold" size="13.0" />
-            </font></Label>
+        <Label prefHeight="17.0" prefWidth="150.0" styleClass="username-label" text="Username" textFill="#e36486"> </Label>
         <TextField fx:id="emailField" prefHeight="40.0" styleClass="email-field" />
     </HBox>
 
     <HBox alignment="CENTER_LEFT" spacing="10">
-        <Label prefHeight="17.0" prefWidth="151.0" styleClass="prompt-label" text="Password" textFill="#e36486">
-            <font>
-                <Font name="Verdana Bold" size="13.0" />
-            </font></Label>
+        <Label prefHeight="17.0" prefWidth="151.0" styleClass="password-label" text="Password" textFill="#e36486"> </Label>
         <PasswordField fx:id="passwordField" prefHeight="40.0" prefWidth="305.0" styleClass="password-field" />
     </HBox>
     
     <HBox fx:id="buttonsHBox" alignment="CENTER" prefHeight="79.0" prefWidth="460.0" spacing="10">
-        <Button fx:id="loginButton" onAction="#handleLogin" styleClass="login-button" text="Login">
-         <effect>
-            <DropShadow height="2.0" offsetX="1.5" offsetY="1.5" radius="0.5" spread="1.0" width="2.0">
-               <color>
-                  <Color red="0.9647058844566345" green="0.5647059082984924" blue="0.6509804129600525" />
-               </color>
-            </DropShadow>
-         </effect></Button>
-        <Button fx:id="registerButton" onAction="#goToRegisterPage" styleClass="register-button" text="Register">
-         <effect>
-            <DropShadow height="2.0" offsetX="1.5" offsetY="1.5" radius="0.5" spread="1.0" width="2.0">
-               <color>
-                  <Color red="0.9647058844566345" green="0.5647059082984924" blue="0.6509804129600525" />
-               </color>
-            </DropShadow>
-         </effect></Button>
+        <Button fx:id="loginButton" onAction="#handleLogin" styleClass="login-button" text="Login"> </Button>
+        <Button fx:id="registerButton" onAction="#goToRegisterPage" styleClass="register-button" text="Register"> </Button>
     </HBox>
-   <effect>
-      <DropShadow>
-         <color>
-            <Color red="1.0" green="1.0" blue="1.0" />
-         </color>
-      </DropShadow>
-   </effect>
 
 </VBox>
