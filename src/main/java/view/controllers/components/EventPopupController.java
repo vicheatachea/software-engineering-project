@@ -5,7 +5,6 @@ import dto.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -94,7 +93,7 @@ public class EventPopupController {
             // Fetch data from the database
             subjectComboBox.getItems().addAll(
                     subjectController.fetchSubjectsByUser().stream()
-                            .map(SubjectDTO::name)
+                            .map(SubjectDTO::code)
                             .toList()
             );
             locationComboBox.getItems().addAll(
