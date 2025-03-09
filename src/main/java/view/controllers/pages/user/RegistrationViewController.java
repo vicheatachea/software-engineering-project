@@ -34,7 +34,7 @@ public class RegistrationViewController {
 	@FXML
 	private ComboBox<String> roleComboBox;
 
-	public void setViewControllers(UserController userController, SidebarViewController sidebarViewController) {
+	public void setControllers(UserController userController, SidebarViewController sidebarViewController) {
 		this.userController = userController;
 		this.sidebarViewController = sidebarViewController;
 	}
@@ -101,7 +101,7 @@ public class RegistrationViewController {
 			Parent parent = fxmlLoader.load();
 
 			LoginViewController loginViewController = fxmlLoader.getController();
-			loginViewController.setViewControllers(userController, sidebarViewController);
+			loginViewController.setControllers(userController, sidebarViewController);
 
 			Scene scene = firstNameField.getScene();
 			scene.setRoot(parent);

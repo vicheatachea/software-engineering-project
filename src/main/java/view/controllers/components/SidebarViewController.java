@@ -116,7 +116,7 @@ public class SidebarViewController implements ControllerAware {
             Parent parent = fxmlLoader.load();
 
             LoginViewController loginViewController = fxmlLoader.getController();
-            loginViewController.setViewControllers(userController, this);
+            loginViewController.setControllers(userController, this);
 
             Stage loginStage = new Stage();
             loginStage.initModality(Modality.APPLICATION_MODAL);
@@ -135,7 +135,7 @@ public class SidebarViewController implements ControllerAware {
             Parent parent = fxmlLoader.load();
 
             UserProfileViewController userProfileViewController = fxmlLoader.getController();
-            userProfileViewController.setViewControllers(userController, this);
+            userProfileViewController.setControllers(userController, this);
             userProfileViewController.updateUserInfo();
 
             Stage userProfileStage = new Stage();

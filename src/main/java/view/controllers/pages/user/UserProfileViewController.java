@@ -22,7 +22,7 @@ public class UserProfileViewController {
 	@FXML
 	private Label socialNumberLabel;
 
-	public void setViewControllers(UserController userController, SidebarViewController sidebarViewController) {
+	public void setControllers(UserController userController, SidebarViewController sidebarViewController) {
 		this.userController = userController;
 		this.sidebarViewController = sidebarViewController;
 	}

@@ -22,7 +22,7 @@ public class LoginViewController {
     @FXML
     private PasswordField passwordField;
 
-    public void setViewControllers(UserController userController, SidebarViewController sidebarViewController) {
+    public void setControllers(UserController userController, SidebarViewController sidebarViewController) {
         this.userController = userController;
         this.sidebarViewController = sidebarViewController;
     }
@@ -57,7 +57,7 @@ public class LoginViewController {
             Parent parent = fxmlLoader.load();
 
             RegistrationViewController registrationViewController = fxmlLoader.getController();
-            registrationViewController.setViewControllers(userController, sidebarViewController);
+            registrationViewController.setControllers(userController, sidebarViewController);
 
             Scene scene = emailField.getScene();
             scene.setRoot(parent);
