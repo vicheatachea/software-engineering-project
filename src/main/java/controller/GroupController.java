@@ -23,6 +23,11 @@ public class GroupController {
 		return groupModel.fetchGroupByName(groupName);
 	}
 
+	// Fetch a group DTO by the timetable ID
+	public GroupDTO fetchGroupByTimetableId(long timetableId) {
+		return groupModel.fetchGroupByTimetableId(timetableId);
+	}
+
 	// Check if the logged-in user is the owner of a group
 	public boolean isUserGroupOwner(String groupName) {
 		return groupModel.isUserGroupOwner(groupName);
