@@ -154,6 +154,26 @@ class GroupControllerTest {
 	}
 
 	@Test
+	void fetchByTimetableId() {
+		UserDTO teacher = createTeacher("teacher", "BA987654321");
+
+		userController.registerUser(teacher);
+		userController.authenticateUser(teacher.username(), teacher.password());
+		long teacherId = userController.fetchCurrentUserId();
+
+		SubjectDTO subject1 = createSubject("ICT", "ICT101");
+		subjectController.addSubject(subject1);
+
+		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, subject1.code());
+
+		groupController.addGroup(group);
+
+		long timetableId = timetableController.fetchTimetableForGroup(group.name());
+
+		assertEquals(group, groupController.fetchGroupByTimetableId(timetableId));
+	}
+
+	@Test
 	void isUserGroupOwner() {
 		UserDTO teacher = createTeacher("teacher", "123456789AB");
 		UserDTO student = createStudent("student", "BA123456789");
