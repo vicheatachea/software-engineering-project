@@ -5,7 +5,10 @@ import dao.TimetableDAO;
 import dao.UserDAO;
 import dao.UserGroupDAO;
 import dto.GroupDTO;
-import entity.*;
+import entity.SubjectEntity;
+import entity.TimetableEntity;
+import entity.UserEntity;
+import entity.UserGroupEntity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -53,6 +56,16 @@ public class GroupModel {
 	// Fetch a group DTO by the group name
 	public GroupDTO fetchGroupByName(String groupName) {
 		UserGroupEntity group = userGroupDAO.findByName(groupName);
+
+		if (group == null) {
+			throw new IllegalArgumentException("Group does not exist.");
+		}
+
+		return ConvertToGroupDTO(group);
+	}
+
+	public GroupDTO fetchGroupByTimetableId(long timetableId) {
+		UserGroupEntity group = userGroupDAO.findByTimetableId(timetableId);
 
 		if (group == null) {
 			throw new IllegalArgumentException("Group does not exist.");
