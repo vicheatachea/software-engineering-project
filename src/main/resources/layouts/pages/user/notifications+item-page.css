@@ -7,7 +7,8 @@
 }
 
 .notification-label {
-    -fx-font-size: 22px;
+    --block-font-family: 'Verdana';
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-text-fill: #e36486;
     -fx-alignment: center;
@@ -16,7 +17,7 @@
 }
 
 .notifications-container {
-    -fx-background-color: white;
+    -fx-background-color: lightgray;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
     -fx-padding: 10px;
@@ -28,16 +29,11 @@
     -fx-spacing: 10px;
 }
 
-.event-label {
-    -fx-text-fill: white;
+.event-label, .time-label {
+    --block-font-family: 'Verdana';
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
-    -fx-text-fill: #FFE0E9;
-}
-
-.time-label {
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-text-fill: #FFE0E9;
+    -fx-text-fill: #e36486;
 }
 
 .delete-button {
@@ -46,6 +42,7 @@
     -fx-font-weight: bold;
     -fx-border-color: transparent;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(246,144,166,0.8), 2, 0.5, 1.5, 1.5);
 }
 
 .mark-all-button {
@@ -57,4 +54,5 @@
     -fx-cursor: hand;
     -fx-alignment: center;
     -fx-margin: 20px 0 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(246,144,166,0.8), 2, 0.5, 1.5, 1.5);
 }

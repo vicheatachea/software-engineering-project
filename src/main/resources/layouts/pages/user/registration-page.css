@@ -1,58 +1,40 @@
 .registration-vbox {
-    -fx-pref-width: 520px;
-    -fx-pref-height: 540px;
-    -fx-spacing: 15px;
-    -fx-alignment: center;
-    -fx-padding: 30px;
     -fx-background-color: linear-gradient(to bottom, #FFE0E9, #F690A6);
+    -fx-padding: 30px;
     -fx-border-radius: 0 0 10px 10px;
     -fx-background-radius: 0 0 10px 10px;
 }
 
 .register-label {
-    -fx-text-fill: #e36486;
+    --block-font-family: 'Verdana';
     -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-alignment: center;
+    -fx-text-fill: #e36486;
 }
 
-.prompt-label {
-    -fx-text-fill: #a9a9a9;
-    -fx-font-size: 14px;
-    -fx-padding: 0 10px;
-    -fx-translate-y: -25px;
-    -fx-background-color: white;
+.register-label, .firstname-label, .lastname-label, .socialnumber-label, .email-label, .username-label, .password-label, .dob-label, .role-label {
+    --block-font-family: 'Verdana';
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e36486;
+}
+
+.first-name-field, .last-name-field, .social-number-field, .email-field, .username-field, .password-field, .dob-field, .role-field {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 35px;
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
-    -fx-border-color: transparent;
+    -fx-border-color: #e36486;
+    -fx-padding: 5px;
 }
 
-.first-name-field,
-.last-name-field,
-.social-number-field,
-.email-field,
-.username-field,
-.password-field,
-.dob-field,
-.role-field {
-    -fx-pref-height: 40px;
-}
-
-.role-field,
-.dob-field {
-    -fx-pref-width: 200px;
-}
-
-.register-button,
-.back-to-login-button {
+.register-button, .back-to-login-button {
     -fx-background-color: #e36486;
     -fx-text-fill: white;
     -fx-background-radius: 10px;
     -fx-pref-width: 140px;
     -fx-pref-height: 35px;
-}
-
-.register-button .effect,
-.back-to-login-button .effect {
     -fx-effect: dropshadow(gaussian, rgba(246,144,166,0.8), 2, 0.5, 1.5, 1.5);
 }
+
+
