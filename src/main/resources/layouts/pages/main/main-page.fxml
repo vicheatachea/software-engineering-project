@@ -3,7 +3,7 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<SplitPane dividerPositions="0.23" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="main-page" stylesheets="@main-page.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.main.MainPageController">
+<SplitPane dividerPositions="0.23" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="main-page" stylesheets="@main-page.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.main.MainPageViewController">
    <items>
       <fx:include fx:id="sidebar" source="../../components/sidebar/sidebar.fxml" />
       <StackPane fx:id="mainContent" prefHeight="397.0" prefWidth="374.0" />
