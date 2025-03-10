@@ -8,6 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import view.controllers.components.SidebarViewController;
 
@@ -16,6 +18,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
 public class RegistrationViewController {
+	public VBox registrationVBox;
+	public Label registerLabel;
+	public TextField emailField;
+	public HBox dobRoleHBox;
+	public HBox buttonsHBox;
+	public Button backToLoginButton;
+	public Button registerButton;
 	private UserController userController;
 	private SidebarViewController sidebarViewController;
 

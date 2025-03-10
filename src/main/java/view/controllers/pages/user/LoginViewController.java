@@ -5,15 +5,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.control.Alert;
 import view.controllers.components.SidebarViewController;
 
 import java.io.IOException;
 
 public class LoginViewController {
+    public VBox loginVBox;
+    public Label loginLabel;
+    public HBox buttonsHBox;
+    public Button loginButton;
+    public Button registerButton;
     private UserController userController;
     private SidebarViewController sidebarViewController;
 
