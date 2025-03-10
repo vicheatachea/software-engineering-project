@@ -141,7 +141,7 @@ public class EventPopupViewController {
                     scheduleComboBox.setValue("Myself");
                 } else {
                     scheduleComboBox.setValue("Group");
-//                    groupComboBox.setValue(groupController.fetchGroupByTimetable(teachingSession.timetableId()).name());
+                    groupComboBox.setValue(groupController.fetchGroupByTimetableId(teachingSession.timetableId()).name());
                     subjectComboBox.setDisable(true);
                 }
                 subjectComboBox.setValue(subject);
@@ -166,7 +166,7 @@ public class EventPopupViewController {
                     scheduleComboBox.setValue("Myself");
                 } else {
                     scheduleComboBox.setValue("Group");
-//                    groupComboBox.setValue(groupController.fetchGroupByTimetable(assignment.timetableId()).name());
+                    groupComboBox.setValue(groupController.fetchGroupByTimetableId(assignment.timetableId()).name());
                     subjectComboBox.setDisable(true);
                 }
                 subjectComboBox.setValue(subject);
