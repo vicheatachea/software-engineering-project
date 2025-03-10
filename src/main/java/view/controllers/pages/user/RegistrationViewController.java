@@ -97,8 +97,6 @@ public class RegistrationViewController {
 			} else {
 				showAlert("Error", "Invalid user data.");
 			}
-		} catch (DateTimeParseException e) {
-			showAlert("Error", "Invalid date format. Please use yyyy-MM-dd.");
 		} catch (Exception e) {
 			showAlert("Error", "An unexpected error occurred: " + e.getMessage());
 		}

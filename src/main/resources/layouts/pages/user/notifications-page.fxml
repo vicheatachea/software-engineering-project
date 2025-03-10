@@ -3,25 +3,15 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.text.Font?>
 
 <VBox fx:id="notificationsVBox" alignment="CENTER" prefHeight="540.0" prefWidth="520.0" spacing="15" styleClass="notifications-vbox" stylesheets="@notifications.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.NotificationsViewController">
 
-    <Label fx:id="notificationLabel" styleClass="notification-label" text="Notifications" textFill="#e36486"> </Label>
+    <Label fx:id="notificationLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="57.0" prefWidth="252.0" stylesheets="@notifications.css" styleClass="notification-label" text="Notifications"> </Label>
 
     <ScrollPane fx:id="notificationsScrollPane" fitToWidth="true" opacity="0.3" prefHeight="443.0" prefWidth="460.0">
         <VBox fx:id="notificationsContainer" spacing="10" styleClass="notifications-container" />
     </ScrollPane>
 
-    <Button fx:id="markAllReadButton" onAction="#handleMarkAllRead" styleClass="mark-all-button" text="Mark All Read">
-      <effect>
-         <DropShadow height="2.0" offsetX="1.5" offsetY="1.5" radius="0.5" spread="1.0" width="2.0">
-            <color>
-               <Color red="0.9647058844566345" green="0.5647059082984924" blue="0.6509804129600525" />
-            </color>
-         </DropShadow>
-      </effect></Button>
+    <Button fx:id="markAllReadButton" onAction="#handleMarkAllRead" styleClass="mark-all-button" text="Mark All Read"> </Button>
 </VBox>

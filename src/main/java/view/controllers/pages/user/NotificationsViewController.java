@@ -4,6 +4,7 @@ import dto.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import javafx.scene.control.ScrollPane;
 import view.controllers.components.EventNotification;
 
 public class NotificationsViewController {
+    public Label notificationLabel;
     private List<EventNotification> eventNotifications = new ArrayList<>();
 
     @FXML
