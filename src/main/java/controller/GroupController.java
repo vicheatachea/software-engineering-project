@@ -25,6 +25,11 @@ public class GroupController {
 		return groupModel.fetchGroupByName(groupName);
 	}
 
+	// Fetch a group DTO by the timetable ID
+	public GroupDTO fetchGroupByTimetableId(long timetableId) {
+		return groupModel.fetchGroupByTimetableId(timetableId);
+	}
+
 	// Check if the logged-in user is the owner of a group
 	public boolean isUserGroupOwner(String groupName) {
 		return groupModel.isUserGroupOwner(groupName);
@@ -53,10 +58,5 @@ public class GroupController {
 	// Remove a student from a group
 	public void removeStudentFromGroup(GroupDTO groupDTO, String studentUsername) {
 		groupModel.removeStudentFromGroup(groupDTO, studentUsername);
-	}
-
-	public Set<UserDTO> fetchAllStudentsByGroup(GroupDTO groupDTO) {
-		// Placeholder
-		return null;
 	}
 }

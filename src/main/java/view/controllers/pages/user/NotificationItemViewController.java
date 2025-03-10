@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
-public class NotificationItemController {
+public class NotificationItemViewController {
     @FXML
     private Label eventLabel;
 
@@ -14,9 +14,9 @@ public class NotificationItemController {
     @FXML
     private HBox notificationItem;
 
-    private NotificationsController parentController;
+    private NotificationsViewController parentController;
 
-    public void setNotificationData(NotificationsController parent, String event, int time) {
+    public void setNotificationData(NotificationsViewController parent, String event, int time) {
         this.parentController = parent;
         eventLabel.setText(event);
         timeLabel.setText("Time: " + time);

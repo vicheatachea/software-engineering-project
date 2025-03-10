@@ -1,4 +1,4 @@
 package view.controllers.pages.main;
 
-public class SettingsController {
+public class SettingsViewController {
 }

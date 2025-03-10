@@ -154,39 +154,23 @@ class GroupControllerTest {
 	}
 
 	@Test
-	void fetchAllStudentsByGroupName() {
-		UserDTO teacher = createTeacher("teacher", "123456789AB");
+	void fetchByTimetableId() {
+		UserDTO teacher = createTeacher("teacher", "BA987654321");
 
 		userController.registerUser(teacher);
 		userController.authenticateUser(teacher.username(), teacher.password());
 		long teacherId = userController.fetchCurrentUserId();
 
-		SubjectDTO subject = createSubject("ICT", "ICT101");
-		subjectController.addSubject(subject);
+		SubjectDTO subject1 = createSubject("ICT", "ICT101");
+		subjectController.addSubject(subject1);
 
-		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, "ICT101");
+		GroupDTO group = new GroupDTO("Group1", "TST1", 10, teacherId, subject1.code());
+
 		groupController.addGroup(group);
 
-		List<UserDTO> students = List.of(
-				createStudent("student1", "BA123456789"),
-				createStudent("student2", "BA987654321"),
-				createStudent("student3", "BA654321987"),
-				createStudent("student4", "BA321987654"),
-				createStudent("student5", "BA789654321")
-		);
+		long timetableId = timetableController.fetchTimetableForGroup(group.name());
 
-		for (UserDTO student : students) {
-			userController.registerUser(student);
-			userController.authenticateUser(student.username(), student.password());
-			userController.logout();
-			userController.authenticateUser(teacher.username(), teacher.password());
-			groupController.addStudentToGroup(group, student.username());
-			userController.logout();
-		}
-
-		userController.fetchStudentsInGroup(group.name()).forEach(userDTO -> {
-			assertTrue(students.stream().anyMatch(student -> student.username().equals(userDTO.username())));
-		});
+		assertEquals(group, groupController.fetchGroupByTimetableId(timetableId));
 	}
 
 	@Test

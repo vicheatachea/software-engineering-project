@@ -20,7 +20,7 @@
         <Label prefHeight="17.0" prefWidth="151.0" styleClass="password-label" text="Password" textFill="#e36486"> </Label>
         <PasswordField fx:id="passwordField" prefHeight="40.0" prefWidth="305.0" styleClass="password-field" />
     </HBox>
-    
+
     <HBox fx:id="buttonsHBox" alignment="CENTER" prefHeight="79.0" prefWidth="460.0" spacing="10">
         <Button fx:id="loginButton" onAction="#handleLogin" styleClass="login-button" text="Login"> </Button>
         <Button fx:id="registerButton" onAction="#goToRegisterPage" styleClass="register-button" text="Register"> </Button>

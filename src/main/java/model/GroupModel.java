@@ -64,6 +64,16 @@ public class GroupModel {
 		return ConvertToGroupDTO(group);
 	}
 
+	public GroupDTO fetchGroupByTimetableId(long timetableId) {
+		UserGroupEntity group = userGroupDAO.findByTimetableId(timetableId);
+
+		if (group == null) {
+			throw new IllegalArgumentException("Group does not exist.");
+		}
+
+		return ConvertToGroupDTO(group);
+	}
+
 	public void addGroup(GroupDTO groupDTO) {
 		if (!userModel.isCurrentUserTeacher()) {
 			throw new IllegalArgumentException("Only teacher can add group");

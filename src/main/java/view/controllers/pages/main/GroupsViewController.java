@@ -9,7 +9,6 @@ import dto.SubjectDTO;
 import dto.UserDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -19,13 +18,12 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import view.controllers.ControllerAware;
 
-import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public class GroupsController implements ControllerAware {
+public class GroupsViewController implements ControllerAware {
     private GroupController groupController;
     private SubjectController subjectController;
     private UserController userController;
@@ -111,7 +109,6 @@ public class GroupsController implements ControllerAware {
         addLabel.setFont(new Font("Arial", 18));
 
         addStudentComboBox.setStyle("-fx-font: 16px \"Arial\";");
-        addStudentComboBox.setPromptText("Select Student");
 
         addStudentButton.setFont(new Font("Arial", 16));
         addStudentButton.setOnAction(event -> handleAddStudent());
@@ -123,7 +120,6 @@ public class GroupsController implements ControllerAware {
         removeLabel.setFont(new Font("Arial", 18));
 
         removeStudentComboBox.setStyle("-fx-font: 16px \"Arial\";");
-        removeStudentComboBox.setPromptText("Select Student");
 
         removeStudentButton.setFont(new Font("Arial", 16));
         removeStudentButton.setOnAction(event -> handleRemoveStudent());
@@ -422,15 +418,19 @@ public class GroupsController implements ControllerAware {
 
         UserDTO currentUser = userController.getLoggedInUser();
         List<UserDTO> students = userController.fetchAllStudents();
-        Set<UserDTO> groupStudents = groupController.fetchAllStudentsByGroup(groups.get(currentIndex));
+        Set<UserDTO> groupStudents = userController.fetchStudentsInGroup(itemView.getSelectionModel().getSelectedItem());
 
-        students.forEach(student -> {
-            if (!student.username().equals(currentUser.username()) && student.role().equals("STUDENT")) {
-                addStudentComboBox.getItems().add(student.username());
-            }
-        });
+        if (students != null) {
+            students.forEach(student -> {
+                if (!student.username().equals(currentUser.username()) && student.role().equals("STUDENT") && !groupStudents.contains(student)) {
+                    addStudentComboBox.getItems().add(student.username());
+                }
+            });
+        }
 
-        groupStudents.forEach(student -> removeStudentComboBox.getItems().add(student.username()));
+        if (groupStudents != null) {
+            groupStudents.forEach(student -> removeStudentComboBox.getItems().add(student.username()));
+        }
     }
 
     private void clearFields() {

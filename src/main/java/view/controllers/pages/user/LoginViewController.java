@@ -1,6 +1,5 @@
 package view.controllers.pages.user;
 
-import controller.BaseController;
 import controller.UserController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,24 +9,22 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
+import view.controllers.components.SidebarViewController;
 
 import java.io.IOException;
 
-public class LoginController {
+public class LoginViewController {
     private UserController userController;
-    private Stage stage;
+    private SidebarViewController sidebarViewController;
 
     @FXML
     private TextField emailField;
     @FXML
     private PasswordField passwordField;
 
-    public void setUserController(UserController userController) {
+    public void setControllers(UserController userController, SidebarViewController sidebarViewController) {
         this.userController = userController;
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
+        this.sidebarViewController = sidebarViewController;
     }
 
     @FXML
@@ -42,7 +39,9 @@ public class LoginController {
 
         try {
             if (userController.authenticateUser(username, password)) {
-                stage.close(); // Close the login popup
+                sidebarViewController.updateUserButtons();
+                Stage stage = (Stage) emailField.getScene().getWindow();
+                stage.close();
             } else {
                 showAlert("Error", "Invalid credentials.");
             }
@@ -57,9 +56,8 @@ public class LoginController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/registration-page.fxml"));
             Parent parent = fxmlLoader.load();
 
-            RegistrationController registrationController = fxmlLoader.getController();
-            registrationController.setUserController(userController);
-            registrationController.setStage(stage);
+            RegistrationViewController registrationViewController = fxmlLoader.getController();
+            registrationViewController.setControllers(userController, sidebarViewController);
 
             Scene scene = emailField.getScene();
             scene.setRoot(parent);
