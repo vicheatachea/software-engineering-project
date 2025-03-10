@@ -108,6 +108,9 @@ public class SidebarViewController implements ControllerAware {
         subjectsButton.setManaged(isTeacher);
         locationsButton.setVisible(isTeacher);
         locationsButton.setManaged(isTeacher);
+
+        currentView.set("clear");
+        currentView.set("timetable");
     }
 
     private void showLoginPopup() {
