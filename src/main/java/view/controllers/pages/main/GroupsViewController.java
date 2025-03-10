@@ -109,7 +109,6 @@ public class GroupsViewController implements ControllerAware {
         addLabel.setFont(new Font("Arial", 18));
 
         addStudentComboBox.setStyle("-fx-font: 16px \"Arial\";");
-        addStudentComboBox.setPromptText("Select Student");
 
         addStudentButton.setFont(new Font("Arial", 16));
         addStudentButton.setOnAction(event -> handleAddStudent());
@@ -121,7 +120,6 @@ public class GroupsViewController implements ControllerAware {
         removeLabel.setFont(new Font("Arial", 18));
 
         removeStudentComboBox.setStyle("-fx-font: 16px \"Arial\";");
-        removeStudentComboBox.setPromptText("Select Student");
 
         removeStudentButton.setFont(new Font("Arial", 16));
         removeStudentButton.setOnAction(event -> handleRemoveStudent());
@@ -420,11 +418,11 @@ public class GroupsViewController implements ControllerAware {
 
         UserDTO currentUser = userController.getLoggedInUser();
         List<UserDTO> students = userController.fetchAllStudents();
-        Set<UserDTO> groupStudents = groupController.fetchAllStudentsByGroup(groups.get(currentIndex));
+        Set<UserDTO> groupStudents = userController.fetchStudentsInGroup(itemView.getSelectionModel().getSelectedItem());
 
         if (students != null) {
             students.forEach(student -> {
-                if (!student.username().equals(currentUser.username()) && student.role().equals("STUDENT")) {
+                if (!student.username().equals(currentUser.username()) && student.role().equals("STUDENT") && !groupStudents.contains(student)) {
                     addStudentComboBox.getItems().add(student.username());
                 }
             });
