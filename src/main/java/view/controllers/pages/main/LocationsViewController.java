@@ -7,7 +7,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import view.controllers.ControllerAware;
@@ -15,7 +14,7 @@ import view.controllers.ControllerAware;
 import java.util.List;
 import java.util.Optional;
 
-public class LocationsController implements ControllerAware {
+public class LocationsViewController implements ControllerAware {
 	private LocationController locationController;
 	private List<LocationDTO> locations;
 	private final List<String> components = List.of("Name", "Building", "Campus");

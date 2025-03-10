@@ -5,25 +5,27 @@ import dto.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.RowConstraints;
+import javafx.stage.Stage;
 import util.TimeFormatterUtil;
+import view.controllers.pages.main.TimetableViewController;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class EventPopupController {
+public class EventPopupViewController {
     private EventController eventController;
     private GroupController groupController;
     private LocationController locationController;
     private SubjectController subjectController;
     private TimetableController timetableController;
+    private TimetableViewController timetableViewController;
 
     private Event event;
-    private final RowConstraints hiddenRow = new RowConstraints(0);
     private final TimeTextField startTimeField = new TimeTextField();
     private final TimeTextField endTimeField = new TimeTextField();
 
@@ -68,13 +70,14 @@ public class EventPopupController {
     @FXML
     private Button deleteButton;
 
-    public void setUp(Event event, BaseController baseController) {
+    public void setUp(Event event, BaseController baseController, TimetableViewController timetableViewController) {
         this.event = event;
         this.eventController = baseController.getEventController();
         this.groupController = baseController.getGroupController();
         this.locationController = baseController.getLocationController();
         this.subjectController = baseController.getSubjectController();
         this.timetableController = baseController.getTimetableController();
+        this.timetableViewController = timetableViewController;
     }
 
     @FXML
@@ -88,12 +91,13 @@ public class EventPopupController {
 
         eventComboBox.addEventHandler(ActionEvent.ACTION, event -> handleEventChange());
         scheduleComboBox.addEventHandler(ActionEvent.ACTION, event -> handleScheduleChange());
+        groupComboBox.addEventHandler(ActionEvent.ACTION, event -> handleGroupChange());
 
         Platform.runLater(() -> {
             // Fetch data from the database
             subjectComboBox.getItems().addAll(
                     subjectController.fetchSubjectsByUser().stream()
-                            .map(SubjectDTO::name)
+                            .map(SubjectDTO::code)
                             .toList()
             );
             locationComboBox.getItems().addAll(
@@ -131,8 +135,16 @@ public class EventPopupController {
                 startTimeField.setText(TimeFormatterUtil.getTimeFromDateTime(startDateTime));
                 endTimeField.setText(TimeFormatterUtil.getTimeFromDateTime(endDateTime));
                 locationComboBox.setValue(location);
-                subjectComboBox.setValue(subject);
                 descriptionTextArea.setText(description);
+
+                if (teachingSession.timetableId() == timetableController.fetchTimetableForUser()) {
+                    scheduleComboBox.setValue("Myself");
+                } else {
+                    scheduleComboBox.setValue("Group");
+//                    groupComboBox.setValue(groupController.fetchGroupByTimetable(teachingSession.timetableId()).name());
+                    subjectComboBox.setDisable(true);
+                }
+                subjectComboBox.setValue(subject);
             } else if (event instanceof AssignmentDTO assignment) {
                 LocalDateTime publishingDateTime = assignment.publishingDate();
                 LocalDateTime deadlineDateTime = assignment.deadline();
@@ -148,8 +160,16 @@ public class EventPopupController {
                 endTimeField.setText(TimeFormatterUtil.getTimeFromDateTime(deadlineDateTime));
                 nameTextField.setText(assignmentName);
                 assignmentComboBox.setValue(assignmentType);
-                subjectComboBox.setValue(subject);
                 descriptionTextArea.setText(description);
+
+                if (assignment.timetableId() == timetableController.fetchTimetableForUser()) {
+                    scheduleComboBox.setValue("Myself");
+                } else {
+                    scheduleComboBox.setValue("Group");
+//                    groupComboBox.setValue(groupController.fetchGroupByTimetable(assignment.timetableId()).name());
+                    subjectComboBox.setDisable(true);
+                }
+                subjectComboBox.setValue(subject);
             }
         });
     }
@@ -163,39 +183,10 @@ public class EventPopupController {
 
         switch (eventType) {
             case "Class":
-                startLabel.setText("Start Time");
-                endLabel.setText("End Time");
-                endDatePicker.setValue(null);
-                endDatePicker.setDisable(true);
-
-                popupGridPane.getRowConstraints().set(6, hiddenRow);
-                nameLabel.setVisible(false);
-                nameTextField.setVisible(false);
-
-                popupGridPane.getRowConstraints().set(7, hiddenRow);
-                assignmentLabel.setVisible(false);
-                assignmentComboBox.setVisible(false);
-
-                popupGridPane.getRowConstraints().set(8, new RowConstraints());
-                locationLabel.setVisible(true);
-                locationComboBox.setVisible(true);
+                toggleEventView(false);
                 break;
             case "Assignment":
-                startLabel.setText("Publishing Date");
-                endLabel.setText("Due Date");
-                endDatePicker.setDisable(false);
-
-                popupGridPane.getRowConstraints().set(6, new RowConstraints());
-                nameLabel.setVisible(true);
-                nameTextField.setVisible(true);
-
-                popupGridPane.getRowConstraints().set(7, new RowConstraints());
-                assignmentLabel.setVisible(true);
-                assignmentComboBox.setVisible(true);
-
-                popupGridPane.getRowConstraints().set(8, hiddenRow);
-                locationLabel.setVisible(false);
-                locationComboBox.setVisible(false);
+                toggleEventView(true);
                 break;
         }
     }
@@ -209,15 +200,20 @@ public class EventPopupController {
 
         switch (scheduleType) {
             case "Myself":
-                popupGridPane.getRowConstraints().set(4, hiddenRow);
-                groupLabel.setVisible(false);
-                groupComboBox.setVisible(false);
+                toggleScheduleView(false);
                 break;
             case "Group":
-                popupGridPane.getRowConstraints().set(4, new RowConstraints());
-                groupLabel.setVisible(true);
-                groupComboBox.setVisible(true);
+                toggleScheduleView(true);
                 break;
+        }
+    }
+
+    private void handleGroupChange() {
+        String groupName = (String) groupComboBox.getValue();
+
+        if (groupName != null) {
+            GroupDTO group = groupController.fetchGroupByName(groupName);
+            subjectComboBox.setValue(group.subjectCode());
         }
     }
 
@@ -328,6 +324,7 @@ public class EventPopupController {
         } else {
             eventController.updateEvent(newEvent);
         }
+        leaveAndUpdate();
     }
 
     @FXML
@@ -350,6 +347,7 @@ public class EventPopupController {
                 }
                 eventController.deleteEvent(event);
             }
+            leaveAndUpdate();
         }
     }
 
@@ -367,5 +365,53 @@ public class EventPopupController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void toggleEventView(boolean isAssignment) {
+        if (isAssignment) {
+            startLabel.setText("Publishing Date");
+            endLabel.setText("Due Date");
+        } else {
+            startLabel.setText("Start Time");
+            endLabel.setText("End Time");
+        }
+
+        endDatePicker.setDisable(!isAssignment);
+
+        for (Node child : popupGridPane.getChildren()) {
+            Integer rowIndex = GridPane.getRowIndex(child);
+            if (rowIndex == null) {
+                rowIndex = 0;
+            }
+            if (rowIndex == 6 || rowIndex == 7) {
+                child.setVisible(isAssignment);
+                child.setManaged(isAssignment);
+            }
+            if (rowIndex == 8) {
+                child.setVisible(!isAssignment);
+                child.setManaged(!isAssignment);
+            }
+        }
+    }
+
+    private void toggleScheduleView(boolean isGroup) {
+        for (Node child : popupGridPane.getChildren()) {
+            Integer rowIndex = GridPane.getRowIndex(child);
+            if (rowIndex == null) {
+                rowIndex = 0;
+            }
+            if (rowIndex == 4) {
+                child.setVisible(isGroup);
+                child.setManaged(isGroup);
+            }
+        }
+        subjectComboBox.setValue(null);
+        subjectComboBox.setDisable(isGroup);
+    }
+
+    private void leaveAndUpdate() {
+        timetableViewController.loadTimetable();
+        Stage stage = (Stage) popupGridPane.getScene().getWindow();
+        stage.close();
     }
 }

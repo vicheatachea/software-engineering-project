@@ -4,7 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import view.controllers.pages.main.MainPageController;
+import view.controllers.pages.main.MainPageViewController;
 
 import java.io.IOException;
 
@@ -17,7 +17,7 @@ public class View extends Application {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/pages/main/main-page.fxml"));
             stage.setScene(new Scene(loader.load()));
-            MainPageController controller = loader.getController();
+            MainPageViewController controller = loader.getController();
             controller.setStage(stage);
 
             stage.setTitle("Student Timetable Management System");

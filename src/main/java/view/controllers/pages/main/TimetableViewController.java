@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 import util.StringUtil;
 import view.controllers.ControllerAware;
 import view.controllers.components.EventLabel;
-import view.controllers.components.EventPopupController;
+import view.controllers.components.EventPopupViewController;
 import view.controllers.components.HeaderLabel;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class TimetableController implements ControllerAware {
+public class TimetableViewController implements ControllerAware {
     private static final int NUMBER_OF_BUTTONS = 2;
     BaseController baseController;
     EventController eventController;
@@ -167,8 +167,8 @@ public class TimetableController implements ControllerAware {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/components/timetable/event-popup.fxml"));
             Parent content = loader.load();
 
-            EventPopupController popupController = loader.getController();
-            popupController.setUp(event, baseController);
+            EventPopupViewController popupViewController = loader.getController();
+            popupViewController.setUp(event, baseController, this);
 
             Stage popupStage = new Stage();
             popupStage.setScene(new Scene(content));
@@ -224,7 +224,7 @@ public class TimetableController implements ControllerAware {
         return String.format("%02d", number);
     }
 
-    private void loadTimetable() {
+    public void loadTimetable() {
         if (!userController.isUserLoggedIn()) {
             return;
         }

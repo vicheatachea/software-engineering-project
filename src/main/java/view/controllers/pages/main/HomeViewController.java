@@ -1,4 +1,4 @@
 package view.controllers.pages.main;
 
-public class HomeController {
+public class HomeViewController {
 }

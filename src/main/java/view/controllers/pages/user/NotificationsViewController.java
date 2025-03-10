@@ -12,9 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.control.ScrollPane;
-import view.controllers.components.SidebarController;
+import view.controllers.components.SidebarViewController;
 
-public class NotificationsController implements NotificationAware {
+public class NotificationsViewController implements NotificationAware {
     @FXML
     private VBox notificationsContainer;
 
@@ -22,7 +22,7 @@ public class NotificationsController implements NotificationAware {
     private Button markAllReadButton;
 
     private final List<Event> events = new ArrayList<>();
-    private SidebarController sidebarController;
+    private SidebarViewController sidebarViewController;
 
     @FXML
     private VBox notificationsVBox;
@@ -35,15 +35,15 @@ public class NotificationsController implements NotificationAware {
         VBox.setVgrow(notificationsScrollPane, javafx.scene.layout.Priority.ALWAYS);
     }
 
-    public void setSidebarController(SidebarController sidebarController) {
-        this.sidebarController = sidebarController;
+    public void setSidebarViewController(SidebarViewController sidebarViewController) {
+        this.sidebarViewController = sidebarViewController;
     }
 
     @Override
     public void notify(Event event, int time) {
         events.add(event);
         loadNotification(event.toString(), time);
-        if (sidebarController != null) {
+        if (sidebarViewController != null) {
 //            sidebarController.incrementNotificationCount();
         }
     }
@@ -53,8 +53,8 @@ public class NotificationsController implements NotificationAware {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/notifications/notification-item.fxml"));
             HBox notificationBox = loader.load();
 
-            NotificationItemController controller = loader.getController();
-            controller.setNotificationData(this, event, time);
+            NotificationItemViewController itemViewController = loader.getController();
+            itemViewController.setNotificationData(this, event, time);
 
             notificationsContainer.getChildren().add(notificationBox);
         } catch (IOException e) {
@@ -65,7 +65,7 @@ public class NotificationsController implements NotificationAware {
     public void removeNotification(HBox notification) {
         notificationsContainer.getChildren().remove(notification);
         events.removeIf(event -> event.toString().equals(((Label) notification.getChildren().get(0)).getText()));
-        if (sidebarController != null) {
+        if (sidebarViewController != null) {
 //            sidebarController.incrementNotificationCount();
         }
     }
@@ -74,7 +74,7 @@ public class NotificationsController implements NotificationAware {
     private void handleMarkAllRead() {
         notificationsContainer.getChildren().clear();
         events.clear();
-        if (sidebarController != null) {
+        if (sidebarViewController != null) {
 //            sidebarController.resetNotificationCount();
         }
     }

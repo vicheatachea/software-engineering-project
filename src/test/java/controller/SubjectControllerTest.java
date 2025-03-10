@@ -91,9 +91,6 @@ class SubjectControllerTest {
 		userController.registerUser(student);
 		userController.authenticateUser(student.username(), student.password());
 
-		// Fetch timetableId for student
-		long studentId = userController.fetchCurrentUserId();
-
 		// Log out student
 		userController.logout();
 
@@ -113,7 +110,7 @@ class SubjectControllerTest {
 
 		groupController.addGroup(group);
 
-		groupController.addStudentToGroup(group, studentId);
+		groupController.addStudentToGroup(group, student.username());
 
 		long groupTimetableId = timetableController.fetchTimetableForGroup(group.name());
 
