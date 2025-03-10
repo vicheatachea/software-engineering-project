@@ -2,6 +2,9 @@ package view.controllers.components;
 
 import controller.BaseController;
 import controller.UserController;
+import controller.notifications.NotificationAware;
+import controller.notifications.NotificationService;
+import dto.Event;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -21,10 +24,13 @@ import view.controllers.pages.user.NotificationsViewController;
 import view.controllers.pages.user.UserProfileViewController;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class SidebarViewController implements ControllerAware {
+public class SidebarViewController implements ControllerAware, NotificationAware {
     private final StringProperty currentView = new SimpleStringProperty();
-    private int notificationCount = 0;
+    private NotificationService notificationService;
+    private List<EventNotification> notifications = new ArrayList<>();
 
     private UserController userController;
     private Button accountButton;
@@ -77,6 +83,7 @@ public class SidebarViewController implements ControllerAware {
     @Override
     public void setBaseController(BaseController baseController) {
         this.userController = baseController.getUserController();
+        this.notificationService = new NotificationService(this, baseController.getEventController());
     }
 
     private void addButton(String name, String view) {
@@ -109,6 +116,7 @@ public class SidebarViewController implements ControllerAware {
         locationsButton.setVisible(isTeacher);
         locationsButton.setManaged(isTeacher);
 
+        clearNotifications();
         currentView.set("clear");
         currentView.set("timetable");
     }
@@ -158,7 +166,7 @@ public class SidebarViewController implements ControllerAware {
             Parent parent = fxmlLoader.load();
 
             NotificationsViewController notificationsViewController = fxmlLoader.getController();
-
+            notificationsViewController.setEventNotifications(notifications);
 
             Stage notificationStage = new Stage();
             notificationStage.initModality(Modality.APPLICATION_MODAL);
@@ -171,21 +179,17 @@ public class SidebarViewController implements ControllerAware {
         }
     }
 
-//    public void incrementNotificationCount() {
-//        notificationCount++;
-//        updateNotificationButton();
-//    }
-//
-//    public void resetNotificationCount() {
-//        notificationCount = 0;
-//        updateNotificationButton();
-//    }
-//
-//    private void updateNotificationButton() {
-//        if (notificationCount > 0) {
-//            notificationButton.setText("\uD83D\uDD14 " + notificationCount);
-//        } else {
-//            notificationButton.setText("\uD83D\uDD14");
-//        }
-//    }
+    @Override
+    public void notify(Event event, int time) {
+        notifications.add(new EventNotification(event, time));
+    }
+
+    private void clearNotifications() {
+        notifications.clear();
+        notificationService.reset();
+    }
+
+    public void shutdownNotifications() {
+        notificationService.shutdown();
+    }
 }
