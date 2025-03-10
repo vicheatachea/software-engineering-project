@@ -33,6 +33,7 @@ public class MainPageViewController implements Initializable {
 
 	public void setStage(Stage stage) {
 		this.stage = stage;
+        stage.setOnCloseRequest(event -> sidebarController.shutdownNotifications());
 	}
 
     @Override
@@ -63,6 +64,7 @@ public class MainPageViewController implements Initializable {
                     loadContent("/layouts/pages/main/settings.fxml", null);
                     break;
                 case "quit":
+                    sidebarController.shutdownNotifications();
                     stage.close();
                     break;
             }
