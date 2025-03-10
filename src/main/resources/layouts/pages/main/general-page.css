@@ -10,6 +10,13 @@
     -fx-text-fill: #e36486;
 }
 
+.grid-pane {
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #e36486;
+    -fx-padding: 5px;
+}
+
 .new-button, .add-button, .save-button, .delete-button {
     -fx-background-color: #e36486;
     -fx-text-fill: white;

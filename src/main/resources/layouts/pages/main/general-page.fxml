@@ -23,7 +23,7 @@
                         <Insets bottom="30.0" top="30.0" />
                      </VBox.margin>
                    </Label>
-                  <GridPane fx:id="componentGrid" hgap="30.0" vgap="20.0">
+                  <GridPane fx:id="componentGrid" styleClass="grid-pane" stylesheets="@general-page.css" hgap="30.0" vgap="20.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" />
                       <ColumnConstraints hgrow="ALWAYS" />
