@@ -59,9 +59,4 @@ public class GroupController {
 	public void removeStudentFromGroup(GroupDTO groupDTO, String studentUsername) {
 		groupModel.removeStudentFromGroup(groupDTO, studentUsername);
 	}
-
-	public Set<UserDTO> fetchAllStudentsByGroup(GroupDTO groupDTO) {
-		// Placeholder
-		return null;
-	}
 }
