@@ -1,0 +1,8 @@
+.settings-page {
+    -fx-background-color: #FFE0E9;
+}
+
+.settings-label {
+    --block-font-family: 'Verdana';
+    -fx-font-size: 24px;
+    -fx-text-fill: #e36486;}

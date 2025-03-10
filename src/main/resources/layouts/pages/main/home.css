@@ -1,0 +1,10 @@
+.home-page {
+    -fx-background-color: #FFE0E9;
+    -fx-padding: 30px;
+}
+
+.home-label {
+    --block-font-family: 'Verdana';
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e36486;}

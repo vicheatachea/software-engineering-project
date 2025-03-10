@@ -1,9 +1,17 @@
+.timetable {
+    -fx-background-color: #FFE0E9;
+}
+
+.date-label, .week-placeholder {
+    -fx-text-fill: #e36486;
+}
+
 .teaching-session-label {
-    -fx-background-color: #3a95cd;
+    -fx-background-color: #77C3EC;
 }
 
 .assignment-label {
-    -fx-background-color: #f0ad4e;
+    -fx-background-color: #FCBE85;
 }
 
 .time-label {
