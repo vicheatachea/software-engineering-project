@@ -37,7 +37,7 @@ public class NotificationService {
         );
     }
 
-    private void checkNotifications() {
+    private synchronized void checkNotifications() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime oneHourLater = now.plusHours(1);
         List<Event> events = eventController.fetchEventsByUser(now, oneHourLater);
@@ -92,5 +92,13 @@ public class NotificationService {
             }
             return eventTime.isBefore(now);
         });
+    }
+
+    public synchronized void reset() {
+        notificationStatuses.clear();
+    }
+
+    public void shutdown() {
+        executorService.shutdown();
     }
 }
