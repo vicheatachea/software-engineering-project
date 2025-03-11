@@ -10,10 +10,6 @@ import javafx.scene.layout.HBox;
 public class NotificationItemViewController {
     @FXML
     private Label eventLabel;
-
-    @FXML
-    private Label timeLabel;
-
     @FXML
     private HBox notificationItem;
 
@@ -22,11 +18,10 @@ public class NotificationItemViewController {
     public void setNotificationData(NotificationsViewController parent, Event event, int time) {
         this.parentController = parent;
         if (event instanceof AssignmentDTO assignmentDTO) {
-            eventLabel.setText("Assignment: " + assignmentDTO.assignmentName());
+            eventLabel.setText("Assignment \"" + assignmentDTO.assignmentName() + "\" is due in " + time + " minutes.");
         } else if (event instanceof TeachingSessionDTO teachingSessionDTO) {
-            eventLabel.setText("Event: " + teachingSessionDTO.subjectCode());
+            eventLabel.setText("Class of " + teachingSessionDTO.subjectCode() + " is starting in " + time + " minutes.");
         }
-        timeLabel.setText("Time: " + time);
     }
 
     @FXML
