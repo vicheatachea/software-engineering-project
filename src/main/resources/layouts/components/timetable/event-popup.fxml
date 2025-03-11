@@ -10,27 +10,28 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox styleClass="event-popup-vbox" spacing="40.0" stylesheets="@event-popup.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.components.EventPopupViewController">
+<VBox spacing="20.0" styleClass="event-popup-vbox" stylesheets="@event-popup.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.components.EventPopupViewController">
    <children>
-      <GridPane fx:id="popupGridPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" vgap="30.0">
+      <GridPane fx:id="popupGridPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="300.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints vgrow="SOMETIMES" />
+          <RowConstraints vgrow="SOMETIMES" />
+          <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label styleClass="event-label" text="Event Type" />
@@ -45,27 +46,55 @@
             <Label styleClass="description-label" text="Description" GridPane.rowIndex="9" />
             <HBox fx:id="startHBox" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <DatePicker fx:id="startDatePicker" />
+                  <DatePicker fx:id="startDatePicker">
+                     <HBox.margin>
+                        <Insets bottom="20.0" />
+                     </HBox.margin></DatePicker>
                </children>
             </HBox>
             <HBox fx:id="endHBox" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <DatePicker fx:id="endDatePicker" />
+                  <DatePicker fx:id="endDatePicker">
+                     <HBox.margin>
+                        <Insets bottom="20.0" />
+                     </HBox.margin></DatePicker>
                </children>
             </HBox>
-            <ComboBox fx:id="eventComboBox" prefWidth="150.0" GridPane.columnIndex="1" />
-            <ComboBox fx:id="scheduleComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <ComboBox fx:id="groupComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ComboBox fx:id="subjectComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <TextField fx:id="nameTextField" styleClass="name-text-field" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <ComboBox fx:id="assignmentComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <ComboBox fx:id="locationComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <TextArea fx:id="descriptionTextArea" styleClass="description-text-field" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <ComboBox fx:id="eventComboBox" prefWidth="150.0" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="20.0" />
+               </GridPane.margin></ComboBox>
+            <ComboBox fx:id="scheduleComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets bottom="20.0" />
+               </GridPane.margin></ComboBox>
+            <ComboBox fx:id="groupComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets bottom="20.0" />
+               </GridPane.margin></ComboBox>
+            <ComboBox fx:id="subjectComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <GridPane.margin>
+                  <Insets bottom="20.0" />
+               </GridPane.margin></ComboBox>
+            <TextField fx:id="nameTextField" styleClass="name-text-field" GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <GridPane.margin>
+                  <Insets bottom="20.0" />
+               </GridPane.margin></TextField>
+            <ComboBox fx:id="assignmentComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+               <GridPane.margin>
+                  <Insets bottom="20.0" />
+               </GridPane.margin></ComboBox>
+            <ComboBox fx:id="locationComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+               <GridPane.margin>
+                  <Insets bottom="20.0" />
+               </GridPane.margin></ComboBox>
+            <TextArea fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" styleClass="description-text-field" GridPane.columnIndex="1" GridPane.rowIndex="9" />
          </children>
       </GridPane>
       <HBox>
          <children>
             <Button mnemonicParsing="false" onAction="#handleSaveEvent" styleClass="save-button" text="Save Event" />
+            <Region HBox.hgrow="ALWAYS" />
             <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDeleteEvent" styleClass="delete-button" text="Delete Event" />
          </children>
       </HBox>

@@ -392,6 +392,7 @@ public class EventPopupViewController {
                 child.setManaged(!isAssignment);
             }
         }
+        adjustStageSize();
     }
 
     private void toggleScheduleView(boolean isGroup) {
@@ -407,6 +408,12 @@ public class EventPopupViewController {
         }
         subjectComboBox.setValue(null);
         subjectComboBox.setDisable(isGroup);
+        adjustStageSize();
+    }
+
+    private void adjustStageSize() {
+        Stage stage = (Stage) popupGridPane.getScene().getWindow();
+        stage.sizeToScene();
     }
 
     private void leaveAndUpdate() {
