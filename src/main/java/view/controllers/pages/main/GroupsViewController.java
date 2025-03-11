@@ -179,6 +179,10 @@ public class GroupsViewController implements ControllerAware {
 
     @FXML
     private void handleAdd() {
+        if (teacherPermissionError()) {
+            return;
+        }
+
         if (areFieldsEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -250,6 +254,10 @@ public class GroupsViewController implements ControllerAware {
 
     @FXML
     private void handleSave() {
+        if (teacherPermissionError()) {
+            return;
+        }
+
         if (areFieldsEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -326,6 +334,10 @@ public class GroupsViewController implements ControllerAware {
 
     @FXML
     private void handleDelete() {
+        if (teacherPermissionError()) {
+            return;
+        }
+
         int selectedIndex = itemView.getSelectionModel().getSelectedIndex();
         if (selectedIndex != -1) {
             String name = itemView.getSelectionModel().getSelectedItem();
@@ -387,6 +399,10 @@ public class GroupsViewController implements ControllerAware {
             return;
         }
 
+        if (teacherPermissionError()) {
+            return;
+        }
+
         String groupName = itemView.getSelectionModel().getSelectedItem();
         GroupDTO group = groupController.fetchGroupByName(groupName);
 
@@ -402,6 +418,10 @@ public class GroupsViewController implements ControllerAware {
             alert.setHeaderText(null);
             alert.setContentText("Please select a student to remove.");
             alert.showAndWait();
+            return;
+        }
+
+        if (teacherPermissionError()) {
             return;
         }
 
@@ -480,5 +500,17 @@ public class GroupsViewController implements ControllerAware {
 
     private boolean areFieldsEmpty() {
         return nameTextField.getText().isEmpty() || codeTextField.getText().isEmpty() || capacityTextField.getText().isEmpty() || subjectComboBox.getValue() == null;
+    }
+
+    private boolean teacherPermissionError() {
+        if (!userController.isCurrentUserTeacher()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("You must be a teacher to configure groups.");
+            alert.showAndWait();
+            return true;
+        }
+        return false;
     }
 }
