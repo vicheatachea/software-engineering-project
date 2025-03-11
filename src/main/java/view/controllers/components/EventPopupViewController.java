@@ -259,8 +259,17 @@ public class EventPopupViewController {
         String startTime = startTimeField.getText();
         String endTime = endTimeField.getText();
 
-        LocalTime startLocalTime = TimeFormatterUtil.getTimeFromString(startTime);
-        LocalTime endLocalTime = TimeFormatterUtil.getTimeFromString(endTime);
+
+        LocalTime startLocalTime;
+        LocalTime endLocalTime;
+
+        try {
+            startLocalTime = TimeFormatterUtil.getTimeFromString(startTime);
+            endLocalTime = TimeFormatterUtil.getTimeFromString(endTime);
+        } catch (Exception e) {
+            displayErrorAlert("Configuration Error", "Invalid time format");
+            return;
+        }
 
         String scheduleFor = (String) scheduleComboBox.getValue();
         String subject = (String) subjectComboBox.getValue();
@@ -295,6 +304,11 @@ public class EventPopupViewController {
 
         switch (eventType) {
             case "Class":
+                if (startLocalTime.isAfter(endLocalTime)) {
+                    displayErrorAlert("Configuration Error", "Start time cannot be after end time");
+                    return;
+                }
+
                 LocalDateTime startDateTime = LocalDateTime.of(startDate, startLocalTime);
                 LocalDateTime endDateTime = LocalDateTime.of(startDate, endLocalTime);
 
