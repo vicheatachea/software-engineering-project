@@ -26,11 +26,11 @@
     -fx-spacing: 10px;
 }
 
-.event-label, .time-label {
+.event-label {
     --block-font-family: 'Verdana';
     -fx-font-size: 13px;
     -fx-font-weight: bold;
-    -fx-text-fill: #e36486;
+    -fx-text-fill: white;
 }
 
 .delete-button {
