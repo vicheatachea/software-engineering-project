@@ -9,7 +9,7 @@
 
 <VBox fx:id="loginVBox" alignment="CENTER" prefHeight="540.0" prefWidth="520.0" spacing="15" styleClass="login-vbox" stylesheets="@login-page.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.LoginViewController">
 
-    <Label fx:id="loginLabel" contentDisplay="CENTER" prefHeight="57.0" prefWidth="56.0" styleClass="login-label" text="Login"> </Label>
+    <Label fx:id="loginLabel" contentDisplay="CENTER" prefHeight="55.0" styleClass="login-label" text="Login"> </Label>
 
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Label prefHeight="17.0" prefWidth="150.0" styleClass="username-label" text="Username" textFill="#e36486"> </Label>
