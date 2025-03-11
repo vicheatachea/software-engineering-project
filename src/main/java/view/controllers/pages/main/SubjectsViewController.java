@@ -56,10 +56,12 @@ public class SubjectsViewController implements ControllerAware {
 		int i = 0;
 		for (String key : components) {
 			Label label = new Label(key + ":");
-			label.setFont(new javafx.scene.text.Font("Arial", 18));
+			label.setFont(new javafx.scene.text.Font("Verdana Bold", 18));
+			label.setStyle("-fx-text-fill: #e36486;");
+
 
 			TextField textField = new TextField();
-			textField.setFont(new javafx.scene.text.Font("Arial", 16));
+			textField.setFont(new javafx.scene.text.Font("Verdana", 16));
 
 			textField.setPromptText("Enter " + key);
 			textField.setId(key.toLowerCase() + "TextField");

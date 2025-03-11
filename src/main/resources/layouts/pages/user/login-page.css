@@ -1,14 +1,22 @@
 .login-vbox {
-    -fx-background-color: #FFE0E9;
+    -fx-background-color: linear-gradient(to bottom, #FFE0E9, #F690A6);
     -fx-padding: 30px;
-    -fx-border-radius: 0 0 15px 15px;
-    -fx-background-radius: 0 0 15px 15px;
+    -fx-border-radius: 0 0 10px 10px;
+    -fx-background-radius: 0 0 10px 10px;
 }
 
 .login-label {
+    --block-font-family: 'Verdana';
     -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ff6b81;
+    -fx-text-fill: #e36486;
+}
+
+.username-label, .password-label {
+    --block-font-family: 'Verdana';
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e36486;
 }
 
 .email-field, .password-field {
@@ -16,14 +24,15 @@
     -fx-pref-height: 35px;
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
-    -fx-border-color: #FF6B81;
+    -fx-border-color: #e36486;
     -fx-padding: 5px;
 }
 
 .login-button, .register-button {
-    -fx-background-color: #FF6B81;
+    -fx-background-color: #e36486;
     -fx-text-fill: white;
     -fx-background-radius: 10px;
     -fx-pref-width: 140px;
     -fx-pref-height: 35px;
+    -fx-effect: dropshadow(gaussian, rgba(246,144,166,0.8), 2, 0.5, 1.5, 1.5);
 }

@@ -79,14 +79,15 @@ public class GroupsViewController implements ControllerAware {
 
         for (String key : components.keySet()) {
             Label label = new Label(key + ":");
-            label.setFont(new Font("Arial", 18));
+            label.setFont(new Font("Verdana Bold", 18));
+            label.setStyle("-fx-text-fill: #e36486;");
 
             componentGrid.add(label, 0, rowIndex);
 
             switch (components.get(key)) {
                 case "field" -> {
                     TextField textField = new TextField();
-                    textField.setFont(new Font("Arial", 16));
+                    textField.setFont(new Font("Verdana", 16));
                     textField.setPromptText("Enter " + key);
                     textField.setId(key.toLowerCase() + "TextField");
 
@@ -94,7 +95,7 @@ public class GroupsViewController implements ControllerAware {
                 }
                 case "comboBox" -> {
                     ComboBox<String> comboBox = new ComboBox<>();
-                    comboBox.setStyle("-fx-font: 16px \"Arial\";");
+                    comboBox.setStyle("-fx-font: 16px \"Verdana\";");
                     comboBox.setPromptText("Select " + key);
                     comboBox.setId(key.toLowerCase() + "ComboBox");
 
@@ -106,22 +107,22 @@ public class GroupsViewController implements ControllerAware {
 
         HBox addHBox = new HBox();
         Label addLabel = new Label("Add Student:");
-        addLabel.setFont(new Font("Arial", 18));
+        addLabel.setFont(new Font("Verdana", 18));
 
-        addStudentComboBox.setStyle("-fx-font: 16px \"Arial\";");
+        addStudentComboBox.setStyle("-fx-font: 16px \"Verdana\";");
 
-        addStudentButton.setFont(new Font("Arial", 16));
+        addStudentButton.setFont(new Font("Verdana", 16));
         addStudentButton.setOnAction(event -> handleAddStudent());
 
         addHBox.getChildren().addAll(addStudentComboBox, addStudentButton);
 
         HBox removeHBox = new HBox();
         Label removeLabel = new Label("Remove Student:");
-        removeLabel.setFont(new Font("Arial", 18));
+        removeLabel.setFont(new Font("Verdana", 18));
 
-        removeStudentComboBox.setStyle("-fx-font: 16px \"Arial\";");
+        removeStudentComboBox.setStyle("-fx-font: 16px \"Verdana\";");
 
-        removeStudentButton.setFont(new Font("Arial", 16));
+        removeStudentButton.setFont(new Font("Verdana", 16));
         removeStudentButton.setOnAction(event -> handleRemoveStudent());
 
         removeHBox.getChildren().addAll(removeStudentComboBox, removeStudentButton);

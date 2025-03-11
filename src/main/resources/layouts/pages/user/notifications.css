@@ -1,55 +1,49 @@
 .notifications-vbox {
-    -fx-background-color: #FFE0E9;
+    -fx-background-color: linear-gradient(to bottom, #FFE0E9, #F690A6);
     -fx-padding: 30px;
-    -fx-border-radius: 0 0 15px 15px;
-    -fx-background-radius: 0 0 15px 15px;
+    -fx-border-radius: 0 0 10px 10px;
+    -fx-background-radius: 0 0 10px 10px;
     -fx-alignment: center;
 }
 
 .notification-label {
+    --block-font-family: 'Verdana';
     -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-text-fill: #FF6B81;
-    -fx-alignment: center;
-    -fx-padding: 10px 0;
-    -fx-max-width: Infinity;
+    -fx-text-fill: #e36486;
 }
 
 .notifications-container {
-    -fx-background-color: white;
+    -fx-background-color: lightgray;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
     -fx-padding: 10px;
 }
 
 .notification-item {
-    -fx-background-color: #FF6B81;
+    -fx-background-color: #e36486;
     -fx-padding: 10px;
     -fx-spacing: 10px;
 }
 
-.event-label {
-    -fx-text-fill: white;
+.event-label, .time-label {
+    --block-font-family: 'Verdana';
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
-    -fx-text-fill: #FFE0E9;
-}
-
-.time-label {
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-text-fill: #FFE0E9;
+    -fx-text-fill: #e36486;
 }
 
 .delete-button {
-    -fx-background-color: transparent;
+    -fx-background-color: #e36486;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-border-color: transparent;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(246,144,166,0.8), 2, 0.5, 1.5, 1.5);
 }
 
 .mark-all-button {
-    -fx-background-color: #FF6B81;
+    -fx-background-color: #e36486;
     -fx-text-fill: white;
     -fx-padding: 8px 15px;
     -fx-background-radius: 10px;
@@ -57,4 +51,5 @@
     -fx-cursor: hand;
     -fx-alignment: center;
     -fx-margin: 20px 0 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(246,144,166,0.8), 2, 0.5, 1.5, 1.5);
 }

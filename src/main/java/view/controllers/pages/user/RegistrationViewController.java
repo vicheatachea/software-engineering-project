@@ -8,14 +8,24 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import view.controllers.components.SidebarViewController;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
 public class RegistrationViewController {
+	public VBox registrationVBox;
+	public Label registerLabel;
+	public TextField emailField;
+	public HBox dobRoleHBox;
+	public HBox buttonsHBox;
+	public Button backToLoginButton;
+	public Button registerButton;
 	private UserController userController;
 	private SidebarViewController sidebarViewController;
 
@@ -56,7 +66,7 @@ public class RegistrationViewController {
 				return;
 			}
 
-			if (!firstName.matches("[a-zA-Z]+") || !lastName.matches("[a-zA-Z]+")) {
+			if (!firstName.matches("^[a-zA-Z]+$") || !lastName.matches("^[a-zA-Z]+$")) {
 				showAlert("Warning", "First name and last name can only contain letters.");
 				return;
 			}
@@ -87,8 +97,6 @@ public class RegistrationViewController {
 			} else {
 				showAlert("Error", "Invalid user data.");
 			}
-		} catch (DateTimeParseException e) {
-			showAlert("Error", "Invalid date format. Please use yyyy-MM-dd.");
 		} catch (Exception e) {
 			showAlert("Error", "An unexpected error occurred: " + e.getMessage());
 		}
@@ -122,5 +130,17 @@ public class RegistrationViewController {
 	@FXML
 	public void initialize() {
 		roleComboBox.setItems(FXCollections.observableArrayList("STUDENT", "TEACHER"));
+
+		// Setup the DatePicker to disable today's and future dates
+		dobPicker.setDayCellFactory(picker -> new DateCell() {
+			@Override
+			public void updateItem(LocalDate date, boolean empty) {
+				super.updateItem(date, empty);
+				if (date.compareTo(LocalDate.now()) >= 0) {
+					setDisable(true);
+					setStyle("-fx-background-color: #FFE0E9;");
+				}
+			}
+		});
 	}
 }

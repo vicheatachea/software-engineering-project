@@ -1,0 +1,39 @@
+.event-popup-vbox {
+        -fx-background-color: #FFE0E9;
+        -fx-padding: 30px;
+        -fx-border-radius: 0 0 10px 10px;
+        -fx-background-radius: 0 0 10px 10px;
+}
+
+.event-label,
+.start-label,
+.end-label,
+.location-label,
+.description-label,
+.schedule-for,
+.group-label,
+.name-label,
+.subject-label,
+.assignment-label,
+.location-button{
+    --block-font-family: 'Verdana';
+    -fx-text-fill: #e36486;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.name-text-field, .description-text-field {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 35px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #e36486;
+    -fx-padding: 5px;
+}
+
+.save-button, .delete-button {
+    -fx-background-color: #e36486;
+    -fx-text-fill: white;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(246,144,166,0.8), 2, 0.5, 1.5, 1.5);
+}

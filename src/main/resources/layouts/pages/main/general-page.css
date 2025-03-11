@@ -1,3 +1,32 @@
+.general-page {
+    -fx-background-color: #FFE0E9;
+    -fx-padding: 30px;
+}
+
+.general-label {
+    --block-font-family: 'Verdana';
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e36486;
+}
+
+.grid-pane {
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #e36486;
+    -fx-padding: 5px;
+}
+
+.new-button, .add-button, .save-button, .delete-button {
+    -fx-background-color: #e36486;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-background-radius: 10px;
+    -fx-pref-width: 140px;
+    -fx-pref-height: 35px;
+    -fx-effect: dropshadow(gaussian, rgba(246,144,166,0.8), 2, 0.5, 1.5, 1.5);
+}
+
 .list-cell {
     -fx-font-size: 16px;
 }

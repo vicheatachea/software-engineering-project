@@ -1,3 +1,11 @@
-#sidebar {
-    -fx-background-color: linear-gradient(to bottom, #FF9EBB, #df3f6d);
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom, #FFE0E9, #F690A6);
+}
+
+.sidebar-label {
+    --block-font-family: 'Verdana';
+    -fx-font-size: 60px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e36486;
+    -fx-effect: dropshadow(gaussian, rgba(246,144,166,0.8), 2, 0.5, 1.5, 1.5);
 }
