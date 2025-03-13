@@ -3,12 +3,12 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 
+<HBox fx:id="notificationItem" spacing="10" styleClass="notification-item" stylesheets="@notifications.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.NotificationItemViewController">
 
-<HBox fx:id="notificationItem" spacing="10" xmlns="http://javafx.com/javafx/23.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.NotificationItemViewController" styleClass="notification-item" stylesheets="@notifications.css">
+    <Label fx:id="eventLabel" styleClass="event-label" text="Event" />
+   <Region HBox.hgrow="ALWAYS" />
 
-    <Label fx:id="eventLabel" text="Event" styleClass="event-label" />
-    <Label fx:id="timeLabel" text="Time" styleClass="time-label" />
-
-    <Button fx:id="deleteButton" text="✖" onAction="#handleDelete" styleClass="delete-button" />
+    <Button fx:id="deleteButton" onAction="#handleDelete" styleClass="delete-button" text="✖" />
 </HBox>

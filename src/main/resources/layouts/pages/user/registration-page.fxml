@@ -11,7 +11,7 @@
 
 <VBox fx:id="registrationVBox" alignment="CENTER" prefHeight="540.0" prefWidth="520.0" spacing="15" styleClass="registration-vbox" stylesheets="@registration-page.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.RegistrationViewController">
 
-    <Label fx:id="registrationLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="60.0" prefWidth="236.0" styleClass="registration-label" text="Register"> </Label>
+    <Label fx:id="registrationLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="60.0" styleClass="registration-label" text="Register"> </Label>
 
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Label prefHeight="17.0" prefWidth="153.0" styleClass="firstname-label" text="First Name"> </Label>

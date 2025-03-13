@@ -10,13 +10,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@timetable.css" styleClass="timetable" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.main.TimetableViewController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="timetable" stylesheets="@timetable.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.main.TimetableViewController">
    <top>
       <HBox fx:id="topbar" alignment="CENTER" BorderPane.alignment="CENTER">
          <children>
             <Region HBox.hgrow="ALWAYS" />
-            <Label fx:id="dateLabel" styleClass="date-label" text="Day to Day Month Year Placeholder" />
+            <Label fx:id="dateLabel" styleClass="date-label" text="Day to Day Month Year Placeholder">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
             <Region HBox.hgrow="ALWAYS" />
             <DatePicker fx:id="datePicker" onAction="#handleDatePick" />
          </children>
@@ -65,6 +69,9 @@
       <Label fx:id="weekLabel" styleClass="week-placeholder" text="Week Placeholder" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="20.0" />
-         </BorderPane.margin></Label>
+         </BorderPane.margin>
+         <font>
+            <Font size="18.0" />
+         </font></Label>
    </bottom>
 </BorderPane>
