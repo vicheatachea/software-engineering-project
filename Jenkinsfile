@@ -6,12 +6,12 @@ pipeline {
 	environment {
 		DOCKERHUB_CREDENTIALS_ID = 'Docker_Hub'
 		DOCKERHUB_REPO = 'sakuheinonen/stms'
-		DOCKER_IMAGE_TAG = 'latest_v1'
+		DOCKER_IMAGE_TAG = 'latest_v2'
 	}
 	stages {
 		stage('Checkout') {
 			steps {
-				git branch: 'controller-tests', url: 'https://github.com/vicheatachea/software-engineering-project.git'
+				git branch: 'main', url: 'https://github.com/vicheatachea/software-engineering-project.git'
 			}
 		}
 		stage('Build') {
