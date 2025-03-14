@@ -50,7 +50,7 @@ pipeline {
 			steps {
 				// Build Docker image
 				script {
-					docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
+					docker.build("${DOCKERHUB_APP_REPO}:${DOCKER_IMAGE_TAG}")
 				}
 			}
 		}
@@ -58,7 +58,7 @@ pipeline {
 			steps {
 				// Build Docker image
 				script {
-					docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}", "-f Dockerfile-db .")
+					docker.build("${DOCKERHUB_DB_REPO}:${DOCKER_IMAGE_TAG}", "-f Dockerfile-db .")
 				}
 			}
 		}
