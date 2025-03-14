@@ -5,7 +5,8 @@ pipeline {
 	}
 	environment {
 		DOCKERHUB_CREDENTIALS_ID = 'Docker_Hub'
-		DOCKERHUB_REPO = 'sakuheinonen/stms'
+		DOCKERHUB_APP_REPO = 'sakuheinonen/stms'
+		DOCKERHUB_DB_REPO = 'sakuheinonen/stms-db'
 		DOCKER_IMAGE_TAG = 'osx_test'
 	}
 	stages {
@@ -57,7 +58,7 @@ pipeline {
 			steps {
 				// Build Docker image
 				script {
-					docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}_db", "-f Dockerfile-db .")
+					docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}", "-f Dockerfile-db .")
 				}
 			}
 		}
@@ -66,8 +67,8 @@ pipeline {
 				// Push both Docker images to Docker Hub
 				script {
 					docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
-						docker.image("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}").push()
-            			docker.image("${DOCKERHUB_REPO}-db:${DOCKER_IMAGE_TAG}").push()
+						docker.image("${DOCKERHUB_APP_REPO}:${DOCKER_IMAGE_TAG}").push()
+            			docker.image("${DOCKERHUB_DB_REPO}:${DOCKER_IMAGE_TAG}").push()
           			}
         		}
       		}
