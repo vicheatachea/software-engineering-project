@@ -1,0 +1,11 @@
+FROM mariadb:latest
+
+ENV MYSQL_USER=stms_user
+ENV MYSQL_PASSWORD=password
+ENV MYSQL_DATABASE=stms
+ENV MYSQL_ROOT_PASSWORD=rootpassword
+
+# Copy initialization scripts if needed
+COPY src/main/resources/scripts/databaseUser.sql /docker-entrypoint-initdb.d/
+
+EXPOSE 3306

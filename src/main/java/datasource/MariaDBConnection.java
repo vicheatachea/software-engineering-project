@@ -16,7 +16,8 @@ public class MariaDBConnection {
 
 	private static final String USER = "stms_user";
 	private static final String PASSWORD = "password";
-	private static final String BASE_URL = "jdbc:mariadb://localhost:3306/";
+	private static final String DB_HOST = System.getenv("DB_HOST") != null ? System.getenv("DB_HOST") : "localhost";
+	private static final String BASE_URL = "jdbc:mariadb://" + DB_HOST + ":3306/";
 
 	private static final Logger logger = LoggerFactory.getLogger(MariaDBConnection.class);
 

@@ -1,8 +1,24 @@
 version: '3.8'
 
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: stms_app
+    environment:
+      - DISPLAY=host.docker.internal:0
+      - DB_HOST=mariadb
+    depends_on:
+      - mariadb
+    network_mode: "host"
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+
   mariadb:
-    image: mariadb:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.db
     container_name: mariadb_container
     restart: always
     environment:
