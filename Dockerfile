@@ -20,16 +20,23 @@ RUN apt-get update && \
     libxrender1 \
     xauth \
     x11-apps \
-    mariadb-client \
+    mariadb-server \
+    openjfx \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Environment variables
+ENV DISPLAY=host.docker.internal:0.0
+ENV DB_HOST=database
+ENV DB_PORT=3306
+ENV DB_DATABASE=stms
+ENV DB_USERNAME=stms_user
+ENV DB_PASSWORD=password
+
+# Copy the built application and its dependencies
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 COPY --from=build /app/target/dependency/*.jar ./lib/
-
-# Expose any necessary ports
-EXPOSE 3306
 
 # Entry point optimized for external database connection
 ENTRYPOINT ["java", "-cp", "app.jar:lib/*", "Main"]
