@@ -11,12 +11,14 @@ their individual timetables.
 ## Technologies
 
 The STMS project was developed using the following technologies:
+
 - Java 21
 - JavaFX
 - MariaDB
 - Hibernate ORM
 
 The project was built using the following tools:
+
 - IntelliJ IDEA
 - Scene Builder
 - Jenkins
@@ -25,6 +27,7 @@ The project was built using the following tools:
 ## Installation
 
 To install the STMS project, follow these steps:
+
 1. Clone the repository to your local machine, with the following command:
 
     ```bash
@@ -33,4 +36,6 @@ To install the STMS project, follow these steps:
 
 2. Open the project in IntelliJ IDEA or another Java IDE.
 
-3. Run the project by executing the `Main` class located in the `src/main/java` directory.
+3. Create the database in MariaDB by running the db_init.sql script located in the `src/main/resources` directory.
+
+4. Run the project by executing the `Main` class located in the `src/main/java` directory.
