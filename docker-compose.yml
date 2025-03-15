@@ -17,19 +17,20 @@ services:
     depends_on:
       database:
         condition: service_healthy
+    restart: no
   
   
   database:
     image: mariadb
     container_name: stms_database
-    restart: always
+    restart: no
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: stms
       MYSQL_USER: stms_user
       MYSQL_PASSWORD: password
     ports:
-      - "3307:3306"
+      - "3306"
     networks:
       - stms_network
     volumes:
