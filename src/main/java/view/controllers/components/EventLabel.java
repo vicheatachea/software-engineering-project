@@ -1,7 +1,11 @@
 package view.controllers.components;
 
+import dto.AssignmentDTO;
 import dto.Event;
+import dto.TeachingSessionDTO;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import util.TimeFormatterUtil;
 
 public class EventLabel extends Label {
     private Event event;
@@ -13,13 +17,26 @@ public class EventLabel extends Label {
     private int numberOfLabels = 1;
 
     public EventLabel(Event event, double height, double top_offset) {
-        // Placeholder
-        super("Event");
+        super();
         this.event = event;
         this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        this.setPadding(new Insets(5, 5, 5, 5));
 
         this.height = height;
         this.top_offset = top_offset;
+
+        if (event instanceof TeachingSessionDTO teachingSession) {
+            String startTime = TimeFormatterUtil.getTimeFromDateTime(teachingSession.startDate());
+            String endTime = TimeFormatterUtil.getTimeFromDateTime(teachingSession.endDate());
+
+            this.setText(teachingSession.subjectCode() + "\n" + startTime + " – " + endTime + "\n" + teachingSession.locationName());
+        } else if (event instanceof AssignmentDTO assignment) {
+            String dueTime = TimeFormatterUtil.getTimeFromDateTime(assignment.deadline());
+
+            this.setText(assignment.assignmentName() + "\n" + assignment.subjectCode() + "\n" + dueTime);
+        } else {
+            this.setText("Unknown Event");
+        }
     }
 
     public Event getEvent() {
