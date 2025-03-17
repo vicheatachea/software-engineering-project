@@ -16,6 +16,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -367,6 +368,14 @@ public class TimetableViewController implements ControllerAware {
         timetableGrid.getChildren().stream()
                 .filter(node -> node instanceof EventLabel)
                 .forEach(node -> ((EventLabel) node).updateLabelWidth(cellWidth));
+
+        List<ColumnConstraints> columnConstraints = timetableGrid.getColumnConstraints();
+        for (int i = 1; i < columnConstraints.size(); i++) {
+            ColumnConstraints constraint = columnConstraints.get(i);
+            constraint.setMinWidth(cellWidth);
+            constraint.setPrefWidth(cellWidth);
+            constraint.setMaxWidth(cellWidth);
+        }
     }
 
     private Set<EventLabel> getEventLabelsInRange(int column, int startRow, int endRow) {
