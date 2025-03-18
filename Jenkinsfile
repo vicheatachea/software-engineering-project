@@ -7,7 +7,7 @@ pipeline {
 		DOCKERHUB_CREDENTIALS_ID = 'Docker_Hub'
 		DOCKERHUB_APP_REPO = 'sakuheinonen/stms'
 		DOCKERHUB_DB_REPO = 'sakuheinonen/stms-db'
-		DOCKER_IMAGE_TAG = 'osx_test'
+		DOCKER_IMAGE_TAG = 'test'
 	}
 	stages {
 		stage('Checkout') {
@@ -54,6 +54,15 @@ pipeline {
 				}
 			}
 		}
+
+		stage('Build Db Docker Image') {
+		    steps {
+		    // Build Docker image}
+                script {
+                    docker.build("${DOCKERHUB_DB_REPO}:${DOCKER_IMAGE_TAG}", "-f Dockerfile-db .")
+                }
+		    }
+		}
 	
 		stage('Push Docker Images') {
 			steps {
@@ -61,6 +70,7 @@ pipeline {
 				script {
 					docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
 						docker.image("${DOCKERHUB_APP_REPO}:${DOCKER_IMAGE_TAG}").push()
+						docker.image("${DOCKERHUB_DB_REPO}:${DOCKER_IMAGE_TAG}").push()
           			}
         		}
       		}
