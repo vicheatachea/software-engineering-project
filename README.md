@@ -8,6 +8,9 @@ groups, add and remove students from groups, and create and update assignments a
 groups. Students can view their assignments and classes, and both teachers and students can manage
 their individual timetables.
 
+### Sequence diagram for creating an assignment:
+![Create assignment sequence diagram](/docs/diagrams/images/STMS_Sequence_Diagram.png)
+
 ## Technologies
 
 The STMS project was developed using the following technologies:
