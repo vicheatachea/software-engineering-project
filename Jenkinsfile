@@ -12,7 +12,7 @@ pipeline {
 	stages {
 		stage('Checkout') {
 			steps {
-				git branch: 'docker-osx', url: 'https://github.com/vicheatachea/software-engineering-project.git'
+				git branch: 'docker', url: 'https://github.com/vicheatachea/software-engineering-project.git'
 			}
 		}
 		stage('Build') {
