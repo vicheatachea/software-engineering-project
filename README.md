@@ -9,7 +9,12 @@ groups. Students can view their assignments and classes, and both teachers and s
 their individual timetables.
 
 ### Sequence diagram for creating an assignment:
-![Create assignment sequence diagram](/docs/diagrams/images/STMS_Sequence_Diagram.png)
+![Create assignment sequence diagram](/docs/diagrams/images/Sequence_diagram_screenshot.png)
+
+For more information about the diagrams go to the [diagrams](/docs/diagrams) directory.
+
+> [!NOTE]
+> The diagrams are transparent and might not be displayed properly on dark backgrounds.
 
 ## Technologies
 
