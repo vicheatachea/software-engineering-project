@@ -5,18 +5,19 @@ pipeline {
 	}
 	environment {
 		DOCKERHUB_CREDENTIALS_ID = 'Docker_Hub'
-		DOCKERHUB_REPO = 'sakuheinonen/stms'
-		DOCKER_IMAGE_TAG = 'latest_v2'
+		DOCKERHUB_APP_REPO = 'sakuheinonen/stms'
+		DOCKERHUB_DB_REPO = 'sakuheinonen/stms-db'
+		DOCKER_IMAGE_TAG = 'osx_test'
 	}
 	stages {
 		stage('Checkout') {
 			steps {
-				git branch: 'main', url: 'https://github.com/vicheatachea/software-engineering-project.git'
+				git branch: 'docker-osx', url: 'https://github.com/vicheatachea/software-engineering-project.git'
 			}
 		}
 		stage('Build') {
 			steps {
-				sh 'mvn clean install'
+				sh 'mvn clean install -DskipTests'
 			}
 		}
 		stage('Test') {
@@ -45,23 +46,24 @@ pipeline {
 				)
 			}
 		}
-		stage('Build Docker Image') {
+		stage('Build App Docker Image') {
 			steps {
 				// Build Docker image
 				script {
-					docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
+					docker.build("${DOCKERHUB_APP_REPO}:${DOCKER_IMAGE_TAG}")
 				}
 			}
 		}
-		stage('Push Docker Image to Docker Hub') {
+	
+		stage('Push Docker Images') {
 			steps {
-				// Push Docker image to Docker Hub
+				// Push both Docker images to Docker Hub
 				script {
 					docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
-						docker.image("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}").push()
-					}
-				}
-			}
-		}
+						docker.image("${DOCKERHUB_APP_REPO}:${DOCKER_IMAGE_TAG}").push()
+          			}
+        		}
+      		}
+    	}
 	}
 }
