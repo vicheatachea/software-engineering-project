@@ -19,11 +19,24 @@
 
 }
 
-.name-label, .role-label, .social-number-label {
+.name-label, .role-label{
     --block-font-family: 'Verdana';
-    -fx-font-size: 13px;
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-text-fill: #e36486;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #FFE0E9;
+}
+
+.social-number-label {
+    --block-font-family: 'Verdana';
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e36486;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #FFE0E9;
 }
 
 .logout-button {

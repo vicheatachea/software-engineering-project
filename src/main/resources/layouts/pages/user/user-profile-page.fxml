@@ -11,7 +11,7 @@
     <Label fx:id="myAccountLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="57.0" prefWidth="252.0" styleClass="my-account-label" text="My account"> </Label>
 
     <ImageView fx:id="profileImageView" fitHeight="170.0" fitWidth="168.0" styleClass="profile-image" />
-   <HBox prefHeight="70.0" prefWidth="200.0">
+   <HBox prefHeight="70.0" prefWidth="200.0" spacing="10.0">
       <children>
           <Label fx:id="nameLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="100.0" prefWidth="300.0" styleClass="name-label" text="Name" />
           <Label fx:id="roleLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="100.0" prefWidth="300.0" styleClass="role-label" text="Role"> </Label>
