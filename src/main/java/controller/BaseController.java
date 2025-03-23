@@ -1,5 +1,7 @@
 package controller;
 
+import model.UserPreferences;
+
 /*
 * The controller should not manipulate the view directly to maintain separation of concerns
 * The view controllers should be able to call each controller to manipulate the model and retrieve data
@@ -35,5 +37,13 @@ public class BaseController {
 
     public UserController getUserController() {
         return userController;
+    }
+
+    public String getLocale() {
+        return UserPreferences.getLocale();
+    }
+
+    public void setLocale(String locale) {
+        UserPreferences.setLocale(locale);
     }
 }
