@@ -50,6 +50,6 @@ public final class UserPreferences {
 
 	// Retrieve the locale
 	public static String getLocale() {
-		return preferences.get(LOCALE, "en_US");
+		return preferences.get(LOCALE, "en-US");
 	}
 }
