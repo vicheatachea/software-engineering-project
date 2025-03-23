@@ -2,6 +2,7 @@ package util;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class LocaleUtil {
 //    private static final String LOCALE_BUNDLE = "view_text";
@@ -13,5 +14,10 @@ public class LocaleUtil {
                 new Locale.Builder().setLanguage("ja").setRegion("JP").build(),
                 new Locale.Builder().setLanguage("km").setRegion("KH").build()
         );
+    }
+
+    public static ResourceBundle getUIBundle(String localeString) {
+        Locale locale = Locale.forLanguageTag(localeString);
+        return ResourceBundle.getBundle("view_text", locale);
     }
 }
