@@ -29,12 +29,11 @@ public class LocaleController {
 
     // Set the locale for the user
     public void setUserLocale(Locale locale) {
-        UserPreferences.setLocale(locale.toString());
+        UserPreferences.setLocale(locale.toLanguageTag());
     }
 
     // Fetch the bundle for UI translations
     public ResourceBundle getUIBundle() {
-        Locale locale = Locale.forLanguageTag(UserPreferences.getLocale());
-        return ResourceBundle.getBundle(LOCALE_BUNDLE, locale);
+        return ResourceBundle.getBundle(LOCALE_BUNDLE, getUserLocale());
     }
 }
