@@ -14,6 +14,7 @@ public class BaseController {
     private final SubjectController subjectController = new SubjectController();
     private final TimetableController timetableController = new TimetableController();
     private final UserController userController = new UserController();
+    private final LocaleController localeController = new LocaleController();
 
     public EventController getEventController() {
         return eventController;
@@ -39,11 +40,7 @@ public class BaseController {
         return userController;
     }
 
-    public String getLocale() {
-        return UserPreferences.getLocale();
-    }
-
-    public void setLocale(String locale) {
-        UserPreferences.setLocale(locale);
+    public LocaleController getLocaleController() {
+        return localeController;
     }
 }
