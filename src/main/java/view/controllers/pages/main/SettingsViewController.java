@@ -1,20 +1,22 @@
 package view.controllers.pages.main;
 
 import controller.BaseController;
+import controller.LocaleController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import util.LocaleUtil;
 import view.controllers.ControllerAware;
+import view.controllers.components.SidebarViewController;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class SettingsViewController implements ControllerAware {
-    private BaseController baseController;
+    private LocaleController localeController;
+    private SidebarViewController sidebarViewController;
 
     @FXML
     private Label settingsLabel;
@@ -25,14 +27,14 @@ public class SettingsViewController implements ControllerAware {
 
     @FXML
     private void initialize() {
-        List<Locale> locales = LocaleUtil.getAvailableLocales();
-        locales.forEach(locale ->
-                languageComboBox.getItems().add(locale.getDisplayLanguage(locale))
-        );
-        languageComboBox.addEventHandler(ActionEvent.ACTION, event -> handleLanguageChange());
-
         Platform.runLater(() -> {
-            Locale currentLocale = Locale.forLanguageTag(baseController.getLocale());
+            List<Locale> locales = localeController.getAvailableLocales();
+            locales.forEach(locale ->
+                    languageComboBox.getItems().add(locale.getDisplayLanguage(locale))
+            );
+            languageComboBox.addEventHandler(ActionEvent.ACTION, event -> handleLanguageChange());
+
+            Locale currentLocale = localeController.getUserLocale();
             languageComboBox.setValue(currentLocale.getDisplayLanguage(currentLocale));
             updateTranslations();
         });
@@ -40,15 +42,19 @@ public class SettingsViewController implements ControllerAware {
 
     @Override
     public void setBaseController(BaseController baseController) {
-        this.baseController = baseController;
+        this.localeController = baseController.getLocaleController();
+    }
+
+    public void setSidebarViewController(SidebarViewController sidebarViewController) {
+        this.sidebarViewController = sidebarViewController;
     }
 
     private void handleLanguageChange() {
         String selectedLanguage = languageComboBox.getValue();
 
-        for (Locale locale : LocaleUtil.getAvailableLocales()) {
+        for (Locale locale : localeController.getAvailableLocales()) {
             if (locale.getDisplayLanguage(locale).equals(selectedLanguage)) {
-                baseController.setLocale(locale.toLanguageTag());
+                localeController.setUserLocale(locale);
                 break;
             }
         }
@@ -56,10 +62,11 @@ public class SettingsViewController implements ControllerAware {
     }
 
     private void updateTranslations() {
-        String localeString = baseController.getLocale();
-        ResourceBundle bundle = LocaleUtil.getUIBundle(localeString);
+        ResourceBundle viewText = localeController.getUIBundle();
 
-        settingsLabel.setText(bundle.getString("settings.title"));
-        languageLabel.setText(bundle.getString("settings.language"));
+        settingsLabel.setText(viewText.getString("settings.title"));
+        languageLabel.setText(viewText.getString("settings.language"));
+
+        sidebarViewController.updateTranslations();
     }
 }
