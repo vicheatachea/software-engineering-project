@@ -10,10 +10,10 @@
    <center>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Settings" />
+            <Label fx:id="settingsLabel" text="Settings" />
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label text="Language" />
+                  <Label fx:id="languageLabel" text="Language" />
                   <ComboBox fx:id="languageComboBox" prefWidth="150.0" />
                </children>
             </HBox>
