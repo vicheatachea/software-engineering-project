@@ -95,6 +95,9 @@ public class MainPageViewController implements Initializable {
 			if (subController instanceof ControllerAware) {
 				((ControllerAware) subController).setBaseController(baseController);
 			}
+            if (subController instanceof SettingsViewController) {
+                ((SettingsViewController) subController).setSidebarViewController(sidebarController);
+            }
 
 			mainContent.getChildren().setAll(content);
 		} catch (NullPointerException e) {

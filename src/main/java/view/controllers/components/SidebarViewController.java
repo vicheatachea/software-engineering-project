@@ -1,6 +1,7 @@
 package view.controllers.components;
 
 import controller.BaseController;
+import controller.LocaleController;
 import controller.UserController;
 import controller.notifications.NotificationAware;
 import controller.notifications.NotificationService;
@@ -26,35 +27,47 @@ import view.controllers.pages.user.UserProfileViewController;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class SidebarViewController implements ControllerAware, NotificationAware {
     private final StringProperty currentView = new SimpleStringProperty();
     private NotificationService notificationService;
     private List<EventNotification> notifications = new ArrayList<>();
 
+    private LocaleController localeController;
     private UserController userController;
     private Button accountButton;
     private Button loginButton;
     private Button notificationsButton;
-    private Button subjectsButton;
-    private Button locationsButton;
 
     @FXML
     private VBox sidebar;
+    private Button timetableButton;
+    private Button groupsButton;
+    private Button subjectsButton;
+    private Button locationsButton;
+    private Button settingsButton;
+    private Button quitButton;
 
     @FXML
     private void initialize() {
-        addButton("\uD83D\uDCC6 Timetable", "timetable");
-        addButton("\uD83D\uDC65 Groups", "groups");
-        addButton("\uD83D\uDCDA Subjects", "subjects");
-        addButton("\uD83C\uDFE2 Locations", "locations");
-        addButton("\uD83D\uDEE0 Settings", "settings");
-        addButton("\uD83D\uDEAA Quit", "quit");
-
         Platform.runLater(() -> {
+            ResourceBundle viewText = localeController.getUIBundle();
+
+            addButton("\uD83D\uDCC6 " + viewText.getString("sidebar.timetable"), "timetable");
+            addButton("\uD83D\uDC65 " + viewText.getString("sidebar.groups"), "groups");
+            addButton("\uD83D\uDCDA " + viewText.getString("sidebar.subjects"), "subjects");
+            addButton("\uD83C\uDFE2 " + viewText.getString("sidebar.locations"), "locations");
+            addButton("\uD83D\uDEE0 " + viewText.getString("sidebar.settings"), "settings");
+            addButton("\uD83D\uDEAA " + viewText.getString("sidebar.quit"), "quit");
+
             currentView.set("timetable");
+            timetableButton = (Button) sidebar.lookup("#timetableButton");
+            groupsButton = (Button) sidebar.lookup("#groupsButton");
             subjectsButton = (Button) sidebar.lookup("#subjectsButton");
             locationsButton = (Button) sidebar.lookup("#locationsButton");
+            settingsButton = (Button) sidebar.lookup("#settingsButton");
+            quitButton = (Button) sidebar.lookup("#quitButton");
 
             try {
                 HBox userArea = FXMLLoader.load(getClass().getResource("/layouts/components/sidebar/user-area.fxml"));
@@ -82,6 +95,7 @@ public class SidebarViewController implements ControllerAware, NotificationAware
 
     @Override
     public void setBaseController(BaseController baseController) {
+        this.localeController = baseController.getLocaleController();
         this.userController = baseController.getUserController();
         this.notificationService = new NotificationService(this, baseController.getEventController());
     }
@@ -191,5 +205,16 @@ public class SidebarViewController implements ControllerAware, NotificationAware
 
     public void shutdownNotifications() {
         notificationService.shutdown();
+    }
+
+    public void updateTranslations() {
+        ResourceBundle viewText = localeController.getUIBundle();
+
+        timetableButton.setText("\uD83D\uDCC6 " + viewText.getString("sidebar.timetable"));
+        groupsButton.setText("\uD83D\uDC65 " + viewText.getString("sidebar.groups"));
+        subjectsButton.setText("\uD83D\uDCDA " + viewText.getString("sidebar.subjects"));
+        locationsButton.setText("\uD83C\uDFE2 " + viewText.getString("sidebar.locations"));
+        settingsButton.setText("\uD83D\uDEE0 " + viewText.getString("sidebar.settings"));
+        quitButton.setText("\uD83D\uDEAA " + viewText.getString("sidebar.quit"));
     }
 }
