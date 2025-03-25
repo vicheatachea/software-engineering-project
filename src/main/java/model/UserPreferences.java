@@ -33,14 +33,8 @@ public final class UserPreferences {
 
 	// Delete the user ID
 	public static void deleteUser() {
-		try {
-			preferences.clear();
-		} catch (BackingStoreException e) {
-			throw new IllegalArgumentException("Failed to delete user preferences");
-		} finally {
-			preferences.put(USER_ID_KEY, "-1");
-			preferences.put(ROLE, "STUDENT");
-		}
+		preferences.remove(USER_ID_KEY);
+		preferences.remove(ROLE);
 	}
 
 	// Store the locale
