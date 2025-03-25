@@ -9,16 +9,16 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import view.controllers.ControllerAware;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class LocationsViewController implements ControllerAware {
+	private ResourceBundle viewText;
 	private LocationController locationController;
 	private List<LocationDTO> locations;
-	private final List<String> components = List.of("Name", "Building", "Campus");
 	private boolean isEditingMode;
 	private int currentIndex;
 
@@ -47,32 +47,46 @@ public class LocationsViewController implements ControllerAware {
 
 	@FXML
 	public void initialize() {
-		String title = "Location";
-
-		titleLabel.setText(title + "s");
-		newButton.setText("New " + title);
-		addButton.setText("Add " + title);
-		saveButton.setText("Save " + title);
-		deleteButton.setText("Delete " + title);
-
-		int i = 0;
-		for (String key : components) {
-			Label label = new Label(key + ":");
-			label.setFont(new javafx.scene.text.Font("Verdana Bold", 18));
-			label.setStyle("-fx-text-fill: #e36486;");
-
-			TextField textField = new TextField();
-			textField.setFont(new javafx.scene.text.Font("Verdana", 16));
-
-			textField.setPromptText("Enter " + key);
-			textField.setId(key.toLowerCase() + "TextField");
-
-			componentGrid.add(label, 0, i);
-			componentGrid.add(textField, 1, i);
-			i++;
-		}
-
 		Platform.runLater(() -> {
+			titleLabel.setText(viewText.getString("locations.title"));
+			newButton.setText(viewText.getString("locations.new"));
+			addButton.setText(viewText.getString("locations.add"));
+			saveButton.setText(viewText.getString("locations.save"));
+			deleteButton.setText(viewText.getString("locations.delete"));
+
+			String[] components = {
+					viewText.getString("common.name"),
+					viewText.getString("locations.building"),
+					viewText.getString("locations.campus")
+			};
+			String[] prompts = {
+					viewText.getString("common.promptName"),
+					viewText.getString("locations.promptBuilding"),
+					viewText.getString("locations.promptCampus")
+			};
+			String[] ids = {
+					"nameTextField",
+					"buildingTextField",
+					"campusTextField"
+			};
+
+			int i = 0;
+			for (String component : components) {
+				Label label = new Label(component);
+				label.setFont(new javafx.scene.text.Font("Verdana Bold", 18));
+				label.setStyle("-fx-text-fill: #e36486;");
+
+				TextField textField = new TextField();
+				textField.setFont(new javafx.scene.text.Font("Verdana", 16));
+
+				textField.setPromptText(prompts[i]);
+				textField.setId(ids[i]);
+
+				componentGrid.add(label, 0, i);
+				componentGrid.add(textField, 1, i);
+				i++;
+			}
+
 			loadLocations();
 			nameTextField = (TextField) contentVBox.lookup("#nameTextField");
 			buildingTextField = (TextField) contentVBox.lookup("#buildingTextField");
@@ -84,6 +98,7 @@ public class LocationsViewController implements ControllerAware {
 
 	public void setBaseController(BaseController baseController) {
 		this.locationController = baseController.getLocationController();
+		this.viewText = baseController.getLocaleController().getUIBundle();
 	}
 
 	private void loadLocations() {
@@ -96,10 +111,11 @@ public class LocationsViewController implements ControllerAware {
 	private void handleNew() {
 		if (resolveIsNotSaved()) {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-			alert.setTitle("Create Location");
+			alert.setTitle(viewText.getString("confirmation.location.create"));
 			alert.setHeaderText(null);
-			alert.setContentText(
-					"Are you sure you want to create a new location?\n" + "Any unsaved changes will be lost.");
+			alert.setContentText(String.format("%s\n%s",
+					viewText.getString("confirmation.location.createPrompt"),
+					viewText.getString("confirmation.unsavedChanges")));
 
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.isEmpty() || result.get() != ButtonType.OK) {
@@ -115,9 +131,9 @@ public class LocationsViewController implements ControllerAware {
 	private void handleAdd() {
 		if (areFieldsEmpty()) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setTitle("Error");
+			alert.setTitle(viewText.getString("error.title"));
 			alert.setHeaderText(null);
-			alert.setContentText("All fields are required.");
+			alert.setContentText(viewText.getString("error.fillAllFields"));
 			alert.showAndWait();
 			return;
 		}
@@ -129,9 +145,9 @@ public class LocationsViewController implements ControllerAware {
 		for (LocationDTO location : locations) {
 			if (location.name().equals(name)) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
-				alert.setTitle("Error");
+				alert.setTitle(viewText.getString("error.title"));
 				alert.setHeaderText(null);
-				alert.setContentText("Location with this name already exists.");
+				alert.setContentText(viewText.getString("error.location.exists"));
 				alert.showAndWait();
 				return;
 			}
@@ -147,9 +163,9 @@ public class LocationsViewController implements ControllerAware {
 	private void handleSave() {
 		if (areFieldsEmpty()) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setTitle("Error");
+			alert.setTitle(viewText.getString("error.title"));
 			alert.setHeaderText(null);
-			alert.setContentText("All fields are required.");
+			alert.setContentText(viewText.getString("error.fillAllFields"));
 			alert.showAndWait();
 			return;
 		}
@@ -164,9 +180,9 @@ public class LocationsViewController implements ControllerAware {
 			for (LocationDTO location : locations) {
 				if (location.name().equals(name) && !name.equals(currentName)) {
 					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setTitle("Error");
+					alert.setTitle(viewText.getString("error.title"));
 					alert.setHeaderText(null);
-					alert.setContentText("Location with this name already exists.");
+					alert.setContentText(viewText.getString("error.location.exists"));
 					alert.showAndWait();
 					return;
 				}
@@ -185,9 +201,9 @@ public class LocationsViewController implements ControllerAware {
 		int selectedIndex = itemView.getSelectionModel().getSelectedIndex();
 		if (selectedIndex != -1) {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-			alert.setTitle("Delete Location");
+			alert.setTitle(viewText.getString("confirmation.location.delete"));
 			alert.setHeaderText(null);
-			alert.setContentText("Are you sure you want to delete this location?");
+			alert.setContentText(viewText.getString("confirmation.location.deletePrompt"));
 
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -203,9 +219,11 @@ public class LocationsViewController implements ControllerAware {
 	private void handleItemSelection() {
 		if (resolveIsNotSaved()) {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-			alert.setTitle("Select Location");
+			alert.setTitle(viewText.getString("confirmation.location.select"));
 			alert.setHeaderText(null);
-			alert.setContentText("Are you sure you want to change items?\n" + "Any unsaved changes will be lost.");
+			alert.setContentText(String.format("%s\n%s",
+					viewText.getString("confirmation.location.selectPrompt"),
+					viewText.getString("confirmation.unsavedChanges")));
 
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.isEmpty() || result.get() != ButtonType.OK) {
