@@ -64,7 +64,7 @@ public class SettingsViewController implements ControllerAware {
     private void updateTranslations() {
         ResourceBundle viewText = localeController.getUIBundle();
 
-        settingsLabel.setText(viewText.getString("settings.title"));
+        settingsLabel.setText(viewText.getString("sidebar.settings"));
         languageLabel.setText(viewText.getString("settings.language"));
 
         sidebarViewController.updateTranslations();
