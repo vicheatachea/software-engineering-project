@@ -48,7 +48,7 @@ public class LocationsViewController implements ControllerAware {
 	@FXML
 	public void initialize() {
 		Platform.runLater(() -> {
-			titleLabel.setText(viewText.getString("locations.title"));
+			titleLabel.setText(viewText.getString("sidebar.locations"));
 			newButton.setText(viewText.getString("locations.new"));
 			addButton.setText(viewText.getString("locations.add"));
 			saveButton.setText(viewText.getString("locations.save"));
