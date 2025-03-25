@@ -1,8 +1,6 @@
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: sakuheinonen/stms:test
     environment:
       DB_HOST: database
       DB_PORT: 3306
@@ -19,10 +17,7 @@ services:
   
   
   database:
-    build:
-      context: .
-      dockerfile: Dockerfile-db
-    container_name: stms_database
+    image: sakuheinonen/stms-db:test
     restart: no
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
