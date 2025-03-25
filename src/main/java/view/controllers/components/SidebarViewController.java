@@ -82,6 +82,10 @@ public class SidebarViewController implements ControllerAware, NotificationAware
                 loginButton.setOnAction(event -> showLoginPopup());
                 notificationsButton.setOnAction(event -> showNotificationPopup());
 
+                accountButton.setText(viewText.getString("sidebar.account"));
+                loginButton.setText(viewText.getString("sidebar.login"));
+                notificationsButton.setText(viewText.getString("sidebar.notifications"));
+
                 updateUserButtons();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -209,6 +213,10 @@ public class SidebarViewController implements ControllerAware, NotificationAware
 
     public void updateTranslations() {
         ResourceBundle viewText = localeController.getUIBundle();
+
+        accountButton.setText(viewText.getString("sidebar.account"));
+        loginButton.setText(viewText.getString("sidebar.login"));
+        notificationsButton.setText(viewText.getString("sidebar.notifications"));
 
         timetableButton.setText(viewText.getString("sidebar.timetable"));
         groupsButton.setText(viewText.getString("sidebar.groups"));
