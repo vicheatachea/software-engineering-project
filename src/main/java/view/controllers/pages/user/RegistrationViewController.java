@@ -62,7 +62,7 @@ public class RegistrationViewController {
 
 			if (firstName.isEmpty() || lastName.isEmpty() || socialNumber.isEmpty() || username.isEmpty() ||
 			    password.isEmpty() || dobPicker.getValue() == null || role == null) {
-				showAlert("Warning", "Please fill in all fields.");
+				showAlert("Error", "Please fill in all fields.");
 				return;
 			}
 
