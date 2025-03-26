@@ -34,6 +34,7 @@ public class SidebarViewController implements ControllerAware, NotificationAware
     private NotificationService notificationService;
     private List<EventNotification> notifications = new ArrayList<>();
 
+    private BaseController baseController;
     private LocaleController localeController;
     private UserController userController;
     private Button accountButton;
@@ -99,6 +100,7 @@ public class SidebarViewController implements ControllerAware, NotificationAware
 
     @Override
     public void setBaseController(BaseController baseController) {
+        this.baseController = baseController;
         this.localeController = baseController.getLocaleController();
         this.userController = baseController.getUserController();
         this.notificationService = new NotificationService(this, baseController.getEventController());
@@ -145,7 +147,8 @@ public class SidebarViewController implements ControllerAware, NotificationAware
             Parent parent = fxmlLoader.load();
 
             LoginViewController loginViewController = fxmlLoader.getController();
-            loginViewController.setControllers(userController, this);
+            loginViewController.setBaseController(baseController);
+            loginViewController.setSidebarViewController(this);
 
             Stage loginStage = new Stage();
             loginStage.initModality(Modality.APPLICATION_MODAL);

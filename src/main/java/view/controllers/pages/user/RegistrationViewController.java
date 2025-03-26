@@ -1,5 +1,6 @@
 package view.controllers.pages.user;
 
+import controller.BaseController;
 import controller.UserController;
 import dto.UserDTO;
 import javafx.collections.FXCollections;
@@ -11,14 +12,16 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import view.controllers.SidebarControllerAware;
+import view.controllers.ControllerAware;
 import view.controllers.components.SidebarViewController;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
+import java.util.ResourceBundle;
 
-public class RegistrationViewController {
+public class RegistrationViewController implements ControllerAware, SidebarControllerAware {
 	public VBox registrationVBox;
 	public Label registerLabel;
 	public TextField emailField;
@@ -26,8 +29,11 @@ public class RegistrationViewController {
 	public HBox buttonsHBox;
 	public Button backToLoginButton;
 	public Button registerButton;
+
+	private BaseController baseController;
 	private UserController userController;
 	private SidebarViewController sidebarViewController;
+	private ResourceBundle viewText;
 
 	@FXML
 	private TextField firstNameField;
@@ -44,8 +50,32 @@ public class RegistrationViewController {
 	@FXML
 	private ComboBox<String> roleComboBox;
 
-	public void setControllers(UserController userController, SidebarViewController sidebarViewController) {
-		this.userController = userController;
+	@FXML
+	public void initialize() {
+		roleComboBox.setItems(FXCollections.observableArrayList("STUDENT", "TEACHER"));
+
+		// Setup the DatePicker to disable today's and future dates
+		dobPicker.setDayCellFactory(picker -> new DateCell() {
+			@Override
+			public void updateItem(LocalDate date, boolean empty) {
+				super.updateItem(date, empty);
+				if (date.compareTo(LocalDate.now()) >= 0) {
+					setDisable(true);
+					setStyle("-fx-background-color: #FFE0E9;");
+				}
+			}
+		});
+	}
+
+	@Override
+	public void setBaseController(BaseController baseController) {
+		this.baseController = baseController;
+		this.userController = baseController.getUserController();
+		this.viewText = baseController.getLocaleController().getUIBundle();
+	}
+
+	@Override
+	public void setSidebarViewController(SidebarViewController sidebarViewController) {
 		this.sidebarViewController = sidebarViewController;
 	}
 
@@ -62,7 +92,7 @@ public class RegistrationViewController {
 
 			if (firstName.isEmpty() || lastName.isEmpty() || socialNumber.isEmpty() || username.isEmpty() ||
 			    password.isEmpty() || dobPicker.getValue() == null || role == null) {
-				showAlert("Warning", "Please fill in all fields.");
+				showAlert("Error", "Please fill in all fields.");
 				return;
 			}
 
@@ -109,7 +139,8 @@ public class RegistrationViewController {
 			Parent parent = fxmlLoader.load();
 
 			LoginViewController loginViewController = fxmlLoader.getController();
-			loginViewController.setControllers(userController, sidebarViewController);
+			loginViewController.setBaseController(baseController);
+			loginViewController.setSidebarViewController(sidebarViewController);
 
 			Scene scene = firstNameField.getScene();
 			scene.setRoot(parent);
@@ -125,22 +156,5 @@ public class RegistrationViewController {
 		alert.setHeaderText(null);
 		alert.setContentText(message);
 		alert.showAndWait();
-	}
-
-	@FXML
-	public void initialize() {
-		roleComboBox.setItems(FXCollections.observableArrayList("STUDENT", "TEACHER"));
-
-		// Setup the DatePicker to disable today's and future dates
-		dobPicker.setDayCellFactory(picker -> new DateCell() {
-			@Override
-			public void updateItem(LocalDate date, boolean empty) {
-				super.updateItem(date, empty);
-				if (date.compareTo(LocalDate.now()) >= 0) {
-					setDisable(true);
-					setStyle("-fx-background-color: #FFE0E9;");
-				}
-			}
-		});
 	}
 }

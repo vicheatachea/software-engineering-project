@@ -1,6 +1,8 @@
 package view.controllers.pages.user;
 
+import controller.BaseController;
 import controller.UserController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,26 +11,50 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import view.controllers.SidebarControllerAware;
+import view.controllers.ControllerAware;
 import view.controllers.components.SidebarViewController;
+
+import java.util.ResourceBundle;
 
 import java.io.IOException;
 
-public class LoginViewController {
+public class LoginViewController implements ControllerAware, SidebarControllerAware {
     public VBox loginVBox;
     public Label loginLabel;
     public HBox buttonsHBox;
     public Button loginButton;
     public Button registerButton;
+    private BaseController baseController;
     private UserController userController;
     private SidebarViewController sidebarViewController;
+    private ResourceBundle viewText;
 
     @FXML
     private TextField emailField;
     @FXML
     private PasswordField passwordField;
 
-    public void setControllers(UserController userController, SidebarViewController sidebarViewController) {
-        this.userController = userController;
+    @FXML
+    private void initialize() {
+        Platform.runLater(() -> {
+            loginLabel.setText(viewText.getString("login.title"));
+            loginButton.setText(viewText.getString("login.login"));
+            registerButton.setText(viewText.getString("login.register"));
+            emailField.setText(viewText.getString("login.username"));
+            passwordField.setText(viewText.getString("login.password"));
+        });
+    }
+
+    @Override
+    public void setBaseController(BaseController baseController) {
+        this.baseController = baseController;
+        this.userController = baseController.getUserController();
+        this.viewText = baseController.getLocaleController().getUIBundle();
+    }
+
+    @Override
+    public void setSidebarViewController(SidebarViewController sidebarViewController) {
         this.sidebarViewController = sidebarViewController;
     }
 
@@ -38,7 +64,7 @@ public class LoginViewController {
         String password = passwordField.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
-            showAlert("Error", "Please fill in all fields.");
+            showAlert(viewText.getString("error.title"), viewText.getString("error.invalidLogin"));
             return;
         }
 
@@ -48,10 +74,10 @@ public class LoginViewController {
                 Stage stage = (Stage) emailField.getScene().getWindow();
                 stage.close();
             } else {
-                showAlert("Error", "Invalid credentials.");
+                showAlert(viewText.getString("error.title"), viewText.getString("error.invalidCredentials"));
             }
         } catch (Exception e) {
-            showAlert("Error", "An unexpected error occurred: " + e.getMessage());
+            showAlert(viewText.getString("error.title"), viewText.getString("error.unexpectedError"));
         }
     }
 
@@ -62,13 +88,14 @@ public class LoginViewController {
             Parent parent = fxmlLoader.load();
 
             RegistrationViewController registrationViewController = fxmlLoader.getController();
-            registrationViewController.setControllers(userController, sidebarViewController);
+            registrationViewController.setBaseController(baseController);
+            registrationViewController.setSidebarViewController(sidebarViewController);
 
             Scene scene = emailField.getScene();
             scene.setRoot(parent);
 
         } catch (IOException e) {
-            showAlert("Error", "An unexpected error occurred: " + e.getMessage());
+            showAlert(viewText.getString("error.title"), viewText.getString("error.unexpectedError") + e.getMessage());
         }
     }
 

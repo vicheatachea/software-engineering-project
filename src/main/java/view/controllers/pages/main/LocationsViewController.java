@@ -21,7 +21,6 @@ public class LocationsViewController implements ControllerAware {
 	private List<LocationDTO> locations;
 	private boolean isEditingMode;
 	private int currentIndex;
-
 	private TextField nameTextField;
 	private TextField buildingTextField;
 	private TextField campusTextField;
