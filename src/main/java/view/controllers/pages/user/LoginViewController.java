@@ -34,6 +34,10 @@ public class LoginViewController implements ControllerAware, SidebarControllerAw
     private TextField emailField;
     @FXML
     private PasswordField passwordField;
+    @FXML
+    private Label emailLabel;
+    @FXML
+    private Label passwordLabel;
 
     @FXML
     private void initialize() {
@@ -41,8 +45,8 @@ public class LoginViewController implements ControllerAware, SidebarControllerAw
             loginLabel.setText(viewText.getString("login.title"));
             loginButton.setText(viewText.getString("login.login"));
             registerButton.setText(viewText.getString("login.register"));
-            emailField.setText(viewText.getString("login.username"));
-            passwordField.setText(viewText.getString("login.password"));
+            emailLabel.setText(viewText.getString("login.username"));
+            passwordLabel.setText(viewText.getString("login.password"));
         });
     }
 
