@@ -13,11 +13,12 @@ import view.controllers.ControllerAware;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class SubjectsViewController implements ControllerAware {
+	private ResourceBundle viewText;
 	private SubjectController subjectController;
 	private List<SubjectDTO> subjects;
-	private final List<String> components = List.of("Name", "Code");
 	private boolean isEditingMode;
 	private int currentIndex;
 
@@ -45,33 +46,44 @@ public class SubjectsViewController implements ControllerAware {
 
 	@FXML
 	public void initialize() {
-		String title = "Subject";
-
-		titleLabel.setText(title + "s");
-		newButton.setText("New " + title);
-		addButton.setText("Add " + title);
-		saveButton.setText("Save " + title);
-		deleteButton.setText("Delete " + title);
-
-		int i = 0;
-		for (String key : components) {
-			Label label = new Label(key + ":");
-			label.setFont(new javafx.scene.text.Font("Verdana Bold", 18));
-			label.setStyle("-fx-text-fill: #e36486;");
-
-
-			TextField textField = new TextField();
-			textField.setFont(new javafx.scene.text.Font("Verdana", 16));
-
-			textField.setPromptText("Enter " + key);
-			textField.setId(key.toLowerCase() + "TextField");
-
-			componentGrid.add(label, 0, i);
-			componentGrid.add(textField, 1, i);
-			i++;
-		}
-
 		Platform.runLater(() -> {
+			titleLabel.setText(viewText.getString("subjects.title"));
+			newButton.setText(viewText.getString("subjects.new"));
+			addButton.setText(viewText.getString("subjects.add"));
+			saveButton.setText(viewText.getString("subjects.save"));
+			deleteButton.setText(viewText.getString("subjects.delete"));
+
+			String[] components = {
+					viewText.getString("common.name"),
+					viewText.getString("common.code"),
+			};
+			String[] prompts = {
+					viewText.getString("common.promptName"),
+					viewText.getString("common.promptCode"),
+			};
+			String[] ids = {
+					"nameTextField",
+					"codeTextField",
+			};
+
+			int i = 0;
+			for (String component : components) {
+				Label label = new Label(component);
+				label.setFont(new javafx.scene.text.Font("Verdana Bold", 18));
+				label.setStyle("-fx-text-fill: #e36486;");
+
+
+				TextField textField = new TextField();
+				textField.setFont(new javafx.scene.text.Font("Verdana", 16));
+
+				textField.setPromptText(prompts[i]);
+				textField.setId(ids[i]);
+
+				componentGrid.add(label, 0, i);
+				componentGrid.add(textField, 1, i);
+				i++;
+			}
+
 			loadSubjects();
 			nameTextField = (TextField) contentVBox.lookup("#nameTextField");
 			codeTextField = (TextField) contentVBox.lookup("#codeTextField");
@@ -82,6 +94,7 @@ public class SubjectsViewController implements ControllerAware {
 
 	public void setBaseController(BaseController baseController) {
 		this.subjectController = baseController.getSubjectController();
+		this.viewText = baseController.getLocaleController().getUIBundle();
 	}
 
 	private void loadSubjects() {
@@ -94,10 +107,12 @@ public class SubjectsViewController implements ControllerAware {
 	private void handleNew() {
 		if (resolveIsNotSaved()) {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-			alert.setTitle("Create Subject");
+			alert.setTitle(viewText.getString("confirmation.subject.create"));
 			alert.setHeaderText(null);
-			alert.setContentText("Are you sure you want to create a new subject?\n" +
-			                     "Any unsaved changes will be lost.");
+			alert.setContentText(String.format("%s\n%s",
+					viewText.getString("confirmation.subject.createPrompt"),
+					viewText.getString("confirmation.unsavedChanges"))
+			);
 
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.isEmpty() || result.get() != ButtonType.OK) {
@@ -113,9 +128,9 @@ public class SubjectsViewController implements ControllerAware {
 	private void handleAdd() {
 		if (areFieldsEmpty()) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setTitle("Error");
+			alert.setTitle(viewText.getString("error.title"));
 			alert.setHeaderText(null);
-			alert.setContentText("All fields are required.");
+			alert.setContentText(viewText.getString("error.fillAllFields"));
 			alert.showAndWait();
 			return;
 		}
@@ -126,9 +141,9 @@ public class SubjectsViewController implements ControllerAware {
 		for (SubjectDTO subject : subjects) {
 			if (subject.code().equals(code)) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
-				alert.setTitle("Error");
+				alert.setTitle(viewText.getString("error.title"));
 				alert.setHeaderText(null);
-				alert.setContentText("Subject with this code already exists.");
+				alert.setContentText(viewText.getString("error.subject.exists"));
 				alert.showAndWait();
 				return;
 			}
@@ -144,9 +159,9 @@ public class SubjectsViewController implements ControllerAware {
 	private void handleSave() {
 		if (areFieldsEmpty()) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setTitle("Error");
+			alert.setTitle(viewText.getString("error.title"));
 			alert.setHeaderText(null);
-			alert.setContentText("All fields are required.");
+			alert.setContentText(viewText.getString("error.fillAllFields"));
 			alert.showAndWait();
 			return;
 		}
@@ -160,9 +175,9 @@ public class SubjectsViewController implements ControllerAware {
 			for (SubjectDTO subject : subjects) {
 				if (subject.code().equals(code) && !code.equals(currentCode)) {
 					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setTitle("Error");
+					alert.setTitle(viewText.getString("error.title"));
 					alert.setHeaderText(null);
-					alert.setContentText("Subject with this code already exists.");
+					alert.setContentText(viewText.getString("error.location.exists"));
 					alert.showAndWait();
 					return;
 				}
@@ -181,9 +196,9 @@ public class SubjectsViewController implements ControllerAware {
 		int selectedIndex = itemView.getSelectionModel().getSelectedIndex();
 		if (selectedIndex != -1) {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-			alert.setTitle("Delete Subject");
+			alert.setTitle(viewText.getString("confirmation.subject.delete"));
 			alert.setHeaderText(null);
-			alert.setContentText("Are you sure you want to delete this subject?");
+			alert.setContentText(viewText.getString("confirmation.subject.deletePrompt"));
 
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -199,10 +214,12 @@ public class SubjectsViewController implements ControllerAware {
 	private void handleItemSelection() {
 		if (resolveIsNotSaved()) {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-			alert.setTitle("Select Subject");
+			alert.setTitle(viewText.getString("confirmation.subject.select"));
 			alert.setHeaderText(null);
-			alert.setContentText("Are you sure you want to change items?\n" +
-			                     "Any unsaved changes will be lost.");
+			alert.setContentText(String.format("%s\n%s",
+					viewText.getString("confirmation.selectPrompt"),
+					viewText.getString("confirmation.unsavedChanges"))
+			);
 
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.isEmpty() || result.get() != ButtonType.OK) {
