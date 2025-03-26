@@ -191,6 +191,8 @@ public class SidebarViewController implements ControllerAware, NotificationAware
 
             NotificationsViewController notificationsViewController = fxmlLoader.getController();
             notificationsViewController.setEventNotifications(notifications);
+            notificationsViewController.setBaseController(baseController);
+            notificationsViewController.setSidebarViewController(this);
 
             Stage notificationStage = new Stage();
             notificationStage.initModality(Modality.APPLICATION_MODAL);
