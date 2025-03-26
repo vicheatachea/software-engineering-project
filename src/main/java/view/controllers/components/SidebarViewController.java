@@ -40,6 +40,7 @@ public class SidebarViewController implements ControllerAware, NotificationAware
     private Button accountButton;
     private Button loginButton;
     private Button notificationsButton;
+    private ResourceBundle viewText;
 
     @FXML
     private VBox sidebar;
@@ -104,6 +105,7 @@ public class SidebarViewController implements ControllerAware, NotificationAware
         this.localeController = baseController.getLocaleController();
         this.userController = baseController.getUserController();
         this.notificationService = new NotificationService(this, baseController.getEventController());
+        this.viewText = baseController.getLocaleController().getUIBundle();
     }
 
     private void addButton(String name, String view) {
@@ -153,7 +155,7 @@ public class SidebarViewController implements ControllerAware, NotificationAware
             Stage loginStage = new Stage();
             loginStage.initModality(Modality.APPLICATION_MODAL);
             loginStage.initOwner(sidebar.getScene().getWindow());
-            loginStage.setTitle("Login");
+            loginStage.setTitle(viewText.getString("login.title"));
             loginStage.setScene(new Scene(parent));
             loginStage.showAndWait();
         } catch (IOException e) {
@@ -173,7 +175,7 @@ public class SidebarViewController implements ControllerAware, NotificationAware
             Stage userProfileStage = new Stage();
             userProfileStage.initModality(Modality.APPLICATION_MODAL);
             userProfileStage.initOwner(sidebar.getScene().getWindow());
-            userProfileStage.setTitle("User Profile");
+            userProfileStage.setTitle(viewText.getString("userprofile.title"));
             userProfileStage.setScene(new Scene(parent));
             userProfileStage.showAndWait();
         } catch (IOException e) {
@@ -192,7 +194,7 @@ public class SidebarViewController implements ControllerAware, NotificationAware
             Stage notificationStage = new Stage();
             notificationStage.initModality(Modality.APPLICATION_MODAL);
             notificationStage.initOwner(sidebar.getScene().getWindow());
-            notificationStage.setTitle("Notifications");
+            notificationStage.setTitle(viewText.getString("notifications.title"));
             notificationStage.setScene(new Scene(parent));
             notificationStage.showAndWait();
         } catch (IOException e) {
