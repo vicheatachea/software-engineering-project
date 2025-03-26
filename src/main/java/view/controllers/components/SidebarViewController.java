@@ -169,7 +169,8 @@ public class SidebarViewController implements ControllerAware, NotificationAware
             Parent parent = fxmlLoader.load();
 
             UserProfileViewController userProfileViewController = fxmlLoader.getController();
-            userProfileViewController.setControllers(userController, this);
+            userProfileViewController.setBaseController(baseController);
+            userProfileViewController.setSidebarViewController(this);
             userProfileViewController.updateUserInfo();
 
             Stage userProfileStage = new Stage();
