@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import view.controllers.SidebarControllerAware;
 import view.controllers.ControllerAware;
 import view.controllers.components.SidebarViewController;
 
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class SettingsViewController implements ControllerAware {
+public class SettingsViewController implements ControllerAware, SidebarControllerAware {
     private LocaleController localeController;
     private SidebarViewController sidebarViewController;
 
@@ -45,6 +46,7 @@ public class SettingsViewController implements ControllerAware {
         this.localeController = baseController.getLocaleController();
     }
 
+    @Override
     public void setSidebarViewController(SidebarViewController sidebarViewController) {
         this.sidebarViewController = sidebarViewController;
     }
