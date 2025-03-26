@@ -1,5 +1,6 @@
 package view.controllers.pages.user;
 
+import controller.BaseController;
 import controller.UserController;
 import dto.UserDTO;
 import javafx.collections.FXCollections;
@@ -16,7 +17,6 @@ import view.controllers.components.SidebarViewController;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 
 public class RegistrationViewController {
 	public VBox registrationVBox;
@@ -28,6 +28,7 @@ public class RegistrationViewController {
 	public Button registerButton;
 	private UserController userController;
 	private SidebarViewController sidebarViewController;
+
 
 	@FXML
 	private TextField firstNameField;

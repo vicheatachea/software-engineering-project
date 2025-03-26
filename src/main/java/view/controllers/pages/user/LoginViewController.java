@@ -1,6 +1,7 @@
 package view.controllers.pages.user;
 
 import controller.UserController;
+import controller.LocaleController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import view.controllers.components.SidebarViewController;
+import java.util.ResourceBundle;
 
 import java.io.IOException;
 
@@ -21,6 +23,8 @@ public class LoginViewController {
     public Button registerButton;
     private UserController userController;
     private SidebarViewController sidebarViewController;
+    private ResourceBundle viewText;
+    private LocaleController localeController;
 
     @FXML
     private TextField emailField;
@@ -33,12 +37,23 @@ public class LoginViewController {
     }
 
     @FXML
+    private void initialize() {
+        if (viewText != null) {
+            loginLabel.setText(viewText.getString("login.title"));
+            loginButton.setText(viewText.getString("login.login"));
+            registerButton.setText(viewText.getString("login.register"));
+            emailField.setText(viewText.getString("login.username"));
+            passwordField.setText(viewText.getString("login.password"));
+        }
+    }
+
+    @FXML
     private void handleLogin() {
         String username = emailField.getText();
         String password = passwordField.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
-            showAlert("Error", "Please fill in all fields.");
+            showAlert(viewText.getString("error.title"), viewText.getString("error.invalidLogin"));
             return;
         }
 
@@ -48,10 +63,10 @@ public class LoginViewController {
                 Stage stage = (Stage) emailField.getScene().getWindow();
                 stage.close();
             } else {
-                showAlert("Error", "Invalid credentials.");
+                showAlert(viewText.getString("error.title"), viewText.getString("error.invalidCredentials"));
             }
         } catch (Exception e) {
-            showAlert("Error", "An unexpected error occurred: " + e.getMessage());
+            showAlert(viewText.getString("error.title"), viewText.getString("error.unexpectedError"));
         }
     }
 
@@ -68,7 +83,7 @@ public class LoginViewController {
             scene.setRoot(parent);
 
         } catch (IOException e) {
-            showAlert("Error", "An unexpected error occurred: " + e.getMessage());
+            showAlert(viewText.getString("error.title"), viewText.getString("error.unexpectedError") + e.getMessage());
         }
     }
 
