@@ -16,6 +16,7 @@ import view.controllers.pages.main.TimetableViewController;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Objects;
 
 public class EventPopupViewController {
     private EventController eventController;
@@ -32,17 +33,17 @@ public class EventPopupViewController {
     @FXML
     private GridPane popupGridPane;
     @FXML
-    private ComboBox eventComboBox;
+    private ComboBox<String> eventComboBox;
     @FXML
-    private ComboBox scheduleComboBox;
+    private ComboBox<String> scheduleComboBox;
     @FXML
-    private ComboBox groupComboBox;
+    private ComboBox<String> groupComboBox;
     @FXML
-    private ComboBox subjectComboBox;
+    private ComboBox<String> subjectComboBox;
     @FXML
-    private ComboBox assignmentComboBox;
+    private ComboBox<String> assignmentComboBox;
     @FXML
-    private ComboBox locationComboBox;
+    private ComboBox<String> locationComboBox;
     @FXML
     private TextField nameTextField;
     @FXML
@@ -175,7 +176,7 @@ public class EventPopupViewController {
     }
 
     private void handleEventChange() {
-        String eventType = (String) eventComboBox.getValue();
+        String eventType = eventComboBox.getValue();
 
         if (eventType == null) {
             return;
@@ -192,7 +193,7 @@ public class EventPopupViewController {
     }
 
     private void handleScheduleChange() {
-        String scheduleType = (String) scheduleComboBox.getValue();
+        String scheduleType = scheduleComboBox.getValue();
 
         if (scheduleType == null) {
             return;
@@ -209,7 +210,7 @@ public class EventPopupViewController {
     }
 
     private void handleGroupChange() {
-        String groupName = (String) groupComboBox.getValue();
+        String groupName = groupComboBox.getValue();
 
         if (groupName != null) {
             GroupDTO group = groupController.fetchGroupByName(groupName);
@@ -219,7 +220,7 @@ public class EventPopupViewController {
 
     @FXML
     private void handleSaveEvent() {
-        String eventType = (String) eventComboBox.getValue();
+        String eventType = eventComboBox.getValue();
 
         if (checkNullOrEmpty(eventType, "Please select an event type") ||
                 checkNullOrEmpty(scheduleComboBox.getValue(), "Please select a schedule type") ||
@@ -271,8 +272,8 @@ public class EventPopupViewController {
             return;
         }
 
-        String scheduleFor = (String) scheduleComboBox.getValue();
-        String subject = (String) subjectComboBox.getValue();
+        String scheduleFor = scheduleComboBox.getValue();
+        String subject = subjectComboBox.getValue();
         String description = descriptionTextArea.getText();
 
         Long timetableId;
@@ -280,7 +281,7 @@ public class EventPopupViewController {
         if (scheduleFor.equals("Myself")) {
             timetableId = timetableController.fetchTimetableForUser();
         } else {
-            String groupName = (String) groupComboBox.getValue();
+            String groupName = groupComboBox.getValue();
 
             if (checkNullOrEmpty(groupName, "Please select a group")) {
                 return;
@@ -312,7 +313,7 @@ public class EventPopupViewController {
                 LocalDateTime startDateTime = LocalDateTime.of(startDate, startLocalTime);
                 LocalDateTime endDateTime = LocalDateTime.of(startDate, endLocalTime);
 
-                String location = (String) locationComboBox.getValue();
+                String location = locationComboBox.getValue();
 
                 newEvent = new TeachingSessionDTO(id, startDateTime, endDateTime, location, subject, description, timetableId);
                 break;
@@ -322,7 +323,7 @@ public class EventPopupViewController {
                 LocalDateTime deadlineDateTime = LocalDateTime.of(endDate, endLocalTime);
 
                 String assignmentName = nameTextField.getText();
-                String assignmentType = (String) assignmentComboBox.getValue();
+                String assignmentType = assignmentComboBox.getValue();
 
                 newEvent = new AssignmentDTO(id, assignmentType, publishingDateTime, deadlineDateTime, assignmentName, subject, description, timetableId);
                 break;
@@ -350,10 +351,10 @@ public class EventPopupViewController {
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.OK) {
-            if (scheduleComboBox.getValue() == "Myself") {
+            if (Objects.equals(scheduleComboBox.getValue(), "Myself")) {
                 eventController.deleteEvent(event);
             } else {
-                String groupName = (String) groupComboBox.getValue();
+                String groupName = groupComboBox.getValue();
 
                 if (!groupController.isUserGroupOwner(groupName)) {
                     displayErrorAlert("Permission Error", "You do not have permission to delete events for this group");
