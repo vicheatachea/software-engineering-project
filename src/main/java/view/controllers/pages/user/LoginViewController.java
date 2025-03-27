@@ -24,7 +24,7 @@ public class LoginViewController implements ControllerAware, SidebarControllerAw
     public Label loginLabel;
     public HBox buttonsHBox;
     public Button loginButton;
-    public Button registerButton;
+    public Button loginRegisterButton;
     private BaseController baseController;
     private UserController userController;
     private SidebarViewController sidebarViewController;
@@ -39,17 +39,6 @@ public class LoginViewController implements ControllerAware, SidebarControllerAw
     @FXML
     private Label passwordLabel;
 
-    @FXML
-    private void initialize() {
-        Platform.runLater(() -> {
-            loginLabel.setText(viewText.getString("login.title"));
-            loginButton.setText(viewText.getString("login.login"));
-            registerButton.setText(viewText.getString("login.register"));
-            emailLabel.setText(viewText.getString("login.username"));
-            passwordLabel.setText(viewText.getString("login.password"));
-        });
-    }
-
     @Override
     public void setBaseController(BaseController baseController) {
         this.baseController = baseController;
@@ -61,6 +50,19 @@ public class LoginViewController implements ControllerAware, SidebarControllerAw
     public void setSidebarViewController(SidebarViewController sidebarViewController) {
         this.sidebarViewController = sidebarViewController;
     }
+
+    @FXML
+    private void initialize() {
+        Platform.runLater(() -> {
+            loginLabel.setText(viewText.getString("login.title"));
+            loginButton.setText(viewText.getString("login.login"));
+            loginRegisterButton.setText(viewText.getString("login.register"));
+            emailLabel.setText(viewText.getString("login.username"));
+            passwordLabel.setText(viewText.getString("login.password"));
+
+        });
+    }
+
 
     @FXML
     private void handleLogin() {
@@ -99,7 +101,7 @@ public class LoginViewController implements ControllerAware, SidebarControllerAw
             scene.setRoot(parent);
 
         } catch (IOException e) {
-            showAlert(viewText.getString("error.title"), viewText.getString("error.unexpectedError") + e.getMessage());
+            showAlert(viewText.getString("error.title"), viewText.getString("error.unexpectedError"));
         }
     }
 
