@@ -68,7 +68,7 @@ public class NotificationsViewController {
             HBox notificationBox = loader.load();
 
             NotificationItemViewController itemViewController = loader.getController();
-            itemViewController.setNotificationData(this, event, time);
+            itemViewController.setNotificationData(this, event, time, viewText);
 
             notificationsContainer.getChildren().add(notificationBox);
         } catch (IOException e) {
