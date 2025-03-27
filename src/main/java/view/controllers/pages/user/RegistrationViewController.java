@@ -16,7 +16,6 @@ import view.controllers.components.SidebarViewController;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 
 public class RegistrationViewController {
 	public VBox registrationVBox;
@@ -66,7 +65,7 @@ public class RegistrationViewController {
 				return;
 			}
 
-			if (!firstName.matches("^[a-zA-Z]+$") || !lastName.matches("^[a-zA-Z]+$")) {
+			if (!firstName.matches("[^0-9]+$") || !lastName.matches("[^0-9]+$")) {
 				showAlert("Warning", "First name and last name can only contain letters.");
 				return;
 			}
