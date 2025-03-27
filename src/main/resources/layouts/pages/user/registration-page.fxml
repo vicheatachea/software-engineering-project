@@ -14,33 +14,33 @@
     <Label fx:id="registrationLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="60.0" styleClass="registration-label" text="Register"> </Label>
 
     <HBox alignment="CENTER_LEFT" spacing="10">
-        <Label prefHeight="17.0" prefWidth="153.0" styleClass="firstname-label" text="First Name"> </Label>
+        <Label fx:id="firstNameLabel" prefHeight="17.0" prefWidth="153.0" styleClass="firstname-label" text="First Name"> </Label>
         <TextField fx:id="firstNameField" prefHeight="40.0" styleClass="first-name-field" />
     </HBox>
 
     <HBox alignment="CENTER_LEFT" spacing="10">
-        <Label prefHeight="17.0" prefWidth="151.0" styleClass="lastname-label" text="Last Name"> </Label>
+        <Label fx:id="lastNameLabel" prefHeight="17.0" prefWidth="151.0" styleClass="lastname-label" text="Last Name"> </Label>
         <TextField fx:id="lastNameField" prefHeight="40.0" styleClass="last-name-field" />
     </HBox>
 
     <HBox alignment="CENTER_LEFT" spacing="10">
-        <Label prefHeight="17.0" prefWidth="150.0" styleClass="socialnumber-label" text="Social Number"> </Label>
+        <Label fx:id="socialNumberLabel" prefHeight="17.0" prefWidth="150.0" styleClass="socialnumber-label" text="Social Number"> </Label>
         <TextField fx:id="socialNumberField" prefHeight="40.0" styleClass="social-number-field" />
     </HBox>
 
     <HBox alignment="CENTER_LEFT" spacing="10">
-        <Label prefHeight="17.0" prefWidth="150.0" styleClass="email-label" text="Email"> </Label>
+        <Label fx:id="emailLabel" prefHeight="17.0" prefWidth="150.0" styleClass="email-label" text="Email"> </Label>
         <TextField fx:id="emailField" prefHeight="40.0" styleClass="email-field" />
     </HBox>
 
     <HBox alignment="CENTER_LEFT" spacing="10">
-        <Label prefHeight="17.0" prefWidth="154.0" styleClass="username-label" text="Username"> </Label>
+        <Label fx:id="usernameLabel" prefHeight="17.0" prefWidth="154.0" styleClass="username-label" text="Username"> </Label>
         <TextField fx:id="usernameField" prefHeight="40.0" styleClass="username-field" />
     </HBox>
 
     <HBox alignment="CENTER_LEFT" spacing="10">
-        <Label prefHeight="17.0" prefWidth="156.0" styleClass="password-label" text="Password"> </Label>
-        <PasswordField fx:id="passwordField" prefHeight="40.0" styleClass="password-field" />
+        <Label fx:id="registerPasswordLabel" prefHeight="17.0" prefWidth="156.0" styleClass="password-label" text="Password"> </Label>
+        <PasswordField fx:id="registerPasswordField" prefHeight="40.0" styleClass="password-field" />
     </HBox>
 
     <HBox fx:id="dobRoleHBox" alignment="CENTER" spacing="10">
