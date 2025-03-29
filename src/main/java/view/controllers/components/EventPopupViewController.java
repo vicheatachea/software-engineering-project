@@ -17,8 +17,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 public class EventPopupViewController {
+    private ResourceBundle viewText;
     private EventController eventController;
     private GroupController groupController;
     private LocationController locationController;
@@ -51,11 +53,17 @@ public class EventPopupViewController {
     @FXML
     private HBox endHBox;
     @FXML
+    private Label eventLabel;
+    @FXML
     private Label startLabel;
     @FXML
     private Label endLabel;
     @FXML
+    private Label scheduleLabel;
+    @FXML
     private Label groupLabel;
+    @FXML
+    private Label subjectLabel;
     @FXML
     private Label nameLabel;
     @FXML
@@ -63,11 +71,15 @@ public class EventPopupViewController {
     @FXML
     private Label locationLabel;
     @FXML
+    private Label descriptionLabel;
+    @FXML
     private DatePicker startDatePicker;
     @FXML
     private DatePicker endDatePicker;
     @FXML
     private TextArea descriptionTextArea;
+    @FXML
+    private Button saveButton;
     @FXML
     private Button deleteButton;
 
@@ -79,22 +91,45 @@ public class EventPopupViewController {
         this.subjectController = baseController.getSubjectController();
         this.timetableController = baseController.getTimetableController();
         this.timetableViewController = timetableViewController;
+        this.viewText = baseController.getLocaleController().getUIBundle();
     }
 
     @FXML
     private void initialize() {
-        startHBox.getChildren().add(startTimeField);
-        endHBox.getChildren().add(endTimeField);
-
-        eventComboBox.getItems().addAll("Class", "Assignment");
-        scheduleComboBox.getItems().addAll("Myself", "Group");
-        assignmentComboBox.getItems().addAll("Individual", "Group");
-
-        eventComboBox.addEventHandler(ActionEvent.ACTION, event -> handleEventChange());
-        scheduleComboBox.addEventHandler(ActionEvent.ACTION, event -> handleScheduleChange());
-        groupComboBox.addEventHandler(ActionEvent.ACTION, event -> handleGroupChange());
-
         Platform.runLater(() -> {
+            eventLabel.setText(viewText.getString("event.eventType"));
+            startLabel.setText(viewText.getString("event.startTime"));
+            endLabel.setText(viewText.getString("event.endTime"));
+            scheduleLabel.setText(viewText.getString("event.scheduleType"));
+            groupLabel.setText(viewText.getString("event.group"));
+            subjectLabel.setText(viewText.getString("event.subject"));
+            nameLabel.setText(viewText.getString("event.assignmentName"));
+            assignmentLabel.setText(viewText.getString("event.assignmentType"));
+            locationLabel.setText(viewText.getString("event.location"));
+            descriptionLabel.setText(viewText.getString("event.description"));
+
+            saveButton.setText(viewText.getString("event.saveEvent"));
+            deleteButton.setText(viewText.getString("event.deleteEvent"));
+
+            startHBox.getChildren().add(startTimeField);
+            endHBox.getChildren().add(endTimeField);
+
+            eventComboBox.getItems().addAll(
+                    viewText.getString("event.class"),
+                    viewText.getString("event.assignment")
+            );
+            scheduleComboBox.getItems().addAll(viewText.getString("event.myself"),
+                    viewText.getString("event.group")
+            );
+            assignmentComboBox.getItems().addAll(
+                    viewText.getString("event.individual"),
+                    viewText.getString("event.group")
+            );
+
+            eventComboBox.addEventHandler(ActionEvent.ACTION, event -> handleEventChange());
+            scheduleComboBox.addEventHandler(ActionEvent.ACTION, event -> handleScheduleChange());
+            groupComboBox.addEventHandler(ActionEvent.ACTION, event -> handleGroupChange());
+
             // Fetch data from the database
             subjectComboBox.getItems().addAll(
                     subjectController.fetchSubjectsByUser().stream()
@@ -113,8 +148,8 @@ public class EventPopupViewController {
             );
 
             if (event == null) {
-                eventComboBox.setValue("Class");
-                scheduleComboBox.setValue("Myself");
+                eventComboBox.setValue(viewText.getString("event.class"));
+                scheduleComboBox.setValue(viewText.getString("event.myself"));
                 deleteButton.setVisible(false);
                 deleteButton.setManaged(false);
                 return;
@@ -131,7 +166,7 @@ public class EventPopupViewController {
                 String subject = teachingSession.subjectCode();
                 String description = teachingSession.description();
 
-                eventComboBox.setValue("Class");
+                eventComboBox.setValue(viewText.getString("event.class"));
                 startDatePicker.setValue(startDateTime.toLocalDate());
                 startTimeField.setText(TimeFormatterUtil.getTimeFromDateTime(startDateTime));
                 endTimeField.setText(TimeFormatterUtil.getTimeFromDateTime(endDateTime));
@@ -139,9 +174,9 @@ public class EventPopupViewController {
                 descriptionTextArea.setText(description);
 
                 if (teachingSession.timetableId() == timetableController.fetchTimetableForUser()) {
-                    scheduleComboBox.setValue("Myself");
+                    scheduleComboBox.setValue(viewText.getString("event.myself"));
                 } else {
-                    scheduleComboBox.setValue("Group");
+                    scheduleComboBox.setValue(viewText.getString("event.group"));
                     groupComboBox.setValue(groupController.fetchGroupByTimetableId(teachingSession.timetableId()).name());
                     subjectComboBox.setDisable(true);
                 }
@@ -154,7 +189,7 @@ public class EventPopupViewController {
                 String subject = assignment.subjectCode();
                 String description = assignment.description();
 
-                eventComboBox.setValue("Assignment");
+                eventComboBox.setValue(viewText.getString("event.assignment"));
                 startDatePicker.setValue(publishingDateTime.toLocalDate());
                 startTimeField.setText(TimeFormatterUtil.getTimeFromDateTime(publishingDateTime));
                 endDatePicker.setValue(deadlineDateTime.toLocalDate());
@@ -164,9 +199,9 @@ public class EventPopupViewController {
                 descriptionTextArea.setText(description);
 
                 if (assignment.timetableId() == timetableController.fetchTimetableForUser()) {
-                    scheduleComboBox.setValue("Myself");
+                    scheduleComboBox.setValue(viewText.getString("event.myself"));
                 } else {
-                    scheduleComboBox.setValue("Group");
+                    scheduleComboBox.setValue(viewText.getString("event.group"));
                     groupComboBox.setValue(groupController.fetchGroupByTimetableId(assignment.timetableId()).name());
                     subjectComboBox.setDisable(true);
                 }
@@ -182,13 +217,13 @@ public class EventPopupViewController {
             return;
         }
 
+        String classText = viewText.getString("event.class");
+        String assignmentText = viewText.getString("event.assignment");
+
         switch (eventType) {
-            case "Class":
-                toggleEventView(false);
-                break;
-            case "Assignment":
-                toggleEventView(true);
-                break;
+            case String value when value.equals(classText) -> toggleEventView(false);
+            case String value when value.equals(assignmentText) -> toggleEventView(true);
+            default -> System.out.println("Event type not recognised");
         }
     }
 
@@ -199,13 +234,13 @@ public class EventPopupViewController {
             return;
         }
 
+        String myselfText = viewText.getString("event.myself");
+        String groupText = viewText.getString("event.group");
+
         switch (scheduleType) {
-            case "Myself":
-                toggleScheduleView(false);
-                break;
-            case "Group":
-                toggleScheduleView(true);
-                break;
+            case String value when value.equals(myselfText) -> toggleScheduleView(false);
+            case String value when value.equals(groupText) -> toggleScheduleView(true);
+            default -> System.out.println("Schedule type not recognised");
         }
     }
 
@@ -222,25 +257,25 @@ public class EventPopupViewController {
     private void handleSaveEvent() {
         String eventType = eventComboBox.getValue();
 
-        if (checkNullOrEmpty(eventType, "Please select an event type") ||
-                checkNullOrEmpty(scheduleComboBox.getValue(), "Please select a schedule type") ||
-                checkNullOrEmpty(subjectComboBox.getValue(), "Please select a subject")) {
+        if (checkNullOrEmpty(eventType, viewText.getString("event.promptEventType")) ||
+                checkNullOrEmpty(scheduleComboBox.getValue(), viewText.getString("event.promptScheduleType")) ||
+                checkNullOrEmpty(subjectComboBox.getValue(), viewText.getString("event.promptSubject"))) {
             return;
         }
 
-        if (eventType.equals("Assignment")) {
-            if (checkNullOrEmpty(startDatePicker.getValue(), "Please select a publishing date") ||
-                    checkNullOrEmpty(endDatePicker.getValue(), "Please select a due date") ||
-                    checkNullOrEmpty(nameTextField.getText(), "Please enter an assignment name") ||
-                    checkNullOrEmpty(assignmentComboBox.getValue(), "Please select an assignment type")) {
+        if (eventType.equals(viewText.getString("event.assignment"))) {
+            if (checkNullOrEmpty(startDatePicker.getValue(), viewText.getString("event.promptPublishingDate")) ||
+                    checkNullOrEmpty(endDatePicker.getValue(), viewText.getString("event.promptDueDate")) ||
+                    checkNullOrEmpty(nameTextField.getText(), viewText.getString("event.promptAssignmentName")) ||
+                    checkNullOrEmpty(assignmentComboBox.getValue(), viewText.getString("event.promptAssignmentType"))) {
                 return;
             }
         }
 
-        if (eventType.equals("Class")) {
-            if (checkNullOrEmpty(startTimeField.getText(), "Please enter a start time") ||
-                    checkNullOrEmpty(endTimeField.getText(), "Please enter an end time") ||
-                    checkNullOrEmpty(locationComboBox.getValue(), "Please select a location")) {
+        if (eventType.equals(viewText.getString("event.class"))) {
+            if (checkNullOrEmpty(startTimeField.getText(), viewText.getString("event.promptStartTime")) ||
+                    checkNullOrEmpty(endTimeField.getText(), viewText.getString("event.promptEndTime")) ||
+                    checkNullOrEmpty(locationComboBox.getValue(), viewText.getString("event.promptLocation"))) {
                 return;
             }
         }
@@ -268,7 +303,10 @@ public class EventPopupViewController {
             startLocalTime = TimeFormatterUtil.getTimeFromString(startTime);
             endLocalTime = TimeFormatterUtil.getTimeFromString(endTime);
         } catch (Exception e) {
-            displayErrorAlert("Configuration Error", "Invalid time format");
+            displayErrorAlert(
+                    viewText.getString("error.title"),
+                    viewText.getString("error.invalidTime")
+            );
             return;
         }
 
@@ -278,20 +316,19 @@ public class EventPopupViewController {
 
         Long timetableId;
 
-        if (scheduleFor.equals("Myself")) {
+        if (scheduleFor.equals(viewText.getString("event.myself"))) {
             timetableId = timetableController.fetchTimetableForUser();
         } else {
             String groupName = groupComboBox.getValue();
 
-            if (checkNullOrEmpty(groupName, "Please select a group")) {
+            if (checkNullOrEmpty(groupName, viewText.getString("event.promptGroup"))) {
                 return;
             }
             if (!groupController.isUserGroupOwner(groupName)) {
-                if (event == null) {
-                    displayErrorAlert("Permission Error", "You do not have permission to add events for this group");
-                } else {
-                    displayErrorAlert("Permission Error", "You do not have permission to update events for this group");
-                }
+                displayErrorAlert(
+                        viewText.getString("error.title"),
+                        viewText.getString("error.event.permission")
+                );
                 return;
             }
 
@@ -304,9 +341,12 @@ public class EventPopupViewController {
         }
 
         switch (eventType) {
-            case "Class":
+            case String value when value.equals(viewText.getString("event.class")) -> {
                 if (startLocalTime.isAfter(endLocalTime)) {
-                    displayErrorAlert("Configuration Error", "Start time cannot be after end time");
+                    displayErrorAlert(
+                            viewText.getString("error.title"),
+                            viewText.getString("error.event.timeAfter")
+                    );
                     return;
                 }
 
@@ -316,8 +356,8 @@ public class EventPopupViewController {
                 String location = locationComboBox.getValue();
 
                 newEvent = new TeachingSessionDTO(id, startDateTime, endDateTime, location, subject, description, timetableId);
-                break;
-            case "Assignment":
+            }
+            case String value when value.equals(viewText.getString("event.assignment")) -> {
                 LocalDate endDate = endDatePicker.getValue();
                 LocalDateTime publishingDateTime = LocalDateTime.of(startDate, startLocalTime);
                 LocalDateTime deadlineDateTime = LocalDateTime.of(endDate, endLocalTime);
@@ -326,11 +366,15 @@ public class EventPopupViewController {
                 String assignmentType = assignmentComboBox.getValue();
 
                 newEvent = new AssignmentDTO(id, assignmentType, publishingDateTime, deadlineDateTime, assignmentName, subject, description, timetableId);
-                break;
+            }
+            default -> System.out.println("Event type not recognised");
         }
 
         if (newEvent == null) {
-            displayErrorAlert("Configuration Error", "Event type not recognised");
+            displayErrorAlert(
+                    viewText.getString("error.title"),
+                    viewText.getString("error.event.notRecognised")
+            );
             return;
         }
 
@@ -345,19 +389,22 @@ public class EventPopupViewController {
     @FXML
     private void handleDeleteEvent() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete Event");
+        alert.setTitle(viewText.getString("confirmation.event.delete"));
         alert.setHeaderText(null);
-        alert.setContentText("Are you sure you want to delete this event?");
+        alert.setContentText(viewText.getString("confirmation.event.deletePrompt"));
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.OK) {
-            if (Objects.equals(scheduleComboBox.getValue(), "Myself")) {
+            if (Objects.equals(scheduleComboBox.getValue(), viewText.getString("event.myself"))) {
                 eventController.deleteEvent(event);
             } else {
                 String groupName = groupComboBox.getValue();
 
                 if (!groupController.isUserGroupOwner(groupName)) {
-                    displayErrorAlert("Permission Error", "You do not have permission to delete events for this group");
+                    displayErrorAlert(
+                            viewText.getString("error.title"),
+                            viewText.getString("error.event.permission")
+                    );
                     return;
                 }
                 eventController.deleteEvent(event);
@@ -368,7 +415,7 @@ public class EventPopupViewController {
 
     private boolean checkNullOrEmpty(Object object, String message) {
         if (object == null || object instanceof String && ((String) object).isEmpty()) {
-            displayErrorAlert("Configuration Error", message);
+            displayErrorAlert(viewText.getString("error.title"), message);
             return true;
         }
         return false;
@@ -384,11 +431,11 @@ public class EventPopupViewController {
 
     private void toggleEventView(boolean isAssignment) {
         if (isAssignment) {
-            startLabel.setText("Publishing Date");
-            endLabel.setText("Due Date");
+            startLabel.setText(viewText.getString("event.publishingDate"));
+            endLabel.setText(viewText.getString("event.dueDate"));
         } else {
-            startLabel.setText("Start Time");
-            endLabel.setText("End Time");
+            startLabel.setText(viewText.getString("event.startTime"));
+            endLabel.setText(viewText.getString("event.endTime"));
         }
 
         endDatePicker.setDisable(!isAssignment);

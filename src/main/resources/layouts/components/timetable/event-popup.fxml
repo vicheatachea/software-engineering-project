@@ -34,16 +34,16 @@
             <RowConstraints vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label styleClass="event-label" text="Event Type" />
+            <Label fx:id="eventLabel" styleClass="event-label" text="Event Type" />
             <Label fx:id="startLabel" styleClass="start-label" text="Start Date" GridPane.rowIndex="1" />
             <Label fx:id="endLabel" styleClass="end-label" text="End Date" GridPane.rowIndex="2" />
-            <Label styleClass="schedule-for" text="Schedule For" GridPane.rowIndex="3" />
+            <Label fx:id="scheduleLabel" styleClass="schedule-for" text="Schedule For" GridPane.rowIndex="3" />
             <Label fx:id="groupLabel" styleClass="group-label" text="Group" GridPane.rowIndex="4" />
-            <Label styleClass="subject-label" text="Subject" GridPane.rowIndex="5" />
+            <Label fx:id="subjectLabel" styleClass="subject-label" text="Subject" GridPane.rowIndex="5" />
             <Label fx:id="nameLabel" styleClass="name-label" text="Assignment Name" GridPane.rowIndex="6" />
             <Label fx:id="assignmentLabel" styleClass="assignment-label" text="Assignment Type" GridPane.rowIndex="7" />
             <Label fx:id="locationLabel" styleClass="location-label" text="Location" GridPane.rowIndex="8" />
-            <Label styleClass="description-label" text="Description" GridPane.rowIndex="9" />
+            <Label fx:id="descriptionLabel" styleClass="description-label" text="Description" GridPane.rowIndex="9" />
             <HBox fx:id="startHBox" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
                   <DatePicker fx:id="startDatePicker">
@@ -93,7 +93,7 @@
       </GridPane>
       <HBox>
          <children>
-            <Button mnemonicParsing="false" onAction="#handleSaveEvent" styleClass="save-button" text="Save Event" />
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSaveEvent" styleClass="save-button" text="Save Event" />
             <Region HBox.hgrow="ALWAYS" />
             <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDeleteEvent" styleClass="delete-button" text="Delete Event" />
          </children>
