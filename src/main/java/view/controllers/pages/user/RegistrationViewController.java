@@ -3,6 +3,7 @@ package view.controllers.pages.user;
 import controller.BaseController;
 import controller.UserController;
 import dto.UserDTO;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,12 +24,19 @@ import java.util.ResourceBundle;
 
 public class RegistrationViewController implements ControllerAware, SidebarControllerAware {
 	public VBox registrationVBox;
-	public Label registerLabel;
+	public Label registrationLabel;
 	public TextField emailField;
 	public HBox dobRoleHBox;
 	public HBox buttonsHBox;
 	public Button backToLoginButton;
 	public Button registerButton;
+	public Label firstNameLabel;
+	public Label lastNameLabel;
+	public Label socialNumberLabel;
+	public Label usernameLabel;
+	public Label emailLabel;
+	public Label registerPasswordLabel;
+
 
 	private BaseController baseController;
 	private UserController userController;
@@ -44,28 +52,11 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 	@FXML
 	private TextField usernameField;
 	@FXML
-	private PasswordField passwordField;
+	private PasswordField registerPasswordField;
 	@FXML
 	private DatePicker dobPicker;
 	@FXML
 	private ComboBox<String> roleComboBox;
-
-	@FXML
-	public void initialize() {
-		roleComboBox.setItems(FXCollections.observableArrayList("STUDENT", "TEACHER"));
-
-		// Setup the DatePicker to disable today's and future dates
-		dobPicker.setDayCellFactory(picker -> new DateCell() {
-			@Override
-			public void updateItem(LocalDate date, boolean empty) {
-				super.updateItem(date, empty);
-				if (date.compareTo(LocalDate.now()) >= 0) {
-					setDisable(true);
-					setStyle("-fx-background-color: #FFE0E9;");
-				}
-			}
-		});
-	}
 
 	@Override
 	public void setBaseController(BaseController baseController) {
@@ -79,6 +70,39 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 		this.sidebarViewController = sidebarViewController;
 	}
 
+
+	@FXML
+	public void initialize() {
+		Platform.runLater(() -> {
+				registrationLabel.setText(viewText.getString("register.title"));
+				registerButton.setText(viewText.getString("register.register"));
+				backToLoginButton.setText(viewText.getString("register.backToLogin"));
+				firstNameLabel.setText(viewText.getString("register.firstName"));
+				lastNameLabel.setText(viewText.getString("register.lastName"));
+				socialNumberLabel.setText(viewText.getString("register.socialNumber"));
+				emailLabel.setText(viewText.getString("register.email"));
+				dobPicker.setPromptText(viewText.getString("register.dateOfBirth"));
+				registerPasswordLabel.setText(viewText.getString("register.password"));
+				usernameLabel.setText(viewText.getString("register.username"));
+				roleComboBox.setPromptText(viewText.getString("register.selectRole"));
+				roleComboBox.setItems(FXCollections.observableArrayList(
+						viewText.getString("register.student"),
+						viewText.getString("register.teacher")));
+		});
+
+		// Setup the DatePicker to disable today's and future dates.
+		dobPicker.setDayCellFactory(picker -> new DateCell() {
+			@Override
+			public void updateItem(LocalDate date, boolean empty) {
+				super.updateItem(date, empty);
+				if (date.compareTo(LocalDate.now()) >= 0) {
+					setDisable(true);
+					setStyle("-fx-background-color: #FFE0E9;");
+				}
+			}
+		});
+	}
+
 	@FXML
 	private void handleRegister() {
 		try {
@@ -86,38 +110,37 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 			String lastName = lastNameField.getText();
 			String socialNumber = socialNumberField.getText();
 			String username = usernameField.getText();
-			String password = passwordField.getText();
+			String password = registerPasswordField.getText();
 			LocalDateTime dateOfBirth = dobPicker.getValue().atTime(0, 0);
 			String role = roleComboBox.getValue();
 
 			if (firstName.isEmpty() || lastName.isEmpty() || socialNumber.isEmpty() || username.isEmpty() ||
-			    password.isEmpty() || dobPicker.getValue() == null || role == null) {
-				showAlert("Error", "Please fill in all fields.");
+					password.isEmpty() || dobPicker.getValue() == null || role == null) {
+				showAlert(viewText.getString("error.title"), viewText.getString("error.fillAllFields"));
 				return;
 			}
 
 			if (!firstName.matches("^[a-zA-Z]+$") || !lastName.matches("^[a-zA-Z]+$")) {
-				showAlert("Warning", "First name and last name can only contain letters.");
+				showAlert(viewText.getString("warning.title"), viewText.getString("warning.fullName"));
 				return;
 			}
 
 			if (socialNumber.length() != 11) {
-				showAlert("Warning", "Social number has to be exactly 11 characters long.");
+				showAlert(viewText.getString("warning.title"), viewText.getString("warning.socialNumber"));
 				return;
 			}
 
 			if (userController.isUsernameTaken(username)) {
-				showAlert("Error", "Username is already taken.");
+				showAlert(viewText.getString("error.title"), viewText.getString("error.username"));
 				return;
 			}
 
 			if (password.length() < 8) {
-				showAlert("Warning", "Password must be 8 characters long.");
+				showAlert(viewText.getString("warning.title"), viewText.getString("warning.password"));
 				return;
 			}
 
-			UserDTO userDTO =
-					new UserDTO(username, password, firstName, lastName, dateOfBirth, socialNumber.toUpperCase(), role);
+			UserDTO userDTO = new UserDTO(username, password, firstName, lastName, dateOfBirth, socialNumber.toUpperCase(), role);
 
 			if (userController.registerUser(userDTO)) {
 				userController.authenticateUser(username, password);
@@ -125,10 +148,10 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 				Stage stage = (Stage) firstNameField.getScene().getWindow();
 				stage.close();
 			} else {
-				showAlert("Error", "Invalid user data.");
+				showAlert(viewText.getString("error.title"), viewText.getString("error.invalidUserData"));
 			}
 		} catch (Exception e) {
-			showAlert("Error", "An unexpected error occurred: " + e.getMessage());
+			showAlert(viewText.getString("error.title"), viewText.getString("error.unexpectedError") + e.getMessage());
 		}
 	}
 
@@ -144,9 +167,8 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 
 			Scene scene = firstNameField.getScene();
 			scene.setRoot(parent);
-
 		} catch (IOException e) {
-			showAlert("Error", "An unexpected error occurred: " + e.getMessage());
+			showAlert(viewText.getString("error.title"), viewText.getString("error.unexpectedError") + e.getMessage());
 		}
 	}
 
