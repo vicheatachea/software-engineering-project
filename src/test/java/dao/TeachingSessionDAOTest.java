@@ -63,9 +63,10 @@ class TeachingSessionDAOTest {
 		Timestamp end = Timestamp.valueOf("2025-02-11 15:00:00");
 
 		String description = "Math class";
+		String localeCode = "en";
 
 		TeachingSessionEntity teachingSession =
-				new TeachingSessionEntity(start, end, description, location, timetable, subject);
+				new TeachingSessionEntity(start, end, description, location, timetable, subject, localeCode);
 
 		teachingSessionDAO.persist(teachingSession);
 
@@ -93,9 +94,10 @@ class TeachingSessionDAOTest {
 		Timestamp end = Timestamp.valueOf("2025-02-11 15:00:00");
 
 		String description = "Math class";
+		String localeCode = "en";
 
 		TeachingSessionEntity teachingSession =
-				new TeachingSessionEntity(start, end, description, location, timetable, subject);
+				new TeachingSessionEntity(start, end, description, location, timetable, subject, localeCode);
 		teachingSessionDAO.persist(teachingSession);
 
 		// Update the teaching session
@@ -126,9 +128,10 @@ class TeachingSessionDAOTest {
 		Timestamp end = Timestamp.valueOf("2025-02-11 15:00:00");
 
 		String description = "Math class";
+		String localeCode = "en";
 
 		TeachingSessionEntity teachingSession =
-				new TeachingSessionEntity(start, end, description, location, timetable, subject);
+				new TeachingSessionEntity(start, end, description, location, timetable, subject, localeCode);
 
 		teachingSessionDAO.persist(teachingSession);
 
@@ -150,11 +153,12 @@ class TeachingSessionDAOTest {
 		Timestamp end = Timestamp.valueOf("2025-02-11 15:00:00");
 
 		String description = "Math class";
+		String localeCode = "en";
 
 		TeachingSessionEntity teachingSession1 =
-				new TeachingSessionEntity(start, end, description, location, timetable, subject);
+				new TeachingSessionEntity(start, end, description, location, timetable, subject, localeCode);
 		TeachingSessionEntity teachingSession2 =
-				new TeachingSessionEntity(start, end, description, location, timetable, subject);
+				new TeachingSessionEntity(start, end, description, location, timetable, subject, localeCode);
 
 		teachingSessionDAO.persist(teachingSession1);
 		teachingSessionDAO.persist(teachingSession2);
@@ -177,9 +181,10 @@ class TeachingSessionDAOTest {
 		Timestamp end = Timestamp.valueOf("2025-02-11 15:00:00");
 
 		String description = "Math class";
+		String localeCode = "en";
 
 		TeachingSessionEntity teachingSession =
-				new TeachingSessionEntity(start, end, description, location, timetable, subject);
+				new TeachingSessionEntity(start, end, description, location, timetable, subject, localeCode);
 
 		teachingSessionDAO.persist(teachingSession);
 
@@ -205,9 +210,10 @@ class TeachingSessionDAOTest {
 		Timestamp end = Timestamp.valueOf("2025-02-11 15:00:00");
 
 		String description = "Math class";
+		String localeCode = "en";
 
 		TeachingSessionEntity teachingSession =
-				new TeachingSessionEntity(start, end, description, location, timetable, subject);
+				new TeachingSessionEntity(start, end, description, location, timetable, subject, localeCode);
 
 		teachingSessionDAO.persist(teachingSession);
 
@@ -229,9 +235,10 @@ class TeachingSessionDAOTest {
 		Timestamp end = Timestamp.valueOf("2025-02-11 15:00:00");
 
 		String description = "Math class";
+		String localeCode = "en";
 
 		TeachingSessionEntity teachingSession =
-				new TeachingSessionEntity(start, end, description, location, timetable, subject);
+				new TeachingSessionEntity(start, end, description, location, timetable, subject, localeCode);
 
 		teachingSessionDAO.persist(teachingSession);
 
@@ -255,10 +262,13 @@ class TeachingSessionDAOTest {
 		String description = "Math class";
 		String description2 = "Math class 2";
 
+		String localeCode = "en";
+		String localeCode2 = "jp";
+
 		TeachingSessionEntity teachingSession1 =
-				new TeachingSessionEntity(start, end, description, location, timetable, subject);
+				new TeachingSessionEntity(start, end, description, location, timetable, subject, localeCode);
 		TeachingSessionEntity teachingSession2 =
-				new TeachingSessionEntity(start, end, description2, location, timetable, subject);
+				new TeachingSessionEntity(start, end, description2, location, timetable, subject, localeCode2);
 
 		teachingSessionDAO.persist(teachingSession1);
 		teachingSessionDAO.persist(teachingSession2);
@@ -290,10 +300,13 @@ class TeachingSessionDAOTest {
 		String description = "Math class";
 		String description2 = "Math class 2";
 
+		String localeCode = "en";
+		String localeCode2 = "jp";
+
 		TeachingSessionEntity teachingSession1 =
-				new TeachingSessionEntity(start, end, description, location, timetable, subject);
+				new TeachingSessionEntity(start, end, description, location, timetable, subject, localeCode);
 		TeachingSessionEntity teachingSession2 =
-				new TeachingSessionEntity(start, end, description2, location, timetable2, subject);
+				new TeachingSessionEntity(start, end, description2, location, timetable2, subject, localeCode2);
 
 		teachingSessionDAO.persist(teachingSession1);
 		teachingSessionDAO.persist(teachingSession2);

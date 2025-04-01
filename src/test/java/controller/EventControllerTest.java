@@ -92,13 +92,14 @@ class EventControllerTest {
 		TeachingSessionDTO teachingSession = new TeachingSessionDTO(null, LocalDateTime.parse("2023-10-01T10:00:00"),
 		                                                            LocalDateTime.parse("2023-10-01T12:00:00"),
 		                                                            location.name(), subject.code(),
-		                                                            "This is a teaching Session", groupTimetableId);
+		                                                            "This is a teaching Session", groupTimetableId,
+		                                                            "en");
 
 		eventController.addEvent(teachingSession);
 
 		AssignmentDTO assignment = new AssignmentDTO(null, "Individual", LocalDateTime.parse("2023-10-01T10:00:00"),
 		                                             LocalDateTime.parse("2023-10-01T12:00:00"), "Assignment 1",
-		                                             subject.code(), "This is an assignment", groupTimetableId);
+		                                             subject.code(), "This is an assignment", groupTimetableId, "en");
 
 		eventController.addEvent(assignment);
 
@@ -137,7 +138,8 @@ class EventControllerTest {
 		TeachingSessionDTO teachingSession = new TeachingSessionDTO(null, LocalDateTime.parse("2023-10-01T10:00:00"),
 		                                                            LocalDateTime.parse("2023-10-01T12:00:00"),
 		                                                            location.name(), subject.code(),
-		                                                            "This is a teaching Session", groupTimetableId);
+		                                                            "This is a teaching Session", groupTimetableId,
+		                                                            "en");
 
 		eventController.addEvent(teachingSession);
 
@@ -175,7 +177,7 @@ class EventControllerTest {
 
 		AssignmentDTO assignment = new AssignmentDTO(null, "Individual", LocalDateTime.parse("2023-10-01T10:00:00"),
 		                                             LocalDateTime.parse("2023-10-01T12:00:00"), "Assignment 1",
-		                                             subject.code(), "This is an assignment", groupTimetableId);
+		                                             subject.code(), "This is an assignment", groupTimetableId, "en");
 
 		eventController.addEvent(assignment);
 
@@ -213,7 +215,8 @@ class EventControllerTest {
 		TeachingSessionDTO teachingSession = new TeachingSessionDTO(null, LocalDateTime.parse("2023-10-01T10:00:00"),
 		                                                            LocalDateTime.parse("2023-10-01T12:00:00"),
 		                                                            location.name(), subject.code(),
-		                                                            "This is a teaching Session", groupTimetableId);
+		                                                            "This is a teaching Session", groupTimetableId,
+		                                                            "en");
 
 		eventController.addEvent(teachingSession);
 
@@ -229,7 +232,7 @@ class EventControllerTest {
 		TeachingSessionDTO updatedTeachingSession =
 				new TeachingSessionDTO(foundTeachingSession.id(), LocalDateTime.parse("2023-12-01T10:00:00"),
 				                       LocalDateTime.parse("2023-12-03T13:54:34"), null, newSubject.code(),
-				                       "This is an updated teaching Session", groupTimetableId);
+				                       "This is an updated teaching Session", groupTimetableId, "en");
 
 		userController.logout();
 		userController.authenticateUser(teacher.username(), teacher.password());
@@ -277,7 +280,7 @@ class EventControllerTest {
 
 		AssignmentDTO assignment = new AssignmentDTO(null, "Individual", LocalDateTime.parse("2023-10-01T10:00:00"),
 		                                             LocalDateTime.parse("2023-10-01T12:00:00"), "Assignment 1",
-		                                             subject.code(), "This is an assignment", groupTimetableId);
+		                                             subject.code(), "This is an assignment", groupTimetableId, "en");
 
 		eventController.addEvent(assignment);
 
@@ -297,7 +300,7 @@ class EventControllerTest {
 		AssignmentDTO updatedAssignment =
 				new AssignmentDTO(foundAssignment.id(), "Group", LocalDateTime.parse("2023-12-01T10:00:00"),
 				                  LocalDateTime.parse("2023-12-03T13:54:34"), "Assignment 2", newSubject.code(),
-				                  "This is an updated assignment", groupTimetableId);
+				                  "This is an updated assignment", groupTimetableId, "en");
 
 		eventController.updateEvent(updatedAssignment);
 
@@ -342,7 +345,8 @@ class EventControllerTest {
 		TeachingSessionDTO teachingSession = new TeachingSessionDTO(null, LocalDateTime.parse("2023-10-01T10:00:00"),
 		                                                            LocalDateTime.parse("2023-10-01T12:00:00"),
 		                                                            location.name(), subject.code(),
-		                                                            "This is a teaching Session", groupTimetableId);
+		                                                            "This is a teaching Session", groupTimetableId,
+		                                                            "en");
 
 		eventController.addEvent(teachingSession);
 
@@ -391,7 +395,7 @@ class EventControllerTest {
 
 		AssignmentDTO assignment = new AssignmentDTO(null, "Individual", LocalDateTime.parse("2023-10-01T10:00:00"),
 		                                             LocalDateTime.parse("2023-10-01T12:00:00"), "Assignment 1",
-		                                             subject.code(), "This is an assignment", groupTimetableId);
+		                                             subject.code(), "This is an assignment", groupTimetableId, "en");
 
 		eventController.addEvent(assignment);
 
