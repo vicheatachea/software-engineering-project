@@ -38,6 +38,7 @@ public class EventModel {
 		return events;
 	}
 
+	// Fetch events by timetable (Either group or user)
 	public List<Event> fetchEventsByTimetable(LocalDateTime startDate, LocalDateTime endDate, long timetableId) {
 		List<Event> events = new ArrayList<>();
 
@@ -63,7 +64,35 @@ public class EventModel {
 		return events;
 	}
 
+	// Fetch events by locale
+	public List<Event> fetchEventsByLocale(LocalDateTime startDate, LocalDateTime endDate, String localeCode) {
+		List<Event> events = new ArrayList<>();
+
+		List<TeachingSessionEntity> teachingSessions =
+				teachingSessionDAO.findAllByLocaleDuringPeriod(Timestamp.valueOf(startDate), Timestamp.valueOf(endDate),
+				                                               localeCode);
+
+		if (teachingSessions != null) {
+			for (TeachingSessionEntity teachingSession : teachingSessions) {
+				events.add(convertToTeachingSessionDTO(teachingSession));
+			}
+		}
+
+		List<AssignmentEntity> assignments =
+				assignmentDAO.findAllByLocaleDuringPeriod(Timestamp.valueOf(startDate), Timestamp.valueOf(endDate),
+				                                          localeCode);
+
+		if (assignments != null) {
+			for (AssignmentEntity assignment : assignments) {
+				events.add(convertToAssignmentDTO(assignment));
+			}
+		}
+
+		return events;
+	}
+
 	// Add an event
+
 	public void addEvent(Event event) {
 		if (event instanceof TeachingSessionDTO teachingSessionDTO) {
 			try {
@@ -126,6 +155,7 @@ public class EventModel {
 		}
 	}
 
+	// Converts an Assignment DTO to an Entity
 	private AssignmentEntity convertToAssignmentEntity(AssignmentDTO dto) {
 		AssignmentEntity entity = new AssignmentEntity();
 
@@ -154,14 +184,17 @@ public class EventModel {
 		return entity;
 	}
 
+	// Converts an Assignment Entity to a DTO
 	private AssignmentDTO convertToAssignmentDTO(AssignmentEntity entity) {
 		return new AssignmentDTO(entity.getId(), entity.getType(), entity.getPublishingDate().toLocalDateTime(),
 		                         entity.getDeadline().toLocalDateTime(), entity.getName(),
 		                         entity.getSubject().getCode(),
 		                         entity.getDescription() == null ? null : entity.getDescription(),
-		                         entity.getTimetable().getId());
+		                         entity.getTimetable().getId(),
+		                         entity.getLocaleCode());
 	}
 
+	// Converts an TeachingSession DTO to an Entity
 	private TeachingSessionEntity convertToTeachingSessionEntity(TeachingSessionDTO dto) {
 		TeachingSessionEntity entity = new TeachingSessionEntity();
 
@@ -190,13 +223,15 @@ public class EventModel {
 		return entity;
 	}
 
+	// Converts an TeachingSession Entity to a DTO
 	private TeachingSessionDTO convertToTeachingSessionDTO(TeachingSessionEntity entity) {
 		return new TeachingSessionDTO(entity.getId(), entity.getStartDate().toLocalDateTime(),
 		                              entity.getEndDate().toLocalDateTime(),
 		                              entity.getLocation() == null ? null : entity.getLocation().getName(),
 		                              entity.getSubject().getCode(),
 		                              entity.getDescription() == null ? null : entity.getDescription(),
-		                              entity.getTimetable().getId());
+		                              entity.getTimetable().getId(),
+		                              entity.getLocaleCode());
 	}
 
 	public void deleteAllEvents() {
@@ -247,6 +282,5 @@ public class EventModel {
 		}
 		return true;
 	}
-
 
 }
