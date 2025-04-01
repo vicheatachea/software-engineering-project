@@ -2,20 +2,19 @@ package view.controllers.pages.main;
 
 import controller.BaseController;
 import controller.EventController;
+import controller.LocaleController;
 import controller.UserController;
 import dto.AssignmentDTO;
 import dto.Event;
 import dto.TeachingSessionDTO;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -41,6 +40,7 @@ public class TimetableViewController implements ControllerAware {
     private static final int NUMBER_OF_BUTTONS = 2;
     BaseController baseController;
     EventController eventController;
+    LocaleController localeController;
     UserController userController;
 
     LocalDate currentDate;
@@ -56,6 +56,8 @@ public class TimetableViewController implements ControllerAware {
     @FXML
     private GridPane timetableGrid;
     @FXML
+    private ComboBox<String> languageComboBox;
+    @FXML
     private Label dateLabel;
     @FXML
     private DatePicker datePicker;
@@ -70,6 +72,14 @@ public class TimetableViewController implements ControllerAware {
             Locale.setDefault(baseController.getLocaleController().getUserLocale());
             handleDatePick();
 
+            languageComboBox.getItems().add(viewText.getString("event.allLanguages"));
+            List<Locale> locales = localeController.getAvailableLocales();
+            locales.forEach(locale ->
+                    languageComboBox.getItems().add(locale.getDisplayLanguage(locale))
+            );
+            languageComboBox.addEventHandler(ActionEvent.ACTION, event -> handleLanguageSelection());
+            languageComboBox.setValue(viewText.getString("event.allLanguages"));
+
             updateTimetableHeaders();
             updateTimetableHours();
             loadTimetable();
@@ -83,6 +93,7 @@ public class TimetableViewController implements ControllerAware {
     public void setBaseController(BaseController baseController) {
         this.baseController = baseController;
         this.eventController = baseController.getEventController();
+        this.localeController = baseController.getLocaleController();
         this.userController = baseController.getUserController();
         this.viewText = baseController.getLocaleController().getUIBundle();
     }
@@ -152,6 +163,10 @@ public class TimetableViewController implements ControllerAware {
             loadTimetable();
         }
     }
+
+    private void handleLanguageSelection() {
+    }
+
 
     private String implementPattern(String pattern, Map<String, Object> values) {
         for (Map.Entry<String, Object> entry : values.entrySet()) {
@@ -250,7 +265,22 @@ public class TimetableViewController implements ControllerAware {
         }
 
         clearTimetable();
-        List<Event> events = eventController.fetchEventsByUser(startDate, endDate);
+        String language = languageComboBox.getValue();
+        List<Event> events;
+
+        if (language.equals(viewText.getString("timetable.allLanguages"))) {
+            events = eventController.fetchEventsByUser(startDate, endDate);
+        } else {
+            Locale selectedLocale = localeController.getAvailableLocales().stream()
+                    .filter(locale -> locale.getDisplayLanguage(locale).equals(language))
+                    .findFirst()
+                    .orElse(null);
+            if (selectedLocale != null) {
+                events = eventController.fetchEventsByLocale(startDate, endDate, selectedLocale);
+            } else {
+                events = eventController.fetchEventsByUser(startDate, endDate);
+            }
+        }
 
         for (Event event : events) {
             int column, startRow, endRow;
