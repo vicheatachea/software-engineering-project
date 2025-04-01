@@ -70,9 +70,10 @@ public class TimetableViewController implements ControllerAware {
             addButtons();
 
             languageComboBox.getItems().add(viewText.getString("timetable.allLanguages"));
+            Locale currentLocale = baseController.getLocaleController().getUserLocale();
             List<Locale> locales = localeController.getAvailableLocales();
             locales.forEach(locale ->
-                    languageComboBox.getItems().add(locale.getDisplayLanguage(locale))
+                    languageComboBox.getItems().add(locale.getDisplayLanguage(currentLocale))
             );
             languageComboBox.setValue(viewText.getString("timetable.allLanguages"));
             languageComboBox.addEventHandler(ActionEvent.ACTION, event -> loadTimetable());
