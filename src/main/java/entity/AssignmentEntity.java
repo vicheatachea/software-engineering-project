@@ -36,7 +36,7 @@ public class AssignmentEntity {
 	@JoinColumn(name = "timetable_id", nullable = false)
 	private TimetableEntity timetable;
 
-	@Column(nullable = false)
+	@Column(nullable = false, name = "locale_code")
 	private String localeCode;
 
 	public AssignmentEntity() {
@@ -54,44 +54,44 @@ public class AssignmentEntity {
 		this.localeCode = localeCode;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public Long getId() {
 		return id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getType() {
 		return type;
 	}
 
-	public void setPublishingDate(Timestamp publishingDate) {
-		this.publishingDate = publishingDate;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public Timestamp getPublishingDate() {
 		return publishingDate;
 	}
 
-	public void setDeadline(Timestamp deadline) {
-		this.deadline = deadline;
+	public void setPublishingDate(Timestamp publishingDate) {
+		this.publishingDate = publishingDate;
 	}
 
 	public Timestamp getDeadline() {
 		return deadline;
+	}
+
+	public void setDeadline(Timestamp deadline) {
+		this.deadline = deadline;
 	}
 
 	public String getDescription() {
@@ -118,9 +118,13 @@ public class AssignmentEntity {
 		this.subject = subject;
 	}
 
-	public String getLocaleCode() { return localeCode; }
+	public String getLocaleCode() {
+		return localeCode;
+	}
 
-	public void setLocaleCode(String localeCode) { this.localeCode = localeCode; }
+	public void setLocaleCode(String localeCode) {
+		this.localeCode = localeCode;
+	}
 
 	@Override
 	public boolean equals(Object o) {
