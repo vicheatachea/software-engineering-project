@@ -1,5 +1,7 @@
 package controller;
 
+import model.UserPreferences;
+
 /*
 * The controller should not manipulate the view directly to maintain separation of concerns
 * The view controllers should be able to call each controller to manipulate the model and retrieve data
@@ -12,6 +14,7 @@ public class BaseController {
     private final SubjectController subjectController = new SubjectController();
     private final TimetableController timetableController = new TimetableController();
     private final UserController userController = new UserController();
+    private final LocaleController localeController = new LocaleController();
 
     public EventController getEventController() {
         return eventController;
@@ -35,5 +38,9 @@ public class BaseController {
 
     public UserController getUserController() {
         return userController;
+    }
+
+    public LocaleController getLocaleController() {
+        return localeController;
     }
 }

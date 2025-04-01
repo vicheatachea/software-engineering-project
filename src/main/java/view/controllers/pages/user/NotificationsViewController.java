@@ -1,6 +1,8 @@
 package view.controllers.pages.user;
 
+import controller.BaseController;
 import dto.Event;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -10,24 +12,40 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
+
 import javafx.scene.control.ScrollPane;
+import view.controllers.ControllerAware;
 import view.controllers.components.EventNotification;
 
-public class NotificationsViewController {
-    public Label notificationLabel;
+public class NotificationsViewController implements ControllerAware {
     private List<EventNotification> eventNotifications = new ArrayList<>();
+    private ResourceBundle viewText;
+    private BaseController baseController;
 
     @FXML
     private VBox notificationsContainer;
     @FXML
     private Button markAllReadButton;
     @FXML
+    private Label notificationLabel;
+    @FXML
     private VBox notificationsVBox;
     @FXML
     private ScrollPane notificationsScrollPane;
 
+    @Override
+    public void setBaseController(BaseController baseController) {
+        this.baseController = baseController;
+        this.viewText = baseController.getLocaleController().getUIBundle();
+    }
+
     @FXML
     private void initialize() {
+        Platform.runLater(() -> {
+            markAllReadButton.setText(viewText.getString("notifications.markAllAsRead"));
+            notificationLabel.setText(viewText.getString("notifications.title"));
+        });
         VBox.setVgrow(notificationsScrollPane, javafx.scene.layout.Priority.ALWAYS);
     }
 
@@ -46,6 +64,7 @@ public class NotificationsViewController {
             HBox notificationBox = loader.load();
 
             NotificationItemViewController itemViewController = loader.getController();
+            itemViewController.setBaseController(baseController);
             itemViewController.setNotificationData(this, event, time);
 
             notificationsContainer.getChildren().add(notificationBox);

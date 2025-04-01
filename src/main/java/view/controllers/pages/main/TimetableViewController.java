@@ -22,25 +22,22 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import util.StringUtil;
 import view.controllers.ControllerAware;
 import view.controllers.components.EventLabel;
 import view.controllers.components.EventPopupViewController;
-import view.controllers.components.HeaderLabel;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TimetableViewController implements ControllerAware {
+    private ResourceBundle viewText;
     private static final int NUMBER_OF_BUTTONS = 2;
     BaseController baseController;
     EventController eventController;
@@ -67,9 +64,10 @@ public class TimetableViewController implements ControllerAware {
 
     @FXML
     private void initialize() {
-        addButtons();
         Platform.runLater(() -> {
+            addButtons();
             datePicker.setValue(LocalDate.now());
+            Locale.setDefault(baseController.getLocaleController().getUserLocale());
             handleDatePick();
 
             updateTimetableHeaders();
@@ -86,6 +84,7 @@ public class TimetableViewController implements ControllerAware {
         this.baseController = baseController;
         this.eventController = baseController.getEventController();
         this.userController = baseController.getUserController();
+        this.viewText = baseController.getLocaleController().getUIBundle();
     }
 
     private void addButtons() {
@@ -95,7 +94,7 @@ public class TimetableViewController implements ControllerAware {
                 buttons[i] = FXMLLoader.load(getClass().getResource("/layouts/components/timetable/timetable-button.fxml"));
             }
 
-            buttons[0].setText("New Event");
+            buttons[0].setText(viewText.getString("timetable.newEvent"));
             buttons[1].setText("\uD83D\uDD27");
 
             buttons[0].setOnAction(event -> handleNewEvent());
@@ -125,22 +124,28 @@ public class TimetableViewController implements ControllerAware {
 
         String startDay = formatNumber(startDate.getDayOfMonth());
         String endDay = formatNumber(endDate.getDayOfMonth());
-        String fullStartMonth = startDate.getMonth().toString();
-        String startMonth = StringUtil.capitaliseFirst(startDate.getMonth().toString().substring(0, 3));
-        String fullEndMonth = endDate.getMonth().toString();
-        String endMonth = StringUtil.capitaliseFirst(endDate.getMonth().toString().substring(0, 3));
+        String startMonth = startDate.getMonth().toString().toLowerCase();
+        String endMonth = endDate.getMonth().toString().toLowerCase();
         int startYear = startDate.getYear();
         int endYear = endDate.getYear();
 
+        Map<String, Object> values = new HashMap<>();
+        values.put("startDay", startDay);
+        values.put("endDay", endDay);
+        values.put("startMonth", viewText.getString("timetable.shortMonth." + startMonth));
+        values.put("endMonth", viewText.getString("timetable.shortMonth." + endMonth));
+        values.put("startYear", startYear);
+        values.put("endYear", endYear);
+
         if (startYear != endYear) {
-            dateLabel.setText(startDay + " " + startMonth + ". " + startYear + " - " + endDay + " " + endMonth + ". " + endYear);
-        } else if (!Objects.equals(fullStartMonth, fullEndMonth)) {
-            dateLabel.setText(startDay + " " + startMonth + ". - " + endDay + " " + endMonth + ". " + startYear);
+            dateLabel.setText(implementPattern(viewText.getString("timetable.longDate"), values));
+        } else if (!Objects.equals(startMonth, endMonth)) {
+            dateLabel.setText(implementPattern(viewText.getString("timetable.mediumDate"), values));
         } else {
-            dateLabel.setText(startDay + " - " + endDay + " " + startMonth + ". " + startYear);
+            dateLabel.setText(implementPattern(viewText.getString("timetable.shortDate"), values));
         }
 
-        weekLabel.setText("Week " + currentWeek);
+        weekLabel.setText(MessageFormat.format(viewText.getString("timetable.week"), currentWeek));
 
         if (!Objects.equals(previousStartDate, startDate)) {
             updateTimetableHeaders();
@@ -148,12 +153,19 @@ public class TimetableViewController implements ControllerAware {
         }
     }
 
+    private String implementPattern(String pattern, Map<String, Object> values) {
+        for (Map.Entry<String, Object> entry : values.entrySet()) {
+            pattern = pattern.replace("{" + entry.getKey() + "}", entry.getValue().toString());
+        }
+        return pattern;
+    }
+
     private void handleNewEvent() {
         if (!userController.isUserLoggedIn()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Not logged in");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(viewText.getString("error.title"));
             alert.setHeaderText(null);
-            alert.setContentText("You need to be logged in to create an event!");
+            alert.setContentText(viewText.getString("error.event.loggedIn"));
             alert.showAndWait();
             return;
         }
@@ -175,7 +187,8 @@ public class TimetableViewController implements ControllerAware {
             Stage popupStage = new Stage();
             popupStage.setScene(new Scene(content));
 
-            popupStage.setTitle(event == null ? "New Event" : "Edit Event");
+            popupStage.setTitle(event == null ? viewText.getString("timetable.newEvent") :
+                    viewText.getString("timetable.editEvent"));
             popupStage.initModality(Modality.WINDOW_MODAL);
             popupStage.initOwner(topbar.getScene().getWindow());
             popupStage.showAndWait();
@@ -191,11 +204,16 @@ public class TimetableViewController implements ControllerAware {
 
         for (int i = 0; i < daysBetween; i++) {
 
-            String weekDay = startDate.plusDays(i).getDayOfWeek().toString().substring(0, 3);
+            String weekDay = startDate.plusDays(i).getDayOfWeek().toString().toLowerCase();
             String monthDay = formatNumber(startDate.plusDays(i).getDayOfMonth());
             String month = formatNumber(startDate.plusDays(i).getMonthValue());
 
-            HeaderLabel header = new HeaderLabel(StringUtil.capitaliseFirst(weekDay), monthDay, month);
+            Map<String, Object> values = new HashMap<>();
+            values.put("weekDay", viewText.getString("timetable.shortDay." + weekDay));
+            values.put("monthDay", monthDay);
+            values.put("month", month);
+
+            Label header = new Label(implementPattern(viewText.getString("timetable.simpleDate"), values));
             timetableGrid.add(header, i + 1, 0);
 
             GridPane.setHalignment(header, javafx.geometry.HPos.CENTER);
@@ -292,7 +310,7 @@ public class TimetableViewController implements ControllerAware {
                 continue;
             }
 
-            Set<EventLabel> overlappingEvents = getEventLabelsInRange(column, startRow, endRow);;
+            Set<EventLabel> overlappingEvents = getEventLabelsInRange(column, startRow, endRow);
 
             if (!overlappingEvents.isEmpty()) {
                 int maxLabelPosition = overlappingEvents.stream()
