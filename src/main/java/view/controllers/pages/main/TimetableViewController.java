@@ -74,8 +74,8 @@ public class TimetableViewController implements ControllerAware {
             locales.forEach(locale ->
                     languageComboBox.getItems().add(locale.getDisplayLanguage(locale))
             );
-            languageComboBox.addEventHandler(ActionEvent.ACTION, event -> handleLanguageSelection());
             languageComboBox.setValue(viewText.getString("timetable.allLanguages"));
+            languageComboBox.addEventHandler(ActionEvent.ACTION, event -> loadTimetable());
 
             datePicker.setValue(LocalDate.now());
             Locale.setDefault(baseController.getLocaleController().getUserLocale());
@@ -163,9 +163,6 @@ public class TimetableViewController implements ControllerAware {
             updateTimetableHeaders();
             loadTimetable();
         }
-    }
-
-    private void handleLanguageSelection() {
     }
 
 
