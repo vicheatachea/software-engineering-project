@@ -174,4 +174,24 @@ public class AssignmentDAO {
 			}
 		}
 	}
+
+	public List<AssignmentEntity> findAllByLocaleDuringPeriod(Timestamp start, Timestamp end, String localeCode) {
+
+		EntityManager em = emf.createEntityManager();
+		try {
+			return em.createQuery("SELECT a FROM AssignmentEntity a WHERE a.localeCode = :localeCode AND " +
+			                      "a.deadline BETWEEN :start AND :end", AssignmentEntity.class)
+					.setParameter("localeCode", localeCode)
+					.setParameter("start", start)
+					.setParameter("end", end)
+					.getResultList();
+		} catch (Exception e) {
+			System.out.println("Error: " + e.getMessage());
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
 }
