@@ -15,13 +15,13 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.ScrollPane;
+import view.controllers.ControllerAware;
 import view.controllers.components.EventNotification;
-import view.controllers.components.SidebarViewController;
 
-public class NotificationsViewController {
+public class NotificationsViewController implements ControllerAware {
     private List<EventNotification> eventNotifications = new ArrayList<>();
     private ResourceBundle viewText;
-    private SidebarViewController sidebarViewController;
+    private BaseController baseController;
 
     @FXML
     private VBox notificationsContainer;
@@ -34,14 +34,10 @@ public class NotificationsViewController {
     @FXML
     private ScrollPane notificationsScrollPane;
 
-    @FXML
+    @Override
     public void setBaseController(BaseController baseController) {
+        this.baseController = baseController;
         this.viewText = baseController.getLocaleController().getUIBundle();
-    }
-
-    @FXML
-    public void setSidebarViewController(SidebarViewController sidebarViewController) {
-        this.sidebarViewController = sidebarViewController;
     }
 
     @FXML
@@ -68,7 +64,8 @@ public class NotificationsViewController {
             HBox notificationBox = loader.load();
 
             NotificationItemViewController itemViewController = loader.getController();
-            itemViewController.setNotificationData(this, event, time, viewText);
+            itemViewController.setBaseController(baseController);
+            itemViewController.setNotificationData(this, event, time);
 
             notificationsContainer.getChildren().add(notificationBox);
         } catch (IOException e) {
