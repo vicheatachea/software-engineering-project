@@ -67,6 +67,7 @@ public class TimetableViewController implements ControllerAware {
         Platform.runLater(() -> {
             addButtons();
             datePicker.setValue(LocalDate.now());
+            Locale.setDefault(baseController.getLocaleController().getUserLocale());
             handleDatePick();
 
             updateTimetableHeaders();

@@ -20,7 +20,6 @@ public class UserProfileViewController implements ControllerAware, SidebarContro
 	private UserController userController;
 	private SidebarViewController sidebarViewController;
 	private ResourceBundle viewText;
-	private BaseController baseController;
 
 	@FXML
 	private ImageView profileImageView;
@@ -35,26 +34,6 @@ public class UserProfileViewController implements ControllerAware, SidebarContro
 	@FXML
 	private Button logoutButton;
 
-	@Override
-	public void setBaseController(BaseController baseController) {
-		this.baseController = baseController;
-		this.userController = baseController.getUserController();
-		this.viewText = baseController.getLocaleController().getUIBundle();
-	}
-
-	public void setSidebarViewController(SidebarViewController sidebarViewController) {
-		this.sidebarViewController = sidebarViewController;
-	}
-
-
-	@FXML
-	private void handleLogout() {
-		userController.logout();
-		sidebarViewController.updateUserButtons();
-		Stage stage = (Stage) nameLabel.getScene().getWindow();
-		stage.close();
-	}
-
 	@FXML
 	public void initialize() {
 		Platform.runLater(() -> {
@@ -63,6 +42,24 @@ public class UserProfileViewController implements ControllerAware, SidebarContro
 		});
 	}
 
+	@Override
+	public void setBaseController(BaseController baseController) {
+		this.userController = baseController.getUserController();
+		this.viewText = baseController.getLocaleController().getUIBundle();
+	}
+
+	@Override
+	public void setSidebarViewController(SidebarViewController sidebarViewController) {
+		this.sidebarViewController = sidebarViewController;
+	}
+
+	@FXML
+	private void handleLogout() {
+		userController.logout();
+		sidebarViewController.updateUserButtons();
+		Stage stage = (Stage) nameLabel.getScene().getWindow();
+		stage.close();
+	}
 
 	@FXML
 	public void updateUserInfo() {
@@ -79,11 +76,19 @@ public class UserProfileViewController implements ControllerAware, SidebarContro
 			return;
 		}
 
+		switch (userDTO.role()) {
+			case "STUDENT":
+				roleLabel.setText(viewText.getString("userprofile.roleStudent"));
+				break;
+			case "TEACHER":
+				roleLabel.setText(viewText.getString("userprofile.roleTeacher"));
+				break;
+			default:
+				System.out.println("Unknown role: " + userDTO.role());
+		}
+
 		nameLabel.setText(userDTO.firstName() + " " + userDTO.lastName());
-		roleLabel.setText(userDTO.role());
 		socialNumberLabel.setText(userDTO.socialNumber());
-
-
 	}
 
 	private void showAlert(String title, String message) {
@@ -93,5 +98,4 @@ public class UserProfileViewController implements ControllerAware, SidebarContro
 		alert.setContentText(message);
 		alert.showAndWait();
 	}
-
 }
