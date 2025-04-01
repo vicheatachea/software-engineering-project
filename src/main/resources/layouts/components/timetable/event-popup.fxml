@@ -32,6 +32,7 @@
             <RowConstraints vgrow="SOMETIMES" />
             <RowConstraints vgrow="SOMETIMES" />
             <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label fx:id="eventLabel" styleClass="event-label" text="Event Type" />
@@ -43,7 +44,8 @@
             <Label fx:id="nameLabel" styleClass="name-label" text="Assignment Name" GridPane.rowIndex="6" />
             <Label fx:id="assignmentLabel" styleClass="assignment-label" text="Assignment Type" GridPane.rowIndex="7" />
             <Label fx:id="locationLabel" styleClass="location-label" text="Location" GridPane.rowIndex="8" />
-            <Label fx:id="descriptionLabel" styleClass="description-label" text="Description" GridPane.rowIndex="9" />
+            <Label fx:id="languageLabel" layoutX="10.0" layoutY="395.0" styleClass="location-label" text="Language" GridPane.rowIndex="9" />
+            <Label fx:id="descriptionLabel" styleClass="description-label" text="Description" GridPane.rowIndex="10" />
             <HBox fx:id="startHBox" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
                   <DatePicker fx:id="startDatePicker">
@@ -88,7 +90,12 @@
                <GridPane.margin>
                   <Insets bottom="20.0" />
                </GridPane.margin></ComboBox>
-            <TextArea fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" styleClass="description-text-field" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <ComboBox fx:id="languageComboBox" layoutX="160.0" layoutY="383.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+               <GridPane.margin>
+                  <Insets bottom="20.0" />
+               </GridPane.margin>
+            </ComboBox>
+            <TextArea fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" styleClass="description-text-field" GridPane.columnIndex="1" GridPane.rowIndex="10" />
          </children>
       </GridPane>
       <HBox>
