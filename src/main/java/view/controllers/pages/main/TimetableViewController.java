@@ -68,17 +68,18 @@ public class TimetableViewController implements ControllerAware {
     private void initialize() {
         Platform.runLater(() -> {
             addButtons();
-            datePicker.setValue(LocalDate.now());
-            Locale.setDefault(baseController.getLocaleController().getUserLocale());
-            handleDatePick();
 
-            languageComboBox.getItems().add(viewText.getString("event.allLanguages"));
+            languageComboBox.getItems().add(viewText.getString("timetable.allLanguages"));
             List<Locale> locales = localeController.getAvailableLocales();
             locales.forEach(locale ->
                     languageComboBox.getItems().add(locale.getDisplayLanguage(locale))
             );
             languageComboBox.addEventHandler(ActionEvent.ACTION, event -> handleLanguageSelection());
-            languageComboBox.setValue(viewText.getString("event.allLanguages"));
+            languageComboBox.setValue(viewText.getString("timetable.allLanguages"));
+
+            datePicker.setValue(LocalDate.now());
+            Locale.setDefault(baseController.getLocaleController().getUserLocale());
+            handleDatePick();
 
             updateTimetableHeaders();
             updateTimetableHours();
@@ -276,7 +277,7 @@ public class TimetableViewController implements ControllerAware {
                     .findFirst()
                     .orElse(null);
             if (selectedLocale != null) {
-                events = eventController.fetchEventsByLocale(startDate, endDate, selectedLocale);
+                events = eventController.fetchEventsByLocale(startDate, endDate, selectedLocale.toLanguageTag());
             } else {
                 events = eventController.fetchEventsByUser(startDate, endDate);
             }
