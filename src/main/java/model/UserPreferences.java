@@ -12,6 +12,7 @@ public final class UserPreferences {
 
 	private static final String USER_ID_KEY = "user_id";
 	private static final String ROLE = "role";
+	private static final String LOCALE = "locale";
 	private static final Preferences preferences = Preferences.userNodeForPackage(UserPreferences.class);
 
 	// Store the user ID
@@ -32,13 +33,17 @@ public final class UserPreferences {
 
 	// Delete the user ID
 	public static void deleteUser() {
-		try {
-			preferences.clear();
-		} catch (BackingStoreException e) {
-			throw new IllegalArgumentException("Failed to delete user preferences");
-		} finally {
-			preferences.put(USER_ID_KEY, "-1");
-			preferences.put(ROLE, "STUDENT");
-		}
+		preferences.remove(USER_ID_KEY);
+		preferences.remove(ROLE);
+	}
+
+	// Store the locale
+	public static void setLocale(String locale) {
+		preferences.put(LOCALE, locale);
+	}
+
+	// Retrieve the locale
+	public static String getLocale() {
+		return preferences.get(LOCALE, "en-US");
 	}
 }

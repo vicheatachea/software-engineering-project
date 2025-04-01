@@ -6,21 +6,33 @@ import dto.TeachingSessionDTO;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import controller.BaseController;
+import view.controllers.ControllerAware;
 
-public class NotificationItemViewController {
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
+
+public class NotificationItemViewController implements ControllerAware {
+    private ResourceBundle viewText;
+    private NotificationsViewController parentController;
+
     @FXML
     private Label eventLabel;
     @FXML
     private HBox notificationItem;
 
-    private NotificationsViewController parentController;
+    @Override
+    public void setBaseController(BaseController baseController) {
+        this.viewText = baseController.getLocaleController().getUIBundle();
+    }
 
     public void setNotificationData(NotificationsViewController parent, Event event, int time) {
         this.parentController = parent;
+
         if (event instanceof AssignmentDTO assignmentDTO) {
-            eventLabel.setText("Assignment \"" + assignmentDTO.assignmentName() + "\" is due in " + time + " minutes.");
+            eventLabel.setText(MessageFormat.format(viewText.getString("notificationItem.assignmentText"), assignmentDTO.assignmentName(), time));
         } else if (event instanceof TeachingSessionDTO teachingSessionDTO) {
-            eventLabel.setText("Class of " + teachingSessionDTO.subjectCode() + " is starting in " + time + " minutes.");
+            eventLabel.setText(MessageFormat.format(viewText.getString("notificationItem.classOfText"), teachingSessionDTO.subjectCode(), time));
         }
     }
 

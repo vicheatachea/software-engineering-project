@@ -1,6 +1,7 @@
 package view.controllers.components;
 
 import controller.BaseController;
+import controller.LocaleController;
 import controller.UserController;
 import controller.notifications.NotificationAware;
 import controller.notifications.NotificationService;
@@ -26,35 +27,49 @@ import view.controllers.pages.user.UserProfileViewController;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class SidebarViewController implements ControllerAware, NotificationAware {
     private final StringProperty currentView = new SimpleStringProperty();
     private NotificationService notificationService;
     private List<EventNotification> notifications = new ArrayList<>();
 
+    private BaseController baseController;
+    private LocaleController localeController;
     private UserController userController;
     private Button accountButton;
     private Button loginButton;
     private Button notificationsButton;
-    private Button subjectsButton;
-    private Button locationsButton;
+    private ResourceBundle viewText;
 
     @FXML
     private VBox sidebar;
+    private Button timetableButton;
+    private Button groupsButton;
+    private Button subjectsButton;
+    private Button locationsButton;
+    private Button settingsButton;
+    private Button quitButton;
 
     @FXML
     private void initialize() {
-        addButton("\uD83D\uDCC6 Timetable", "timetable");
-        addButton("\uD83D\uDC65 Groups", "groups");
-        addButton("\uD83D\uDCDA Subjects", "subjects");
-        addButton("\uD83C\uDFE2 Locations", "locations");
-        addButton("\uD83D\uDEE0 Settings", "settings");
-        addButton("\uD83D\uDEAA Quit", "quit");
-
         Platform.runLater(() -> {
+            ResourceBundle viewText = localeController.getUIBundle();
+
+            addButton(viewText.getString("sidebar.timetable"), "timetable");
+            addButton(viewText.getString("sidebar.groups"), "groups");
+            addButton(viewText.getString("sidebar.subjects"), "subjects");
+            addButton(viewText.getString("sidebar.locations"), "locations");
+            addButton(viewText.getString("sidebar.settings"), "settings");
+            addButton(viewText.getString("sidebar.quit"), "quit");
+
             currentView.set("timetable");
+            timetableButton = (Button) sidebar.lookup("#timetableButton");
+            groupsButton = (Button) sidebar.lookup("#groupsButton");
             subjectsButton = (Button) sidebar.lookup("#subjectsButton");
             locationsButton = (Button) sidebar.lookup("#locationsButton");
+            settingsButton = (Button) sidebar.lookup("#settingsButton");
+            quitButton = (Button) sidebar.lookup("#quitButton");
 
             try {
                 HBox userArea = FXMLLoader.load(getClass().getResource("/layouts/components/sidebar/user-area.fxml"));
@@ -69,6 +84,10 @@ public class SidebarViewController implements ControllerAware, NotificationAware
                 loginButton.setOnAction(event -> showLoginPopup());
                 notificationsButton.setOnAction(event -> showNotificationPopup());
 
+                accountButton.setText(viewText.getString("sidebar.account"));
+                loginButton.setText(viewText.getString("sidebar.login"));
+                notificationsButton.setText(viewText.getString("sidebar.notifications"));
+
                 updateUserButtons();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -82,8 +101,11 @@ public class SidebarViewController implements ControllerAware, NotificationAware
 
     @Override
     public void setBaseController(BaseController baseController) {
+        this.baseController = baseController;
+        this.localeController = baseController.getLocaleController();
         this.userController = baseController.getUserController();
         this.notificationService = new NotificationService(this, baseController.getEventController());
+        this.viewText = baseController.getLocaleController().getUIBundle();
     }
 
     private void addButton(String name, String view) {
@@ -127,12 +149,13 @@ public class SidebarViewController implements ControllerAware, NotificationAware
             Parent parent = fxmlLoader.load();
 
             LoginViewController loginViewController = fxmlLoader.getController();
-            loginViewController.setControllers(userController, this);
+            loginViewController.setBaseController(baseController);
+            loginViewController.setSidebarViewController(this);
 
             Stage loginStage = new Stage();
             loginStage.initModality(Modality.APPLICATION_MODAL);
             loginStage.initOwner(sidebar.getScene().getWindow());
-            loginStage.setTitle("Login");
+            loginStage.setTitle(viewText.getString("login.title"));
             loginStage.setScene(new Scene(parent));
             loginStage.showAndWait();
         } catch (IOException e) {
@@ -146,13 +169,14 @@ public class SidebarViewController implements ControllerAware, NotificationAware
             Parent parent = fxmlLoader.load();
 
             UserProfileViewController userProfileViewController = fxmlLoader.getController();
-            userProfileViewController.setControllers(userController, this);
+            userProfileViewController.setBaseController(baseController);
+            userProfileViewController.setSidebarViewController(this);
             userProfileViewController.updateUserInfo();
 
             Stage userProfileStage = new Stage();
             userProfileStage.initModality(Modality.APPLICATION_MODAL);
             userProfileStage.initOwner(sidebar.getScene().getWindow());
-            userProfileStage.setTitle("User Profile");
+            userProfileStage.setTitle(viewText.getString("userprofile.title"));
             userProfileStage.setScene(new Scene(parent));
             userProfileStage.showAndWait();
         } catch (IOException e) {
@@ -166,12 +190,13 @@ public class SidebarViewController implements ControllerAware, NotificationAware
             Parent parent = fxmlLoader.load();
 
             NotificationsViewController notificationsViewController = fxmlLoader.getController();
+            notificationsViewController.setBaseController(baseController);
             notificationsViewController.setEventNotifications(notifications);
 
             Stage notificationStage = new Stage();
             notificationStage.initModality(Modality.APPLICATION_MODAL);
             notificationStage.initOwner(sidebar.getScene().getWindow());
-            notificationStage.setTitle("Notifications");
+            notificationStage.setTitle(viewText.getString("notifications.title"));
             notificationStage.setScene(new Scene(parent));
             notificationStage.showAndWait();
         } catch (IOException e) {
@@ -191,5 +216,20 @@ public class SidebarViewController implements ControllerAware, NotificationAware
 
     public void shutdownNotifications() {
         notificationService.shutdown();
+    }
+
+    public void updateTranslations() {
+        ResourceBundle viewText = localeController.getUIBundle();
+
+        accountButton.setText(viewText.getString("sidebar.account"));
+        loginButton.setText(viewText.getString("sidebar.login"));
+        notificationsButton.setText(viewText.getString("sidebar.notifications"));
+
+        timetableButton.setText(viewText.getString("sidebar.timetable"));
+        groupsButton.setText(viewText.getString("sidebar.groups"));
+        subjectsButton.setText(viewText.getString("sidebar.subjects"));
+        locationsButton.setText(viewText.getString("sidebar.locations"));
+        settingsButton.setText(viewText.getString("sidebar.settings"));
+        quitButton.setText(viewText.getString("sidebar.quit"));
     }
 }

@@ -1,17 +1,25 @@
 package view.controllers.pages.user;
 
+import controller.BaseController;
 import controller.UserController;
 import dto.UserDTO;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import view.controllers.ControllerAware;
+import view.controllers.SidebarControllerAware;
 import view.controllers.components.SidebarViewController;
+import java.util.ResourceBundle;
 
-public class UserProfileViewController {
+
+public class UserProfileViewController implements ControllerAware, SidebarControllerAware {
 	private UserController userController;
 	private SidebarViewController sidebarViewController;
+	private ResourceBundle viewText;
 
 	@FXML
 	private ImageView profileImageView;
@@ -21,9 +29,27 @@ public class UserProfileViewController {
 	private Label roleLabel;
 	@FXML
 	private Label socialNumberLabel;
+	@FXML
+	private Label myAccountLabel;
+	@FXML
+	private Button logoutButton;
 
-	public void setControllers(UserController userController, SidebarViewController sidebarViewController) {
-		this.userController = userController;
+	@FXML
+	public void initialize() {
+		Platform.runLater(() -> {
+			myAccountLabel.setText(viewText.getString("userprofile.myAccount"));
+			logoutButton.setText(viewText.getString("userprofile.logout"));
+		});
+	}
+
+	@Override
+	public void setBaseController(BaseController baseController) {
+		this.userController = baseController.getUserController();
+		this.viewText = baseController.getLocaleController().getUIBundle();
+	}
+
+	@Override
+	public void setSidebarViewController(SidebarViewController sidebarViewController) {
 		this.sidebarViewController = sidebarViewController;
 	}
 
@@ -36,29 +62,33 @@ public class UserProfileViewController {
 	}
 
 	@FXML
-	public void initialize() {
-	}
-
-	@FXML
 	public void updateUserInfo() {
 		if (userController == null || !userController.isUserLoggedIn()) {
-			showAlert("Account Error", "You are not logged in.");
+			showAlert(viewText.getString("error.accountError"), viewText.getString("error.notLoggedIn"));
 			return;
 		}
 
 		UserDTO userDTO = userController.getLoggedInUser();
 
 		if (userDTO == null) {
-			showAlert("Account Error", "Your account information could not be found. You have been logged out.");
+			showAlert(viewText.getString("error.accountError"), viewText.getString("error.accountInformationNotFound"));
 			userController.logout();
 			return;
 		}
 
+		switch (userDTO.role()) {
+			case "STUDENT":
+				roleLabel.setText(viewText.getString("userprofile.roleStudent"));
+				break;
+			case "TEACHER":
+				roleLabel.setText(viewText.getString("userprofile.roleTeacher"));
+				break;
+			default:
+				System.out.println("Unknown role: " + userDTO.role());
+		}
+
 		nameLabel.setText(userDTO.firstName() + " " + userDTO.lastName());
-		roleLabel.setText(userDTO.role());
 		socialNumberLabel.setText(userDTO.socialNumber());
-
-
 	}
 
 	private void showAlert(String title, String message) {
@@ -68,5 +98,4 @@ public class UserProfileViewController {
 		alert.setContentText(message);
 		alert.showAndWait();
 	}
-
 }

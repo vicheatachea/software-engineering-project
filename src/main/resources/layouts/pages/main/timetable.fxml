@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -16,6 +17,7 @@
    <top>
       <HBox fx:id="topbar" alignment="CENTER" BorderPane.alignment="CENTER">
          <children>
+            <ComboBox fx:id="languageComboBox" prefWidth="150.0" />
             <Region HBox.hgrow="ALWAYS" />
             <Label fx:id="dateLabel" styleClass="date-label" text="Day to Day Month Year Placeholder">
                <font>
