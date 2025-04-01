@@ -38,7 +38,7 @@ public class TeachingSessionEntity {
 	@ManyToMany(mappedBy = "teachingSessions")
 	private Set<UserEntity> teachers;
 
-	@Column(nullable = false)
+	@Column(nullable = false, name = "locale_code")
 	private String localeCode;
 
 	public TeachingSessionEntity() {
@@ -55,76 +55,76 @@ public class TeachingSessionEntity {
 		this.localeCode = localeCode;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public Long getId() {
 		return id;
 	}
 
-	public void setStartDate(Timestamp StartDate) {
-		this.StartDate = StartDate;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Timestamp getStartDate() {
 		return StartDate;
 	}
 
-	public void setEndDate(Timestamp EndDate) {
-		this.EndDate = EndDate;
+	public void setStartDate(Timestamp StartDate) {
+		this.StartDate = StartDate;
 	}
 
 	public Timestamp getEndDate() {
 		return EndDate;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setEndDate(Timestamp EndDate) {
+		this.EndDate = EndDate;
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
-	public void setLocation(LocationEntity location) {
-		this.location = location;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public LocationEntity getLocation() {
 		return location;
 	}
 
-	public void setTimetable(TimetableEntity timetable) {
-		this.timetable = timetable;
+	public void setLocation(LocationEntity location) {
+		this.location = location;
 	}
 
 	public TimetableEntity getTimetable() {
 		return timetable;
 	}
 
-	public void setSubject(SubjectEntity subject) {
-		this.subject = subject;
+	public void setTimetable(TimetableEntity timetable) {
+		this.timetable = timetable;
 	}
 
 	public SubjectEntity getSubject() {
 		return subject;
 	}
 
-	public void setTeachers(Set<UserEntity> teachers) {
-		this.teachers = teachers;
+	public void setSubject(SubjectEntity subject) {
+		this.subject = subject;
 	}
 
 	public Set<UserEntity> getTeachers() {
 		return teachers;
 	}
 
-	public void setLocaleCode(String localeCode) {
-		this.localeCode = localeCode;
+	public void setTeachers(Set<UserEntity> teachers) {
+		this.teachers = teachers;
 	}
 
 	public String getLocaleCode() {
 		return localeCode;
+	}
+
+	public void setLocaleCode(String localeCode) {
+		this.localeCode = localeCode;
 	}
 
 	@Override
