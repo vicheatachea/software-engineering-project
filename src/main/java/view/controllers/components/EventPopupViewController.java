@@ -387,7 +387,7 @@ public class EventPopupViewController {
 
                 String location = locationComboBox.getValue();
 
-                newEvent = new TeachingSessionDTO(id, startDateTime, endDateTime, location, subject, description, timetableId, eventLocale);
+                newEvent = new TeachingSessionDTO(id, startDateTime, endDateTime, location, subject, description, timetableId, eventLocale.toLanguageTag());
             }
             case String value when value.equals(viewText.getString("event.assignment")) -> {
                 LocalDate endDate = endDatePicker.getValue();
@@ -397,7 +397,7 @@ public class EventPopupViewController {
                 String assignmentName = nameTextField.getText();
                 String assignmentType = assignmentComboBox.getValue();
 
-                newEvent = new AssignmentDTO(id, assignmentType, publishingDateTime, deadlineDateTime, assignmentName, subject, description, timetableId, eventLocale);
+                newEvent = new AssignmentDTO(id, assignmentType, publishingDateTime, deadlineDateTime, assignmentName, subject, description, timetableId, eventLocale.toLanguageTag());
             }
             default -> System.out.println("Event type not recognised");
         }
