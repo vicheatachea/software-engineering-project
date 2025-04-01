@@ -14,6 +14,11 @@ public class EventController {
 		return eventModel.fetchEventsByUser(startDate, endDate);
 	}
 
+	// Fetch all events that have a certain locale
+	public List<Event> fetchEventsByLocale(LocalDateTime startDate, LocalDateTime endDate, String localeCode) {
+		return eventModel.fetchEventsByLocale(startDate, endDate, localeCode);
+	}
+
 	// Add an event for a user
 	public void addEvent(Event event) {
 		eventModel.addEvent(event);
@@ -29,6 +34,7 @@ public class EventController {
 		eventModel.deleteEvent(event);
 	}
 
+	// Delete an event for a user
 	public void deleteAllEvents() {
 		eventModel.deleteAllEvents();
 	}

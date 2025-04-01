@@ -36,11 +36,14 @@ public class AssignmentEntity {
 	@JoinColumn(name = "timetable_id", nullable = false)
 	private TimetableEntity timetable;
 
+	@Column(nullable = false)
+	private String localeCode;
+
 	public AssignmentEntity() {
 	}
 
 	public AssignmentEntity(String name, String type, Timestamp publishingDate, Timestamp deadline, String description,
-	                        SubjectEntity subject, TimetableEntity timetable) {
+	                        SubjectEntity subject, TimetableEntity timetable, String localeCode) {
 		this.name = name;
 		this.type = type;
 		this.publishingDate = publishingDate;
@@ -48,6 +51,7 @@ public class AssignmentEntity {
 		this.description = description;
 		this.subject = subject;
 		this.timetable = timetable;
+		this.localeCode = localeCode;
 	}
 
 	public void setId(Long id) {
@@ -113,6 +117,10 @@ public class AssignmentEntity {
 	public void setSubject(SubjectEntity subject) {
 		this.subject = subject;
 	}
+
+	public String getLocaleCode() { return localeCode; }
+
+	public void setLocaleCode(String localeCode) { this.localeCode = localeCode; }
 
 	@Override
 	public boolean equals(Object o) {

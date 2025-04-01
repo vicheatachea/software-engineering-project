@@ -1,0 +1,5 @@
+FROM mariadb:latest
+
+COPY ./src/main/resources/scripts/db-init.sql /docker-entrypoint-initdb.d/db-init.sql
+
+EXPOSE 3306

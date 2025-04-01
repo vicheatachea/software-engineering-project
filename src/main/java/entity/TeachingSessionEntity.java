@@ -38,17 +38,21 @@ public class TeachingSessionEntity {
 	@ManyToMany(mappedBy = "teachingSessions")
 	private Set<UserEntity> teachers;
 
+	@Column(nullable = false)
+	private String localeCode;
+
 	public TeachingSessionEntity() {
 	}
 
 	public TeachingSessionEntity(Timestamp StartDate, Timestamp EndDate, String description, LocationEntity location,
-	                             TimetableEntity timetable, SubjectEntity subject) {
+	                             TimetableEntity timetable, SubjectEntity subject, String localeCode) {
 		this.StartDate = StartDate;
 		this.EndDate = EndDate;
 		this.description = description;
 		this.location = location;
 		this.timetable = timetable;
 		this.subject = subject;
+		this.localeCode = localeCode;
 	}
 
 	public void setId(Long id) {
@@ -113,6 +117,14 @@ public class TeachingSessionEntity {
 
 	public Set<UserEntity> getTeachers() {
 		return teachers;
+	}
+
+	public void setLocaleCode(String localeCode) {
+		this.localeCode = localeCode;
+	}
+
+	public String getLocaleCode() {
+		return localeCode;
 	}
 
 	@Override

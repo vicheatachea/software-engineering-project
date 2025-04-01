@@ -117,7 +117,7 @@ class SubjectControllerTest {
 		TeachingSessionDTO teachingSessionDTO = new TeachingSessionDTO(null, LocalDateTime.parse("2025-01-01T10:00:00"),
 		                                                               LocalDateTime.parse("2025-01-01T12:00:00"), null,
 		                                                               subject.code(), "test description",
-		                                                               groupTimetableId);
+		                                                               groupTimetableId, "en");
 
 		eventController.addEvent(teachingSessionDTO);
 
