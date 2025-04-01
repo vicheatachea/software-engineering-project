@@ -118,6 +118,7 @@ public class GroupsViewController implements ControllerAware {
             HBox addHBox = new HBox();
             Label addLabel = new Label(viewText.getString("groups.label.addStudent"));
             addLabel.setFont(new Font("Verdana", 18));
+            addLabel.setStyle("-fx-text-fill: #e36486;");
 
             addStudentComboBox.setStyle("-fx-font: 16px \"Verdana\";");
 
@@ -130,6 +131,7 @@ public class GroupsViewController implements ControllerAware {
             HBox removeHBox = new HBox();
             Label removeLabel = new Label(viewText.getString("groups.label.removeStudent"));
             removeLabel.setFont(new Font("Verdana", 18));
+            removeLabel.setStyle("-fx-text-fill: #e36486;");
 
             removeStudentComboBox.setStyle("-fx-font: 16px \"Verdana\";");
 
