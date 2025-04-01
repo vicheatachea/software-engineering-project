@@ -1,7 +1,9 @@
 package dto;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 
-public record TeachingSessionDTO(Long id, LocalDateTime startDate, LocalDateTime endDate, String locationName,
-                                 String subjectCode, String description, long timetableId) implements Event {
+public record TeachingSessionDTO(
+        Long id, LocalDateTime startDate, LocalDateTime endDate, String locationName, String subjectCode,
+        String description, long timetableId, Locale locale) implements Event {
 }
