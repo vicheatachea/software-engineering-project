@@ -193,8 +193,32 @@ public class TeachingSessionDAO {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.timetable.id = :id AND t.StartDate " +
-			                      "BETWEEN :start AND :end", TeachingSessionEntity.class).setParameter("id", id)
-			         .setParameter("start", start).setParameter("end", end).getResultList();
+			                      "BETWEEN :start AND :end", TeachingSessionEntity.class)
+			         .setParameter("id", id)
+			         .setParameter("start", start)
+			         .setParameter("end", end)
+			         .getResultList();
+		} catch (Exception e) {
+			System.out.println("Error: " + e.getMessage());
+			return null;
+		} finally {
+			if (em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	public List<TeachingSessionEntity> findAllByLocaleDuringPeriod(Timestamp start, Timestamp end,
+	                                                               String localeCode) {
+		EntityManager em = emf.createEntityManager();
+
+		try {
+			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.localeCode = :localeCode AND " +
+			                      "t.StartDate BETWEEN :start AND :end", TeachingSessionEntity.class)
+			         .setParameter("localeCode", localeCode)
+			         .setParameter("start", start)
+					 .setParameter("end", end)
+					 .getResultList();
 		} catch (Exception e) {
 			System.out.println("Error: " + e.getMessage());
 			return null;

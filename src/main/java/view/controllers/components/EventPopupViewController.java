@@ -16,6 +16,8 @@ import view.controllers.pages.main.TimetableViewController;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -23,6 +25,7 @@ public class EventPopupViewController {
     private ResourceBundle viewText;
     private EventController eventController;
     private GroupController groupController;
+    private LocaleController localeController;
     private LocationController locationController;
     private SubjectController subjectController;
     private TimetableController timetableController;
@@ -71,11 +74,15 @@ public class EventPopupViewController {
     @FXML
     private Label locationLabel;
     @FXML
+    private Label languageLabel;
+    @FXML
     private Label descriptionLabel;
     @FXML
     private DatePicker startDatePicker;
     @FXML
     private DatePicker endDatePicker;
+    @FXML
+    private ComboBox<String> languageComboBox;
     @FXML
     private TextArea descriptionTextArea;
     @FXML
@@ -87,6 +94,7 @@ public class EventPopupViewController {
         this.event = event;
         this.eventController = baseController.getEventController();
         this.groupController = baseController.getGroupController();
+        this.localeController = baseController.getLocaleController();
         this.locationController = baseController.getLocationController();
         this.subjectController = baseController.getSubjectController();
         this.timetableController = baseController.getTimetableController();
@@ -106,6 +114,7 @@ public class EventPopupViewController {
             nameLabel.setText(viewText.getString("event.assignmentName"));
             assignmentLabel.setText(viewText.getString("event.assignmentType"));
             locationLabel.setText(viewText.getString("event.location"));
+            languageLabel.setText(viewText.getString("event.language"));
             descriptionLabel.setText(viewText.getString("event.description"));
 
             saveButton.setText(viewText.getString("event.saveEvent"));
@@ -124,6 +133,10 @@ public class EventPopupViewController {
             assignmentComboBox.getItems().addAll(
                     viewText.getString("event.individual"),
                     viewText.getString("event.group")
+            );
+            List<Locale> locales = localeController.getAvailableLocales();
+            locales.forEach(locale ->
+                    languageComboBox.getItems().add(locale.getDisplayLanguage(locale))
             );
 
             eventComboBox.addEventHandler(ActionEvent.ACTION, event -> handleEventChange());
@@ -150,6 +163,8 @@ public class EventPopupViewController {
             if (event == null) {
                 eventComboBox.setValue(viewText.getString("event.class"));
                 scheduleComboBox.setValue(viewText.getString("event.myself"));
+                Locale locale = localeController.getUserLocale();
+                languageComboBox.setValue(locale.getDisplayLanguage(locale));
                 deleteButton.setVisible(false);
                 deleteButton.setManaged(false);
                 return;
@@ -259,7 +274,8 @@ public class EventPopupViewController {
 
         if (checkNullOrEmpty(eventType, viewText.getString("event.promptEventType")) ||
                 checkNullOrEmpty(scheduleComboBox.getValue(), viewText.getString("event.promptScheduleType")) ||
-                checkNullOrEmpty(subjectComboBox.getValue(), viewText.getString("event.promptSubject"))) {
+                checkNullOrEmpty(subjectComboBox.getValue(), viewText.getString("event.promptSubject")) ||
+                checkNullOrEmpty(languageComboBox.getValue(), viewText.getString("event.promptLanguage"))) {
             return;
         }
 
@@ -312,7 +328,23 @@ public class EventPopupViewController {
 
         String scheduleFor = scheduleComboBox.getValue();
         String subject = subjectComboBox.getValue();
+        String language = languageComboBox.getValue();
         String description = descriptionTextArea.getText();
+
+        Locale eventLocale = null;
+        for (Locale locale : localeController.getAvailableLocales()) {
+            if (locale.getDisplayLanguage(locale).equals(language)) {
+                eventLocale = locale;
+                break;
+            }
+        }
+
+        if (eventLocale == null) {
+            displayErrorAlert(
+                    viewText.getString("error.title"),
+                    viewText.getString("error.event.invalidLanguage")
+            );
+        }
 
         Long timetableId;
 
@@ -355,7 +387,7 @@ public class EventPopupViewController {
 
                 String location = locationComboBox.getValue();
 
-                newEvent = new TeachingSessionDTO(id, startDateTime, endDateTime, location, subject, description, timetableId);
+                newEvent = new TeachingSessionDTO(id, startDateTime, endDateTime, location, subject, description, timetableId, eventLocale.toLanguageTag());
             }
             case String value when value.equals(viewText.getString("event.assignment")) -> {
                 LocalDate endDate = endDatePicker.getValue();
@@ -365,7 +397,7 @@ public class EventPopupViewController {
                 String assignmentName = nameTextField.getText();
                 String assignmentType = assignmentComboBox.getValue();
 
-                newEvent = new AssignmentDTO(id, assignmentType, publishingDateTime, deadlineDateTime, assignmentName, subject, description, timetableId);
+                newEvent = new AssignmentDTO(id, assignmentType, publishingDateTime, deadlineDateTime, assignmentName, subject, description, timetableId, eventLocale.toLanguageTag());
             }
             default -> System.out.println("Event type not recognised");
         }

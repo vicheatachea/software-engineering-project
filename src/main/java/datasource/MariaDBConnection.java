@@ -13,15 +13,16 @@ import java.util.Map;
 
 public class MariaDBConnection {
 
-	private static final String USER = System.getenv("DB_USERNAME") != null ?
-	                                   System.getenv("DB_USERNAME") : "stms_user";
-	private static final String PASSWORD = System.getenv("DB_PASSWORD") != null ?
-	                                       System.getenv("DB_PASSWORD") : "password";
-	private static final String DB_HOST = System.getenv("DB_HOST") != null ?
-	                                      System.getenv("DB_HOST") : "localhost";
-	private static final String DB_PORT = System.getenv("DB_PORT") != null ?
-	                                      System.getenv("DB_PORT") : "3306";
-	private static final String BASE_URL = "jdbc:mariadb://" + DB_HOST + ":" + DB_PORT;
+	private static final String USER =
+			System.getenv("DB_USERNAME") != null ? System.getenv("DB_USERNAME") : "stms_user";
+	private static final String PASSWORD =
+			System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "password";
+	private static final String DB_HOST =
+			System.getenv("DB_HOST") != null ? System.getenv("DB_HOST") : "localhost";
+	private static final String DB_PORT =
+			System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3306";
+	private static final String BASE_URL =
+			"jdbc:mariadb://" + DB_HOST + ":" + DB_PORT + "?useUnicode=true&characterEncoding=UTF-8";
 
 	private static final Logger logger = LoggerFactory.getLogger(MariaDBConnection.class);
 	private static Connection conn = null;
@@ -29,7 +30,8 @@ public class MariaDBConnection {
 
 	public static void verifyDatabase() throws SQLException {
 		try (Connection conn = DriverManager.getConnection(BASE_URL, USER, PASSWORD)) {
-			conn.createStatement().executeUpdate("CREATE DATABASE IF NOT EXISTS `stms`");
+			conn.createStatement().executeUpdate("CREATE DATABASE IF NOT EXISTS `stms` CHARACTER SET utf8mb4 COLLATE " +
+			                                     "utf8mb4_unicode_ci");
 			conn.createStatement().executeUpdate("USE `stms`");
 		} catch (SQLException e) {
 			logger.error("Error verifying database: {}", e.getMessage());
@@ -40,7 +42,8 @@ public class MariaDBConnection {
 	public static EntityManagerFactory getEntityManagerFactory() {
 		if (emf == null || !emf.isOpen()) {
 			Map<String, String> props = new HashMap<>();
-			props.put("jakarta.persistence.jdbc.url", "jdbc:mariadb://" + DB_HOST + ":" + DB_PORT + "/stms");
+			props.put("jakarta.persistence.jdbc.url", "jdbc:mariadb://" + DB_HOST + ":" + DB_PORT +
+			                                          "/stms?useUnicode=true&characterEncoding=UTF-8");
 			props.put("jakarta.persistence.jdbc.user", USER);
 			props.put("jakarta.persistence.jdbc.password", PASSWORD);
 

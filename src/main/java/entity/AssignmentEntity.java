@@ -36,11 +36,14 @@ public class AssignmentEntity {
 	@JoinColumn(name = "timetable_id", nullable = false)
 	private TimetableEntity timetable;
 
+	@Column(nullable = false, name = "locale_code")
+	private String localeCode;
+
 	public AssignmentEntity() {
 	}
 
 	public AssignmentEntity(String name, String type, Timestamp publishingDate, Timestamp deadline, String description,
-	                        SubjectEntity subject, TimetableEntity timetable) {
+	                        SubjectEntity subject, TimetableEntity timetable, String localeCode) {
 		this.name = name;
 		this.type = type;
 		this.publishingDate = publishingDate;
@@ -48,46 +51,47 @@ public class AssignmentEntity {
 		this.description = description;
 		this.subject = subject;
 		this.timetable = timetable;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+		this.localeCode = localeCode;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getType() {
 		return type;
 	}
 
-	public void setPublishingDate(Timestamp publishingDate) {
-		this.publishingDate = publishingDate;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public Timestamp getPublishingDate() {
 		return publishingDate;
 	}
 
-	public void setDeadline(Timestamp deadline) {
-		this.deadline = deadline;
+	public void setPublishingDate(Timestamp publishingDate) {
+		this.publishingDate = publishingDate;
 	}
 
 	public Timestamp getDeadline() {
 		return deadline;
+	}
+
+	public void setDeadline(Timestamp deadline) {
+		this.deadline = deadline;
 	}
 
 	public String getDescription() {
@@ -112,6 +116,14 @@ public class AssignmentEntity {
 
 	public void setSubject(SubjectEntity subject) {
 		this.subject = subject;
+	}
+
+	public String getLocaleCode() {
+		return localeCode;
+	}
+
+	public void setLocaleCode(String localeCode) {
+		this.localeCode = localeCode;
 	}
 
 	@Override
