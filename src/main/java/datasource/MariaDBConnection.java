@@ -17,16 +17,16 @@ public class MariaDBConnection {
 			System.getenv("DB_USERNAME") != null ? System.getenv("DB_USERNAME") : "stms_user";
 	private static final String PASSWORD =
 			System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "password";
-	private static final String DB_HOST =
-			System.getenv("DB_HOST") != null ? System.getenv("DB_HOST") : "localhost";
-	private static final String DB_PORT =
-			System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3306";
+	private static final String DB_HOST = System.getenv("DB_HOST") != null ? System.getenv("DB_HOST") : "localhost";
+	private static final String DB_PORT = System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3306";
 	private static final String BASE_URL =
 			"jdbc:mariadb://" + DB_HOST + ":" + DB_PORT + "?useUnicode=true&characterEncoding=UTF-8";
-
 	private static final Logger logger = LoggerFactory.getLogger(MariaDBConnection.class);
-	private static Connection conn = null;
+	private static final Connection conn = null;
 	private static EntityManagerFactory emf = null;
+
+	private MariaDBConnection() {
+	}
 
 	public static void verifyDatabase() throws SQLException {
 		try (Connection conn = DriverManager.getConnection(BASE_URL, USER, PASSWORD)) {
@@ -35,7 +35,6 @@ public class MariaDBConnection {
 			conn.createStatement().executeUpdate("USE `stms`");
 		} catch (SQLException e) {
 			logger.error("Error verifying database: {}", e.getMessage());
-			throw e;
 		}
 	}
 
@@ -62,7 +61,6 @@ public class MariaDBConnection {
 			}
 		} catch (SQLException e) {
 			logger.error("Error closing database resources: {}", e.getMessage());
-			throw new SQLException(e);
 		}
 	}
 }
