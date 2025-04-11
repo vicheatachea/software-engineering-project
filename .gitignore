@@ -3,6 +3,7 @@ config.properties
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+sonar-project.properties
 
 ### IntelliJ IDEA ###
 .idea/
