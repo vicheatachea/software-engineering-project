@@ -180,6 +180,7 @@ public class EventModel {
 		SubjectEntity subjectEntity = subjectDAO.findByCode(dto.subjectCode());
 		entity.setSubject(subjectEntity);
 		entity.setTimetable(timeTableDAO.findById(dto.timetableId()));
+		entity.setLocaleCode(dto.localeCode());
 
 		return entity;
 	}
@@ -219,6 +220,8 @@ public class EventModel {
 
 		TimetableDAO timeTableDAO = new TimetableDAO();
 		entity.setTimetable(timeTableDAO.findById(dto.timetableId()));
+
+		entity.setLocaleCode(dto.localeCode());
 
 		return entity;
 	}
