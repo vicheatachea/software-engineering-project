@@ -1,0 +1,1798 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta charset="UTF-8"/>
+      <title>SpotBugs Report</title>
+      <style type="text/css">
+		.tablerow0 {
+			background: #EEEEEE;
+		}
+
+		.tablerow1 {
+			background: white;
+		}
+
+		.detailrow0 {
+			background: #EEEEEE;
+		}
+
+		.detailrow1 {
+			background: white;
+		}
+
+		.tableheader {
+			background: #b9b9fe;
+			font-size: larger;
+		}
+		</style>
+   </head>
+   <body>
+      <h1>SpotBugs Report</h1>
+      <p>Produced using <a href="https://spotbugs.github.io">SpotBugs</a>4.8.6.</p>
+      <p>Project: 
+			Software-Engineering-Project[Software-Engineering-Project]</p>
+      <h2>Metrics</h2>
+      <p>4491 lines of code analyzed,
+	in 70 classes, 
+	in 15 packages.</p>
+      <table width="500" cellpadding="5" cellspacing="2">
+         <tr class="tableheader">
+            <th align="left">Metric</th>
+            <th align="right">Total</th>
+            <th align="right">Density*</th>
+         </tr>
+         <tr class="tablerow0">
+            <td>High Priority Warnings</td>
+            <td align="right">3</td>
+            <td align="right">0.67</td>
+         </tr>
+         <tr class="tablerow1">
+            <td>Medium Priority Warnings</td>
+            <td align="right">95</td>
+            <td align="right">21.15</td>
+         </tr>
+         <tr class="$totalClass">
+            <td>
+               <b>Total Warnings</b>
+            </td>
+            <td align="right">
+               <b>98</b>
+            </td>
+            <td align="right">
+               <b>21.82</b>
+            </td>
+         </tr>
+      </table>
+      <p>
+         <i>(* Defects per Thousand lines of non-commenting source statements)</i>
+      </p>
+      <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>Summary</h2>
+      <table width="500" cellpadding="5" cellspacing="2">
+         <tr class="tableheader">
+            <th align="left">Warning Type</th>
+            <th align="right">Number</th>
+         </tr>
+         <tr class="tablerow0">
+            <td>
+               <a href="#Warnings_BAD_PRACTICE">Bad practice Warnings</a>
+            </td>
+            <td align="right">9</td>
+         </tr>
+         <tr class="tablerow1">
+            <td>
+               <a href="#Warnings_CORRECTNESS">Correctness Warnings</a>
+            </td>
+            <td align="right">1</td>
+         </tr>
+         <tr class="tablerow0">
+            <td>
+               <a href="#Warnings_I18N">Internationalization Warnings</a>
+            </td>
+            <td align="right">1</td>
+         </tr>
+         <tr class="tablerow1">
+            <td>
+               <a href="#Warnings_MALICIOUS_CODE">Malicious code vulnerability Warnings</a>
+            </td>
+            <td align="right">64</td>
+         </tr>
+         <tr class="tablerow0">
+            <td>
+               <a href="#Warnings_PERFORMANCE">Performance Warnings</a>
+            </td>
+            <td align="right">2</td>
+         </tr>
+         <tr class="tablerow1">
+            <td>
+               <a href="#Warnings_STYLE">Dodgy code Warnings</a>
+            </td>
+            <td align="right">21</td>
+         </tr>
+         <tr class="tablerow0">
+            <td>
+               <b>Total</b>
+            </td>
+            <td align="right">
+               <b>98</b>
+            </td>
+         </tr>
+      </table>
+      <p>
+         <br/>
+         <br/>
+      </p>
+      <h1>Warnings</h1>
+      <p>Click on each warning link to see a full description of the issue, and
+	    details of how to resolve it.</p>
+      <h2>
+         <a name="Warnings_BAD_PRACTICE">Bad practice Warnings</a>
+      </h2>
+      <table class="warningtable"
+             width="100%"
+             cellspacing="2"
+             cellpadding="5">
+         <tr class="tableheader">
+            <th align="left">Warning</th>
+            <th align="left">Priority</th>
+            <th align="left">Details</th>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#DMI_RANDOM_USED_ONLY_ONCE">Random object created and used only once</a>
+            </td>
+            <td width="10%" valign="top">High</td>
+            <td width="70%">
+               <p>Random object created and used only once in util.PasswordHashUtil.generateSalt()<br/>
+                  <br/>
+                  <br/>In file PasswordHashUtil.java PasswordHashUtil.java,
+					
+						line 13 13<br/>In class util.PasswordHashUtil<br/>In method util.PasswordHashUtil.generateSalt()<br/>Called method java.security.SecureRandom.nextBytes(byte[])<br/>At PasswordHashUtil.java:[line 13]<br/>At PasswordHashUtil.java:[line 13]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#HE_EQUALS_USE_HASHCODE">Class defines equals() and uses Object.hashCode()</a>
+            </td>
+            <td width="10%" valign="top">High</td>
+            <td width="70%">
+               <p>entity.UserGroupEntity defines equals and uses Object.hashCode()<br/>
+                  <br/>
+                  <br/>In file UserGroupEntity.java,
+					
+						lines 131
+						    to 138<br/>In class entity.UserGroupEntity<br/>In method entity.UserGroupEntity.equals(Object)<br/>At UserGroupEntity.java:[lines 131-138]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#VA_FORMAT_STRING_USES_NEWLINE">Format string should use %n rather than \n</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Format string should use %n rather than \n in view.controllers.pages.main.GroupsViewController.handleItemSelection()<br/>
+                  <br/>
+                  <br/>In file GroupsViewController.java,
+					
+						line 383<br/>In class view.controllers.pages.main.GroupsViewController<br/>In method view.controllers.pages.main.GroupsViewController.handleItemSelection()<br/>Called method String.format(String, Object[])<br/>Format string "%s\n%s"<br/>At GroupsViewController.java:[line 383]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#VA_FORMAT_STRING_USES_NEWLINE">Format string should use %n rather than \n</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Format string should use %n rather than \n in view.controllers.pages.main.GroupsViewController.handleNew()<br/>
+                  <br/>
+                  <br/>In file GroupsViewController.java,
+					
+						line 181<br/>In class view.controllers.pages.main.GroupsViewController<br/>In method view.controllers.pages.main.GroupsViewController.handleNew()<br/>Called method String.format(String, Object[])<br/>Format string "%s\n%s"<br/>At GroupsViewController.java:[line 181]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#VA_FORMAT_STRING_USES_NEWLINE">Format string should use %n rather than \n</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Format string should use %n rather than \n in view.controllers.pages.main.LocationsViewController.handleItemSelection()<br/>
+                  <br/>
+                  <br/>In file LocationsViewController.java,
+					
+						line 224<br/>In class view.controllers.pages.main.LocationsViewController<br/>In method view.controllers.pages.main.LocationsViewController.handleItemSelection()<br/>Called method String.format(String, Object[])<br/>Format string "%s\n%s"<br/>At LocationsViewController.java:[line 224]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#VA_FORMAT_STRING_USES_NEWLINE">Format string should use %n rather than \n</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Format string should use %n rather than \n in view.controllers.pages.main.LocationsViewController.handleNew()<br/>
+                  <br/>
+                  <br/>In file LocationsViewController.java,
+					
+						line 115<br/>In class view.controllers.pages.main.LocationsViewController<br/>In method view.controllers.pages.main.LocationsViewController.handleNew()<br/>Called method String.format(String, Object[])<br/>Format string "%s\n%s"<br/>At LocationsViewController.java:[line 115]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#VA_FORMAT_STRING_USES_NEWLINE">Format string should use %n rather than \n</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Format string should use %n rather than \n in view.controllers.pages.main.SubjectsViewController.handleItemSelection()<br/>
+                  <br/>
+                  <br/>In file SubjectsViewController.java,
+					
+						line 219<br/>In class view.controllers.pages.main.SubjectsViewController<br/>In method view.controllers.pages.main.SubjectsViewController.handleItemSelection()<br/>Called method String.format(String, Object[])<br/>Format string "%s\n%s"<br/>At SubjectsViewController.java:[line 219]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#VA_FORMAT_STRING_USES_NEWLINE">Format string should use %n rather than \n</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Format string should use %n rather than \n in view.controllers.pages.main.SubjectsViewController.handleNew()<br/>
+                  <br/>
+                  <br/>In file SubjectsViewController.java,
+					
+						line 112<br/>In class view.controllers.pages.main.SubjectsViewController<br/>In method view.controllers.pages.main.SubjectsViewController.handleNew()<br/>Called method String.format(String, Object[])<br/>Format string "%s\n%s"<br/>At SubjectsViewController.java:[line 112]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#ODR_OPEN_DATABASE_RESOURCE">Method may fail to close database resource</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>datasource.MariaDBConnection.verifyDatabase() may fail to close Statement<br/>
+                  <br/>
+                  <br/>In file MariaDBConnection.java MariaDBConnection.java,
+					
+						line 33 33<br/>In class datasource.MariaDBConnection<br/>In method datasource.MariaDBConnection.verifyDatabase()<br/>Need to close java.sql.Statement <br/>At MariaDBConnection.java:[line 33]<br/>At MariaDBConnection.java:[line 33]</p>
+            </td>
+         </tr>
+      </table>
+      <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="Warnings_CORRECTNESS">Correctness Warnings</a>
+      </h2>
+      <table class="warningtable"
+             width="100%"
+             cellspacing="2"
+             cellpadding="5">
+         <tr class="tableheader">
+            <th align="left">Warning</th>
+            <th align="left">Priority</th>
+            <th align="left">Details</th>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#HE_USE_OF_UNHASHABLE_CLASS">Use of class without a hashCode() method in a hashed data structure</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.UserGroupEntity doesn't define a hashCode() method but is used in a hashed data structure in dao.UserGroupDAO.lambda$delete$0(UserGroupEntity, UserEntity)<br/>
+                  <br/>
+                  <br/>In file UserGroupDAO.java,
+					
+						line 113<br/>In class dao.UserGroupDAO<br/>In method dao.UserGroupDAO.lambda$delete$0(UserGroupEntity, UserEntity)<br/>Unhashable class entity.UserGroupEntity <br/>Called method java.util.Set.remove(Object)<br/>At UserGroupDAO.java:[line 113]</p>
+            </td>
+         </tr>
+      </table>
+      <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="Warnings_I18N">Internationalization Warnings</a>
+      </h2>
+      <table class="warningtable"
+             width="100%"
+             cellspacing="2"
+             cellpadding="5">
+         <tr class="tableheader">
+            <th align="left">Warning</th>
+            <th align="left">Priority</th>
+            <th align="left">Details</th>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#DM_DEFAULT_ENCODING">Reliance on default encoding</a>
+            </td>
+            <td width="10%" valign="top">High</td>
+            <td width="70%">
+               <p>Found reliance on default encoding in util.PasswordHashUtil.hashPassword(String, String): String.getBytes()<br/>
+                  <br/>
+                  <br/>In file PasswordHashUtil.java PasswordHashUtil.java,
+					
+						line 20 20<br/>In class util.PasswordHashUtil<br/>In method util.PasswordHashUtil.hashPassword(String, String)<br/>Called method String.getBytes()<br/>At PasswordHashUtil.java:[line 20]<br/>At PasswordHashUtil.java:[line 20]</p>
+            </td>
+         </tr>
+      </table>
+      <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="Warnings_MALICIOUS_CODE">Malicious code vulnerability Warnings</a>
+      </h2>
+      <table class="warningtable"
+             width="100%"
+             cellspacing="2"
+             cellpadding="5">
+         <tr class="tableheader">
+            <th align="left">Warning</th>
+            <th align="left">Priority</th>
+            <th align="left">Details</th>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>controller.BaseController.getEventController() may expose internal representation by returning BaseController.eventController<br/>
+                  <br/>
+                  <br/>In file BaseController.java BaseController.java,
+					
+						line 20 20<br/>In class controller.BaseController<br/>In method controller.BaseController.getEventController()<br/>Field controller.BaseController.eventController<br/>At BaseController.java:[line 20]<br/>At BaseController.java:[line 20]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>controller.BaseController.getGroupController() may expose internal representation by returning BaseController.groupController<br/>
+                  <br/>
+                  <br/>In file BaseController.java BaseController.java,
+					
+						line 24 24<br/>In class controller.BaseController<br/>In method controller.BaseController.getGroupController()<br/>Field controller.BaseController.groupController<br/>At BaseController.java:[line 24]<br/>At BaseController.java:[line 24]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>controller.BaseController.getLocaleController() may expose internal representation by returning BaseController.localeController<br/>
+                  <br/>
+                  <br/>In file BaseController.java BaseController.java,
+					
+						line 44 44<br/>In class controller.BaseController<br/>In method controller.BaseController.getLocaleController()<br/>Field controller.BaseController.localeController<br/>At BaseController.java:[line 44]<br/>At BaseController.java:[line 44]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>controller.BaseController.getLocationController() may expose internal representation by returning BaseController.locationController<br/>
+                  <br/>
+                  <br/>In file BaseController.java BaseController.java,
+					
+						line 28 28<br/>In class controller.BaseController<br/>In method controller.BaseController.getLocationController()<br/>Field controller.BaseController.locationController<br/>At BaseController.java:[line 28]<br/>At BaseController.java:[line 28]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>controller.BaseController.getSubjectController() may expose internal representation by returning BaseController.subjectController<br/>
+                  <br/>
+                  <br/>In file BaseController.java BaseController.java,
+					
+						line 32 32<br/>In class controller.BaseController<br/>In method controller.BaseController.getSubjectController()<br/>Field controller.BaseController.subjectController<br/>At BaseController.java:[line 32]<br/>At BaseController.java:[line 32]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>controller.BaseController.getTimetableController() may expose internal representation by returning BaseController.timetableController<br/>
+                  <br/>
+                  <br/>In file BaseController.java BaseController.java,
+					
+						line 36 36<br/>In class controller.BaseController<br/>In method controller.BaseController.getTimetableController()<br/>Field controller.BaseController.timetableController<br/>At BaseController.java:[line 36]<br/>At BaseController.java:[line 36]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>controller.BaseController.getUserController() may expose internal representation by returning BaseController.userController<br/>
+                  <br/>
+                  <br/>In file BaseController.java BaseController.java,
+					
+						line 40 40<br/>In class controller.BaseController<br/>In method controller.BaseController.getUserController()<br/>Field controller.BaseController.userController<br/>At BaseController.java:[line 40]<br/>At BaseController.java:[line 40]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.AssignmentEntity.getDeadline() may expose internal representation by returning AssignmentEntity.deadline<br/>
+                  <br/>
+                  <br/>In file AssignmentEntity.java AssignmentEntity.java,
+					
+						line 90 90<br/>In class entity.AssignmentEntity<br/>In method entity.AssignmentEntity.getDeadline()<br/>Field entity.AssignmentEntity.deadline<br/>At AssignmentEntity.java:[line 90]<br/>At AssignmentEntity.java:[line 90]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.AssignmentEntity.getPublishingDate() may expose internal representation by returning AssignmentEntity.publishingDate<br/>
+                  <br/>
+                  <br/>In file AssignmentEntity.java AssignmentEntity.java,
+					
+						line 82 82<br/>In class entity.AssignmentEntity<br/>In method entity.AssignmentEntity.getPublishingDate()<br/>Field entity.AssignmentEntity.publishingDate<br/>At AssignmentEntity.java:[line 82]<br/>At AssignmentEntity.java:[line 82]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.AssignmentEntity.getSubject() may expose internal representation by returning AssignmentEntity.subject<br/>
+                  <br/>
+                  <br/>In file AssignmentEntity.java AssignmentEntity.java,
+					
+						line 114 114<br/>In class entity.AssignmentEntity<br/>In method entity.AssignmentEntity.getSubject()<br/>Field entity.AssignmentEntity.subject<br/>At AssignmentEntity.java:[line 114]<br/>At AssignmentEntity.java:[line 114]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.AssignmentEntity.getTimetable() may expose internal representation by returning AssignmentEntity.timetable<br/>
+                  <br/>
+                  <br/>In file AssignmentEntity.java AssignmentEntity.java,
+					
+						line 106 106<br/>In class entity.AssignmentEntity<br/>In method entity.AssignmentEntity.getTimetable()<br/>Field entity.AssignmentEntity.timetable<br/>At AssignmentEntity.java:[line 106]<br/>At AssignmentEntity.java:[line 106]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.TeachingSessionEntity.getEndDate() may expose internal representation by returning TeachingSessionEntity.EndDate<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 75 75<br/>In class entity.TeachingSessionEntity<br/>In method entity.TeachingSessionEntity.getEndDate()<br/>Field entity.TeachingSessionEntity.EndDate<br/>At TeachingSessionEntity.java:[line 75]<br/>At TeachingSessionEntity.java:[line 75]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.TeachingSessionEntity.getLocation() may expose internal representation by returning TeachingSessionEntity.location<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 91 91<br/>In class entity.TeachingSessionEntity<br/>In method entity.TeachingSessionEntity.getLocation()<br/>Field entity.TeachingSessionEntity.location<br/>At TeachingSessionEntity.java:[line 91]<br/>At TeachingSessionEntity.java:[line 91]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.TeachingSessionEntity.getStartDate() may expose internal representation by returning TeachingSessionEntity.StartDate<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 67 67<br/>In class entity.TeachingSessionEntity<br/>In method entity.TeachingSessionEntity.getStartDate()<br/>Field entity.TeachingSessionEntity.StartDate<br/>At TeachingSessionEntity.java:[line 67]<br/>At TeachingSessionEntity.java:[line 67]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.TeachingSessionEntity.getSubject() may expose internal representation by returning TeachingSessionEntity.subject<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 107 107<br/>In class entity.TeachingSessionEntity<br/>In method entity.TeachingSessionEntity.getSubject()<br/>Field entity.TeachingSessionEntity.subject<br/>At TeachingSessionEntity.java:[line 107]<br/>At TeachingSessionEntity.java:[line 107]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.TeachingSessionEntity.getTeachers() may expose internal representation by returning TeachingSessionEntity.teachers<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 115 115<br/>In class entity.TeachingSessionEntity<br/>In method entity.TeachingSessionEntity.getTeachers()<br/>Field entity.TeachingSessionEntity.teachers<br/>At TeachingSessionEntity.java:[line 115]<br/>At TeachingSessionEntity.java:[line 115]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.TeachingSessionEntity.getTimetable() may expose internal representation by returning TeachingSessionEntity.timetable<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 99 99<br/>In class entity.TeachingSessionEntity<br/>In method entity.TeachingSessionEntity.getTimetable()<br/>Field entity.TeachingSessionEntity.timetable<br/>At TeachingSessionEntity.java:[line 99]<br/>At TeachingSessionEntity.java:[line 99]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.UserEntity.getDateOfBirth() may expose internal representation by returning UserEntity.dateOfBirth<br/>
+                  <br/>
+                  <br/>In file UserEntity.java UserEntity.java,
+					
+						line 103 103<br/>In class entity.UserEntity<br/>In method entity.UserEntity.getDateOfBirth()<br/>Field entity.UserEntity.dateOfBirth<br/>At UserEntity.java:[line 103]<br/>At UserEntity.java:[line 103]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.UserEntity.getGroups() may expose internal representation by returning UserEntity.groups<br/>
+                  <br/>
+                  <br/>In file UserEntity.java UserEntity.java,
+					
+						line 148 148<br/>In class entity.UserEntity<br/>In method entity.UserEntity.getGroups()<br/>Field entity.UserEntity.groups<br/>At UserEntity.java:[line 148]<br/>At UserEntity.java:[line 148]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.UserEntity.getTimetable() may expose internal representation by returning UserEntity.timetable<br/>
+                  <br/>
+                  <br/>In file UserEntity.java UserEntity.java,
+					
+						line 152 152<br/>In class entity.UserEntity<br/>In method entity.UserEntity.getTimetable()<br/>Field entity.UserEntity.timetable<br/>At UserEntity.java:[line 152]<br/>At UserEntity.java:[line 152]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.UserGroupEntity.getStudents() may expose internal representation by returning UserGroupEntity.students<br/>
+                  <br/>
+                  <br/>In file UserGroupEntity.java UserGroupEntity.java,
+					
+						line 110 110<br/>In class entity.UserGroupEntity<br/>In method entity.UserGroupEntity.getStudents()<br/>Field entity.UserGroupEntity.students<br/>At UserGroupEntity.java:[line 110]<br/>At UserGroupEntity.java:[line 110]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.UserGroupEntity.getSubject() may expose internal representation by returning UserGroupEntity.subject<br/>
+                  <br/>
+                  <br/>In file UserGroupEntity.java UserGroupEntity.java,
+					
+						line 118 118<br/>In class entity.UserGroupEntity<br/>In method entity.UserGroupEntity.getSubject()<br/>Field entity.UserGroupEntity.subject<br/>At UserGroupEntity.java:[line 118]<br/>At UserGroupEntity.java:[line 118]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.UserGroupEntity.getTeacher() may expose internal representation by returning UserGroupEntity.teacher<br/>
+                  <br/>
+                  <br/>In file UserGroupEntity.java UserGroupEntity.java,
+					
+						line 96 96<br/>In class entity.UserGroupEntity<br/>In method entity.UserGroupEntity.getTeacher()<br/>Field entity.UserGroupEntity.teacher<br/>At UserGroupEntity.java:[line 96]<br/>At UserGroupEntity.java:[line 96]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.UserGroupEntity.getTimetable() may expose internal representation by returning UserGroupEntity.timetable<br/>
+                  <br/>
+                  <br/>In file UserGroupEntity.java UserGroupEntity.java,
+					
+						line 122 122<br/>In class entity.UserGroupEntity<br/>In method entity.UserGroupEntity.getTimetable()<br/>Field entity.UserGroupEntity.timetable<br/>At UserGroupEntity.java:[line 122]<br/>At UserGroupEntity.java:[line 122]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>new controller.notifications.NotificationService(NotificationAware, EventController) may expose internal representation by storing an externally mutable object into NotificationService.eventController<br/>
+                  <br/>
+                  <br/>In file NotificationService.java NotificationService.java,
+					
+						line 27 27<br/>In class controller.notifications.NotificationService<br/>In method new controller.notifications.NotificationService(NotificationAware, EventController)<br/>Field controller.notifications.NotificationService.eventController<br/>Local variable named eventController<br/>At NotificationService.java:[line 27]<br/>At NotificationService.java:[line 27]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>new entity.AssignmentEntity(String, String, Timestamp, Timestamp, String, SubjectEntity, TimetableEntity, String) may expose internal representation by storing an externally mutable object into AssignmentEntity.deadline<br/>
+                  <br/>
+                  <br/>In file AssignmentEntity.java AssignmentEntity.java,
+					
+						line 50 50<br/>In class entity.AssignmentEntity<br/>In method new entity.AssignmentEntity(String, String, Timestamp, Timestamp, String, SubjectEntity, TimetableEntity, String)<br/>Field entity.AssignmentEntity.deadline<br/>Local variable named deadline<br/>At AssignmentEntity.java:[line 50]<br/>At AssignmentEntity.java:[line 50]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>new entity.AssignmentEntity(String, String, Timestamp, Timestamp, String, SubjectEntity, TimetableEntity, String) may expose internal representation by storing an externally mutable object into AssignmentEntity.publishingDate<br/>
+                  <br/>
+                  <br/>In file AssignmentEntity.java AssignmentEntity.java,
+					
+						line 49 49<br/>In class entity.AssignmentEntity<br/>In method new entity.AssignmentEntity(String, String, Timestamp, Timestamp, String, SubjectEntity, TimetableEntity, String)<br/>Field entity.AssignmentEntity.publishingDate<br/>Local variable named publishingDate<br/>At AssignmentEntity.java:[line 49]<br/>At AssignmentEntity.java:[line 49]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>new entity.AssignmentEntity(String, String, Timestamp, Timestamp, String, SubjectEntity, TimetableEntity, String) may expose internal representation by storing an externally mutable object into AssignmentEntity.subject<br/>
+                  <br/>
+                  <br/>In file AssignmentEntity.java AssignmentEntity.java,
+					
+						line 52 52<br/>In class entity.AssignmentEntity<br/>In method new entity.AssignmentEntity(String, String, Timestamp, Timestamp, String, SubjectEntity, TimetableEntity, String)<br/>Field entity.AssignmentEntity.subject<br/>Local variable named subject<br/>At AssignmentEntity.java:[line 52]<br/>At AssignmentEntity.java:[line 52]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>new entity.AssignmentEntity(String, String, Timestamp, Timestamp, String, SubjectEntity, TimetableEntity, String) may expose internal representation by storing an externally mutable object into AssignmentEntity.timetable<br/>
+                  <br/>
+                  <br/>In file AssignmentEntity.java AssignmentEntity.java,
+					
+						line 53 53<br/>In class entity.AssignmentEntity<br/>In method new entity.AssignmentEntity(String, String, Timestamp, Timestamp, String, SubjectEntity, TimetableEntity, String)<br/>Field entity.AssignmentEntity.timetable<br/>Local variable named timetable<br/>At AssignmentEntity.java:[line 53]<br/>At AssignmentEntity.java:[line 53]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.AssignmentEntity.setDeadline(Timestamp) may expose internal representation by storing an externally mutable object into AssignmentEntity.deadline<br/>
+                  <br/>
+                  <br/>In file AssignmentEntity.java AssignmentEntity.java,
+					
+						line 94 94<br/>In class entity.AssignmentEntity<br/>In method entity.AssignmentEntity.setDeadline(Timestamp)<br/>Field entity.AssignmentEntity.deadline<br/>Local variable named deadline<br/>At AssignmentEntity.java:[line 94]<br/>At AssignmentEntity.java:[line 94]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.AssignmentEntity.setPublishingDate(Timestamp) may expose internal representation by storing an externally mutable object into AssignmentEntity.publishingDate<br/>
+                  <br/>
+                  <br/>In file AssignmentEntity.java AssignmentEntity.java,
+					
+						line 86 86<br/>In class entity.AssignmentEntity<br/>In method entity.AssignmentEntity.setPublishingDate(Timestamp)<br/>Field entity.AssignmentEntity.publishingDate<br/>Local variable named publishingDate<br/>At AssignmentEntity.java:[line 86]<br/>At AssignmentEntity.java:[line 86]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.AssignmentEntity.setSubject(SubjectEntity) may expose internal representation by storing an externally mutable object into AssignmentEntity.subject<br/>
+                  <br/>
+                  <br/>In file AssignmentEntity.java AssignmentEntity.java,
+					
+						line 118 118<br/>In class entity.AssignmentEntity<br/>In method entity.AssignmentEntity.setSubject(SubjectEntity)<br/>Field entity.AssignmentEntity.subject<br/>Local variable named subject<br/>At AssignmentEntity.java:[line 118]<br/>At AssignmentEntity.java:[line 118]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.AssignmentEntity.setTimetable(TimetableEntity) may expose internal representation by storing an externally mutable object into AssignmentEntity.timetable<br/>
+                  <br/>
+                  <br/>In file AssignmentEntity.java AssignmentEntity.java,
+					
+						line 110 110<br/>In class entity.AssignmentEntity<br/>In method entity.AssignmentEntity.setTimetable(TimetableEntity)<br/>Field entity.AssignmentEntity.timetable<br/>Local variable named timetable<br/>At AssignmentEntity.java:[line 110]<br/>At AssignmentEntity.java:[line 110]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>new entity.TeachingSessionEntity(Timestamp, Timestamp, String, LocationEntity, TimetableEntity, SubjectEntity, String) may expose internal representation by storing an externally mutable object into TeachingSessionEntity.EndDate<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 50 50<br/>In class entity.TeachingSessionEntity<br/>In method new entity.TeachingSessionEntity(Timestamp, Timestamp, String, LocationEntity, TimetableEntity, SubjectEntity, String)<br/>Field entity.TeachingSessionEntity.EndDate<br/>Local variable named EndDate<br/>At TeachingSessionEntity.java:[line 50]<br/>At TeachingSessionEntity.java:[line 50]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>new entity.TeachingSessionEntity(Timestamp, Timestamp, String, LocationEntity, TimetableEntity, SubjectEntity, String) may expose internal representation by storing an externally mutable object into TeachingSessionEntity.StartDate<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 49 49<br/>In class entity.TeachingSessionEntity<br/>In method new entity.TeachingSessionEntity(Timestamp, Timestamp, String, LocationEntity, TimetableEntity, SubjectEntity, String)<br/>Field entity.TeachingSessionEntity.StartDate<br/>Local variable named StartDate<br/>At TeachingSessionEntity.java:[line 49]<br/>At TeachingSessionEntity.java:[line 49]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>new entity.TeachingSessionEntity(Timestamp, Timestamp, String, LocationEntity, TimetableEntity, SubjectEntity, String) may expose internal representation by storing an externally mutable object into TeachingSessionEntity.location<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 52 52<br/>In class entity.TeachingSessionEntity<br/>In method new entity.TeachingSessionEntity(Timestamp, Timestamp, String, LocationEntity, TimetableEntity, SubjectEntity, String)<br/>Field entity.TeachingSessionEntity.location<br/>Local variable named location<br/>At TeachingSessionEntity.java:[line 52]<br/>At TeachingSessionEntity.java:[line 52]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>new entity.TeachingSessionEntity(Timestamp, Timestamp, String, LocationEntity, TimetableEntity, SubjectEntity, String) may expose internal representation by storing an externally mutable object into TeachingSessionEntity.subject<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 54 54<br/>In class entity.TeachingSessionEntity<br/>In method new entity.TeachingSessionEntity(Timestamp, Timestamp, String, LocationEntity, TimetableEntity, SubjectEntity, String)<br/>Field entity.TeachingSessionEntity.subject<br/>Local variable named subject<br/>At TeachingSessionEntity.java:[line 54]<br/>At TeachingSessionEntity.java:[line 54]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>new entity.TeachingSessionEntity(Timestamp, Timestamp, String, LocationEntity, TimetableEntity, SubjectEntity, String) may expose internal representation by storing an externally mutable object into TeachingSessionEntity.timetable<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 53 53<br/>In class entity.TeachingSessionEntity<br/>In method new entity.TeachingSessionEntity(Timestamp, Timestamp, String, LocationEntity, TimetableEntity, SubjectEntity, String)<br/>Field entity.TeachingSessionEntity.timetable<br/>Local variable named timetable<br/>At TeachingSessionEntity.java:[line 53]<br/>At TeachingSessionEntity.java:[line 53]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.TeachingSessionEntity.setEndDate(Timestamp) may expose internal representation by storing an externally mutable object into TeachingSessionEntity.EndDate<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 79 79<br/>In class entity.TeachingSessionEntity<br/>In method entity.TeachingSessionEntity.setEndDate(Timestamp)<br/>Field entity.TeachingSessionEntity.EndDate<br/>Local variable named EndDate<br/>At TeachingSessionEntity.java:[line 79]<br/>At TeachingSessionEntity.java:[line 79]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.TeachingSessionEntity.setLocation(LocationEntity) may expose internal representation by storing an externally mutable object into TeachingSessionEntity.location<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 95 95<br/>In class entity.TeachingSessionEntity<br/>In method entity.TeachingSessionEntity.setLocation(LocationEntity)<br/>Field entity.TeachingSessionEntity.location<br/>Local variable named location<br/>At TeachingSessionEntity.java:[line 95]<br/>At TeachingSessionEntity.java:[line 95]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.TeachingSessionEntity.setStartDate(Timestamp) may expose internal representation by storing an externally mutable object into TeachingSessionEntity.StartDate<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 71 71<br/>In class entity.TeachingSessionEntity<br/>In method entity.TeachingSessionEntity.setStartDate(Timestamp)<br/>Field entity.TeachingSessionEntity.StartDate<br/>Local variable named StartDate<br/>At TeachingSessionEntity.java:[line 71]<br/>At TeachingSessionEntity.java:[line 71]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.TeachingSessionEntity.setSubject(SubjectEntity) may expose internal representation by storing an externally mutable object into TeachingSessionEntity.subject<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 111 111<br/>In class entity.TeachingSessionEntity<br/>In method entity.TeachingSessionEntity.setSubject(SubjectEntity)<br/>Field entity.TeachingSessionEntity.subject<br/>Local variable named subject<br/>At TeachingSessionEntity.java:[line 111]<br/>At TeachingSessionEntity.java:[line 111]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.TeachingSessionEntity.setTeachers(Set) may expose internal representation by storing an externally mutable object into TeachingSessionEntity.teachers<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 119 119<br/>In class entity.TeachingSessionEntity<br/>In method entity.TeachingSessionEntity.setTeachers(Set)<br/>Field entity.TeachingSessionEntity.teachers<br/>Local variable named teachers<br/>At TeachingSessionEntity.java:[line 119]<br/>At TeachingSessionEntity.java:[line 119]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.TeachingSessionEntity.setTimetable(TimetableEntity) may expose internal representation by storing an externally mutable object into TeachingSessionEntity.timetable<br/>
+                  <br/>
+                  <br/>In file TeachingSessionEntity.java TeachingSessionEntity.java,
+					
+						line 103 103<br/>In class entity.TeachingSessionEntity<br/>In method entity.TeachingSessionEntity.setTimetable(TimetableEntity)<br/>Field entity.TeachingSessionEntity.timetable<br/>Local variable named timetable<br/>At TeachingSessionEntity.java:[line 103]<br/>At TeachingSessionEntity.java:[line 103]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>new entity.UserEntity(String, String, String, String, Timestamp, String, Role, TimetableEntity) may expose internal representation by storing an externally mutable object into UserEntity.dateOfBirth<br/>
+                  <br/>
+                  <br/>In file UserEntity.java UserEntity.java,
+					
+						line 64 64<br/>In class entity.UserEntity<br/>In method new entity.UserEntity(String, String, String, String, Timestamp, String, Role, TimetableEntity)<br/>Field entity.UserEntity.dateOfBirth<br/>Local variable named dateOfBirth<br/>At UserEntity.java:[line 64]<br/>At UserEntity.java:[line 64]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>new entity.UserEntity(String, String, String, String, Timestamp, String, Role, TimetableEntity) may expose internal representation by storing an externally mutable object into UserEntity.timetable<br/>
+                  <br/>
+                  <br/>In file UserEntity.java UserEntity.java,
+					
+						line 67 67<br/>In class entity.UserEntity<br/>In method new entity.UserEntity(String, String, String, String, Timestamp, String, Role, TimetableEntity)<br/>Field entity.UserEntity.timetable<br/>Local variable named timetable<br/>At UserEntity.java:[line 67]<br/>At UserEntity.java:[line 67]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.UserEntity.setDateOfBirth(Timestamp) may expose internal representation by storing an externally mutable object into UserEntity.dateOfBirth<br/>
+                  <br/>
+                  <br/>In file UserEntity.java UserEntity.java,
+					
+						line 99 99<br/>In class entity.UserEntity<br/>In method entity.UserEntity.setDateOfBirth(Timestamp)<br/>Field entity.UserEntity.dateOfBirth<br/>Local variable named dateOfBirth<br/>At UserEntity.java:[line 99]<br/>At UserEntity.java:[line 99]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>new entity.UserGroupEntity(String, String, Integer, UserEntity, Set, SubjectEntity, TimetableEntity) may expose internal representation by storing an externally mutable object into UserGroupEntity.students<br/>
+                  <br/>
+                  <br/>In file UserGroupEntity.java UserGroupEntity.java,
+					
+						line 51 51<br/>In class entity.UserGroupEntity<br/>In method new entity.UserGroupEntity(String, String, Integer, UserEntity, Set, SubjectEntity, TimetableEntity)<br/>Field entity.UserGroupEntity.students<br/>Local variable named students<br/>At UserGroupEntity.java:[line 51]<br/>At UserGroupEntity.java:[line 51]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>new entity.UserGroupEntity(String, String, Integer, UserEntity, Set, SubjectEntity, TimetableEntity) may expose internal representation by storing an externally mutable object into UserGroupEntity.subject<br/>
+                  <br/>
+                  <br/>In file UserGroupEntity.java UserGroupEntity.java,
+					
+						line 52 52<br/>In class entity.UserGroupEntity<br/>In method new entity.UserGroupEntity(String, String, Integer, UserEntity, Set, SubjectEntity, TimetableEntity)<br/>Field entity.UserGroupEntity.subject<br/>Local variable named subject<br/>At UserGroupEntity.java:[line 52]<br/>At UserGroupEntity.java:[line 52]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>new entity.UserGroupEntity(String, String, Integer, UserEntity, Set, SubjectEntity, TimetableEntity) may expose internal representation by storing an externally mutable object into UserGroupEntity.teacher<br/>
+                  <br/>
+                  <br/>In file UserGroupEntity.java UserGroupEntity.java,
+					
+						line 50 50<br/>In class entity.UserGroupEntity<br/>In method new entity.UserGroupEntity(String, String, Integer, UserEntity, Set, SubjectEntity, TimetableEntity)<br/>Field entity.UserGroupEntity.teacher<br/>Local variable named teacher<br/>At UserGroupEntity.java:[line 50]<br/>At UserGroupEntity.java:[line 50]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>new entity.UserGroupEntity(String, String, Integer, UserEntity, Set, SubjectEntity, TimetableEntity) may expose internal representation by storing an externally mutable object into UserGroupEntity.timetable<br/>
+                  <br/>
+                  <br/>In file UserGroupEntity.java UserGroupEntity.java,
+					
+						line 53 53<br/>In class entity.UserGroupEntity<br/>In method new entity.UserGroupEntity(String, String, Integer, UserEntity, Set, SubjectEntity, TimetableEntity)<br/>Field entity.UserGroupEntity.timetable<br/>Local variable named timetable<br/>At UserGroupEntity.java:[line 53]<br/>At UserGroupEntity.java:[line 53]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.UserGroupEntity.setStudents(Set) may expose internal representation by storing an externally mutable object into UserGroupEntity.students<br/>
+                  <br/>
+                  <br/>In file UserGroupEntity.java UserGroupEntity.java,
+					
+						line 106 106<br/>In class entity.UserGroupEntity<br/>In method entity.UserGroupEntity.setStudents(Set)<br/>Field entity.UserGroupEntity.students<br/>Local variable named students<br/>At UserGroupEntity.java:[line 106]<br/>At UserGroupEntity.java:[line 106]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.UserGroupEntity.setSubject(SubjectEntity) may expose internal representation by storing an externally mutable object into UserGroupEntity.subject<br/>
+                  <br/>
+                  <br/>In file UserGroupEntity.java UserGroupEntity.java,
+					
+						line 114 114<br/>In class entity.UserGroupEntity<br/>In method entity.UserGroupEntity.setSubject(SubjectEntity)<br/>Field entity.UserGroupEntity.subject<br/>Local variable named subject<br/>At UserGroupEntity.java:[line 114]<br/>At UserGroupEntity.java:[line 114]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.UserGroupEntity.setTeacher(UserEntity) may expose internal representation by storing an externally mutable object into UserGroupEntity.teacher<br/>
+                  <br/>
+                  <br/>In file UserGroupEntity.java UserGroupEntity.java,
+					
+						line 92 92<br/>In class entity.UserGroupEntity<br/>In method entity.UserGroupEntity.setTeacher(UserEntity)<br/>Field entity.UserGroupEntity.teacher<br/>Local variable named teacher<br/>At UserGroupEntity.java:[line 92]<br/>At UserGroupEntity.java:[line 92]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>entity.UserGroupEntity.setTimetable(TimetableEntity) may expose internal representation by storing an externally mutable object into UserGroupEntity.timetable<br/>
+                  <br/>
+                  <br/>In file UserGroupEntity.java UserGroupEntity.java,
+					
+						line 126 126<br/>In class entity.UserGroupEntity<br/>In method entity.UserGroupEntity.setTimetable(TimetableEntity)<br/>Field entity.UserGroupEntity.timetable<br/>Local variable named timetable<br/>At UserGroupEntity.java:[line 126]<br/>At UserGroupEntity.java:[line 126]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>view.controllers.components.EventPopupViewController.setUp(Event, BaseController, TimetableViewController) may expose internal representation by storing an externally mutable object into EventPopupViewController.timetableViewController<br/>
+                  <br/>
+                  <br/>In file EventPopupViewController.java EventPopupViewController.java,
+					
+						line 101 101<br/>In class view.controllers.components.EventPopupViewController<br/>In method view.controllers.components.EventPopupViewController.setUp(Event, BaseController, TimetableViewController)<br/>Field view.controllers.components.EventPopupViewController.timetableViewController<br/>Local variable named timetableViewController<br/>At EventPopupViewController.java:[line 101]<br/>At EventPopupViewController.java:[line 101]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>view.controllers.pages.main.SettingsViewController.setSidebarViewController(SidebarViewController) may expose internal representation by storing an externally mutable object into SettingsViewController.sidebarViewController<br/>
+                  <br/>
+                  <br/>In file SettingsViewController.java SettingsViewController.java,
+					
+						line 51 51<br/>In class view.controllers.pages.main.SettingsViewController<br/>In method view.controllers.pages.main.SettingsViewController.setSidebarViewController(SidebarViewController)<br/>Field view.controllers.pages.main.SettingsViewController.sidebarViewController<br/>Local variable named sidebarViewController<br/>At SettingsViewController.java:[line 51]<br/>At SettingsViewController.java:[line 51]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>view.controllers.pages.user.LoginViewController.setSidebarViewController(SidebarViewController) may expose internal representation by storing an externally mutable object into LoginViewController.sidebarViewController<br/>
+                  <br/>
+                  <br/>In file LoginViewController.java LoginViewController.java,
+					
+						line 51 51<br/>In class view.controllers.pages.user.LoginViewController<br/>In method view.controllers.pages.user.LoginViewController.setSidebarViewController(SidebarViewController)<br/>Field view.controllers.pages.user.LoginViewController.sidebarViewController<br/>Local variable named sidebarViewController<br/>At LoginViewController.java:[line 51]<br/>At LoginViewController.java:[line 51]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>view.controllers.pages.user.NotificationItemViewController.setNotificationData(NotificationsViewController, Event, int) may expose internal representation by storing an externally mutable object into NotificationItemViewController.parentController<br/>
+                  <br/>
+                  <br/>In file NotificationItemViewController.java NotificationItemViewController.java,
+					
+						line 30 30<br/>In class view.controllers.pages.user.NotificationItemViewController<br/>In method view.controllers.pages.user.NotificationItemViewController.setNotificationData(NotificationsViewController, Event, int)<br/>Field view.controllers.pages.user.NotificationItemViewController.parentController<br/>Local variable named parent<br/>At NotificationItemViewController.java:[line 30]<br/>At NotificationItemViewController.java:[line 30]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>view.controllers.pages.user.NotificationsViewController.setEventNotifications(List) may expose internal representation by storing an externally mutable object into NotificationsViewController.eventNotifications<br/>
+                  <br/>
+                  <br/>In file NotificationsViewController.java NotificationsViewController.java,
+					
+						line 55 55<br/>In class view.controllers.pages.user.NotificationsViewController<br/>In method view.controllers.pages.user.NotificationsViewController.setEventNotifications(List)<br/>Field view.controllers.pages.user.NotificationsViewController.eventNotifications<br/>Local variable named eventNotifications<br/>At NotificationsViewController.java:[line 55]<br/>At NotificationsViewController.java:[line 55]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>view.controllers.pages.user.RegistrationViewController.setSidebarViewController(SidebarViewController) may expose internal representation by storing an externally mutable object into RegistrationViewController.sidebarViewController<br/>
+                  <br/>
+                  <br/>In file RegistrationViewController.java RegistrationViewController.java,
+					
+						line 70 70<br/>In class view.controllers.pages.user.RegistrationViewController<br/>In method view.controllers.pages.user.RegistrationViewController.setSidebarViewController(SidebarViewController)<br/>Field view.controllers.pages.user.RegistrationViewController.sidebarViewController<br/>Local variable named sidebarViewController<br/>At RegistrationViewController.java:[line 70]<br/>At RegistrationViewController.java:[line 70]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>view.controllers.pages.user.UserProfileViewController.setSidebarViewController(SidebarViewController) may expose internal representation by storing an externally mutable object into UserProfileViewController.sidebarViewController<br/>
+                  <br/>
+                  <br/>In file UserProfileViewController.java UserProfileViewController.java,
+					
+						line 53 53<br/>In class view.controllers.pages.user.UserProfileViewController<br/>In method view.controllers.pages.user.UserProfileViewController.setSidebarViewController(SidebarViewController)<br/>Field view.controllers.pages.user.UserProfileViewController.sidebarViewController<br/>Local variable named sidebarViewController<br/>At UserProfileViewController.java:[line 53]<br/>At UserProfileViewController.java:[line 53]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#MS_EXPOSE_REP">Public static method may expose internal representation by returning a mutable object or array</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Public static controller.cache.EventCache.getInstance() may expose internal representation by returning EventCache.instance<br/>
+                  <br/>
+                  <br/>In file EventCache.java EventCache.java,
+					
+						line 21 21<br/>In class controller.cache.EventCache<br/>In method controller.cache.EventCache.getInstance()<br/>Field controller.cache.EventCache.instance<br/>At EventCache.java:[line 21]<br/>At EventCache.java:[line 21]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#MS_EXPOSE_REP">Public static method may expose internal representation by returning a mutable object or array</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Public static controller.cache.GeneralCache.getInstance() may expose internal representation by returning GeneralCache.instance<br/>
+                  <br/>
+                  <br/>In file GeneralCache.java GeneralCache.java,
+					
+						line 20 20<br/>In class controller.cache.GeneralCache<br/>In method controller.cache.GeneralCache.getInstance()<br/>Field controller.cache.GeneralCache.instance<br/>At GeneralCache.java:[line 20]<br/>At GeneralCache.java:[line 20]</p>
+            </td>
+         </tr>
+      </table>
+      <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="Warnings_PERFORMANCE">Performance Warnings</a>
+      </h2>
+      <table class="warningtable"
+             width="100%"
+             cellspacing="2"
+             cellpadding="5">
+         <tr class="tableheader">
+            <th align="left">Warning</th>
+            <th align="left">Priority</th>
+            <th align="left">Details</th>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#URF_UNREAD_FIELD">Unread field</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Unread field: view.controllers.pages.main.TimetableViewController.currentDate<br/>
+                  <br/>
+                  <br/>In file TimetableViewController.java,
+					
+						line 132<br/>In class view.controllers.pages.main.TimetableViewController<br/>Field view.controllers.pages.main.TimetableViewController.currentDate<br/>At TimetableViewController.java:[line 132]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#WMI_WRONG_MAP_ITERATOR">Inefficient use of keySet iterator instead of entrySet iterator</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>view.controllers.pages.main.GroupsViewController.lambda$initialize$3() makes inefficient use of keySet iterator instead of entrySet iterator<br/>
+                  <br/>
+                  <br/>In file GroupsViewController.java GroupsViewController.java,
+					
+						line 97 97<br/>In class view.controllers.pages.main.GroupsViewController<br/>In method view.controllers.pages.main.GroupsViewController.lambda$initialize$3()<br/>At GroupsViewController.java:[line 97]<br/>At GroupsViewController.java:[line 97]</p>
+            </td>
+         </tr>
+      </table>
+      <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="Warnings_STYLE">Dodgy code Warnings</a>
+      </h2>
+      <table class="warningtable"
+             width="100%"
+             cellspacing="2"
+             cellpadding="5">
+         <tr class="tableheader">
+            <th align="left">Warning</th>
+            <th align="left">Priority</th>
+            <th align="left">Details</th>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#DCN_NULLPOINTER_EXCEPTION">NullPointerException caught</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Do not catch NullPointerException like in view.View.start(Stage)<br/>
+                  <br/>
+                  <br/>In file View.java,
+					
+						line 28<br/>In class view.View<br/>In method view.View.start(Stage)<br/>At View.java:[line 28]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#DCN_NULLPOINTER_EXCEPTION">NullPointerException caught</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Do not catch NullPointerException like in view.controllers.pages.main.MainPageViewController.loadContent(String, String)<br/>
+                  <br/>
+                  <br/>In file MainPageViewController.java,
+					
+						line 103<br/>In class view.controllers.pages.main.MainPageViewController<br/>In method view.controllers.pages.main.MainPageViewController.loadContent(String, String)<br/>At MainPageViewController.java:[line 103]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#NP_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD">Read of unwritten public or protected field</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Read of unwritten public or protected field loginButton in view.controllers.pages.user.LoginViewController.lambda$initialize$0()<br/>
+                  <br/>
+                  <br/>In file LoginViewController.java LoginViewController.java,
+					
+						line 58 58<br/>In class view.controllers.pages.user.LoginViewController<br/>In method view.controllers.pages.user.LoginViewController.lambda$initialize$0()<br/>Field view.controllers.pages.user.LoginViewController.loginButton<br/>At LoginViewController.java:[line 58]<br/>At LoginViewController.java:[line 58]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#NP_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD">Read of unwritten public or protected field</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Read of unwritten public or protected field loginLabel in view.controllers.pages.user.LoginViewController.lambda$initialize$0()<br/>
+                  <br/>
+                  <br/>In file LoginViewController.java LoginViewController.java,
+					
+						line 57 57<br/>In class view.controllers.pages.user.LoginViewController<br/>In method view.controllers.pages.user.LoginViewController.lambda$initialize$0()<br/>Field view.controllers.pages.user.LoginViewController.loginLabel<br/>At LoginViewController.java:[line 57]<br/>At LoginViewController.java:[line 57]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#NP_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD">Read of unwritten public or protected field</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Read of unwritten public or protected field loginRegisterButton in view.controllers.pages.user.LoginViewController.lambda$initialize$0()<br/>
+                  <br/>
+                  <br/>In file LoginViewController.java LoginViewController.java,
+					
+						line 59 59<br/>In class view.controllers.pages.user.LoginViewController<br/>In method view.controllers.pages.user.LoginViewController.lambda$initialize$0()<br/>Field view.controllers.pages.user.LoginViewController.loginRegisterButton<br/>At LoginViewController.java:[line 59]<br/>At LoginViewController.java:[line 59]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE">Redundant nullcheck of value known to be non-null</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Redundant nullcheck of user, which is known to be non-null in model.UserModel.authenticate(String, String)<br/>
+                  <br/>
+                  <br/>In file UserModel.java UserModel.java,
+					
+						line 61 61<br/>In class model.UserModel<br/>In method model.UserModel.authenticate(String, String)<br/>Value loaded from user<br/>Return value of dao.UserDAO.authenticate(String, String) of type entity.UserEntity<br/>Redundant null check at UserModel.java:[line 61]<br/>Redundant null check at UserModel.java:[line 61]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE">Redundant nullcheck of value known to be non-null</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Redundant nullcheck of timetableId, which is known to be non-null in view.controllers.components.EventPopupViewController.handleSaveEvent()<br/>
+                  <br/>
+                  <br/>In file EventPopupViewController.java EventPopupViewController.java,
+					
+						line 370 370<br/>In class view.controllers.components.EventPopupViewController<br/>In method view.controllers.components.EventPopupViewController.handleSaveEvent()<br/>Value loaded from timetableId<br/>Redundant null check at EventPopupViewController.java:[line 370]<br/>Redundant null check at EventPopupViewController.java:[line 370]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE">Redundant nullcheck of value known to be non-null</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Redundant nullcheck of userDTO, which is known to be non-null in view.controllers.pages.user.UserProfileViewController.updateUserInfo()<br/>
+                  <br/>
+                  <br/>In file UserProfileViewController.java UserProfileViewController.java,
+					
+						line 73 73<br/>In class view.controllers.pages.user.UserProfileViewController<br/>In method view.controllers.pages.user.UserProfileViewController.updateUserInfo()<br/>Value loaded from userDTO<br/>Return value of controller.UserController.getLoggedInUser() of type dto.UserDTO<br/>Redundant null check at UserProfileViewController.java:[line 73]<br/>Redundant null check at UserProfileViewController.java:[line 73]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#SF_SWITCH_NO_DEFAULT">Switch statement found where default case is missing</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Switch statement found in view.controllers.components.TimeTextField.handleKeyTyped(KeyEvent) where default case is missing<br/>
+                  <br/>
+                  <br/>In file TimeTextField.java TimeTextField.java,
+					
+						lines 23 23
+						    to 46 46<br/>In class view.controllers.components.TimeTextField<br/>In method view.controllers.components.TimeTextField.handleKeyTyped(KeyEvent)<br/>At TimeTextField.java:[lines 23-46]<br/>At TimeTextField.java:[lines 23-46]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#SF_SWITCH_NO_DEFAULT">Switch statement found where default case is missing</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Switch statement found in view.controllers.pages.main.GroupsViewController.lambda$initialize$3() where default case is missing<br/>
+                  <br/>
+                  <br/>In file GroupsViewController.java GroupsViewController.java,
+					
+						lines 97 97
+						    to 112 112<br/>In class view.controllers.pages.main.GroupsViewController<br/>In method view.controllers.pages.main.GroupsViewController.lambda$initialize$3()<br/>At GroupsViewController.java:[lines 97-112]<br/>At GroupsViewController.java:[lines 97-112]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#SF_SWITCH_NO_DEFAULT">Switch statement found where default case is missing</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Switch statement found in view.controllers.pages.main.MainPageViewController.lambda$initialize$1(ObservableValue, String, String) where default case is missing<br/>
+                  <br/>
+                  <br/>In file MainPageViewController.java MainPageViewController.java,
+					
+						lines 47 47
+						    to 68 68<br/>In class view.controllers.pages.main.MainPageViewController<br/>In method view.controllers.pages.main.MainPageViewController.lambda$initialize$1(ObservableValue, String, String)<br/>At MainPageViewController.java:[lines 47-68]<br/>At MainPageViewController.java:[lines 47-68]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#SF_SWITCH_NO_DEFAULT">Switch statement found where default case is missing</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Switch statement found in view.controllers.pages.main.MainPageViewController.loadContent(String, String) where default case is missing<br/>
+                  <br/>
+                  <br/>In file MainPageViewController.java MainPageViewController.java,
+					
+						lines 79 79
+						    to 87 87<br/>In class view.controllers.pages.main.MainPageViewController<br/>In method view.controllers.pages.main.MainPageViewController.loadContent(String, String)<br/>At MainPageViewController.java:[lines 79-87]<br/>At MainPageViewController.java:[lines 79-87]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD">Unused public or protected field</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Unused public or protected field: view.controllers.pages.user.LoginViewController.buttonsHBox<br/>
+                  <br/>
+                  <br/>In file LoginViewController.java,
+					
+						lines 
+						    to <br/>In class view.controllers.pages.user.LoginViewController<br/>Field view.controllers.pages.user.LoginViewController.buttonsHBox<br/>In LoginViewController.java</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD">Unused public or protected field</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Unused public or protected field: view.controllers.pages.user.LoginViewController.loginVBox<br/>
+                  <br/>
+                  <br/>In file LoginViewController.java,
+					
+						lines 
+						    to <br/>In class view.controllers.pages.user.LoginViewController<br/>Field view.controllers.pages.user.LoginViewController.loginVBox<br/>In LoginViewController.java</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD">Unused public or protected field</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Unused public or protected field: view.controllers.pages.user.RegistrationViewController.buttonsHBox<br/>
+                  <br/>
+                  <br/>In file RegistrationViewController.java,
+					
+						lines 
+						    to <br/>In class view.controllers.pages.user.RegistrationViewController<br/>Field view.controllers.pages.user.RegistrationViewController.buttonsHBox<br/>In RegistrationViewController.java</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD">Unused public or protected field</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Unused public or protected field: view.controllers.pages.user.RegistrationViewController.dobRoleHBox<br/>
+                  <br/>
+                  <br/>In file RegistrationViewController.java,
+					
+						lines 
+						    to <br/>In class view.controllers.pages.user.RegistrationViewController<br/>Field view.controllers.pages.user.RegistrationViewController.dobRoleHBox<br/>In RegistrationViewController.java</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD">Unused public or protected field</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Unused public or protected field: view.controllers.pages.user.RegistrationViewController.emailField<br/>
+                  <br/>
+                  <br/>In file RegistrationViewController.java,
+					
+						lines 
+						    to <br/>In class view.controllers.pages.user.RegistrationViewController<br/>Field view.controllers.pages.user.RegistrationViewController.emailField<br/>In RegistrationViewController.java</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD">Unused public or protected field</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Unused public or protected field: view.controllers.pages.user.RegistrationViewController.registrationVBox<br/>
+                  <br/>
+                  <br/>In file RegistrationViewController.java,
+					
+						lines 
+						    to <br/>In class view.controllers.pages.user.RegistrationViewController<br/>Field view.controllers.pages.user.RegistrationViewController.registrationVBox<br/>In RegistrationViewController.java</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD">Unwritten public or protected field</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Unwritten public or protected field: view.controllers.pages.user.LoginViewController.loginButton<br/>
+                  <br/>
+                  <br/>In file LoginViewController.java,
+					
+						line 58<br/>In class view.controllers.pages.user.LoginViewController<br/>Field view.controllers.pages.user.LoginViewController.loginButton<br/>At LoginViewController.java:[line 58]</p>
+            </td>
+         </tr>
+         <tr class="tablerow0">
+            <td width="20%" valign="top">
+               <a href="#UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD">Unwritten public or protected field</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Unwritten public or protected field: view.controllers.pages.user.LoginViewController.loginLabel<br/>
+                  <br/>
+                  <br/>In file LoginViewController.java,
+					
+						line 57<br/>In class view.controllers.pages.user.LoginViewController<br/>Field view.controllers.pages.user.LoginViewController.loginLabel<br/>At LoginViewController.java:[line 57]</p>
+            </td>
+         </tr>
+         <tr class="tablerow1">
+            <td width="20%" valign="top">
+               <a href="#UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD">Unwritten public or protected field</a>
+            </td>
+            <td width="10%" valign="top">Medium</td>
+            <td width="70%">
+               <p>Unwritten public or protected field: view.controllers.pages.user.LoginViewController.loginRegisterButton<br/>
+                  <br/>
+                  <br/>In file LoginViewController.java,
+					
+						line 59<br/>In class view.controllers.pages.user.LoginViewController<br/>Field view.controllers.pages.user.LoginViewController.loginRegisterButton<br/>At LoginViewController.java:[line 59]</p>
+            </td>
+         </tr>
+      </table>
+      <p>
+         <br/>
+         <br/>
+      </p>
+      <p>
+         <br/>
+         <br/>
+      </p>
+      <h1>
+         <a name="Details">Warning Types</a>
+      </h1>
+      <h2>
+         <a name="DCN_NULLPOINTER_EXCEPTION">NullPointerException caught</a>
+      </h2>
+   
+<p>
+According to SEI Cert rule <a href="https://wiki.sei.cmu.edu/confluence/display/java/ERR08-J.+Do+not+catch+NullPointerException+or+any+of+its+ancestors">ERR08-J</a> NullPointerException should not be caught. Handling NullPointerException is considered an inferior alternative to null-checking.
+<p>
+This non-compliant code catches a NullPointerException to see if an incoming parameter is null:
+</p>
+<pre><code>
+boolean hasSpace(String m) {
+  try {
+    String ms[] = m.split(" ");
+    return names.length != 1;
+  } catch (NullPointerException e) {
+    return false;
+  }
+}
+</code></pre>
+<p>
+A compliant solution would use a null-check as in the following example:
+</p>
+<pre><code>
+boolean hasSpace(String m) {
+    if (m == null) return false;
+    String ms[] = m.split(" ");
+    return names.length != 1;
+}
+</code></pre>
+    
+     <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="DMI_RANDOM_USED_ONLY_ONCE">Random object created and used only once</a>
+      </h2>
+
+<p> This code creates a java.util.Random object, uses it to generate one random number, and then discards
+the Random object. This produces mediocre quality random numbers and is inefficient.
+If possible, rewrite the code so that the Random object is created once and saved, and each time a new random number
+is required invoke a method on the existing Random object to obtain it.
+</p>
+
+<p>If it is important that the generated Random numbers not be guessable, you <em>must</em> not create a new Random for each random
+number; the values are too easily guessable. You should strongly consider using a java.security.SecureRandom instead
+(and avoid allocating a new SecureRandom for each random number needed).
+</p>
+
+    <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="DM_DEFAULT_ENCODING">Reliance on default encoding</a>
+      </h2>
+
+<p> Found a call to a method which will perform a byte to String (or String to byte) conversion,
+and will assume that the default platform encoding is suitable. This will cause the application
+behavior to vary between platforms. Use an alternative API and specify a charset name or Charset
+object explicitly.</p>
+
+      <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="EI_EXPOSE_REP">May expose internal representation by returning reference to mutable object</a>
+      </h2>
+
+  <p> Returning a reference to a mutable object value stored in one of the object's fields
+  exposes the internal representation of the object.&nbsp;
+   If instances
+   are accessed by untrusted code, and unchecked changes to
+   the mutable object would compromise security or other
+   important properties, you will need to do something different.
+  Returning a new copy of the object is better approach in many situations.</p>
+
+    <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="EI_EXPOSE_REP2">May expose internal representation by incorporating reference to mutable object</a>
+      </h2>
+
+  <p> This code stores a reference to an externally mutable object into the
+  internal representation of the object.&nbsp;
+   If instances
+   are accessed by untrusted code, and unchecked changes to
+   the mutable object would compromise security or other
+   important properties, you will need to do something different.
+  Storing a copy of the object is better approach in many situations.</p>
+
+    <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="VA_FORMAT_STRING_USES_NEWLINE">Format string should use %n rather than \n</a>
+      </h2>
+
+<p>
+This format string includes a newline character (\n). In format strings, it is generally
+ preferable to use %n, which will produce the platform-specific line separator.
+ 
+ When using text blocks introduced in Java 15, use the <code>\</code> escape sequence:
+	 
+<code>String value = """
+                first line%n\
+                second line%n\
+                """;</code>
+</p>
+
+     <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="HE_EQUALS_USE_HASHCODE">Class defines equals() and uses Object.hashCode()</a>
+      </h2>
+
+  <p> This class overrides <code>equals(Object)</code>, but does not
+  override <code>hashCode()</code>, and inherits the implementation of
+  <code>hashCode()</code> from <code>java.lang.Object</code> (which returns
+  the identity hash code, an arbitrary value assigned to the object
+  by the VM).&nbsp; Therefore, the class is very likely to violate the
+  invariant that equal objects must have equal hashcodes.</p>
+
+<p>If you don't think instances of this class will ever be inserted into a HashMap/HashTable,
+the recommended <code>hashCode</code> implementation to use is:</p>
+<pre><code>public int hashCode() {
+    assert false : "hashCode not designed";
+    return 42; // any arbitrary constant will do
+}
+</code></pre>
+
+    <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="HE_USE_OF_UNHASHABLE_CLASS">Use of class without a hashCode() method in a hashed data structure</a>
+      </h2>
+
+  <p> A class defines an equals(Object)  method but not a hashCode() method,
+and thus doesn't fulfill the requirement that equal objects have equal hashCodes.
+An instance of this class is used in a hash data structure, making the need to
+fix this problem of highest importance.
+
+    <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="MS_EXPOSE_REP">Public static method may expose internal representation by returning a mutable object or array</a>
+      </h2>
+
+  <p> A public static method returns a reference to a mutable object or
+   an array that is part of the static state of the class.
+   Any code that calls this method can freely modify
+   the underlying array.
+   One fix is to return a copy of the array.</p>
+
+    <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="NP_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD">Read of unwritten public or protected field</a>
+      </h2>
+
+  <p> The program is dereferencing a public or protected
+field that does not seem to ever have a non-null value written to it.
+Unless the field is initialized via some mechanism not seen by the analysis,
+dereferencing this value will generate a null pointer exception.
+</p>
+
+    <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="ODR_OPEN_DATABASE_RESOURCE">Method may fail to close database resource</a>
+      </h2>
+
+<p> The method creates a database resource (such as a database connection
+or row set), does not assign it to any
+fields, pass it to other methods, or return it, and does not appear to close
+the object on all paths out of the method.&nbsp; Failure to
+close database resources on all paths out of a method may
+result in poor performance, and could cause the application to
+have problems communicating with the database.
+</p>
+
+    <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE">Redundant nullcheck of value known to be non-null</a>
+      </h2>
+
+<p> This method contains a redundant check of a known non-null value against
+the constant null.</p>
+
+    <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="SF_SWITCH_NO_DEFAULT">Switch statement found where default case is missing</a>
+      </h2>
+
+  <p> This method contains a switch statement where default case is missing.
+  Usually you need to provide a default case.</p>
+  <p>Because the analysis only looks at the generated bytecode, this warning can be incorrect triggered if
+the default case is at the end of the switch statement and the switch statement doesn't contain break statements for other
+cases.
+
+    <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="URF_UNREAD_FIELD">Unread field</a>
+      </h2>
+
+  <p> This field is never read.&nbsp; Consider removing it from the class.</p>
+
+    <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD">Unused public or protected field</a>
+      </h2>
+
+  <p> This field is never used.&nbsp;
+The field is public or protected, so perhaps
+    it is intended to be used with classes not seen as part of the analysis. If not,
+consider removing it from the class.</p>
+
+    <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD">Unwritten public or protected field</a>
+      </h2>
+
+  <p> No writes were seen to this public/protected field.&nbsp; All reads of it will return the default
+value. Check for errors (should it have been initialized?), or remove it if it is useless.</p>
+
+    <p>
+         <br/>
+         <br/>
+      </p>
+      <h2>
+         <a name="WMI_WRONG_MAP_ITERATOR">Inefficient use of keySet iterator instead of entrySet iterator</a>
+      </h2>
+
+<p> This method accesses the value of a Map entry, using a key that was retrieved from
+a keySet iterator. It is more efficient to use an iterator on the entrySet of the map, to avoid the
+Map.get(key) lookup.</p>
+
+        <p>
+         <br/>
+         <br/>
+      </p>
+   </body>
+</html>
