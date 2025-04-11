@@ -27,30 +27,25 @@ class LocationControllerTest {
 		}
 	}
 
-	@BeforeEach
-	void setUp() {
-		locationController.deleteAllLocations();
-		userController.deleteAllUsers();
-		try {
-			Thread.sleep(0);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	@AfterAll
 	static void tearDown() {
 		locationController.deleteAllLocations();
 		userController.deleteAllUsers();
 	}
 
-	LocationDTO createLocationDTO(String name) {
-		return new LocationDTO(name, "Metropolia Myllypuro", "Building B");
-	}
-
 	private static UserDTO createTeacher() {
 		return new UserDTO("testLocation", "testPassword", "Test", "Teacher",
 		                   LocalDateTime.of(2000, 1, 1, 0, 0), "BA987654321", "TEACHER");
+	}
+
+	@BeforeEach
+	void setUp() {
+		locationController.deleteAllLocations();
+		userController.deleteAllUsers();
+	}
+
+	LocationDTO createLocationDTO(String name) {
+		return new LocationDTO(name, "Metropolia Myllypuro", "Building B");
 	}
 
 	@Test

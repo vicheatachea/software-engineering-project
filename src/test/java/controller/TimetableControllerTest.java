@@ -22,11 +22,6 @@ class TimetableControllerTest {
 	private static final GroupController groupController = new GroupController();
 	private static final SubjectController subjectController = new SubjectController();
 
-	UserDTO createStudent() {
-		return new UserDTO("testUser", "testPassword", "Test", "User",
-		                   LocalDateTime.of(2000, 1, 1, 0, 0), "123456789AB", "STUDENT");
-	}
-
 	private static UserDTO createTeacher() {
 		return new UserDTO("testTimetable", "testPassword", "Test", "Teacher",
 		                   LocalDateTime.of(2000, 1, 1, 0, 0), "BA987654321", "TEACHER");
@@ -41,20 +36,20 @@ class TimetableControllerTest {
 		}
 	}
 
-	@BeforeEach
-	void setUp() {
+	@AfterAll
+	static void tearDown() {
 		subjectController.deleteAllSubjects();
 		userController.deleteAllUsers();
 		timetableController.deleteAllTimetables();
-		try {
-			Thread.sleep(0);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
-	@AfterAll
-	static void tearDown() {
+	UserDTO createStudent() {
+		return new UserDTO("testUser", "testPassword", "Test", "User",
+		                   LocalDateTime.of(2000, 1, 1, 0, 0), "123456789AB", "STUDENT");
+	}
+
+	@BeforeEach
+	void setUp() {
 		subjectController.deleteAllSubjects();
 		userController.deleteAllUsers();
 		timetableController.deleteAllTimetables();

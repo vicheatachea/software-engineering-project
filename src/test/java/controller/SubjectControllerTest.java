@@ -34,30 +34,25 @@ class SubjectControllerTest {
 		}
 	}
 
-	@BeforeEach
-	void setUp() {
-		subjectController.deleteAllSubjects();
-		userController.deleteAllUsers();
-		try {
-			Thread.sleep(0);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	@AfterAll
 	static void tearDown() {
 		subjectController.deleteAllSubjects();
 		userController.deleteAllUsers();
 	}
 
-	SubjectDTO createSubject(String name, String code) {
-		return new SubjectDTO(name, code);
-	}
-
 	private static UserDTO createTeacher() {
 		return new UserDTO("testTeacher", "testPassword", "Test", "Teacher", LocalDateTime.of(2000, 1, 1, 0, 0),
 		                   "BA987654321", "TEACHER");
+	}
+
+	@BeforeEach
+	void setUp() {
+		subjectController.deleteAllSubjects();
+		userController.deleteAllUsers();
+	}
+
+	SubjectDTO createSubject(String name, String code) {
+		return new SubjectDTO(name, code);
 	}
 
 	UserDTO createStudent() {

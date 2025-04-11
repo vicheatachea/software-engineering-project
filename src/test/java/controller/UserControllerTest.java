@@ -16,6 +16,20 @@ class UserControllerTest {
 
 	private static final UserController userController = new UserController();
 
+	@BeforeAll
+	static void ensureDatabase() {
+		try {
+			MariaDBConnection.verifyDatabase();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@AfterAll
+	static void tearDown() {
+		userController.deleteAllUsers();
+	}
+
 	UserDTO createStudentDTO(String username, String socialNumber) {
 		return new UserDTO(username, "testPassword", "Test", "User", LocalDateTime.of(2000, 1, 1, 0, 0), socialNumber,
 		                   "STUDENT");
@@ -26,28 +40,10 @@ class UserControllerTest {
 		                   "TEACHER");
 	}
 
-	@BeforeAll
-	static void ensureDatabase() {
-		try {
-			MariaDBConnection.verifyDatabase();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	@BeforeEach
 	void setUp() {
 		userController.deleteAllUsers();
-		try {
-			Thread.sleep(0);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
-	}
 
-	@AfterAll
-	static void tearDown() {
-		userController.deleteAllUsers();
 	}
 
 	@Test

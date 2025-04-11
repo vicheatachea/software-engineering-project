@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,18 +21,9 @@ class GroupControllerTest {
 	private static final TimetableController timetableController = new TimetableController();
 	private static final SubjectController subjectController = new SubjectController();
 
-	private UserDTO createStudent(String username, String socialNumber) {
-		return new UserDTO(username, "password", "John", "Doe", LocalDateTime.parse("2000-01-01T12:00:00"),
-		                   socialNumber, "STUDENT");
-	}
-
 	private static UserDTO createTeacher(String username, String socialNumber) {
 		return new UserDTO(username, "password", "John", "Doe", LocalDateTime.parse("2000-01-01T12:00:00"),
 		                   socialNumber, "TEACHER");
-	}
-
-	SubjectDTO createSubject(String name, String code) {
-		return new SubjectDTO(name, code);
 	}
 
 	@BeforeAll
@@ -45,20 +35,24 @@ class GroupControllerTest {
 		}
 	}
 
-	@BeforeEach
-	void setUp() {
+	@AfterAll
+	static void tearDown() {
 		subjectController.deleteAllSubjects();
 		userController.deleteAllUsers();
 		timetableController.deleteAllTimetables();
-		try {
-			Thread.sleep(0);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
-	@AfterAll
-	static void tearDown() {
+	private UserDTO createStudent(String username, String socialNumber) {
+		return new UserDTO(username, "password", "John", "Doe", LocalDateTime.parse("2000-01-01T12:00:00"),
+		                   socialNumber, "STUDENT");
+	}
+
+	SubjectDTO createSubject(String name, String code) {
+		return new SubjectDTO(name, code);
+	}
+
+	@BeforeEach
+	void setUp() {
 		subjectController.deleteAllSubjects();
 		userController.deleteAllUsers();
 		timetableController.deleteAllTimetables();

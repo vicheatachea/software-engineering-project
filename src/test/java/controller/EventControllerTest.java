@@ -31,22 +31,22 @@ class EventControllerTest {
 		}
 	}
 
-	@BeforeEach
-	void setUp() {
+	@AfterAll
+	static void tearDown() {
 		eventController.deleteAllEvents();
 		locationController.deleteAllLocations();
 		subjectController.deleteAllSubjects();
 		userController.deleteAllUsers();
 		timetableController.deleteAllTimetables();
-		try {
-			Thread.sleep(0);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
-	@AfterAll
-	static void tearDown() {
+	private static UserDTO createTeacher(String username, String socialNumber) {
+		return new UserDTO(username, "password", "John", "Doe", LocalDateTime.now().minusYears(32), socialNumber,
+		                   "TEACHER");
+	}
+
+	@BeforeEach
+	void setUp() {
 		eventController.deleteAllEvents();
 		locationController.deleteAllLocations();
 		subjectController.deleteAllSubjects();
@@ -57,11 +57,6 @@ class EventControllerTest {
 	UserDTO createStudent(String username, String socialNumber) {
 		return new UserDTO(username, "password", "John", "Doe", LocalDateTime.now().minusYears(16), socialNumber,
 		                   "STUDENT");
-	}
-
-	private static UserDTO createTeacher(String username, String socialNumber) {
-		return new UserDTO(username, "password", "John", "Doe", LocalDateTime.now().minusYears(32), socialNumber,
-		                   "TEACHER");
 	}
 
 	@Test
