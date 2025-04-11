@@ -47,7 +47,7 @@ public class GroupModel {
 		List<GroupDTO> groupDTOs = new ArrayList<>();
 
 		for (UserGroupEntity group : groups) {
-			groupDTOs.add(ConvertToGroupDTO(group));
+			groupDTOs.add(convertToGroupDTO(group));
 		}
 
 		return groupDTOs;
@@ -61,7 +61,7 @@ public class GroupModel {
 			throw new IllegalArgumentException("Group does not exist.");
 		}
 
-		return ConvertToGroupDTO(group);
+		return convertToGroupDTO(group);
 	}
 
 	public GroupDTO fetchGroupByTimetableId(long timetableId) {
@@ -71,7 +71,7 @@ public class GroupModel {
 			throw new IllegalArgumentException("Group does not exist.");
 		}
 
-		return ConvertToGroupDTO(group);
+		return convertToGroupDTO(group);
 	}
 
 	public void addGroup(GroupDTO groupDTO) {
@@ -228,7 +228,7 @@ public class GroupModel {
 		return Objects.equals(group.getTeacher().getId(), userModel.fetchCurrentUserId());
 	}
 
-	private GroupDTO ConvertToGroupDTO(UserGroupEntity group) {
+	private GroupDTO convertToGroupDTO(UserGroupEntity group) {
 		return new GroupDTO(group.getName(), group.getCode(), group.getCapacity(), group.getTeacher().getId(),
 		                    group.getSubject().getCode());
 	}
