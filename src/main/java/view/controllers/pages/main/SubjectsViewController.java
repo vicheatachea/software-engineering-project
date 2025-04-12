@@ -109,7 +109,7 @@ public class SubjectsViewController implements ControllerAware {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			alert.setTitle(viewText.getString("confirmation.subject.create"));
 			alert.setHeaderText(null);
-			alert.setContentText(String.format("%s\n%s",
+			alert.setContentText(String.format("%s%n%s",
 					viewText.getString("confirmation.subject.createPrompt"),
 					viewText.getString("confirmation.unsavedChanges"))
 			);
@@ -216,7 +216,7 @@ public class SubjectsViewController implements ControllerAware {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			alert.setTitle(viewText.getString("confirmation.subject.select"));
 			alert.setHeaderText(null);
-			alert.setContentText(String.format("%s\n%s",
+			alert.setContentText(String.format("%s%n%s",
 					viewText.getString("confirmation.selectPrompt"),
 					viewText.getString("confirmation.unsavedChanges"))
 			);

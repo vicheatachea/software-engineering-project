@@ -112,7 +112,7 @@ public class LocationsViewController implements ControllerAware {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			alert.setTitle(viewText.getString("confirmation.location.create"));
 			alert.setHeaderText(null);
-			alert.setContentText(String.format("%s\n%s",
+			alert.setContentText(String.format("%s%n%s",
 					viewText.getString("confirmation.location.createPrompt"),
 					viewText.getString("confirmation.unsavedChanges"))
 			);
@@ -221,7 +221,7 @@ public class LocationsViewController implements ControllerAware {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			alert.setTitle(viewText.getString("confirmation.location.select"));
 			alert.setHeaderText(null);
-			alert.setContentText(String.format("%s\n%s",
+			alert.setContentText(String.format("%s%n%s",
 					viewText.getString("confirmation.selectPrompt"),
 					viewText.getString("confirmation.unsavedChanges"))
             );
