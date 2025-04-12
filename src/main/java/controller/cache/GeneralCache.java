@@ -1,7 +1,5 @@
 package controller.cache;
 
-import dto.Event;
-
 import java.util.List;
 import java.util.TreeMap;
 
