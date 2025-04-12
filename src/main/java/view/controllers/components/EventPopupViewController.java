@@ -12,7 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import util.TimeFormatterUtil;
 import view.controllers.pages.main.TimetableViewController;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -365,11 +364,6 @@ public class EventPopupViewController {
             }
 
             timetableId = timetableController.fetchTimetableForGroup(groupName);
-        }
-
-        if (timetableId == null) {
-            System.out.println("Timetable ID not found");
-            return;
         }
 
         switch (eventType) {
