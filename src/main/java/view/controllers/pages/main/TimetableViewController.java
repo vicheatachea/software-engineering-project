@@ -42,8 +42,6 @@ public class TimetableViewController implements ControllerAware {
     EventController eventController;
     LocaleController localeController;
     UserController userController;
-
-    LocalDate currentDate;
     LocalDateTime startDate;
     LocalDateTime endDate;
     int currentWeek;
@@ -129,7 +127,6 @@ public class TimetableViewController implements ControllerAware {
         }
 
         LocalDateTime previousStartDate = startDate;
-        currentDate = newDate;
         startDate = newDate.with(DayOfWeek.MONDAY).atStartOfDay();
         endDate = newDate.with(DayOfWeek.SUNDAY).atTime(23, 59, 59);
         currentWeek = newDate.get(WeekFields.ISO.weekOfWeekBasedYear());
