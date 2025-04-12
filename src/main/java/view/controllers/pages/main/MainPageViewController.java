@@ -67,6 +67,9 @@ public class MainPageViewController implements Initializable {
                     sidebarController.shutdownNotifications();
                     stage.close();
                     break;
+                default:
+                    System.out.println("MainPageController initialize() could not load " + newValue);
+                    break;
             }
         });
     }
@@ -86,10 +89,17 @@ public class MainPageViewController implements Initializable {
                     case "locations":
                         fxmlLoader.setController(new LocationsViewController());
                         break;
+                    default:
+                        break;
                 }
             }
 
             Node content = fxmlLoader.load();
+            if (content == null) {
+                System.out.println("MainPageController loadContent() could not load " + fxmlFilePath);
+                return;
+            }
+
             Object subController = fxmlLoader.getController();
 
 			if (subController instanceof ControllerAware) {
@@ -100,8 +110,6 @@ public class MainPageViewController implements Initializable {
             }
 
 			mainContent.getChildren().setAll(content);
-		} catch (NullPointerException e) {
-			System.out.println("MainPageController loadContent() could not load " + fxmlFilePath);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
