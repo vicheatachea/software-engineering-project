@@ -44,10 +44,10 @@ public class TeachingSessionEntity {
 	public TeachingSessionEntity() {
 	}
 
-	public TeachingSessionEntity(Timestamp StartDate, Timestamp EndDate, String description, LocationEntity location,
+	public TeachingSessionEntity(Timestamp startDate, Timestamp endDate, String description, LocationEntity location,
 	                             TimetableEntity timetable, SubjectEntity subject, String localeCode) {
-		this.StartDate = StartDate;
-		this.EndDate = EndDate;
+		this.StartDate = startDate;
+		this.EndDate = endDate;
 		this.description = description;
 		this.location = location;
 		this.timetable = timetable;
@@ -67,16 +67,16 @@ public class TeachingSessionEntity {
 		return StartDate;
 	}
 
-	public void setStartDate(Timestamp StartDate) {
-		this.StartDate = StartDate;
+	public void setStartDate(Timestamp startDate) {
+		this.StartDate = startDate;
 	}
 
 	public Timestamp getEndDate() {
 		return EndDate;
 	}
 
-	public void setEndDate(Timestamp EndDate) {
-		this.EndDate = EndDate;
+	public void setEndDate(Timestamp endDate) {
+		this.EndDate = endDate;
 	}
 
 	public String getDescription() {
