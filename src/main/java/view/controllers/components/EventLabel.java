@@ -8,22 +8,22 @@ import javafx.scene.control.Label;
 import util.TimeFormatterUtil;
 
 public class EventLabel extends Label {
-    private Event event;
+    private final Event event;
 
     // All the following values represent percentages of the cell size
     private final double height;
-    private final double top_offset;
+    private final double topOffset;
     private int labelPosition = 1;
     private int numberOfLabels = 1;
 
-    public EventLabel(Event event, double height, double top_offset) {
+    public EventLabel(Event event, double height, double topOffset) {
         super();
         this.event = event;
         this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         this.setPadding(new Insets(5, 5, 5, 5));
 
         this.height = height;
-        this.top_offset = top_offset;
+        this.topOffset = topOffset;
 
         if (event instanceof TeachingSessionDTO teachingSession) {
             String startTime = TimeFormatterUtil.getTimeFromDateTime(teachingSession.startDate());
@@ -53,7 +53,7 @@ public class EventLabel extends Label {
 
     public void updateLabelHeight(double cellHeight) {
         this.setMaxHeight(cellHeight * height);
-        this.setTranslateY(cellHeight * top_offset);
+        this.setTranslateY(cellHeight * topOffset);
     }
 
     public void updateLabelWidth(double cellWidth) {
