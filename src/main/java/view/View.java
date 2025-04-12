@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import view.controllers.pages.main.MainPageViewController;
-
 import java.io.IOException;
 
 /*
@@ -17,6 +16,11 @@ public class View extends Application {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/pages/main/main-page.fxml"));
             stage.setScene(new Scene(loader.load()));
+
+            if (loader.getController() == null) {
+                System.out.println("View could not start the application");
+            }
+
             MainPageViewController controller = loader.getController();
             controller.setStage(stage);
 
@@ -25,8 +29,6 @@ public class View extends Application {
             stage.setMinHeight(600);
             stage.setMaximized(true);
             stage.show();
-        } catch (NullPointerException e) {
-            System.out.println("View could not start the application");
         } catch (IOException e) {
             e.printStackTrace();
         }
