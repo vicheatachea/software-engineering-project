@@ -23,26 +23,37 @@ import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class RegistrationViewController implements ControllerAware, SidebarControllerAware {
-	public VBox registrationVBox;
-	public Label registrationLabel;
-	public TextField emailField;
-	public HBox dobRoleHBox;
-	public HBox buttonsHBox;
-	public Button backToLoginButton;
-	public Button registerButton;
-	public Label firstNameLabel;
-	public Label lastNameLabel;
-	public Label socialNumberLabel;
-	public Label usernameLabel;
-	public Label emailLabel;
-	public Label registerPasswordLabel;
-
-
 	private BaseController baseController;
 	private UserController userController;
 	private SidebarViewController sidebarViewController;
 	private ResourceBundle viewText;
 
+	@FXML
+	private VBox registrationVBox;
+	@FXML
+	private Label registrationLabel;
+	@FXML
+	private TextField emailField;
+	@FXML
+	private HBox dobRoleHBox;
+	@FXML
+	private HBox buttonsHBox;
+	@FXML
+	private Button backToLoginButton;
+	@FXML
+	private Button registerButton;
+	@FXML
+	private Label firstNameLabel;
+	@FXML
+	private Label lastNameLabel;
+	@FXML
+	private Label socialNumberLabel;
+	@FXML
+	private Label usernameLabel;
+	@FXML
+	private Label emailLabel;
+	@FXML
+	private Label registerPasswordLabel;
 	@FXML
 	private TextField firstNameField;
 	@FXML

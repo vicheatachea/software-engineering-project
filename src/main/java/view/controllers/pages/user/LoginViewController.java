@@ -20,11 +20,6 @@ import java.util.ResourceBundle;
 import java.io.IOException;
 
 public class LoginViewController implements ControllerAware, SidebarControllerAware {
-    public VBox loginVBox;
-    public Label loginLabel;
-    public HBox buttonsHBox;
-    public Button loginButton;
-    public Button loginRegisterButton;
     private BaseController baseController;
     private UserController userController;
     private SidebarViewController sidebarViewController;
@@ -38,6 +33,16 @@ public class LoginViewController implements ControllerAware, SidebarControllerAw
     private Label emailLabel;
     @FXML
     private Label passwordLabel;
+    @FXML
+    private VBox loginVBox;
+    @FXML
+    private Label loginLabel;
+    @FXML
+    private HBox buttonsHBox;
+    @FXML
+    private Button loginButton;
+    @FXML
+    private Button loginRegisterButton;
 
     @Override
     public void setBaseController(BaseController baseController) {
