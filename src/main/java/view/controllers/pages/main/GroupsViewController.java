@@ -35,10 +35,10 @@ public class GroupsViewController implements ControllerAware {
     private TextField capacityTextField;
     private ComboBox<String> subjectComboBox;
 
-    private ComboBox<String> addStudentComboBox = new ComboBox<>();
-    private Button addStudentButton = new Button();
-    private ComboBox<String> removeStudentComboBox = new ComboBox<>();
-    private Button removeStudentButton = new Button();
+    private final ComboBox<String> addStudentComboBox = new ComboBox<>();
+    private final Button addStudentButton = new Button();
+    private final ComboBox<String> removeStudentComboBox = new ComboBox<>();
+    private final Button removeStudentButton = new Button();
 
     @FXML
     private Label titleLabel;
@@ -87,14 +87,14 @@ public class GroupsViewController implements ControllerAware {
                     "subjectComboBox"
             };
 
-            for (String component : components.keySet()) {
-                Label label = new Label(component);
+            for (Map.Entry<String, String> component : components.entrySet()) {
+                Label label = new Label(component.getKey());
                 label.setFont(new Font("Verdana Bold", 18));
                 label.setStyle("-fx-text-fill: #e36486;");
 
                 componentGrid.add(label, 0, rowIndex);
 
-                switch (components.get(component)) {
+                switch (component.getValue()) {
                     case "field" -> {
                         TextField textField = new TextField();
                         textField.setFont(new Font("Verdana", 16));
@@ -111,6 +111,7 @@ public class GroupsViewController implements ControllerAware {
 
                         componentGrid.add(comboBox, 1, rowIndex);
                     }
+                    default -> System.out.println("Unknown component type: " + components.get(component));
                 }
                 rowIndex++;
             }
@@ -178,7 +179,7 @@ public class GroupsViewController implements ControllerAware {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle(viewText.getString("confirmation.group.create"));
             alert.setHeaderText(null);
-            alert.setContentText(String.format("%s\n%s",
+            alert.setContentText(String.format("%s%n%s",
                     viewText.getString("confirmation.group.createPrompt"),
                     viewText.getString("confirmation.unsavedChanges"))
             );
@@ -380,7 +381,7 @@ public class GroupsViewController implements ControllerAware {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle(viewText.getString("confirmation.group.select"));
             alert.setHeaderText(null);
-            alert.setContentText(String.format("%s\n%s",
+            alert.setContentText(String.format("%s%n%s",
                     viewText.getString("confirmation.selectPrompt"),
                     viewText.getString("confirmation.unsavedChanges"))
             );
