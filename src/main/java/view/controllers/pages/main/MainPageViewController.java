@@ -63,6 +63,8 @@ public class MainPageViewController implements Initializable {
                 case "settings":
                     loadContent("/layouts/pages/main/settings.fxml", null);
                     break;
+                case "clear":
+                    break;
                 case "quit":
                     sidebarController.shutdownNotifications();
                     stage.close();
