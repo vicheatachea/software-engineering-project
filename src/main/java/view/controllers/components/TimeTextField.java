@@ -46,6 +46,8 @@ public class TimeTextField extends TextField {
                     this.positionCaret(caretPosition + 1);
                 }
                 break;
+            case 4:
+                break;
             default:
                 System.out.println("Invalid input");
                 event.consume();
