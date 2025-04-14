@@ -133,9 +133,11 @@ public class EventPopupViewController {
                     viewText.getString("event.individual"),
                     viewText.getString("event.group")
             );
+
+            Locale currentLocale = localeController.getUserLocale();
             List<Locale> locales = localeController.getAvailableLocales();
             locales.forEach(locale ->
-                    languageComboBox.getItems().add(locale.getDisplayLanguage(locale))
+                    languageComboBox.getItems().add(locale.getDisplayLanguage(currentLocale))
             );
 
             eventComboBox.addEventHandler(ActionEvent.ACTION, event -> handleEventChange());
@@ -330,9 +332,11 @@ public class EventPopupViewController {
         String language = languageComboBox.getValue();
         String description = descriptionTextArea.getText();
 
+        Locale currentLocale = localeController.getUserLocale();
         Locale eventLocale = null;
+
         for (Locale locale : localeController.getAvailableLocales()) {
-            if (locale.getDisplayLanguage(locale).equals(language)) {
+            if (locale.getDisplayLanguage(currentLocale).equals(language)) {
                 eventLocale = locale;
                 break;
             }

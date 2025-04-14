@@ -68,9 +68,11 @@ public class TimetableViewController implements ControllerAware {
             addButtons();
 
             languageComboBox.getItems().add(viewText.getString("timetable.allLanguages"));
+            Locale currentLocale = baseController.getLocaleController().getUserLocale();
+
             List<Locale> locales = localeController.getAvailableLocales();
             locales.forEach(locale ->
-                    languageComboBox.getItems().add(locale.getDisplayLanguage(locale))
+                    languageComboBox.getItems().add(locale.getDisplayLanguage(currentLocale))
             );
             languageComboBox.setValue(viewText.getString("timetable.allLanguages"));
             languageComboBox.addEventHandler(ActionEvent.ACTION, event -> loadTimetable());
@@ -261,13 +263,14 @@ public class TimetableViewController implements ControllerAware {
 
         clearTimetable();
         String language = languageComboBox.getValue();
+        Locale currentLocale = baseController.getLocaleController().getUserLocale();
         List<Event> events;
 
         if (language.equals(viewText.getString("timetable.allLanguages"))) {
             events = eventController.fetchEventsByUser(startDate, endDate);
         } else {
             Locale selectedLocale = localeController.getAvailableLocales().stream()
-                    .filter(locale -> locale.getDisplayLanguage(locale).equals(language))
+                    .filter(locale -> locale.getDisplayLanguage(currentLocale).equals(language))
                     .findFirst()
                     .orElse(null);
             if (selectedLocale != null) {
@@ -442,26 +445,12 @@ public class TimetableViewController implements ControllerAware {
 
                 if (colIndex == column &&
                         ((rowIndex >= startRow && rowIndex <= endRow) || (nodeEndRow >= startRow && nodeEndRow <= endRow) ||
-                                (rowIndex <= startRow && nodeEndRow >= endRow))) {
-
-                    if (node instanceof EventLabel eventLabel) {
-                        uniqueEventLabels.add(eventLabel);
-                    }
+                                (rowIndex <= startRow && nodeEndRow >= endRow)) && node instanceof EventLabel eventLabel) {
+                    uniqueEventLabels.add(eventLabel);
                 }
             }
         }
 
         return uniqueEventLabels;
-    }
-
-    // Not to be implemented yet
-    private void addColumn() {
-
-    }
-
-    // If number of columns is odd remove last, otherwise remove first
-    // Not to be implemented yet
-    private void removeColumn() {
-
     }
 }
