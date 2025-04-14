@@ -38,12 +38,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TimetableViewController implements ControllerAware {
     private ResourceBundle viewText;
     private static final int NUMBER_OF_BUTTONS = 2;
-    BaseController baseController;
-    EventController eventController;
-    LocaleController localeController;
-    UserController userController;
-    LocalDateTime startDate;
-    LocalDateTime endDate;
+    private BaseController baseController;
+    private EventController eventController;
+    private LocaleController localeController;
+    private UserController userController;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     int currentWeek;
 
     private double cellHeight;
