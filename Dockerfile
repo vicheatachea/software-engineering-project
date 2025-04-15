@@ -34,4 +34,4 @@ COPY --from=build /app/target/*.jar app.jar
 COPY --from=build /app/target/dependency/*.jar ./lib/
 
 # Entry point optimized for external database connection
-ENTRYPOINT ["java", "-cp", "app.jar:lib/*", "Main"]
+ENTRYPOINT ["java", "-cp", "app.jar:lib/*", "main.Main"]
