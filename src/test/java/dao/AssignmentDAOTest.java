@@ -20,28 +20,29 @@ class AssignmentDAOTest {
 	private static final TimetableDAO timeTableDAO = new TimetableDAO();
 	private static final SubjectDAO subjectDAO = new SubjectDAO();
 
+	private static void resetDatabase() {
+		assignmentDAO.deleteAll();
+		timeTableDAO.deleteAll();
+		subjectDAO.deleteAll();
+	}
+
 	@BeforeAll
-	static void ensureDatabase() throws SQLException {
-		MariaDBConnection.verifyDatabase();
+	static void ensureDatabase() {
+		try {
+			MariaDBConnection.getInstance().verifyDatabase();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@AfterAll
 	static void tearDown() {
-		assignmentDAO.deleteAll();
-		timeTableDAO.deleteAll();
-		subjectDAO.deleteAll();
+		resetDatabase();
 	}
 
 	@BeforeEach
 	void setUp() {
-		assignmentDAO.deleteAll();
-		timeTableDAO.deleteAll();
-		subjectDAO.deleteAll();
-		try {
-			Thread.sleep(0);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+		resetDatabase();
 	}
 
 	@Test

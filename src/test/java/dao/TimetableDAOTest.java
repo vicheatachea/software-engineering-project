@@ -1,5 +1,6 @@
 package dao;
 
+import datasource.MariaDBConnection;
 import entity.TimetableEntity;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,22 +16,21 @@ class TimetableDAOTest {
 	private static final TimetableDAO timetableDAO = new TimetableDAO();
 
 	@BeforeAll
-	static void ensureDatabase() throws SQLException {
-		datasource.MariaDBConnection.verifyDatabase();
-	}
-
-	@BeforeEach
-	void setUp() {
-		timetableDAO.deleteAll();
+	static void ensureDatabase() {
 		try {
-			Thread.sleep(0);
-		} catch (InterruptedException e) {
+			MariaDBConnection.getInstance().verifyDatabase();
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@AfterAll
 	static void tearDown() {
+		timetableDAO.deleteAll();
+	}
+
+	@BeforeEach
+	void setUp() {
 		timetableDAO.deleteAll();
 	}
 

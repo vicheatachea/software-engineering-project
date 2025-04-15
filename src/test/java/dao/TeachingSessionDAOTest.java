@@ -22,30 +22,29 @@ class TeachingSessionDAOTest {
 	private static final TimetableDAO timetableDAO = new TimetableDAO();
 
 	@BeforeAll
-	static void ensureDatabase() throws SQLException {
-		MariaDBConnection.verifyDatabase();
+	static void ensureDatabase() {
+		try {
+			MariaDBConnection.getInstance().verifyDatabase();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static void resetDatabase() {
+		teachingSessionDAO.deleteAll();
+		locationDAO.deleteAll();
+		subjectDAO.deleteAll();
+		timetableDAO.deleteAll();
 	}
 
 	@AfterAll
 	static void tearDown() {
-		teachingSessionDAO.deleteAll();
-		locationDAO.deleteAll();
-		subjectDAO.deleteAll();
-		timetableDAO.deleteAll();
-
+		resetDatabase();
 	}
 
 	@BeforeEach
 	void setUp() {
-		teachingSessionDAO.deleteAll();
-		locationDAO.deleteAll();
-		subjectDAO.deleteAll();
-		timetableDAO.deleteAll();
-		try {
-			Thread.sleep(0);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+		resetDatabase();
 	}
 
 	@Test

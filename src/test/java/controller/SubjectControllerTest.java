@@ -25,10 +25,15 @@ class SubjectControllerTest {
 	private static final TimetableController timetableController = new TimetableController();
 	private static final GroupController groupController = new GroupController();
 
+	private static void resetDatabase() {
+		subjectController.deleteAllSubjects();
+		userController.deleteAllUsers();
+	}
+
 	@BeforeAll
 	static void ensureDatabase() {
 		try {
-			MariaDBConnection.verifyDatabase();
+			MariaDBConnection.getInstance().verifyDatabase();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -36,8 +41,7 @@ class SubjectControllerTest {
 
 	@AfterAll
 	static void tearDown() {
-		subjectController.deleteAllSubjects();
-		userController.deleteAllUsers();
+		resetDatabase();
 	}
 
 	private static UserDTO createTeacher() {
@@ -47,8 +51,7 @@ class SubjectControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		subjectController.deleteAllSubjects();
-		userController.deleteAllUsers();
+		resetDatabase();
 	}
 
 	SubjectDTO createSubject(String name, String code) {

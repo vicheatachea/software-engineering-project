@@ -27,10 +27,16 @@ class TimetableControllerTest {
 		                   LocalDateTime.of(2000, 1, 1, 0, 0), "BA987654321", "TEACHER");
 	}
 
+	private static void resetDatabase() {
+		subjectController.deleteAllSubjects();
+		userController.deleteAllUsers();
+		timetableController.deleteAllTimetables();
+	}
+
 	@BeforeAll
 	static void ensureDatabase() {
 		try {
-			MariaDBConnection.verifyDatabase();
+			MariaDBConnection.getInstance().verifyDatabase();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -38,9 +44,7 @@ class TimetableControllerTest {
 
 	@AfterAll
 	static void tearDown() {
-		subjectController.deleteAllSubjects();
-		userController.deleteAllUsers();
-		timetableController.deleteAllTimetables();
+		resetDatabase();
 	}
 
 	UserDTO createStudent() {
@@ -50,9 +54,7 @@ class TimetableControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		subjectController.deleteAllSubjects();
-		userController.deleteAllUsers();
-		timetableController.deleteAllTimetables();
+		resetDatabase();
 	}
 
 	@Test
@@ -89,6 +91,8 @@ class TimetableControllerTest {
 				new GroupDTO("testGroup", "testCode", 35, userController.fetchCurrentUserId(), subjectDTO.code());
 
 		groupController.addGroup(groupDTO);
+
+		assertNotNull(timetableController.fetchTimetableForGroup(groupDTO.name()));
 	}
 
 	@Test
