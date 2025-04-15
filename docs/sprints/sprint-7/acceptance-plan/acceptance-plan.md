@@ -2,13 +2,13 @@
 
 ## Requirements
 
-| Requirement                     | Description                                                               |
-|---------------------------------|---------------------------------------------------------------------------|
-| Personalized Timetable          | Users can view their classes and assignments in a personalized timetable. |
-| Class and Assignment Management | Users can add, edit, and delete classes and assignments.                  |
-| Alerts/Notifications            | Users can receive notifications for upcoming classes and assignments.     |
-| Language Selection              | Users can select different languages for the interface.                   |
-| Event Localisation              | Users can create classes and assignments in different languages.          |
+| Requirement            | Description                                                               |
+|------------------------|---------------------------------------------------------------------------|
+| Personalized Timetable | Users can view their classes and assignments in a personalized timetable. |
+| Event Management       | Users can add, edit, and delete classes and assignments.                  |
+| Alerts/Notifications   | Users can receive notifications for upcoming classes and assignments.     |
+| Language Selection     | Users can select different languages for the interface.                   |
+| Event Localisation     | Users can create classes and assignments in different languages.          |
 
 ## Test Cases
 
