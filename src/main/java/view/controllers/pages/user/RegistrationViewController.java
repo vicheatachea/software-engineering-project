@@ -13,8 +13,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import view.controllers.SidebarControllerAware;
 import view.controllers.ControllerAware;
+import view.controllers.SidebarControllerAware;
 import view.controllers.components.SidebarViewController;
 
 import java.io.IOException;
@@ -85,20 +85,20 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 	@FXML
 	public void initialize() {
 		Platform.runLater(() -> {
-				registrationLabel.setText(viewText.getString("register.title"));
-				registerButton.setText(viewText.getString("register.register"));
-				backToLoginButton.setText(viewText.getString("register.backToLogin"));
-				firstNameLabel.setText(viewText.getString("register.firstName"));
-				lastNameLabel.setText(viewText.getString("register.lastName"));
-				socialNumberLabel.setText(viewText.getString("register.socialNumber"));
-				emailLabel.setText(viewText.getString("register.email"));
-				dobPicker.setPromptText(viewText.getString("register.dateOfBirth"));
-				registerPasswordLabel.setText(viewText.getString("register.password"));
-				usernameLabel.setText(viewText.getString("register.username"));
-				roleComboBox.setPromptText(viewText.getString("register.selectRole"));
-				roleComboBox.setItems(FXCollections.observableArrayList(
-						viewText.getString("register.student"),
-						viewText.getString("register.teacher")));
+			registrationLabel.setText(viewText.getString("register.title"));
+			registerButton.setText(viewText.getString("register.register"));
+			backToLoginButton.setText(viewText.getString("register.backToLogin"));
+			firstNameLabel.setText(viewText.getString("register.firstName"));
+			lastNameLabel.setText(viewText.getString("register.lastName"));
+			socialNumberLabel.setText(viewText.getString("register.socialNumber"));
+			emailLabel.setText(viewText.getString("register.email"));
+			dobPicker.setPromptText(viewText.getString("register.dateOfBirth"));
+			registerPasswordLabel.setText(viewText.getString("register.password"));
+			usernameLabel.setText(viewText.getString("register.username"));
+			roleComboBox.setPromptText(viewText.getString("register.selectRole"));
+			roleComboBox.setItems(FXCollections.observableArrayList(
+					viewText.getString("register.student"),
+					viewText.getString("register.teacher")));
 		});
 
 		// Setup the DatePicker to disable today's and future dates.
@@ -106,7 +106,7 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 			@Override
 			public void updateItem(LocalDate date, boolean empty) {
 				super.updateItem(date, empty);
-				if (date.compareTo(LocalDate.now()) >= 0) {
+				if (!date.isBefore(LocalDate.now())) {
 					setDisable(true);
 					setStyle("-fx-background-color: #FFE0E9;");
 				}
@@ -126,7 +126,7 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 			String role = roleComboBox.getValue();
 
 			if (firstName.isEmpty() || lastName.isEmpty() || socialNumber.isEmpty() || username.isEmpty() ||
-					password.isEmpty() || dobPicker.getValue() == null || role == null) {
+			    password.isEmpty() || dobPicker.getValue() == null || role == null) {
 				showAlert(viewText.getString("error.title"), viewText.getString("error.fillAllFields"));
 				return;
 			}
@@ -151,7 +151,8 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 				return;
 			}
 
-			UserDTO userDTO = new UserDTO(username, password, firstName, lastName, dateOfBirth, socialNumber.toUpperCase(), role);
+			UserDTO userDTO = new UserDTO(username, password, firstName, lastName, dateOfBirth,
+			                              socialNumber.toUpperCase(), role.toUpperCase());
 
 			if (userController.registerUser(userDTO)) {
 				userController.authenticateUser(username, password);
