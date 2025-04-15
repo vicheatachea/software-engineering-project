@@ -8,6 +8,8 @@ import entity.Role;
 import entity.TimetableEntity;
 import entity.UserEntity;
 import entity.UserGroupEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -16,6 +18,9 @@ import java.util.List;
 import java.util.Set;
 
 public class UserModel {
+
+	private static final Logger logger = LoggerFactory.getLogger(UserModel.class);
+
 	private static final UserDAO userDAO = new UserDAO();
 	private static final TimetableDAO timetableDAO = new TimetableDAO();
 	private static final UserGroupDAO groupDAO = new UserGroupDAO();
@@ -87,7 +92,7 @@ public class UserModel {
 
 			return true;
 		} catch (IllegalArgumentException e) {
-			System.out.println("Registration failed: " + e.getMessage());
+			logger.info("Registration failed: {}", e.getMessage());
 			return false; // Registration failed
 		}
 	}
@@ -130,12 +135,12 @@ public class UserModel {
 			// Save changes
 			userDAO.update(user);
 		} catch (IllegalArgumentException e) {
-			System.out.println("Update failed: " + e.getMessage());
+			logger.info("Update failed: {}", e.getMessage());
 			throw e; // Re-throw to notify caller of the failure
 		}
 	}
 
-	private boolean isValid(UserDTO userDTO) {
+	private void isValid(UserDTO userDTO) {
 		if (userDTO.username() == null || userDTO.username().isEmpty()) {
 			throw new IllegalArgumentException("Username cannot be empty.");
 		}
@@ -171,7 +176,6 @@ public class UserModel {
 		if (userDTO.role() == null || userDTO.role().isEmpty()) {
 			throw new IllegalArgumentException("Role cannot be empty.");
 		}
-		return true;
 	}
 
 	public boolean isUserLoggedIn() {
