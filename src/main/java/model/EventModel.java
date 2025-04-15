@@ -242,7 +242,7 @@ public class EventModel {
 		teachingSessionDAO.deleteAll();
 	}
 
-	private boolean isValidTeachingSession(TeachingSessionDTO teachingSessionDTO) {
+	private void isValidTeachingSession(TeachingSessionDTO teachingSessionDTO) {
 		if (teachingSessionDTO.startDate() == null) {
 			throw new IllegalArgumentException("Start date cannot be null.");
 		}
@@ -258,10 +258,9 @@ public class EventModel {
 		if (teachingSessionDTO.timetableId() <= 0) {
 			throw new IllegalArgumentException("Timetable ID cannot be less than or equal to 0.");
 		}
-		return true;
 	}
 
-	private boolean isValidAssignment(AssignmentDTO assignmentDTO) {
+	private void isValidAssignment(AssignmentDTO assignmentDTO) {
 		if (assignmentDTO.assignmentName() == null || assignmentDTO.assignmentName().isEmpty()) {
 			throw new IllegalArgumentException("Assignment name cannot be null or empty.");
 		}
@@ -283,7 +282,6 @@ public class EventModel {
 		if (assignmentDTO.timetableId() <= 0) {
 			throw new IllegalArgumentException("Timetable ID cannot be less than or equal to 0.");
 		}
-		return true;
 	}
 
 }
