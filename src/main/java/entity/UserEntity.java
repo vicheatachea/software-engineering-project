@@ -60,6 +60,7 @@ public class UserEntity {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.username = username;
+		this.salt = generateSalt();
 		setPassword(password);
 		this.dateOfBirth = dateOfBirth;
 		this.socialNumber = socialNumber;
@@ -71,52 +72,52 @@ public class UserEntity {
 
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public Long getId() {
 		return id;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getFirstName() {
 		return firstName;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
 	public String getLastName() {
 		return lastName;
 	}
 
-	public void setDateOfBirth(Timestamp dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public Timestamp getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setSocialNumber(String socialNumber) {
-		this.socialNumber = socialNumber;
+	public void setDateOfBirth(Timestamp dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
 
 	public String getSocialNumber() {
 		return socialNumber;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setSocialNumber(String socialNumber) {
+		this.socialNumber = socialNumber;
 	}
 
 	public Role getRole() {
 		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	public String getUsername() {
@@ -132,12 +133,14 @@ public class UserEntity {
 	}
 
 	public void setPassword(String password) {
-		generateSalt();
+		if (this.salt == null) {
+			this.salt = generateSalt();
+		}
 		this.password = PasswordHashUtil.hashPassword(password, getSalt());
 	}
 
-	public void generateSalt() {
-		this.salt = PasswordHashUtil.generateSalt();
+	public String generateSalt() {
+		return PasswordHashUtil.generateSalt();
 	}
 
 	public String getSalt() {
