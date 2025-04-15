@@ -15,10 +15,10 @@ public class TeachingSessionEntity {
 	private Long id;
 
 	@Column(name = "start_date", nullable = false)
-	private Timestamp StartDate;
+	private Timestamp startDate;
 
 	@Column(name = "end_date", nullable = false)
-	private Timestamp EndDate;
+	private Timestamp endDate;
 
 	@Column
 	private String description;
@@ -46,8 +46,8 @@ public class TeachingSessionEntity {
 
 	public TeachingSessionEntity(Timestamp startDate, Timestamp endDate, String description, LocationEntity location,
 	                             TimetableEntity timetable, SubjectEntity subject, String localeCode) {
-		this.StartDate = startDate;
-		this.EndDate = endDate;
+		this.startDate = startDate;
+		this.endDate = endDate;
 		this.description = description;
 		this.location = location;
 		this.timetable = timetable;
@@ -64,19 +64,19 @@ public class TeachingSessionEntity {
 	}
 
 	public Timestamp getStartDate() {
-		return StartDate;
+		return startDate;
 	}
 
 	public void setStartDate(Timestamp startDate) {
-		this.StartDate = startDate;
+		this.startDate = startDate;
 	}
 
 	public Timestamp getEndDate() {
-		return EndDate;
+		return endDate;
 	}
 
 	public void setEndDate(Timestamp endDate) {
-		this.EndDate = endDate;
+		this.endDate = endDate;
 	}
 
 	public String getDescription() {
@@ -134,13 +134,13 @@ public class TeachingSessionEntity {
 
 		TeachingSessionEntity that = (TeachingSessionEntity) o;
 
-		return Objects.equals(id, that.id) && Objects.equals(StartDate, that.StartDate) &&
-		       Objects.equals(EndDate, that.EndDate) && Objects.equals(location, that.location) &&
+		return Objects.equals(id, that.id) && Objects.equals(startDate, that.startDate) &&
+		       Objects.equals(endDate, that.endDate) && Objects.equals(location, that.location) &&
 		       Objects.equals(timetable, that.timetable) && Objects.equals(subject, that.subject);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, StartDate, EndDate, location, timetable, subject);
+		return Objects.hash(id, startDate, endDate, location, timetable, subject);
 	}
 }
