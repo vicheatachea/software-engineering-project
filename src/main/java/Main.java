@@ -1,4 +1,5 @@
 import datasource.MariaDBConnection;
+import javafx.application.Application;
 import view.View;
 
 /*
@@ -13,6 +14,6 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		View.launch(View.class);
+		Application.launch(View.class);
 	}
 }
