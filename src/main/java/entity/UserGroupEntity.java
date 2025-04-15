@@ -53,36 +53,40 @@ public class UserGroupEntity {
 		this.timetable = timetable;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public Long getId() {
 		return id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getCode() {
 		return code;
 	}
 
-	public void setCapacity(Integer capacity) {
-		this.capacity = capacity;
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public Integer getCapacity() {
 		return capacity;
+	}
+
+	public void setCapacity(Integer capacity) {
+		this.capacity = capacity;
+	}
+
+	public UserEntity getTeacher() {
+		return teacher;
 	}
 
 	public void setTeacher(UserEntity teacher) {
@@ -92,8 +96,8 @@ public class UserGroupEntity {
 		this.teacher = teacher;
 	}
 
-	public UserEntity getTeacher() {
-		return teacher;
+	public Set<UserEntity> getStudents() {
+		return students;
 	}
 
 	public void setStudents(Set<UserEntity> students) {
@@ -106,16 +110,12 @@ public class UserGroupEntity {
 		this.students = students;
 	}
 
-	public Set<UserEntity> getStudents() {
-		return students;
+	public SubjectEntity getSubject() {
+		return subject;
 	}
 
 	public void setSubject(SubjectEntity subject) {
 		this.subject = subject;
-	}
-
-	public SubjectEntity getSubject() {
-		return subject;
 	}
 
 	public TimetableEntity getTimetable() {
@@ -124,6 +124,11 @@ public class UserGroupEntity {
 
 	public void setTimetable(TimetableEntity timetable) {
 		this.timetable = timetable;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name, code, capacity, teacher, students, subject, timetable);
 	}
 
 	@Override
