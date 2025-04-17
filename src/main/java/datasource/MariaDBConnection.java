@@ -23,7 +23,7 @@ public class MariaDBConnection {
 	private static final String BASE_URL =
 			"jdbc:mariadb://" + DB_HOST + ":" + DB_PORT + "?useUnicode=true&characterEncoding=UTF-8";
 	private static final Logger logger = LoggerFactory.getLogger(MariaDBConnection.class);
-	private EntityManagerFactory emf = null;
+	private static EntityManagerFactory emf = null;
 
 	public void verifyDatabase() throws SQLException {
 		try (Connection conn = DriverManager.getConnection(BASE_URL, USER, PASSWORD);
@@ -48,7 +48,7 @@ public class MariaDBConnection {
 		}
 	}
 
-	public synchronized EntityManagerFactory getEntityManagerFactory() {
+	public static synchronized EntityManagerFactory getEntityManagerFactory() {
 		if (emf == null || !emf.isOpen()) {
 			Map<String, String> props = new HashMap<>();
 			props.put("jakarta.persistence.jdbc.url",
