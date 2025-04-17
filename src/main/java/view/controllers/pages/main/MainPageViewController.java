@@ -17,7 +17,6 @@ import view.controllers.components.SidebarViewController;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class MainPageViewController implements Initializable {
@@ -71,11 +70,7 @@ public class MainPageViewController implements Initializable {
 					break;
 				case "quit":
 					sidebarController.shutdownNotifications();
-					try {
-						MariaDBConnection.getInstance().terminate();
-					} catch (SQLException e) {
-						logger.error("Error closing database connection: {}", e.getMessage());
-					}
+					new MariaDBConnection().terminate();
 					stage.close();
 					break;
 				default:
