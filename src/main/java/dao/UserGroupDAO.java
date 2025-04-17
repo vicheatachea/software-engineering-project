@@ -4,14 +4,24 @@ import datasource.MariaDBConnection;
 import entity.UserGroupEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class UserGroupDAO {
 
+	private static final String ERROR_MESSAGE = "Error: ";
+	private static final Logger logger = LoggerFactory.getLogger(UserGroupDAO.class);
+
 	private static final EntityManagerFactory emf = MariaDBConnection.getEntityManagerFactory();
 
-	public void persist(UserGroupEntity userGroup) {
+	private void logErrorMessage(final Exception e) {
+		logger.error(ERROR_MESSAGE, e);
+	}
+
+	public void persist(final UserGroupEntity userGroup) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
@@ -23,7 +33,7 @@ public class UserGroupDAO {
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
-			throw e;
+			logErrorMessage(e);
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -31,11 +41,12 @@ public class UserGroupDAO {
 		}
 	}
 
-	public UserGroupEntity findById(Long id) {
+	public UserGroupEntity findById(final Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.find(UserGroupEntity.class, id);
-		} catch (Exception e) {
+		} catch (NoResultException e) {
+			logErrorMessage(e);
 			return null;
 		} finally {
 			if (em.isOpen()) {
@@ -44,14 +55,15 @@ public class UserGroupDAO {
 		}
 	}
 
-	public UserGroupEntity findByTimetableId(long timetableId) {
+	public UserGroupEntity findByTimetableId(final long timetableId) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT g FROM UserGroupEntity g WHERE g.timetable.id = :timetableId",
 			                      UserGroupEntity.class)
 			         .setParameter("timetableId", timetableId)
 			         .getSingleResult();
-		} catch (Exception e) {
+		} catch (NoResultException e) {
+			logErrorMessage(e);
 			return null;
 		} finally {
 			if (em.isOpen()) {
@@ -60,13 +72,14 @@ public class UserGroupDAO {
 		}
 	}
 
-	public UserGroupEntity findByName(String groupName) {
+	public UserGroupEntity findByName(final String groupName) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT g FROM UserGroupEntity g WHERE g.name = :groupName", UserGroupEntity.class)
 			         .setParameter("groupName", groupName)
 			         .getSingleResult();
-		} catch (Exception e) {
+		} catch (NoResultException e) {
+			logErrorMessage(e);
 			return null;
 		} finally {
 			if (em.isOpen()) {
@@ -75,7 +88,7 @@ public class UserGroupDAO {
 		}
 	}
 
-	public List<UserGroupEntity> findAllByUserId(Long userId) {
+	public List<UserGroupEntity> findAllByUserId(final Long userId) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT DISTINCT g FROM UserGroupEntity g " + "WHERE g.teacher.id = :userId " +
@@ -84,8 +97,9 @@ public class UserGroupDAO {
 			                      UserGroupEntity.class)
 			         .setParameter("userId", userId)
 			         .getResultList();
-		} catch (Exception e) {
-			return null;
+		} catch (NoResultException e) {
+			logErrorMessage(e);
+			return List.of();
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -97,8 +111,9 @@ public class UserGroupDAO {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT u FROM UserGroupEntity u", UserGroupEntity.class).getResultList();
-		} catch (Exception e) {
-			return null;
+		} catch (NoResultException e) {
+			logErrorMessage(e);
+			return List.of();
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -106,7 +121,7 @@ public class UserGroupDAO {
 		}
 	}
 
-	public void delete(UserGroupEntity userGroup) {
+	public void delete(final UserGroupEntity userGroup) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
@@ -115,7 +130,7 @@ public class UserGroupDAO {
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
-			throw e;
+			logErrorMessage(e);
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -131,7 +146,7 @@ public class UserGroupDAO {
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
-			throw e;
+			logErrorMessage(e);
 		} finally {
 			if (em.isOpen()) {
 				em.close();
