@@ -15,8 +15,8 @@ public class AssignmentDAO {
 
 	private static final Logger logger = LoggerFactory.getLogger(AssignmentDAO.class);
 	private static final String ERROR_MESSAGE = "Error: ";
-	private final EntityManagerFactory emf =
-			new MariaDBConnection().getEntityManagerFactory();
+	private static final EntityManagerFactory emf =
+			MariaDBConnection.getEntityManagerFactory();
 
 	private void logErrorMessage(final Exception e) {
 		logger.error(ERROR_MESSAGE, e);
