@@ -17,7 +17,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		try {
-			MariaDBConnection.getInstance().verifyDatabase();
+			new MariaDBConnection().verifyDatabase();
 		} catch (Exception e) {
 			logger.error("Error verifying database: {}", e.getMessage());
 		}
