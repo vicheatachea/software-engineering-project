@@ -30,7 +30,7 @@ class UserGroupDAOTest {
 	@BeforeAll
 	static void ensureDatabase() {
 		try {
-			MariaDBConnection.getInstance().verifyDatabase();
+			new MariaDBConnection().verifyDatabase();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
