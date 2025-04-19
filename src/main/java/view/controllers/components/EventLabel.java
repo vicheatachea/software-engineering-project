@@ -25,17 +25,19 @@ public class EventLabel extends Label {
         this.height = height;
         this.topOffset = topOffset;
 
-        if (event instanceof TeachingSessionDTO teachingSession) {
-            String startTime = TimeFormatterUtil.getTimeFromDateTime(teachingSession.startDate());
-            String endTime = TimeFormatterUtil.getTimeFromDateTime(teachingSession.endDate());
+        switch (event) {
+            case TeachingSessionDTO teachingSession -> {
+                String startTime = TimeFormatterUtil.getTimeFromDateTime(teachingSession.startDate());
+                String endTime = TimeFormatterUtil.getTimeFromDateTime(teachingSession.endDate());
 
-            this.setText(teachingSession.subjectCode() + "\n" + startTime + " – " + endTime + "\n" + teachingSession.locationName());
-        } else if (event instanceof AssignmentDTO assignment) {
-            String dueTime = TimeFormatterUtil.getTimeFromDateTime(assignment.deadline());
+                this.setText(teachingSession.subjectCode() + "\n" + startTime + " – " + endTime + "\n" + teachingSession.locationName());
+            }
+            case AssignmentDTO assignment -> {
+                String dueTime = TimeFormatterUtil.getTimeFromDateTime(assignment.deadline());
 
-            this.setText(assignment.assignmentName() + "\n" + assignment.subjectCode() + "\n" + dueTime);
-        } else {
-            this.setText("Unknown Event");
+                this.setText(assignment.assignmentName() + "\n" + assignment.subjectCode() + "\n" + dueTime);
+            }
+            default -> this.setText("Unknown Event");
         }
     }
 
