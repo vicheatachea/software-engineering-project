@@ -21,6 +21,11 @@ import java.util.ResourceBundle;
 
 public class MainPageViewController implements Initializable {
 	private static final Logger logger = LoggerFactory.getLogger(MainPageViewController.class);
+	private static final String GENERAL_PAGE_PATH = "/layouts/pages/main/general-page.fxml";
+	private static final String GROUPS = "groups";
+	private static final String SUBJECTS = "subjects";
+	private static final String LOCATIONS = "locations";
+
 	Stage stage;
 	BaseController baseController;
 	@FXML
@@ -51,14 +56,14 @@ public class MainPageViewController implements Initializable {
 				case "timetable":
 					loadContent("/layouts/pages/main/timetable.fxml", null);
 					break;
-				case "groups":
-					loadContent("/layouts/pages/main/general-page.fxml", "groups");
+				case GROUPS:
+					loadContent(GENERAL_PAGE_PATH, GROUPS);
 					break;
-				case "subjects":
-					loadContent("/layouts/pages/main/general-page.fxml", "subjects");
+				case SUBJECTS:
+					loadContent(GENERAL_PAGE_PATH, SUBJECTS);
 					break;
-				case "locations":
-					loadContent("/layouts/pages/main/general-page.fxml", "locations");
+				case LOCATIONS:
+					loadContent(GENERAL_PAGE_PATH, LOCATIONS);
 					break;
 				case "settings":
 					loadContent("/layouts/pages/main/settings.fxml", null);
@@ -71,7 +76,7 @@ public class MainPageViewController implements Initializable {
 					stage.close();
 					break;
 				default:
-					logger.info("MainPageController initialize() could not load {} ", newValue);
+					logger.error("MainPageController initialize() could not load {} ", newValue);
 					break;
 			}
 		});
@@ -83,13 +88,13 @@ public class MainPageViewController implements Initializable {
 
 			if (name != null) {
 				switch (name) {
-					case "groups":
+					case GROUPS:
 						fxmlLoader.setController(new GroupsViewController());
 						break;
-					case "subjects":
+					case SUBJECTS:
 						fxmlLoader.setController(new SubjectsViewController());
 						break;
-					case "locations":
+					case LOCATIONS:
 						fxmlLoader.setController(new LocationsViewController());
 						break;
 					default:
@@ -99,7 +104,7 @@ public class MainPageViewController implements Initializable {
 
 			Node content = fxmlLoader.load();
 			if (content == null) {
-				logger.info("MainPageController loadContent() could not load {}", fxmlFilePath);
+				logger.error("MainPageController loadContent() could not load {}", fxmlFilePath);
 				return;
 			}
 

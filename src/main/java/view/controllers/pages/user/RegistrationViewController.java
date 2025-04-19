@@ -23,6 +23,9 @@ import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class RegistrationViewController implements ControllerAware, SidebarControllerAware {
+	private static final String ERROR_TITLE = "error.title";
+	private static final String WARNING_TITLE = "warning.title";
+
 	private BaseController baseController;
 	private UserController userController;
 	private SidebarViewController sidebarViewController;
@@ -127,27 +130,27 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 
 			if (firstName.isEmpty() || lastName.isEmpty() || socialNumber.isEmpty() || username.isEmpty() ||
 			    password.isEmpty() || dobPicker.getValue() == null || role == null) {
-				showAlert(viewText.getString("error.title"), viewText.getString("error.fillAllFields"));
+				showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.fillAllFields"));
 				return;
 			}
 
 			if (!firstName.matches("^[a-zA-Z]+$") || !lastName.matches("^[a-zA-Z]+$")) {
-				showAlert(viewText.getString("warning.title"), viewText.getString("warning.fullName"));
+				showAlert(viewText.getString(WARNING_TITLE), viewText.getString("warning.fullName"));
 				return;
 			}
 
 			if (socialNumber.length() != 11) {
-				showAlert(viewText.getString("warning.title"), viewText.getString("warning.socialNumber"));
+				showAlert(viewText.getString(WARNING_TITLE), viewText.getString("warning.socialNumber"));
 				return;
 			}
 
 			if (userController.isUsernameTaken(username)) {
-				showAlert(viewText.getString("error.title"), viewText.getString("error.username"));
+				showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.username"));
 				return;
 			}
 
 			if (password.length() < 8) {
-				showAlert(viewText.getString("warning.title"), viewText.getString("warning.password"));
+				showAlert(viewText.getString(WARNING_TITLE), viewText.getString("warning.password"));
 				return;
 			}
 
@@ -160,10 +163,10 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 				Stage stage = (Stage) firstNameField.getScene().getWindow();
 				stage.close();
 			} else {
-				showAlert(viewText.getString("error.title"), viewText.getString("error.invalidUserData"));
+				showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.invalidUserData"));
 			}
 		} catch (Exception e) {
-			showAlert(viewText.getString("error.title"), viewText.getString("error.unexpectedError") + e.getMessage());
+			showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.unexpectedError") + e.getMessage());
 		}
 	}
 
@@ -180,7 +183,7 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 			Scene scene = firstNameField.getScene();
 			scene.setRoot(parent);
 		} catch (IOException e) {
-			showAlert(viewText.getString("error.title"), viewText.getString("error.unexpectedError") + e.getMessage());
+			showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.unexpectedError") + e.getMessage());
 		}
 	}
 

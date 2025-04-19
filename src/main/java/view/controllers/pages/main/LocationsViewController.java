@@ -16,6 +16,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class LocationsViewController implements ControllerAware {
+	private static final String ERROR_TITLE = "error.title";
+
 	private ResourceBundle viewText;
 	private LocationController locationController;
 	private List<LocationDTO> locations;
@@ -131,7 +133,7 @@ public class LocationsViewController implements ControllerAware {
 	private void handleAdd() {
 		if (areFieldsEmpty()) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setTitle(viewText.getString("error.title"));
+			alert.setTitle(viewText.getString(ERROR_TITLE));
 			alert.setHeaderText(null);
 			alert.setContentText(viewText.getString("error.fillAllFields"));
 			alert.showAndWait();
@@ -145,7 +147,7 @@ public class LocationsViewController implements ControllerAware {
 		for (LocationDTO location : locations) {
 			if (location.name().equals(name)) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
-				alert.setTitle(viewText.getString("error.title"));
+				alert.setTitle(viewText.getString(ERROR_TITLE));
 				alert.setHeaderText(null);
 				alert.setContentText(viewText.getString("error.location.exists"));
 				alert.showAndWait();
@@ -163,7 +165,7 @@ public class LocationsViewController implements ControllerAware {
 	private void handleSave() {
 		if (areFieldsEmpty()) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setTitle(viewText.getString("error.title"));
+			alert.setTitle(viewText.getString(ERROR_TITLE));
 			alert.setHeaderText(null);
 			alert.setContentText(viewText.getString("error.fillAllFields"));
 			alert.showAndWait();
@@ -180,7 +182,7 @@ public class LocationsViewController implements ControllerAware {
 			for (LocationDTO location : locations) {
 				if (location.name().equals(name) && !name.equals(currentName)) {
 					Alert alert = new Alert(Alert.AlertType.ERROR);
-					alert.setTitle(viewText.getString("error.title"));
+					alert.setTitle(viewText.getString(ERROR_TITLE));
 					alert.setHeaderText(null);
 					alert.setContentText(viewText.getString("error.location.exists"));
 					alert.showAndWait();

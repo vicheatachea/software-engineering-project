@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class SidebarViewController implements ControllerAware, NotificationAware {
+    private static final String TIMETABLE = "timetable";
+
     private final StringProperty currentView = new SimpleStringProperty();
     private NotificationService notificationService;
     private List<EventNotification> notifications = new ArrayList<>();
@@ -54,16 +56,16 @@ public class SidebarViewController implements ControllerAware, NotificationAware
     @FXML
     private void initialize() {
         Platform.runLater(() -> {
-            ResourceBundle viewText = localeController.getUIBundle();
+            ResourceBundle initialViewText = localeController.getUIBundle();
 
-            addButton(viewText.getString("sidebar.timetable"), "timetable");
-            addButton(viewText.getString("sidebar.groups"), "groups");
-            addButton(viewText.getString("sidebar.subjects"), "subjects");
-            addButton(viewText.getString("sidebar.locations"), "locations");
-            addButton(viewText.getString("sidebar.settings"), "settings");
-            addButton(viewText.getString("sidebar.quit"), "quit");
+            addButton(initialViewText.getString("sidebar.timetable"), TIMETABLE);
+            addButton(initialViewText.getString("sidebar.groups"), "groups");
+            addButton(initialViewText.getString("sidebar.subjects"), "subjects");
+            addButton(initialViewText.getString("sidebar.locations"), "locations");
+            addButton(initialViewText.getString("sidebar.settings"), "settings");
+            addButton(initialViewText.getString("sidebar.quit"), "quit");
 
-            currentView.set("timetable");
+            currentView.set(TIMETABLE);
             timetableButton = (Button) sidebar.lookup("#timetableButton");
             groupsButton = (Button) sidebar.lookup("#groupsButton");
             subjectsButton = (Button) sidebar.lookup("#subjectsButton");
@@ -84,9 +86,9 @@ public class SidebarViewController implements ControllerAware, NotificationAware
                 loginButton.setOnAction(event -> showLoginPopup());
                 notificationsButton.setOnAction(event -> showNotificationPopup());
 
-                accountButton.setText(viewText.getString("sidebar.account"));
-                loginButton.setText(viewText.getString("sidebar.login"));
-                notificationsButton.setText(viewText.getString("sidebar.notifications"));
+                accountButton.setText(initialViewText.getString("sidebar.account"));
+                loginButton.setText(initialViewText.getString("sidebar.login"));
+                notificationsButton.setText(initialViewText.getString("sidebar.notifications"));
 
                 updateUserButtons();
             } catch (IOException e) {
@@ -140,7 +142,7 @@ public class SidebarViewController implements ControllerAware, NotificationAware
 
         clearNotifications();
         currentView.set("clear");
-        currentView.set("timetable");
+        currentView.set(TIMETABLE);
     }
 
     private void showLoginPopup() {
@@ -219,17 +221,17 @@ public class SidebarViewController implements ControllerAware, NotificationAware
     }
 
     public void updateTranslations() {
-        ResourceBundle viewText = localeController.getUIBundle();
+        ResourceBundle updateViewText = localeController.getUIBundle();
 
-        accountButton.setText(viewText.getString("sidebar.account"));
-        loginButton.setText(viewText.getString("sidebar.login"));
-        notificationsButton.setText(viewText.getString("sidebar.notifications"));
+        accountButton.setText(updateViewText.getString("sidebar.account"));
+        loginButton.setText(updateViewText.getString("sidebar.login"));
+        notificationsButton.setText(updateViewText.getString("sidebar.notifications"));
 
-        timetableButton.setText(viewText.getString("sidebar.timetable"));
-        groupsButton.setText(viewText.getString("sidebar.groups"));
-        subjectsButton.setText(viewText.getString("sidebar.subjects"));
-        locationsButton.setText(viewText.getString("sidebar.locations"));
-        settingsButton.setText(viewText.getString("sidebar.settings"));
-        quitButton.setText(viewText.getString("sidebar.quit"));
+        timetableButton.setText(updateViewText.getString("sidebar.timetable"));
+        groupsButton.setText(updateViewText.getString("sidebar.groups"));
+        subjectsButton.setText(updateViewText.getString("sidebar.subjects"));
+        locationsButton.setText(updateViewText.getString("sidebar.locations"));
+        settingsButton.setText(updateViewText.getString("sidebar.settings"));
+        quitButton.setText(updateViewText.getString("sidebar.quit"));
     }
 }

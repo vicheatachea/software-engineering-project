@@ -20,6 +20,8 @@ import java.util.ResourceBundle;
 import java.io.IOException;
 
 public class LoginViewController implements ControllerAware, SidebarControllerAware {
+    private static final String ERROR_TITLE = "error.title";
+
     private BaseController baseController;
     private UserController userController;
     private SidebarViewController sidebarViewController;
@@ -75,7 +77,7 @@ public class LoginViewController implements ControllerAware, SidebarControllerAw
         String password = passwordField.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
-            showAlert(viewText.getString("error.title"), viewText.getString("error.invalidLogin"));
+            showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.invalidLogin"));
             return;
         }
 
@@ -85,10 +87,10 @@ public class LoginViewController implements ControllerAware, SidebarControllerAw
                 Stage stage = (Stage) emailField.getScene().getWindow();
                 stage.close();
             } else {
-                showAlert(viewText.getString("error.title"), viewText.getString("error.invalidCredentials"));
+                showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.invalidCredentials"));
             }
         } catch (Exception e) {
-            showAlert(viewText.getString("error.title"), viewText.getString("error.unexpectedError"));
+            showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.unexpectedError"));
         }
     }
 
@@ -106,7 +108,7 @@ public class LoginViewController implements ControllerAware, SidebarControllerAw
             scene.setRoot(parent);
 
         } catch (IOException e) {
-            showAlert(viewText.getString("error.title"), viewText.getString("error.unexpectedError"));
+            showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.unexpectedError"));
         }
     }
 
