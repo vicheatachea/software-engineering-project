@@ -6,11 +6,14 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import view.controllers.pages.main.MainPageViewController;
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
 * The controller should be initialized in the main page view controller
 */
 public class View extends Application {
+    private static final Logger logger = LoggerFactory.getLogger(View.class);
     @Override
     public void start(Stage stage) {
         try {
@@ -18,7 +21,7 @@ public class View extends Application {
             stage.setScene(new Scene(loader.load()));
 
             if (loader.getController() == null) {
-                System.out.println("View could not start the application");
+                logger.error("View could not start the application");
             }
 
             MainPageViewController controller = loader.getController();

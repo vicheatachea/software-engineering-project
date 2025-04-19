@@ -14,9 +14,11 @@ import view.controllers.ControllerAware;
 import view.controllers.SidebarControllerAware;
 import view.controllers.components.SidebarViewController;
 import java.util.ResourceBundle;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UserProfileViewController implements ControllerAware, SidebarControllerAware {
+	private static final Logger logger = LoggerFactory.getLogger(UserProfileViewController.class);
 	private UserController userController;
 	private SidebarViewController sidebarViewController;
 	private ResourceBundle viewText;
@@ -84,7 +86,7 @@ public class UserProfileViewController implements ControllerAware, SidebarContro
 				roleLabel.setText(viewText.getString("userprofile.roleTeacher"));
 				break;
 			default:
-				System.out.println("Unknown role: " + userDTO.role());
+				logger.error("Unknown role: {}", userDTO.role());
 		}
 
 		nameLabel.setText(userDTO.firstName() + " " + userDTO.lastName());
