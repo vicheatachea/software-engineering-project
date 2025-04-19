@@ -48,9 +48,6 @@ public class MainPageViewController implements Initializable {
 
 		sidebarController.currentViewProperty().addListener((observableValue, oldValue, newValue) -> {
 			switch (newValue) {
-				case "home":
-					loadContent("/layouts/pages/main/home.fxml", null);
-					break;
 				case "timetable":
 					loadContent("/layouts/pages/main/timetable.fxml", null);
 					break;
