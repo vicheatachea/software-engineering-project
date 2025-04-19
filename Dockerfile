@@ -11,19 +11,20 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+    libgdk-pixbuf2.0-0 \
     libgl1 \
     libgtk-3-0 \
-    libgdk-pixbuf2.0-0 \
     libx11-6 \
     libxcb1 \
-    libxtst6 \
     libxrender1 \
-    xauth \
-    x11-apps \
+    libxtst6 \
     mariadb-server \
     openjfx \
+    x11-apps \
+    xauth \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
 
 # Environment variables
 ENV DISPLAY=host.docker.internal:0.0
