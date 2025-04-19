@@ -19,8 +19,16 @@ import javafx.scene.text.Font;
 import view.controllers.ControllerAware;
 
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GroupsViewController implements ControllerAware {
+    private static final Logger logger = LoggerFactory.getLogger(GroupsViewController.class);
+    private static final String FIELD = "field";
+    private static final String ERROR_TITLE = "error.title";
+    private static final String ERROR_GROUP_NOT_TEACHER = "error.group.notTeacher";
+    private static final String CSS_STYLING = "-fx-font: 16px \"Verdana\";";
+
     private ResourceBundle viewText;
     private GroupController groupController;
     private SubjectController subjectController;
@@ -68,12 +76,12 @@ public class GroupsViewController implements ControllerAware {
             saveButton.setText(viewText.getString("groups.save"));
             deleteButton.setText(viewText.getString("groups.delete"));
 
-            LinkedHashMap<String, String> components = new LinkedHashMap<>() {{
-                put(viewText.getString("common.name"), "field");
-                put(viewText.getString("common.code"), "field");
-                put(viewText.getString("groups.capacity"), "field");
-                put(viewText.getString("groups.subject"), "comboBox");
-            }};
+            LinkedHashMap<String, String> components = new LinkedHashMap<>();
+            components.put(viewText.getString("common.name"), FIELD);
+            components.put(viewText.getString("common.code"), FIELD);
+            components.put(viewText.getString("groups.capacity"), FIELD);
+            components.put(viewText.getString("groups.subject"), "comboBox");
+
             String[] prompts = {
                     viewText.getString("common.promptName"),
                     viewText.getString("common.promptCode"),
@@ -95,9 +103,9 @@ public class GroupsViewController implements ControllerAware {
                 componentGrid.add(label, 0, rowIndex);
 
                 switch (component.getValue()) {
-                    case "field" -> {
+                    case FIELD -> {
                         TextField textField = new TextField();
-                        textField.setFont(new Font("Verdana", 16));
+                        textField.setStyle(CSS_STYLING);
                         textField.setPromptText(prompts[rowIndex]);
                         textField.setId(ids[rowIndex]);
 
@@ -105,39 +113,37 @@ public class GroupsViewController implements ControllerAware {
                     }
                     case "comboBox" -> {
                         ComboBox<String> comboBox = new ComboBox<>();
-                        comboBox.setStyle("-fx-font: 16px \"Verdana\";");
+                        comboBox.setStyle(CSS_STYLING);
                         comboBox.setPromptText(prompts[rowIndex]);
                         comboBox.setId(ids[rowIndex]);
 
                         componentGrid.add(comboBox, 1, rowIndex);
                     }
-                    default -> System.out.println("Unknown component type: " + components.get(component));
+                    default -> logger.info("Unknown component type: {}", component.getValue());
                 }
                 rowIndex++;
             }
 
             HBox addHBox = new HBox();
             Label addLabel = new Label(viewText.getString("groups.label.addStudent"));
-            addLabel.setFont(new Font("Verdana", 18));
-            addLabel.setStyle("-fx-text-fill: #e36486;");
+            addLabel.setStyle("-fx-font: bold 18px \"Verdana\"; -fx-text-fill: #e36486;");
 
-            addStudentComboBox.setStyle("-fx-font: 16px \"Verdana\";");
+            addStudentComboBox.setStyle(CSS_STYLING);
 
             addStudentButton.setText(viewText.getString("groups.button.addStudent"));
-            addStudentButton.setFont(new Font("Verdana", 16));
+            addStudentButton.setStyle(CSS_STYLING);
             addStudentButton.setOnAction(event -> handleAddStudent());
 
             addHBox.getChildren().addAll(addStudentComboBox, addStudentButton);
 
             HBox removeHBox = new HBox();
             Label removeLabel = new Label(viewText.getString("groups.label.removeStudent"));
-            removeLabel.setFont(new Font("Verdana", 18));
-            removeLabel.setStyle("-fx-text-fill: #e36486;");
+            removeLabel.setStyle("-fx-font: bold 18px \"Verdana\"; -fx-text-fill: #e36486;");
 
-            removeStudentComboBox.setStyle("-fx-font: 16px \"Verdana\";");
+            removeStudentComboBox.setStyle(CSS_STYLING);
 
             removeStudentButton.setText(viewText.getString("groups.button.removeStudent"));
-            removeStudentButton.setFont(new Font("Verdana", 16));
+            removeStudentButton.setStyle(CSS_STYLING);
             removeStudentButton.setOnAction(event -> handleRemoveStudent());
 
             removeHBox.getChildren().addAll(removeStudentComboBox, removeStudentButton);
@@ -202,7 +208,7 @@ public class GroupsViewController implements ControllerAware {
 
         if (areFieldsEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(viewText.getString("error.title"));
+            alert.setTitle(viewText.getString(ERROR_TITLE));
             alert.setHeaderText(null);
             alert.setContentText(viewText.getString("error.fillAllFields"));
             alert.showAndWait();
@@ -214,7 +220,7 @@ public class GroupsViewController implements ControllerAware {
              capacity = Integer.parseInt(capacityTextField.getText());
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(viewText.getString("error.title"));
+            alert.setTitle(viewText.getString(ERROR_TITLE));
             alert.setHeaderText(null);
             alert.setContentText(viewText.getString("error.group.capacityNumber"));
             alert.showAndWait();
@@ -222,7 +228,7 @@ public class GroupsViewController implements ControllerAware {
         }
         if (capacity < 1) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(viewText.getString("error.title"));
+            alert.setTitle(viewText.getString(ERROR_TITLE));
             alert.setHeaderText(null);
             alert.setContentText(viewText.getString("error.group.capacityPositive"));
             alert.showAndWait();
@@ -236,7 +242,7 @@ public class GroupsViewController implements ControllerAware {
         for (GroupDTO group : groups) {
             if (group.name().equals(name)) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle(viewText.getString("error.title"));
+                alert.setTitle(viewText.getString(ERROR_TITLE));
                 alert.setHeaderText(null);
                 alert.setContentText(viewText.getString("error.group.exists"));
                 alert.showAndWait();
@@ -247,7 +253,7 @@ public class GroupsViewController implements ControllerAware {
         long userId = userController.fetchCurrentUserId();
         if (userId == -1) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(viewText.getString("error.title"));
+            alert.setTitle(viewText.getString(ERROR_TITLE));
             alert.setHeaderText(null);
             alert.setContentText(viewText.getString("error.group.loggedIn"));
             alert.showAndWait();
@@ -256,9 +262,9 @@ public class GroupsViewController implements ControllerAware {
 
         if (!userController.isCurrentUserTeacher()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(viewText.getString("error.title"));
+            alert.setTitle(viewText.getString(ERROR_TITLE));
             alert.setHeaderText(null);
-            alert.setContentText(viewText.getString("error.group.notTeacher"));
+            alert.setContentText(viewText.getString(ERROR_GROUP_NOT_TEACHER));
             alert.showAndWait();
             return;
         }
@@ -274,78 +280,79 @@ public class GroupsViewController implements ControllerAware {
         if (teacherPermissionError()) {
             return;
         }
-
         if (areFieldsEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(viewText.getString("error.title"));
-            alert.setHeaderText(null);
-            alert.setContentText(viewText.getString("error.fillAllFields"));
-            alert.showAndWait();
+            showErrorAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.fillAllFields"));
             return;
         }
 
         int selectedIndex = itemView.getSelectionModel().getSelectedIndex();
-        if (selectedIndex != -1) {
-            int capacity;
-            try {
-                capacity = Integer.parseInt(capacityTextField.getText());
-            } catch (NumberFormatException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle(viewText.getString("error.title"));
-                alert.setHeaderText(null);
-                alert.setContentText(viewText.getString("error.group.capacityNumber"));
-                alert.showAndWait();
-                return;
-            }
-            if (capacity < 1) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle(viewText.getString("error.title"));
-                alert.setHeaderText(null);
-                alert.setContentText(viewText.getString("error.group.capacityPositive"));
-                alert.showAndWait();
-                return;
-            }
+        if (selectedIndex == -1) return;
 
-            String name = nameTextField.getText();
-            String code = codeTextField.getText();
-            String currentName = groups.get(selectedIndex).name();
-            String subjectCode = subjectComboBox.getValue();
-
-            long userId = userController.fetchCurrentUserId();
-            if (userId == -1) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle(viewText.getString("error.title"));
-                alert.setHeaderText(null);
-                alert.setContentText(viewText.getString("error.group.loggedIn"));
-                alert.showAndWait();
-                return;
-            }
-
-            if (!userController.isCurrentUserTeacher()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle(viewText.getString("error.title"));
-                alert.setHeaderText(null);
-                alert.setContentText(viewText.getString("error.group.notTeacher"));
-                alert.showAndWait();
-                return;
-            }
-
-            for (GroupDTO group : groups) {
-                if (group.name().equals(name) && !name.equals(currentName)) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle(viewText.getString("error.title"));
-                    alert.setHeaderText(null);
-                    alert.setContentText(viewText.getString("error.group.exists"));
-                    alert.showAndWait();
-                    return;
-                }
-            }
-
-            GroupDTO group = new GroupDTO(name, code, capacity, userId, subjectCode);
-            groupController.updateGroup(group, currentName);
+        try {
+            GroupDTO updatedGroup = createUpdatedGroup(selectedIndex);
+            updateExistingGroup(updatedGroup, selectedIndex);
             loadGroups();
-
             itemView.getSelectionModel().select(selectedIndex);
+        } catch (ValidationException e) {
+            showErrorAlert(ERROR_TITLE, e.getMessage());
+        }
+    }
+
+    private void showErrorAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(viewText.getString(title));
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    private GroupDTO createUpdatedGroup(int selectedIndex) throws ValidationException {
+        String name = nameTextField.getText();
+        String code = codeTextField.getText();
+        String currentName = groups.get(selectedIndex).name();
+        String subjectCode = subjectComboBox.getValue();
+
+        int capacity = validateCapacity(capacityTextField.getText());
+        validateUserPermissions();
+        validateGroupName(name, currentName);
+
+        long userId = userController.fetchCurrentUserId();
+        return new GroupDTO(name, code, capacity, userId, subjectCode);
+    }
+
+    private void updateExistingGroup(GroupDTO updatedGroup, int selectedIndex) {
+        String currentName = groups.get(selectedIndex).name();
+        groupController.updateGroup(updatedGroup, currentName);
+    }
+
+
+    private int validateCapacity(String capacityStr) throws ValidationException {
+        try {
+            int capacity = Integer.parseInt(capacityStr);
+            if (capacity < 1) {
+                throw new ValidationException(viewText.getString("error.group.capacityPositive"));
+            }
+            return capacity;
+        } catch (NumberFormatException e) {
+            throw new ValidationException(viewText.getString("error.group.capacityNumber"));
+        }
+    }
+
+    private void validateUserPermissions() throws ValidationException {
+        long userId = userController.fetchCurrentUserId();
+        if (userId == -1) {
+            throw new ValidationException(viewText.getString("error.group.loggedIn"));
+        }
+        if (!userController.isCurrentUserTeacher()) {
+            throw new ValidationException(viewText.getString(ERROR_GROUP_NOT_TEACHER));
+        }
+    }
+
+    private void validateGroupName(String newName, String currentName) throws ValidationException {
+        for (GroupDTO group : groups) {
+            if (group.name().equals(newName) && !newName.equals(currentName)) {
+                throw new ValidationException(viewText.getString("error.group.exists"));
+            }
         }
     }
 
@@ -411,7 +418,7 @@ public class GroupsViewController implements ControllerAware {
     private void handleAddStudent() {
         if (addStudentComboBox.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(viewText.getString("error.title"));
+            alert.setTitle(viewText.getString(ERROR_TITLE));
             alert.setHeaderText(null);
             alert.setContentText(viewText.getString("error.group.addStudent"));
             alert.showAndWait();
@@ -433,7 +440,7 @@ public class GroupsViewController implements ControllerAware {
     private void handleRemoveStudent() {
         if (removeStudentComboBox.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(viewText.getString("error.title"));
+            alert.setTitle(viewText.getString(ERROR_TITLE));
             alert.setHeaderText(null);
             alert.setContentText(viewText.getString("error.group.removeStudent"));
             alert.showAndWait();
@@ -481,7 +488,7 @@ public class GroupsViewController implements ControllerAware {
     }
 
     private void changeButtonVisibility(boolean editingMode) {
-        // In editing mode, the add button is not visible, and the edit and delete buttons are visible
+        // In editing mode, the addButton is not visible, and the edit and delete buttons are visible
         isEditingMode = editingMode;
 
         // Hide or show the options to add and remove students
@@ -525,12 +532,18 @@ public class GroupsViewController implements ControllerAware {
     private boolean teacherPermissionError() {
         if (!userController.isCurrentUserTeacher()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(viewText.getString("error.title"));
+            alert.setTitle(viewText.getString(ERROR_TITLE));
             alert.setHeaderText(null);
-            alert.setContentText(viewText.getString("error.group.notTeacher"));
+            alert.setContentText(viewText.getString(ERROR_GROUP_NOT_TEACHER));
             alert.showAndWait();
             return true;
         }
         return false;
+    }
+
+    private static class ValidationException extends Exception {
+        public ValidationException(String message) {
+            super(message);
+        }
     }
 }

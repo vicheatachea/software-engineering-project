@@ -33,9 +33,13 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TimetableViewController implements ControllerAware {
+    private static final String TIMETABLE_ALL_LANGUAGES = "timetable.allLanguages";
+    private static final Logger logger = LoggerFactory.getLogger(TimetableViewController.class);
+
     private ResourceBundle viewText;
     private static final int NUMBER_OF_BUTTONS = 2;
     private BaseController baseController;
@@ -45,8 +49,6 @@ public class TimetableViewController implements ControllerAware {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     int currentWeek;
-
-    private double cellHeight;
     private double cellWidth;
 
     @FXML
@@ -67,14 +69,14 @@ public class TimetableViewController implements ControllerAware {
         Platform.runLater(() -> {
             addButtons();
 
-            languageComboBox.getItems().add(viewText.getString("timetable.allLanguages"));
+            languageComboBox.getItems().add(viewText.getString(TIMETABLE_ALL_LANGUAGES));
             Locale currentLocale = baseController.getLocaleController().getUserLocale();
 
             List<Locale> locales = localeController.getAvailableLocales();
             locales.forEach(locale ->
                     languageComboBox.getItems().add(locale.getDisplayLanguage(currentLocale))
             );
-            languageComboBox.setValue(viewText.getString("timetable.allLanguages"));
+            languageComboBox.setValue(viewText.getString(TIMETABLE_ALL_LANGUAGES));
             languageComboBox.addEventHandler(ActionEvent.ACTION, event -> loadTimetable());
 
             datePicker.setValue(LocalDate.now());
@@ -110,7 +112,7 @@ public class TimetableViewController implements ControllerAware {
             buttons[1].setText("\uD83D\uDD27");
 
             buttons[0].setOnAction(event -> handleNewEvent());
-            // Settings buttons is not yet implemented
+            // Settings buttons are not yet implemented
             buttons[1].setDisable(true);
 
             topbar.getChildren().addFirst(buttons[0]);
@@ -262,116 +264,189 @@ public class TimetableViewController implements ControllerAware {
         }
 
         clearTimetable();
-        String language = languageComboBox.getValue();
-        Locale currentLocale = baseController.getLocaleController().getUserLocale();
-        List<Event> events;
-
-        if (language.equals(viewText.getString("timetable.allLanguages"))) {
-            events = eventController.fetchEventsByUser(startDate, endDate);
-        } else {
-            Locale selectedLocale = localeController.getAvailableLocales().stream()
-                    .filter(locale -> locale.getDisplayLanguage(currentLocale).equals(language))
-                    .findFirst()
-                    .orElse(null);
-            if (selectedLocale != null) {
-                events = eventController.fetchEventsByLocale(startDate, endDate, selectedLocale.toLanguageTag());
-            } else {
-                events = eventController.fetchEventsByUser(startDate, endDate);
-            }
-        }
+        List<Event> events = fetchEvents();
 
         for (Event event : events) {
-            int column, startRow, endRow;
-            EventLabel eventLabel;
-
-            if (event instanceof TeachingSessionDTO teachingSession) {
-                LocalDateTime teachingSessionStart = teachingSession.startDate();
-                LocalDateTime teachingSessionEnd = teachingSession.endDate();
-
-                column = (int) ChronoUnit.DAYS.between(startDate, teachingSessionStart);
-                startRow = getRowIndex(teachingSessionStart, true);
-                endRow = getRowIndex(teachingSessionEnd, false);
-
-                double[] sizeAndOffset = getEventHeightAndOffset(teachingSessionStart, teachingSessionEnd);
-
-                eventLabel = new EventLabel(teachingSession, sizeAndOffset[0], sizeAndOffset[1]);
-                eventLabel.getStyleClass().add("teaching-session-label");
-            } else if (event instanceof AssignmentDTO assignment) {
-                LocalDateTime deadline = assignment.deadline();
-                LocalDateTime deadlineBuffer = deadline.minusHours(1);
-
-                column = (int) ChronoUnit.DAYS.between(startDate, deadline);
-
-                LocalDateTime startTime = deadlineBuffer;
-                LocalDateTime endTime = deadline;
-
-                if (deadline.getDayOfMonth() != deadlineBuffer.getDayOfMonth()) {
-                    if (deadline.getHour() == 0 && deadline.getMinute() == 0) {
-                        column -= 1;
-                        endTime = LocalDateTime.of(deadlineBuffer.getYear(), deadlineBuffer.getMonth(), deadlineBuffer.getDayOfMonth(), 23, 59);
-                    } else {
-                        startTime = LocalDateTime.of(deadline.getYear(), deadline.getMonth(), deadline.getDayOfMonth(), 0, 0);
-                    }
-                }
-
-                startRow = getRowIndex(startTime, true);
-                endRow = getRowIndex(endTime, false);
-
-                double[] sizeAndOffset = getEventHeightAndOffset(startTime, endTime);
-
-                eventLabel = new EventLabel(assignment, sizeAndOffset[0], sizeAndOffset[1]);
-                eventLabel.getStyleClass().add("assignment-label");
-            } else {
-                System.out.println("An event with an unknown type was found");
-                continue;
-            }
-
-            column += 1;
-
-            if (column < 1 || column > (timetableGrid.getColumnCount() - 1)) {
-                System.out.println("An event with a date outside the timetable range was found");
-                continue;
-            }
-            // This code is probably redundant
-            if (startRow == -1 || endRow == -1) {
-                System.out.println("An invalid event was found");
-                continue;
-            }
-
-            Set<EventLabel> overlappingEvents = getEventLabelsInRange(column, startRow, endRow);
-
-            if (!overlappingEvents.isEmpty()) {
-                int maxLabelPosition = overlappingEvents.stream()
-                        .mapToInt(EventLabel::getNumberOfLabels)
-                        .max()
-                        .orElse(1);
-
-                AtomicInteger i = new AtomicInteger(1);
-                boolean added = false;
-                for (; i.get() <= maxLabelPosition; i.incrementAndGet()) {
-                    if (overlappingEvents.stream().noneMatch(eventLabel1 -> eventLabel1.getLabelPosition() == i.get())) {
-                        eventLabel.updateLabelPosition(i.get(), maxLabelPosition);
-                        added = true;
-                        break;
-                    }
-                }
-
-                if (!added) {
-                    eventLabel.updateLabelPosition(maxLabelPosition + 1, maxLabelPosition + 1);
-                    overlappingEvents.forEach(eventLabel1 -> eventLabel1.updateLabelPosition(eventLabel1.getLabelPosition(), maxLabelPosition + 1));
-                }
-            }
-
-            GridPane.setHalignment(eventLabel, javafx.geometry.HPos.LEFT);
-            GridPane.setValignment(eventLabel, javafx.geometry.VPos.TOP);
-
-            // Calling eventLabel.getEvent() instead of just event should avoid storing the event twice
-            eventLabel.setOnMouseClicked(mouseEvent -> handleEditEvent(eventLabel.getEvent()));
-            timetableGrid.add(eventLabel, column, startRow, 1, endRow - startRow + 1);
+            processEvent(event);
         }
 
         updateEventHeight();
         updateEventWidth();
+    }
+
+    private List<Event> fetchEvents() {
+        String language = languageComboBox.getValue();
+        Locale currentLocale = baseController.getLocaleController().getUserLocale();
+
+        if (language.equals(viewText.getString(TIMETABLE_ALL_LANGUAGES))) {
+            return eventController.fetchEventsByUser(startDate, endDate);
+        }
+
+        Locale selectedLocale = localeController.getAvailableLocales().stream()
+                .filter(locale -> locale.getDisplayLanguage(currentLocale).equals(language))
+                .findFirst()
+                .orElse(null);
+
+        return selectedLocale != null
+                ? eventController.fetchEventsByLocale(startDate, endDate, selectedLocale.toLanguageTag())
+                : eventController.fetchEventsByUser(startDate, endDate);
+    }
+
+    private void processEvent(Event event) {
+        EventLabel eventLabel = createEventLabel(event);
+        if (eventLabel == null) {
+            return;
+        }
+
+        int column = calculateEventColumn(event);
+        if (!isColumnValid(column)) {
+            logger.info("An event with a date outside the timetable range was found");
+            return;
+        }
+
+        int[] rows = calculateEventRows(event);
+        int startRow = rows[0];
+        int endRow = rows[1];
+
+        if (startRow == -1 || endRow == -1) {
+            logger.error("An invalid event was found");
+            return;
+        }
+
+        handleEventOverlap(eventLabel, column, startRow, endRow);
+        addEventToGrid(eventLabel, column, startRow, endRow);
+    }
+
+    private EventLabel createEventLabel(Event event) {
+        return switch (event) {
+            case TeachingSessionDTO teachingSession -> createTeachingSessionLabel(teachingSession);
+            case AssignmentDTO assignment -> createAssignmentLabel(assignment);
+            default -> {
+                logger.info("An event with an unknown type was found");
+                yield null;
+            }
+        };
+    }
+
+    private EventLabel createTeachingSessionLabel(TeachingSessionDTO teachingSession) {
+        LocalDateTime start = teachingSession.startDate();
+        LocalDateTime end = teachingSession.endDate();
+        double[] sizeAndOffset = getEventHeightAndOffset(start, end);
+
+        EventLabel label = new EventLabel(teachingSession, sizeAndOffset[0], sizeAndOffset[1]);
+        label.getStyleClass().add("teaching-session-label");
+        return label;
+    }
+
+    private EventLabel createAssignmentLabel(AssignmentDTO assignment) {
+        LocalDateTime deadline = assignment.deadline();
+        TimeRange timeRange = calculateAssignmentTimeRange(deadline);
+        double[] sizeAndOffset = getEventHeightAndOffset(timeRange.start(), timeRange.end());
+
+        EventLabel label = new EventLabel(assignment, sizeAndOffset[0], sizeAndOffset[1]);
+        label.getStyleClass().add("assignment-label");
+        return label;
+    }
+
+    private record TimeRange(LocalDateTime start, LocalDateTime end) {}
+
+    private TimeRange calculateAssignmentTimeRange(LocalDateTime deadline) {
+        LocalDateTime deadlineBuffer = deadline.minusHours(1);
+
+        if (deadline.getDayOfMonth() == deadlineBuffer.getDayOfMonth()) {
+            return new TimeRange(deadlineBuffer, deadline);
+        }
+
+        if (deadline.getHour() == 0 && deadline.getMinute() == 0) {
+            return new TimeRange(
+                    deadlineBuffer,
+                    LocalDateTime.of(deadlineBuffer.getYear(), deadlineBuffer.getMonth(),
+                            deadlineBuffer.getDayOfMonth(), 23, 59)
+            );
+        }
+
+        return new TimeRange(
+                LocalDateTime.of(deadline.getYear(), deadline.getMonth(), deadline.getDayOfMonth(), 0, 0),
+                deadline
+        );
+    }
+
+    private int calculateEventColumn(Event event) {
+        LocalDateTime eventStart = switch (event) {
+            case TeachingSessionDTO teachingSession -> teachingSession.startDate();
+            case AssignmentDTO assignment -> assignment.deadline();
+            default -> null;
+        };
+        if (eventStart == null) {
+            return -1;
+        }
+        return (int) ChronoUnit.DAYS.between(startDate, eventStart) + 1;
+    }
+
+    private boolean isColumnValid(int column) {
+        return column >= 1 && column <= (timetableGrid.getColumnCount() - 1);
+    }
+
+    private int[] calculateEventRows(Event event) {
+        LocalDateTime start;
+        LocalDateTime end;
+
+        switch (event) {
+            case TeachingSessionDTO teachingSession -> {
+                start = teachingSession.startDate();
+                end = teachingSession.endDate();
+            }
+            case AssignmentDTO assignment -> {
+                TimeRange timeRange = calculateAssignmentTimeRange(assignment.deadline());
+                start = timeRange.start();
+                end = timeRange.end();
+            }
+            default -> {
+                return new int[]{-1, -1};
+            }
+        }
+
+        return new int[]{
+                getRowIndex(start, true),
+                getRowIndex(end, false)
+        };
+    }
+
+    private void handleEventOverlap(EventLabel eventLabel, int column, int startRow, int endRow) {
+        Set<EventLabel> overlappingEvents = getEventLabelsInRange(column, startRow, endRow);
+        if (overlappingEvents.isEmpty()) {
+            return;
+        }
+
+        int maxLabelPosition = overlappingEvents.stream()
+                .mapToInt(EventLabel::getNumberOfLabels)
+                .max()
+                .orElse(1);
+
+        boolean positioned = false;
+        for (int i = 1; i <= maxLabelPosition; i++) {
+            int finalI = i;
+            if (overlappingEvents.stream().noneMatch(existing -> existing.getLabelPosition() == finalI)) {
+                eventLabel.updateLabelPosition(i, maxLabelPosition);
+                positioned = true;
+                break;
+            }
+        }
+
+        if (!positioned) {
+            int newMaxPosition = maxLabelPosition + 1;
+            eventLabel.updateLabelPosition(newMaxPosition, newMaxPosition);
+            overlappingEvents.forEach(existing ->
+                    existing.updateLabelPosition(existing.getLabelPosition(), newMaxPosition));
+        }
+    }
+
+    private void addEventToGrid(EventLabel eventLabel, int column, int startRow, int endRow) {
+        GridPane.setHalignment(eventLabel, javafx.geometry.HPos.LEFT);
+        GridPane.setValignment(eventLabel, javafx.geometry.VPos.TOP);
+
+        eventLabel.setOnMouseClicked(mouseEvent -> handleEditEvent(eventLabel.getEvent()));
+        timetableGrid.add(eventLabel, column, startRow, 1, endRow - startRow + 1);
     }
 
     private void clearTimetable() {
@@ -390,7 +465,7 @@ public class TimetableViewController implements ControllerAware {
         return isStart ? (int) (timeInHours / timeStep + 1) : (int) Math.ceil(timeInHours / timeStep);
     }
 
-    // First value is height, second is offset
+    // The first value is height, the second is offset
     private double[] getEventHeightAndOffset(LocalDateTime start, LocalDateTime end) {
         double timeStep = 24.0 / (timetableGrid.getRowCount() - 1);
         double startHours = start.getHour() + start.getMinute() / 60.0;
@@ -403,9 +478,10 @@ public class TimetableViewController implements ControllerAware {
     }
 
     private void updateEventHeight() {
+        double cellHeight;
         cellHeight = timetableGrid.getHeight() / timetableGrid.getRowCount();
         timetableGrid.getChildren().stream()
-                .filter(node -> node instanceof EventLabel)
+                .filter(EventLabel.class::isInstance)
                 .forEach(node -> ((EventLabel) node).updateLabelHeight(cellHeight));
 
         List<RowConstraints> rowConstraints = timetableGrid.getRowConstraints();
@@ -420,7 +496,7 @@ public class TimetableViewController implements ControllerAware {
         // 50 is the width of the first column
         cellWidth = (timetableGrid.getWidth() - 50) / (timetableGrid.getColumnCount() - 1);
         timetableGrid.getChildren().stream()
-                .filter(node -> node instanceof EventLabel)
+                .filter(EventLabel.class::isInstance)
                 .forEach(node -> ((EventLabel) node).updateLabelWidth(cellWidth));
 
         List<ColumnConstraints> columnConstraints = timetableGrid.getColumnConstraints();
