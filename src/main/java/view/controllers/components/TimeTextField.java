@@ -13,7 +13,7 @@ public class TimeTextField extends TextField {
         String character = event.getCharacter();
         String text = this.getText();
 
-        if (!character.matches("[0-9]") || text.length() >= 5) {
+        if (!character.matches("\\d") || text.length() >= 5) {
             event.consume();
             return;
         }
@@ -49,7 +49,6 @@ public class TimeTextField extends TextField {
             case 4:
                 break;
             default:
-                System.out.println("Invalid input");
                 event.consume();
                 break;
         }
