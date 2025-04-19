@@ -11,8 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NotificationService {
+    private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
     private static final int NOTIFICATION_CHECK = 60; // 1 minute
 
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -55,13 +58,13 @@ public class NotificationService {
                     });
 
             LocalDateTime eventTime;
-            if (event instanceof AssignmentDTO) {
-                eventTime = ((AssignmentDTO) event).deadline();
-            } else if (event instanceof TeachingSessionDTO) {
-                eventTime = ((TeachingSessionDTO) event).startDate();
-            } else {
-                System.out.println("Unknown event type: " + event.getClass().getName());
-                continue;
+            switch (event) {
+                case AssignmentDTO assignmentDTO -> eventTime = assignmentDTO.deadline();
+                case TeachingSessionDTO teachingSessionDTO -> eventTime = teachingSessionDTO.startDate();
+                default -> {
+                    logger.info("Unknown event type: {}", event.getClass().getName());
+                    continue;
+                }
             }
 
             int minutesUntilEvent = (int) ChronoUnit.MINUTES.between(now, eventTime);
@@ -82,12 +85,12 @@ public class NotificationService {
     private void clearPastEvents(LocalDateTime now) {
         notificationStatuses.removeIf(status -> {
             LocalDateTime eventTime;
-            if (status.getEvent() instanceof AssignmentDTO) {
-                eventTime = ((AssignmentDTO) status.getEvent()).deadline();
-            } else if (status.getEvent() instanceof TeachingSessionDTO) {
-                eventTime = ((TeachingSessionDTO) status.getEvent()).startDate();
+            if (status.getEvent() instanceof AssignmentDTO assignmentDTO) {
+                eventTime = assignmentDTO.deadline();
+            } else if (status.getEvent() instanceof TeachingSessionDTO teachingSessionDTO) {
+                eventTime = teachingSessionDTO.startDate();
             } else {
-                System.out.println("Unknown event type: " + status.getEvent().getClass().getName());
+                logger.info("Unknown event type: {}", status.getEvent().getClass().getName());
                 return true; // Remove unknown event types
             }
             return eventTime.isBefore(now);
