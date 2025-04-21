@@ -3,7 +3,6 @@ package model;
 import dao.LocationDAO;
 import dto.LocationDTO;
 import entity.LocationEntity;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

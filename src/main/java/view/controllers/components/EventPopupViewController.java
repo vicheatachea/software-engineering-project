@@ -1,17 +1,34 @@
 package view.controllers.components;
 
-import controller.*;
-import dto.*;
+import controller.BaseController;
+import controller.EventController;
+import controller.GroupController;
+import controller.LocaleController;
+import controller.LocationController;
+import controller.SubjectController;
+import controller.TimetableController;
+import dto.AssignmentDTO;
+import dto.Event;
+import dto.GroupDTO;
+import dto.LocationDTO;
+import dto.SubjectDTO;
+import dto.TeachingSessionDTO;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import util.TimeFormatterUtil;
-import view.controllers.pages.main.TimetableViewController;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -19,6 +36,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import view.controllers.pages.main.TimetableViewController;
+
 
 public class EventPopupViewController {
     private ResourceBundle viewText;
@@ -254,9 +273,12 @@ public class EventPopupViewController {
         String groupText = viewText.getString("event.group");
 
         switch (scheduleType) {
-            case String value when value.equals(myselfText) -> toggleScheduleView(false);
-            case String value when value.equals(groupText) -> toggleScheduleView(true);
-            default -> System.out.println("Schedule type not recognised");
+            case String value when value.equals(myselfText)
+                    -> toggleScheduleView(false);
+            case String value when value.equals(groupText)
+                    -> toggleScheduleView(true);
+            default
+                    -> System.out.println("Schedule type not recognised");
         }
     }
 
@@ -264,8 +286,11 @@ public class EventPopupViewController {
         String groupName = groupComboBox.getValue();
 
         if (groupName != null) {
-            GroupDTO group = groupController.fetchGroupByName(groupName);
-            subjectComboBox.setValue(group.subjectCode());
+            GroupDTO group = groupController
+                    .fetchGroupByName(groupName);
+            subjectComboBox.setValue(
+                    group.subjectCode()
+            );
         }
     }
 

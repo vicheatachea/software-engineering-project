@@ -4,7 +4,6 @@ import entity.UserEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
-
 import java.util.List;
 
 import static util.PasswordHashUtil.verifyPassword;

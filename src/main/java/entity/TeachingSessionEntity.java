@@ -1,7 +1,14 @@
 package entity;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Set;
@@ -129,14 +136,21 @@ public class TeachingSessionEntity {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
 		TeachingSessionEntity that = (TeachingSessionEntity) o;
 
-		return Objects.equals(id, that.id) && Objects.equals(StartDate, that.StartDate) &&
-		       Objects.equals(EndDate, that.EndDate) && Objects.equals(location, that.location) &&
-		       Objects.equals(timetable, that.timetable) && Objects.equals(subject, that.subject);
+		return Objects.equals(id, that.id)
+				&& Objects.equals(StartDate, that.StartDate)
+				&& Objects.equals(EndDate, that.EndDate)
+				&& Objects.equals(location, that.location)
+				&& Objects.equals(timetable, that.timetable)
+				&& Objects.equals(subject, that.subject);
 	}
 
 	@Override

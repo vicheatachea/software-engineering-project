@@ -9,7 +9,6 @@ import entity.SubjectEntity;
 import entity.TimetableEntity;
 import entity.UserEntity;
 import entity.UserGroupEntity;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

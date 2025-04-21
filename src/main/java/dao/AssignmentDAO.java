@@ -4,10 +4,13 @@ import entity.AssignmentEntity;
 import entity.UserGroupEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-
 import java.sql.Timestamp;
 import java.util.List;
 
+/**
+ * AssignmentDAO is a Data Access Object (DAO) class that provides methods to interact with the database
+ * for the AssignmentEntity. It handles CRUD operations and other specific queries related to assignments.
+ */
 public class AssignmentDAO {
 
 	private static final EntityManagerFactory emf = datasource.MariaDBConnection.getEntityManagerFactory();
@@ -156,8 +159,7 @@ public class AssignmentDAO {
 		}
 	}
 
-	public List<AssignmentEntity> findAllByTimetableIdDuringPeriod(Long timetableId, Timestamp start,
-	                                                               Timestamp end) {
+	public List<AssignmentEntity> findAllByTimetableIdDuringPeriod(Long timetableId, Timestamp start, Timestamp end) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT a FROM AssignmentEntity a WHERE a.timetable.id = :timetableId AND " +
@@ -176,11 +178,9 @@ public class AssignmentDAO {
 	}
 
 	public List<AssignmentEntity> findAllByLocaleDuringPeriod(Timestamp start, Timestamp end, String localeCode) {
-
 		EntityManager em = emf.createEntityManager();
 		try {
-			return em.createQuery("SELECT a FROM AssignmentEntity a WHERE a.localeCode = :localeCode AND " +
-			                      "a.deadline BETWEEN :start AND :end", AssignmentEntity.class)
+			return em.createQuery("SELECT a FROM AssignmentEntity a WHERE a.localeCode = :localeCode AND " + "a.deadline BETWEEN :start AND :end", AssignmentEntity.class)
 					.setParameter("localeCode", localeCode)
 					.setParameter("start", start)
 					.setParameter("end", end)

@@ -7,13 +7,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import view.controllers.SidebarControllerAware;
-import view.controllers.ControllerAware;
-import view.controllers.components.SidebarViewController;
-
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import view.controllers.ControllerAware;
+import view.controllers.SidebarControllerAware;
+import view.controllers.components.SidebarViewController;
+
 
 public class SettingsViewController implements ControllerAware, SidebarControllerAware {
     private LocaleController localeController;

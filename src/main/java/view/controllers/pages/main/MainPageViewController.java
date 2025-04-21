@@ -1,6 +1,9 @@
 package view.controllers.pages.main;
 
 import controller.BaseController;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,9 +15,6 @@ import javafx.stage.Stage;
 import view.controllers.ControllerAware;
 import view.controllers.components.SidebarViewController;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class MainPageViewController implements Initializable {
 	Stage stage;
