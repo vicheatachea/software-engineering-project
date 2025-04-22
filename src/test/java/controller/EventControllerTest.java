@@ -13,13 +13,13 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EventControllerTest {
-
-	private static final EventController eventController = new EventController();
-	private static final LocationController locationController = new LocationController();
-	private static final UserController userController = new UserController();
-	private static final SubjectController subjectController = new SubjectController();
-	private static final GroupController groupController = new GroupController();
-	private static final TimetableController timetableController = new TimetableController();
+	private static final BaseController baseController = new BaseController();
+	private static final EventController eventController = baseController.getEventController();
+	private static final LocationController locationController = baseController.getLocationController();
+	private static final UserController userController = baseController.getUserController();
+	private static final SubjectController subjectController = baseController.getSubjectController();
+	private static final GroupController groupController = baseController.getGroupController();
+	private static final TimetableController timetableController = baseController.getTimetableController();
 
 	private static void resetDatabase() {
 		eventController.deleteAllEvents();

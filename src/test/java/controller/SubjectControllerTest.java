@@ -18,12 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class SubjectControllerTest {
-
-	private static final SubjectController subjectController = new SubjectController();
-	private static final UserController userController = new UserController();
-	private static final EventController eventController = new EventController();
-	private static final TimetableController timetableController = new TimetableController();
-	private static final GroupController groupController = new GroupController();
+	private static final BaseController baseController = new BaseController();
+	private static final SubjectController subjectController = baseController.getSubjectController();
+	private static final UserController userController = baseController.getUserController();
+	private static final EventController eventController = baseController.getEventController();
+	private static final TimetableController timetableController = baseController.getTimetableController();
+	private static final GroupController groupController = baseController.getGroupController();
 
 	private static void resetDatabase() {
 		subjectController.deleteAllSubjects();

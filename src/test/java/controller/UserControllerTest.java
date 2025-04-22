@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserControllerTest {
-
-	private static final UserController userController = new UserController();
+	private static final BaseController baseController = new BaseController();
+	private static final UserController userController = baseController.getUserController();
 
 	@BeforeAll
 	static void ensureDatabase() {

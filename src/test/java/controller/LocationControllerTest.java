@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LocationControllerTest {
-
-	private static final LocationController locationController = new LocationController();
-	private static final UserController userController = new UserController();
+	private static final BaseController baseController = new BaseController();
+	private static final LocationController locationController = baseController.getLocationController();
+	private static final UserController userController = baseController.getUserController();
 
 
 	private static void resetDatabase() {

@@ -15,11 +15,11 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GroupControllerTest {
-
-	private static final GroupController groupController = new GroupController();
-	private static final UserController userController = new UserController();
-	private static final TimetableController timetableController = new TimetableController();
-	private static final SubjectController subjectController = new SubjectController();
+	private static final BaseController baseController = new BaseController();
+	private static final GroupController groupController = baseController.getGroupController();
+	private static final UserController userController = baseController.getUserController();
+	private static final TimetableController timetableController = baseController.getTimetableController();
+	private static final SubjectController subjectController = baseController.getSubjectController();
 
 	private static UserDTO createTeacher(String socialNumber) {
 		return new UserDTO("teacher", "password", "John", "Doe", LocalDateTime.parse("2000-01-01T12:00:00"),

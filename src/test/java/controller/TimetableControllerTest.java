@@ -16,11 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TimetableControllerTest {
-
-	private static final TimetableController timetableController = new TimetableController();
-	private static final UserController userController = new UserController();
-	private static final GroupController groupController = new GroupController();
-	private static final SubjectController subjectController = new SubjectController();
+	private static final BaseController baseController = new BaseController();
+	private static final TimetableController timetableController = baseController.getTimetableController();
+	private static final UserController userController = baseController.getUserController();
+	private static final GroupController groupController = baseController.getGroupController();
+	private static final SubjectController subjectController = baseController.getSubjectController();
 
 	private static UserDTO createTeacher() {
 		return new UserDTO("testTimetable", "testPassword", "Test", "Teacher",
