@@ -135,7 +135,7 @@ public class UserModel {
 			// Save changes
 			userDAO.update(user);
 		} catch (IllegalArgumentException e) {
-			logger.info("Update failed: ", e);
+			throw new IllegalArgumentException("Update failed: " + e.getMessage());
 		}
 	}
 
