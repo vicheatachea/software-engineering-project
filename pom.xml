@@ -127,11 +127,8 @@
                 <configuration>
                     <excludes>
                         <!-- Exclusions for JaCoCo report generation -->
-                        <exclude>main.Main.class</exclude>
+                        <exclude>**/main/**/*</exclude>
                         <exclude>**/view/**/*</exclude>
-                        <exclude>**/controller/notifications/**/*</exclude>
-                        <exclude>**/controller/BaseController.class</exclude>
-                        <exclude>**/controller/cache/**/*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
