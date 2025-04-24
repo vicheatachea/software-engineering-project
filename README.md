@@ -39,11 +39,11 @@ To install the STMS project, follow these steps:
 1. Clone the repository to your local machine, with the following command:
 
     ```bash
-    git clone https://github.com/vicheatachea/software-engineering-project.git
+    git clone https://github.com/vicheatachea/student-timetable-management-system.git
     ```
 
 2. Open the project in IntelliJ IDEA or another Java IDE.
 
-3. Create the database in MariaDB by running the db_init.sql script located in the `src/main/resources` directory.
+3. Create the database in MariaDB by running the `db_init.sql` script located in the `src/main/resources` directory.
 
 4. Run the project by executing the `Main` class located in the `src/main/java` directory.
