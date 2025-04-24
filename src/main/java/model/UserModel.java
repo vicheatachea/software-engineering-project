@@ -63,12 +63,12 @@ public class UserModel {
 	public boolean authenticate(String username, String password) {
 		UserEntity user = userDAO.authenticate(username, password);
 
-		if (user != null) {
-			UserPreferences.setUser(user.getId(), user.getRole());
-			return true;
+		if (user == null) {
+			return false;
 		}
 
-		return false;
+		UserPreferences.setUser(user.getId(), user.getRole());
+		return true;
 	}
 
 	public boolean register(UserDTO userDTO) {
