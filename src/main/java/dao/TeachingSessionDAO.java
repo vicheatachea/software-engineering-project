@@ -22,7 +22,7 @@ public class TeachingSessionDAO {
 		logger.error(ERROR_MESSAGE, e);
 	}
 
-	public void persist(TeachingSessionEntity teachingSession) {
+	public void persist(final TeachingSessionEntity teachingSession) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
@@ -38,7 +38,7 @@ public class TeachingSessionDAO {
 		}
 	}
 
-	public void update(TeachingSessionEntity entity) {
+	public void update(final TeachingSessionEntity entity) {
 		EntityManager em = emf.createEntityManager();
 		TeachingSessionEntity teachingSession = em.find(TeachingSessionEntity.class, entity.getId());
 
@@ -79,7 +79,7 @@ public class TeachingSessionDAO {
 		}
 	}
 
-	public TeachingSessionEntity findById(Long id) {
+	public TeachingSessionEntity findById(final Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.find(TeachingSessionEntity.class, id);
@@ -107,7 +107,7 @@ public class TeachingSessionDAO {
 		}
 	}
 
-	public void delete(TeachingSessionEntity teachingSession) {
+	public void delete(final TeachingSessionEntity teachingSession) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
@@ -123,7 +123,7 @@ public class TeachingSessionDAO {
 		}
 	}
 
-	public TeachingSessionEntity findBySubjectId(Long id) {
+	public TeachingSessionEntity findBySubjectId(final Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.subject.id = :id",
@@ -138,7 +138,7 @@ public class TeachingSessionDAO {
 		}
 	}
 
-	public TeachingSessionEntity findByLocationId(Long id) {
+	public TeachingSessionEntity findByLocationId(final Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.location.id = :id",
@@ -153,7 +153,7 @@ public class TeachingSessionDAO {
 		}
 	}
 
-	public List<TeachingSessionEntity> findAllByTimetableId(Long id) {
+	public List<TeachingSessionEntity> findAllByTimetableId(final Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.timetable.id = :id",
@@ -184,7 +184,8 @@ public class TeachingSessionDAO {
 		}
 	}
 
-	public List<TeachingSessionEntity> findAllByTimetableIdDuringPeriod(Long id, Timestamp start, Timestamp end) {
+	public List<TeachingSessionEntity> findAllByTimetableIdDuringPeriod(final Long id, final Timestamp start,
+	                                                                    final Timestamp end) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.timetable.id = :id AND t.startDate " +
@@ -200,13 +201,18 @@ public class TeachingSessionDAO {
 		}
 	}
 
-	public List<TeachingSessionEntity> findAllByLocaleDuringPeriod(Timestamp start, Timestamp end, String localeCode) {
+	public List<TeachingSessionEntity> findAllByLocaleDuringPeriod(final Timestamp start, final Timestamp end,
+	                                                               final String localeCode, final Long timetableId) {
 		EntityManager em = emf.createEntityManager();
 
 		try {
-			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.localeCode = :localeCode AND " +
-			                      "t.startDate BETWEEN :start AND :end", TeachingSessionEntity.class)
-			         .setParameter("localeCode", localeCode).setParameter("start", start).setParameter("end", end)
+			return em.createQuery("SELECT t FROM TeachingSessionEntity t WHERE t.timetable.id = :timetableId AND " +
+			                      "t.startDate BETWEEN :start AND :end AND t.localeCode = :localeCode",
+			                      TeachingSessionEntity.class)
+			         .setParameter("localeCode", localeCode)
+			         .setParameter("start", start)
+			         .setParameter("end", end)
+			         .setParameter("timetableId", timetableId)
 			         .getResultList();
 		} catch (NoResultException e) {
 			logErrorMessage(e);
