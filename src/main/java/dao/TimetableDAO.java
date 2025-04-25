@@ -23,7 +23,7 @@ public class TimetableDAO {
 		logger.error(ERROR_MESSAGE, e);
 	}
 
-	public void persist(TimetableEntity timetable) {
+	public void persist(final TimetableEntity timetable) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
@@ -53,7 +53,7 @@ public class TimetableDAO {
 		}
 	}
 
-	public List<TimetableEntity> findAllByUserId(Long userId) {
+	public List<TimetableEntity> findAllByUserId(final Long userId) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			List<TimetableEntity> timetables =
@@ -84,7 +84,7 @@ public class TimetableDAO {
 	}
 
 
-	public TimetableEntity findById(Long id) {
+	public TimetableEntity findById(final Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.find(TimetableEntity.class, id);
@@ -98,7 +98,7 @@ public class TimetableDAO {
 		}
 	}
 
-	public void delete(TimetableEntity timetable) {
+	public void delete(final TimetableEntity timetable) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 
@@ -157,7 +157,7 @@ public class TimetableDAO {
 		}
 	}
 
-	public TimetableEntity findByUserId(long userId) {
+	public TimetableEntity findByUserId(final long userId) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT u.timetable FROM UserEntity u WHERE u.id = :userId", TimetableEntity.class)
@@ -172,7 +172,7 @@ public class TimetableDAO {
 		}
 	}
 
-	public TimetableEntity findByGroupName(String groupName) {
+	public TimetableEntity findByGroupName(final String groupName) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT g.timetable FROM UserGroupEntity g WHERE g.name = :groupName",
