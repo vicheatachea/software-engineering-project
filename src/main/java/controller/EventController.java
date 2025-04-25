@@ -15,7 +15,7 @@ public class EventController {
 	}
 
 	// Fetch all events that have a certain locale
-	public List<Event> fetchEventsByLocale(LocalDateTime startDate, LocalDateTime endDate, String localeCode) {
+	public List<Event> fetchEventsByUserAndLocale(LocalDateTime startDate, LocalDateTime endDate, String localeCode) {
 		return eventModel.fetchEventsByUserAndLocale(startDate, endDate, localeCode);
 	}
 
