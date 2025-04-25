@@ -143,14 +143,15 @@ public class AssignmentDAO {
 	}
 
 	public List<AssignmentEntity> findAllByLocaleDuringPeriod(final Timestamp start, final Timestamp end,
-	                                                          final String localeCode) {
+	                                                          final String localeCode, final Long timetableId) {
 
 		EntityManager em = emf.createEntityManager();
 		try {
-			return em.createQuery("SELECT a FROM AssignmentEntity a WHERE a.localeCode = :localeCode AND " +
-			                      "a.deadline BETWEEN :start AND :end", AssignmentEntity.class)
+			return em.createQuery("SELECT a FROM AssignmentEntity a WHERE a.timetable.id = :timetableId AND " +
+			                      "a.deadline BETWEEN :start AND :end AND a.localeCode = :localeCode",
+			                      AssignmentEntity.class)
 			         .setParameter("localeCode", localeCode).setParameter("start", start).setParameter("end", end)
-			         .getResultList();
+			         .setParameter("timetableId", timetableId).getResultList();
 		} catch (NoResultException e) {
 			logErrorMessage(e);
 			return List.of();
