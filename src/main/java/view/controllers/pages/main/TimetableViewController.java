@@ -291,7 +291,7 @@ public class TimetableViewController implements ControllerAware {
 		                                        .orElse(null);
 
 		return selectedLocale != null
-		       ? eventController.fetchEventsByLocale(startDate, endDate, selectedLocale.toLanguageTag())
+		       ? eventController.fetchEventsByUserAndLocale(startDate, endDate, selectedLocale.toLanguageTag())
 		       : eventController.fetchEventsByUser(startDate, endDate);
 	}
 
