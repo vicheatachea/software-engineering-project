@@ -158,7 +158,7 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 				return;
 			}
 
-			UserDTO userDTO = new UserDTO(username, password, firstName, lastName, dateOfBirth, socialNumber.toUpperCase(), role);
+			UserDTO userDTO = new UserDTO(username, password, firstName, lastName, dateOfBirth, socialNumber.toUpperCase(), role.toUpperCase());
 
 			if (userController.registerUser(userDTO)) {
 				userController.authenticateUser(username, password);
