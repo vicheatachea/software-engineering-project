@@ -16,8 +16,12 @@ class LocationDAOTest {
 	private static final LocationDAO locationDAO = new LocationDAO();
 
 	@BeforeAll
-	static void ensureDatabase() throws SQLException {
-		MariaDBConnection.verifyDatabase();
+	static void ensureDatabase() {
+		try {
+			new MariaDBConnection().verifyDatabase();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@AfterAll
@@ -28,11 +32,6 @@ class LocationDAOTest {
 	@BeforeEach
 	void setUp() {
 		locationDAO.deleteAll();
-		try {
-			Thread.sleep(0);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	@Test

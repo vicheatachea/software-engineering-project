@@ -14,77 +14,80 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import view.controllers.ControllerAware;
 import view.controllers.components.EventNotification;
 
 public class NotificationsViewController implements ControllerAware {
-    private List<EventNotification> eventNotifications = new ArrayList<>();
-    private ResourceBundle viewText;
-    private BaseController baseController;
+	private static final Logger logger = LoggerFactory.getLogger(NotificationsViewController.class);
+	private List<EventNotification> eventNotifications = new ArrayList<>();
+	private ResourceBundle viewText;
+	private BaseController baseController;
 
-    @FXML
-    private VBox notificationsContainer;
-    @FXML
-    private Button markAllReadButton;
-    @FXML
-    private Label notificationLabel;
-    @FXML
-    private VBox notificationsVBox;
-    @FXML
-    private ScrollPane notificationsScrollPane;
+	@FXML
+	private VBox notificationsContainer;
+	@FXML
+	private Button markAllReadButton;
+	@FXML
+	private Label notificationLabel;
+	@FXML
+	private VBox notificationsVBox;
+	@FXML
+	private ScrollPane notificationsScrollPane;
 
-    @Override
-    public void setBaseController(BaseController baseController) {
-        this.baseController = baseController;
-        this.viewText = baseController.getLocaleController().getUIBundle();
-    }
+	@Override
+	public void setBaseController(BaseController baseController) {
+		this.baseController = baseController;
+		this.viewText = baseController.getLocaleController().getUIBundle();
+	}
 
-    @FXML
-    private void initialize() {
-        Platform.runLater(() -> {
-            markAllReadButton.setText(viewText.getString("notifications.markAllAsRead"));
-            notificationLabel.setText(viewText.getString("notifications.title"));
-        });
-        VBox.setVgrow(notificationsScrollPane, javafx.scene.layout.Priority.ALWAYS);
-    }
+	@FXML
+	private void initialize() {
+		Platform.runLater(() -> {
+			markAllReadButton.setText(viewText.getString("notifications.markAllAsRead"));
+			notificationLabel.setText(viewText.getString("notifications.title"));
+		});
+		VBox.setVgrow(notificationsScrollPane, javafx.scene.layout.Priority.ALWAYS);
+	}
 
-    public void setEventNotifications(List<EventNotification> eventNotifications) {
-        clearNotifications();
+	public void setEventNotifications(List<EventNotification> eventNotifications) {
+		clearNotifications();
 
-        this.eventNotifications = eventNotifications;
-        for (EventNotification eventNotification : eventNotifications) {
-            loadNotification(eventNotification.getEvent(), eventNotification.getTime());
-        }
-    }
+		this.eventNotifications = eventNotifications;
+		for (EventNotification eventNotification : eventNotifications) {
+			loadNotification(eventNotification.getEvent(), eventNotification.getTime());
+		}
+	}
 
-    private void loadNotification(Event event, int time) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/pages/user/notification-item.fxml"));
-            HBox notificationBox = loader.load();
+	private void loadNotification(Event event, int time) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/pages/user/notification-item.fxml"));
+			HBox notificationBox = loader.load();
 
-            NotificationItemViewController itemViewController = loader.getController();
-            itemViewController.setBaseController(baseController);
-            itemViewController.setNotificationData(this, event, time);
+			NotificationItemViewController itemViewController = loader.getController();
+			itemViewController.setBaseController(baseController);
+			itemViewController.setNotificationData(this, event, time);
 
-            notificationsContainer.getChildren().add(notificationBox);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+			notificationsContainer.getChildren().add(notificationBox);
+		} catch (IOException e) {
+			logger.error("Error: ", e);
+		}
+	}
 
-    public void removeNotification(HBox notification) {
-        int notificationIndex = notificationsContainer.getChildren().indexOf(notification);
-        notificationsContainer.getChildren().remove(notificationIndex);
-        eventNotifications.remove(notificationIndex);
-    }
+	public void removeNotification(HBox notification) {
+		int notificationIndex = notificationsContainer.getChildren().indexOf(notification);
+		notificationsContainer.getChildren().remove(notificationIndex);
+		eventNotifications.remove(notificationIndex);
+	}
 
-    @FXML
-    private void handleMarkAllRead() {
-        clearNotifications();
-    }
+	@FXML
+	private void handleMarkAllRead() {
+		clearNotifications();
+	}
 
-    private void clearNotifications() {
-        notificationsContainer.getChildren().clear();
-        eventNotifications.clear();
-    }
+	private void clearNotifications() {
+		notificationsContainer.getChildren().clear();
+		eventNotifications.clear();
+	}
 }

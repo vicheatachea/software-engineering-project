@@ -8,6 +8,8 @@ public class TimeFormatterUtil {
     private static final String TIME_FORMAT = "HH:mm";
     private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
 
+    private TimeFormatterUtil() {}
+
     public static LocalTime getTimeFromString(String time) {
         return LocalTime.parse(time, timeFormatter);
     }

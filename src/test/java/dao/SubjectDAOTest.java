@@ -17,8 +17,12 @@ class SubjectDAOTest {
 	private static final SubjectDAO subjectDAO = new SubjectDAO();
 
 	@BeforeAll
-	static void ensureDatabase() throws SQLException {
-		MariaDBConnection.verifyDatabase();
+	static void ensureDatabase() {
+		try {
+			new MariaDBConnection().verifyDatabase();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@AfterAll
@@ -29,11 +33,6 @@ class SubjectDAOTest {
 	@BeforeEach
 	void setUp() {
 		subjectDAO.deleteAll();
-		try {
-			Thread.sleep(0);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	@Test

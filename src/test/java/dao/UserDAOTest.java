@@ -19,39 +19,40 @@ class UserDAOTest {
 	private static final UserDAO userDao = new UserDAO();
 	private static final TimetableDAO timetableDAO = new TimetableDAO();
 
+	private static void resetDatabase() {
+		userDao.deleteAll();
+		timetableDAO.deleteAll();
+	}
+
 	@BeforeAll
-	static void ensureDatabase() throws SQLException {
-		MariaDBConnection.verifyDatabase();
-	}
-
-	@AfterAll
-	static void tearDown() {
-		userDao.deleteAll();
-		timetableDAO.deleteAll();
-	}
-
-
-	@BeforeEach
-	void setUp() {
-		userDao.deleteAll();
-		timetableDAO.deleteAll();
+	static void ensureDatabase() {
 		try {
-			Thread.sleep(0);
-		} catch (InterruptedException e) {
+			new MariaDBConnection().verifyDatabase();
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
+	@AfterAll
+	static void tearDown() {
+		resetDatabase();
+	}
+
+	@BeforeEach
+	void setUp() {
+		resetDatabase();
+	}
+
 	@Test
 	void persist() {
-		Timestamp DoB = Timestamp.valueOf("2000-01-01 00:00:00");
+		Timestamp doB = Timestamp.valueOf("2000-01-01 00:00:00");
 
 		TimetableEntity timetable = new TimetableEntity();
 
 		timetableDAO.persist(timetable);
 
 		UserEntity user =
-				new UserEntity("John", "Doe", "JohnDoe", "password", DoB, "123456789AB", Role.STUDENT, timetable);
+				new UserEntity("John", "Doe", "JohnDoe", "password", doB, "123456789AB", Role.STUDENT, timetable);
 
 		userDao.persist(user);
 
@@ -68,14 +69,14 @@ class UserDAOTest {
 
 	@Test
 	void Update() {
-		Timestamp DoB = Timestamp.valueOf("2000-01-01 00:00:00");
+		Timestamp doB = Timestamp.valueOf("2000-01-01 00:00:00");
 
 		TimetableEntity timetable = new TimetableEntity();
 
 		timetableDAO.persist(timetable);
 
 		UserEntity user =
-				new UserEntity("John", "Doe", "JohnDoe", "password", DoB, "123456789AB", Role.STUDENT, timetable);
+				new UserEntity("John", "Doe", "JohnDoe", "password", doB, "123456789AB", Role.STUDENT, timetable);
 
 		userDao.persist(user);
 
@@ -102,14 +103,15 @@ class UserDAOTest {
 
 	@Test
 	void findByUsername() {
-		Timestamp DoB = Timestamp.valueOf("2000-01-01 00:00:00");
+		Timestamp dOB = Timestamp.valueOf("2000-01-01 00:00:00");
 
 		TimetableEntity timetable = new TimetableEntity();
 
 		timetableDAO.persist(timetable);
 
 		UserEntity user =
-				new UserEntity("John", "Doe", "JohnDoe", "password", DoB, "123456789AB", Role.STUDENT, timetable);
+				new UserEntity("John", "Doe", "JohnDoe", "password", dOB,
+				               "123456789AB", Role.STUDENT, timetable);
 
 		userDao.persist(user);
 
@@ -118,31 +120,31 @@ class UserDAOTest {
 
 	@Test
 	void authenticate() {
-		Timestamp DoB = Timestamp.valueOf("2000-01-01 00:00:00");
+		Timestamp doB = Timestamp.valueOf("2000-01-01 00:00:00");
 
 		TimetableEntity timetable = new TimetableEntity();
 
 		timetableDAO.persist(timetable);
 
 		UserEntity user =
-				new UserEntity("John", "Doe", "JohnDoe", "password", DoB, "123456789AB", Role.STUDENT, timetable);
+				new UserEntity("John", "Doe", "JohnDoe", "password", doB, "123456789AB", Role.STUDENT, timetable);
 
 		userDao.persist(user);
 
 		assertEquals(user.getId(), userDao.authenticate(user.getUsername(), "password").getId());
-		assertThrows(IllegalArgumentException.class, () -> userDao.authenticate(user.getUsername(), "wrongpassword"));
+		assertThrows(IllegalArgumentException.class, () -> userDao.authenticate("JohnDoe", "wrongPassword"));
 	}
 
 	@Test
 	void delete() {
-		Timestamp DoB = Timestamp.valueOf("2000-01-01 00:00:00");
+		Timestamp doB = Timestamp.valueOf("2000-01-01 00:00:00");
 
 		TimetableEntity timetable = new TimetableEntity();
 
 		timetableDAO.persist(timetable);
 
 		UserEntity user =
-				new UserEntity("John", "Doe", "JohnDoe", "password", DoB, "123456789AB", Role.STUDENT, timetable);
+				new UserEntity("John", "Doe", "JohnDoe", "password", doB, "123456789AB", Role.STUDENT, timetable);
 
 		userDao.persist(user);
 
@@ -153,8 +155,8 @@ class UserDAOTest {
 
 	@Test
 	void deleteAll() {
-		Timestamp DoB1 = Timestamp.valueOf("2000-01-01 00:00:00");
-		Timestamp DoB2 = Timestamp.valueOf("2000-01-02 00:00:00");
+		Timestamp doB1 = Timestamp.valueOf("2000-01-01 00:00:00");
+		Timestamp doB2 = Timestamp.valueOf("2000-01-02 00:00:00");
 
 		TimetableEntity timetable1 = new TimetableEntity();
 		TimetableEntity timetable2 = new TimetableEntity();
@@ -163,10 +165,10 @@ class UserDAOTest {
 		timetableDAO.persist(timetable2);
 
 		UserEntity user1 =
-				new UserEntity("John", "Doe", "JohnDoe", "password", DoB1, "123456789AB", Role.STUDENT, timetable1);
+				new UserEntity("John", "Doe", "JohnDoe", "password", doB1, "123456789AB", Role.STUDENT, timetable1);
 
 		UserEntity user2 =
-				new UserEntity("Jane", "Doe", "JaneDoe", "password12", DoB2, "234567891AB", Role.TEACHER, timetable2);
+				new UserEntity("Jane", "Doe", "JaneDoe", "password12", doB2, "234567891AB", Role.TEACHER, timetable2);
 
 		userDao.persist(user1);
 		userDao.persist(user2);

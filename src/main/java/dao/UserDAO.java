@@ -1,16 +1,28 @@
 package dao;
 
+import datasource.MariaDBConnection;
 import entity.UserEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 import static util.PasswordHashUtil.verifyPassword;
 
 public class UserDAO {
 
-	private static final EntityManagerFactory emf = datasource.MariaDBConnection.getEntityManagerFactory();
+	private static final String ERROR_MESSAGE = "Error: ";
+	private static final Logger logger = LoggerFactory.getLogger(UserDAO.class);
+
+	private static final EntityManagerFactory emf =
+			MariaDBConnection.getEntityManagerFactory();
+
+	private void logErrorMessage(final Exception e) {
+		logger.error(ERROR_MESSAGE, e);
+	}
 
 	public void persist(UserEntity user) {
 		EntityManager em = emf.createEntityManager();
@@ -20,7 +32,7 @@ public class UserDAO {
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
-			throw e;
+			logErrorMessage(e);
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -36,7 +48,7 @@ public class UserDAO {
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
-			throw e;
+			logErrorMessage(e);
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -48,7 +60,8 @@ public class UserDAO {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.find(UserEntity.class, id);
-		} catch (Exception e) {
+		} catch (NoResultException e) {
+			logErrorMessage(e);
 			return null;
 		} finally {
 			if (em.isOpen()) {
@@ -65,22 +78,7 @@ public class UserDAO {
 					.setParameter("id", id)
 					.getSingleResult();
 		} catch (NoResultException e) {
-			return null;
-		} finally {
-			if (em.isOpen()) {
-				em.close();
-			}
-		}
-	}
-
-	public UserEntity findStudentById(Long id) {
-		EntityManager em = emf.createEntityManager();
-		try {
-			return em
-					.createQuery("SELECT u FROM UserEntity u WHERE u.id = :id AND u.role = 'STUDENT'", UserEntity.class)
-					.setParameter("id", id)
-					.getSingleResult();
-		} catch (NoResultException e) {
+			logErrorMessage(e);
 			return null;
 		} finally {
 			if (em.isOpen()) {
@@ -96,6 +94,7 @@ public class UserDAO {
 			         .setParameter("username", username)
 			         .getSingleResult();
 		} catch (NoResultException e) {
+			logErrorMessage(e);
 			return null;
 		} finally {
 			if (em.isOpen()) {
@@ -108,23 +107,9 @@ public class UserDAO {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT u FROM UserEntity u", UserEntity.class).getResultList();
-		} catch (Exception e) {
-			return null;
-		} finally {
-			if (em.isOpen()) {
-				em.close();
-			}
-		}
-	}
-
-	// TODO: Delete this method if unused
-	public List<UserEntity> findAllStudents() {
-		EntityManager em = emf.createEntityManager();
-		try {
-			return em.createQuery("SELECT u FROM UserEntity u WHERE u.role = 'STUDENT'", UserEntity.class)
-			         .getResultList();
-		} catch (Exception e) {
-			return null;
+		} catch (NoResultException e) {
+			logErrorMessage(e);
+			return List.of();
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -155,7 +140,7 @@ public class UserDAO {
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
-			throw e;
+			logErrorMessage(e);
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -171,7 +156,7 @@ public class UserDAO {
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
-			throw e;
+			logErrorMessage(e);
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -186,6 +171,7 @@ public class UserDAO {
 			         .setParameter("socialNumber", socialNumber)
 			         .getSingleResult() != null;
 		} catch (NoResultException e) {
+			logErrorMessage(e);
 			return false;
 		} finally {
 			if (em.isOpen()) {

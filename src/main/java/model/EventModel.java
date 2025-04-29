@@ -68,12 +68,29 @@ public class EventModel {
 	}
 
 	// Fetch events by locale
-	public List<Event> fetchEventsByLocale(LocalDateTime startDate, LocalDateTime endDate, String localeCode) {
+	public List<Event> fetchEventsByUserAndLocale(LocalDateTime startDate, LocalDateTime endDate, String localeCode) {
+		List<Event> events = new ArrayList<>();
+
+		long userId = userModel.fetchCurrentUserId();
+
+		List<TimetableEntity> timetables = timetableDAO.findAllByUserId(userId);
+
+		for (TimetableEntity timetable : timetables) {
+			List<Event> eventsByTimetable =
+					fetchEventsByTimetableAndLocale(startDate, endDate, timetable.getId(), localeCode);
+			events.addAll(eventsByTimetable);
+		}
+
+		return events;
+	}
+
+	private List<Event> fetchEventsByTimetableAndLocale(LocalDateTime startDate, LocalDateTime endDate,
+	                                                    Long timetableId, String localeCode) {
 		List<Event> events = new ArrayList<>();
 
 		List<TeachingSessionEntity> teachingSessions =
 				teachingSessionDAO.findAllByLocaleDuringPeriod(Timestamp.valueOf(startDate), Timestamp.valueOf(endDate),
-				                                               localeCode);
+				                                               localeCode, timetableId);
 
 		if (teachingSessions != null) {
 			for (TeachingSessionEntity teachingSession : teachingSessions) {
@@ -83,7 +100,7 @@ public class EventModel {
 
 		List<AssignmentEntity> assignments =
 				assignmentDAO.findAllByLocaleDuringPeriod(Timestamp.valueOf(startDate), Timestamp.valueOf(endDate),
-				                                          localeCode);
+				                                          localeCode, timetableId);
 
 		if (assignments != null) {
 			for (AssignmentEntity assignment : assignments) {
@@ -245,7 +262,7 @@ public class EventModel {
 		teachingSessionDAO.deleteAll();
 	}
 
-	private boolean isValidTeachingSession(TeachingSessionDTO teachingSessionDTO) {
+	private void isValidTeachingSession(TeachingSessionDTO teachingSessionDTO) {
 		if (teachingSessionDTO.startDate() == null) {
 			throw new IllegalArgumentException("Start date cannot be null.");
 		}
@@ -261,10 +278,9 @@ public class EventModel {
 		if (teachingSessionDTO.timetableId() <= 0) {
 			throw new IllegalArgumentException("Timetable ID cannot be less than or equal to 0.");
 		}
-		return true;
 	}
 
-	private boolean isValidAssignment(AssignmentDTO assignmentDTO) {
+	private void isValidAssignment(AssignmentDTO assignmentDTO) {
 		if (assignmentDTO.assignmentName() == null || assignmentDTO.assignmentName().isEmpty()) {
 			throw new IllegalArgumentException("Assignment name cannot be null or empty.");
 		}
@@ -286,7 +302,6 @@ public class EventModel {
 		if (assignmentDTO.timetableId() <= 0) {
 			throw new IllegalArgumentException("Timetable ID cannot be less than or equal to 0.");
 		}
-		return true;
 	}
 
 }

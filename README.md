@@ -9,6 +9,7 @@ groups. Students can view their assignments and classes, and both teachers and s
 their individual timetables.
 
 ### Sequence diagram for creating an assignment:
+
 ![Create assignment sequence diagram](/docs/diagrams/images/Sequence_diagram_screenshot.png)
 
 For more information about the diagrams go to the [diagrams](/docs/diagrams) directory.
@@ -46,4 +47,4 @@ To install the STMS project, follow these steps:
 
 3. Create the database in MariaDB by running the `db_init.sql` script located in the `src/main/resources` directory.
 
-4. Run the project by executing the `Main` class located in the `src/main/java` directory.
+4. Run the project by executing the `Main` class located in the `src/main/java/main` directory.

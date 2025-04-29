@@ -1,7 +1,6 @@
 package dto;
 
 import java.time.LocalDateTime;
-import java.util.Locale;
 
 /**
  * AssignmentDTO is a Data Transfer Object (DTO) class that represents an assignment.

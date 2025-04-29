@@ -1,15 +1,30 @@
 package dao;
 
+import datasource.MariaDBConnection;
 import entity.LocationEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 public class LocationDAO {
 
-	private static final EntityManagerFactory emf = datasource.MariaDBConnection.getEntityManagerFactory();
+	private static final String ERROR_MESSAGE = "Error: ";
 
-	public void persist(LocationEntity location) {
+	private static final Logger logger = LoggerFactory.getLogger(LocationDAO.class);
+
+	private static final EntityManagerFactory emf =
+			MariaDBConnection.getEntityManagerFactory();
+
+
+	private void logErrorMessage(final Exception e) {
+		logger.error(ERROR_MESSAGE, e);
+	}
+
+	public void persist(final LocationEntity location) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
@@ -17,7 +32,7 @@ public class LocationDAO {
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
-			throw e;
+			logErrorMessage(e);
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -25,7 +40,7 @@ public class LocationDAO {
 		}
 	}
 
-	public void update(LocationEntity location) {
+	public void update(final LocationEntity location) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
@@ -33,7 +48,7 @@ public class LocationDAO {
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
-			throw e;
+			logErrorMessage(e);
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -41,11 +56,12 @@ public class LocationDAO {
 		}
 	}
 
-	public LocationEntity findById(Long id) {
+	public LocationEntity findById(final Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.find(LocationEntity.class, id);
-		} catch (Exception e) {
+		} catch (NoResultException e) {
+			logErrorMessage(e);
 			return null;
 		} finally {
 			if (em.isOpen()) {
@@ -58,8 +74,9 @@ public class LocationDAO {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT l FROM LocationEntity l", LocationEntity.class).getResultList();
-		} catch (Exception e) {
-			return null;
+		} catch (NoResultException e) {
+			logErrorMessage(e);
+			return List.of();
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -67,13 +84,13 @@ public class LocationDAO {
 		}
 	}
 
-	public LocationEntity findByName(String name) {
+	public LocationEntity findByName(final String name) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT l FROM LocationEntity l WHERE l.name = :name", LocationEntity.class)
-			         .setParameter("name", name)
-			         .getSingleResult();
-		} catch (Exception e) {
+			         .setParameter("name", name).getSingleResult();
+		} catch (NoResultException e) {
+			logErrorMessage(e);
 			return null;
 		} finally {
 			if (em.isOpen()) {
@@ -93,7 +110,7 @@ public class LocationDAO {
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
-			throw e;
+			logErrorMessage(e);
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -110,7 +127,7 @@ public class LocationDAO {
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
-			throw e;
+			logErrorMessage(e);
 		} finally {
 			if (em.isOpen()) {
 				em.close();

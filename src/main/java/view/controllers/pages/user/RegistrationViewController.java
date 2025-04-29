@@ -30,6 +30,9 @@ import view.controllers.components.SidebarViewController;
 
 
 public class RegistrationViewController implements ControllerAware, SidebarControllerAware {
+	private static final String ERROR_TITLE = "error.title";
+	private static final String WARNING_TITLE = "warning.title";
+
 	private BaseController baseController;
 	private UserController userController;
 	private SidebarViewController sidebarViewController;
@@ -92,20 +95,20 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 	@FXML
 	public void initialize() {
 		Platform.runLater(() -> {
-				registrationLabel.setText(viewText.getString("register.title"));
-				registerButton.setText(viewText.getString("register.register"));
-				backToLoginButton.setText(viewText.getString("register.backToLogin"));
-				firstNameLabel.setText(viewText.getString("register.firstName"));
-				lastNameLabel.setText(viewText.getString("register.lastName"));
-				socialNumberLabel.setText(viewText.getString("register.socialNumber"));
-				emailLabel.setText(viewText.getString("register.email"));
-				dobPicker.setPromptText(viewText.getString("register.dateOfBirth"));
-				registerPasswordLabel.setText(viewText.getString("register.password"));
-				usernameLabel.setText(viewText.getString("register.username"));
-				roleComboBox.setPromptText(viewText.getString("register.selectRole"));
-				roleComboBox.setItems(FXCollections.observableArrayList(
-						viewText.getString("register.student"),
-						viewText.getString("register.teacher")));
+			registrationLabel.setText(viewText.getString("register.title"));
+			registerButton.setText(viewText.getString("register.register"));
+			backToLoginButton.setText(viewText.getString("register.backToLogin"));
+			firstNameLabel.setText(viewText.getString("register.firstName"));
+			lastNameLabel.setText(viewText.getString("register.lastName"));
+			socialNumberLabel.setText(viewText.getString("register.socialNumber"));
+			emailLabel.setText(viewText.getString("register.email"));
+			dobPicker.setPromptText(viewText.getString("register.dateOfBirth"));
+			registerPasswordLabel.setText(viewText.getString("register.password"));
+			usernameLabel.setText(viewText.getString("register.username"));
+			roleComboBox.setPromptText(viewText.getString("register.selectRole"));
+			roleComboBox.setItems(FXCollections.observableArrayList(
+					viewText.getString("register.student"),
+					viewText.getString("register.teacher")));
 		});
 
 		// Setup the DatePicker to disable today's and future dates.
@@ -113,7 +116,7 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 			@Override
 			public void updateItem(LocalDate date, boolean empty) {
 				super.updateItem(date, empty);
-				if (date.compareTo(LocalDate.now()) >= 0) {
+				if (!date.isBefore(LocalDate.now())) {
 					setDisable(true);
 					setStyle("-fx-background-color: #FFE0E9;");
 				}
@@ -133,32 +136,33 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 			String role = roleComboBox.getValue();
 
 			if (firstName.isEmpty() || lastName.isEmpty() || socialNumber.isEmpty() || username.isEmpty() ||
-					password.isEmpty() || dobPicker.getValue() == null || role == null) {
-				showAlert(viewText.getString("error.title"), viewText.getString("error.fillAllFields"));
+			    password.isEmpty() || dobPicker.getValue() == null || role == null) {
+				showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.fillAllFields"));
 				return;
 			}
 
 			if (!firstName.matches("^[a-zA-Z]+$") || !lastName.matches("^[a-zA-Z]+$")) {
-				showAlert(viewText.getString("warning.title"), viewText.getString("warning.fullName"));
+				showAlert(viewText.getString(WARNING_TITLE), viewText.getString("warning.fullName"));
 				return;
 			}
 
 			if (socialNumber.length() != 11) {
-				showAlert(viewText.getString("warning.title"), viewText.getString("warning.socialNumber"));
+				showAlert(viewText.getString(WARNING_TITLE), viewText.getString("warning.socialNumber"));
 				return;
 			}
 
 			if (userController.isUsernameTaken(username)) {
-				showAlert(viewText.getString("error.title"), viewText.getString("error.username"));
+				showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.username"));
 				return;
 			}
 
 			if (password.length() < 8) {
-				showAlert(viewText.getString("warning.title"), viewText.getString("warning.password"));
+				showAlert(viewText.getString(WARNING_TITLE), viewText.getString("warning.password"));
 				return;
 			}
 
-			UserDTO userDTO = new UserDTO(username, password, firstName, lastName, dateOfBirth, socialNumber.toUpperCase(), role.toUpperCase());
+			UserDTO userDTO = new UserDTO(username, password, firstName, lastName, dateOfBirth,
+			                              socialNumber.toUpperCase(), role.toUpperCase());
 
 			if (userController.registerUser(userDTO)) {
 				userController.authenticateUser(username, password);
@@ -166,10 +170,10 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 				Stage stage = (Stage) firstNameField.getScene().getWindow();
 				stage.close();
 			} else {
-				showAlert(viewText.getString("error.title"), viewText.getString("error.invalidUserData"));
+				showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.invalidUserData"));
 			}
 		} catch (Exception e) {
-			showAlert(viewText.getString("error.title"), viewText.getString("error.unexpectedError") + e.getMessage());
+			showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.unexpectedError") + e.getMessage());
 		}
 	}
 
@@ -186,7 +190,7 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 			Scene scene = firstNameField.getScene();
 			scene.setRoot(parent);
 		} catch (IOException e) {
-			showAlert(viewText.getString("error.title"), viewText.getString("error.unexpectedError") + e.getMessage());
+			showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.unexpectedError") + e.getMessage());
 		}
 	}
 

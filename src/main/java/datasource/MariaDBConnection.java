@@ -5,6 +5,7 @@ import jakarta.persistence.Persistence;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -22,45 +23,41 @@ public class MariaDBConnection {
 	private static final String BASE_URL =
 			"jdbc:mariadb://" + DB_HOST + ":" + DB_PORT + "?useUnicode=true&characterEncoding=UTF-8";
 	private static final Logger logger = LoggerFactory.getLogger(MariaDBConnection.class);
-	private static final Connection conn = null;
 	private static EntityManagerFactory emf = null;
 
-	private MariaDBConnection() {
-	}
-
-	public static void verifyDatabase() throws SQLException {
-		try (Connection conn = DriverManager.getConnection(BASE_URL, USER, PASSWORD)) {
-			conn.createStatement().executeUpdate("CREATE DATABASE IF NOT EXISTS `stms` CHARACTER SET utf8mb4 COLLATE " +
-			                                     "utf8mb4_unicode_ci");
-			conn.createStatement().executeUpdate("USE `stms`");
+	public void verifyDatabase() throws SQLException {
+		try (Connection conn = DriverManager.getConnection(BASE_URL, USER, PASSWORD);
+		     Statement statement = conn.createStatement()
+		) {
+			statement.addBatch(
+					"CREATE DATABASE IF NOT EXISTS `stms` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+			statement.addBatch("USE `stms`");
+			statement.executeBatch();
 		} catch (SQLException e) {
 			logger.error("Error verifying database: {}", e.getMessage());
 		}
 	}
 
-	public static EntityManagerFactory getEntityManagerFactory() {
+	public void terminate() {
+		try {
+			if (emf != null && emf.isOpen()) {
+				emf.close();
+			}
+		} catch (Exception e) {
+			logger.error("Error closing database resources: {}", e.getMessage());
+		}
+	}
+
+	public static synchronized EntityManagerFactory getEntityManagerFactory() {
 		if (emf == null || !emf.isOpen()) {
 			Map<String, String> props = new HashMap<>();
-			props.put("jakarta.persistence.jdbc.url", "jdbc:mariadb://" + DB_HOST + ":" + DB_PORT +
-			                                          "/stms?useUnicode=true&characterEncoding=UTF-8");
+			props.put("jakarta.persistence.jdbc.url",
+			          "jdbc:mariadb://" + DB_HOST + ":" + DB_PORT + "/stms?useUnicode=true&characterEncoding=UTF-8");
 			props.put("jakarta.persistence.jdbc.user", USER);
 			props.put("jakarta.persistence.jdbc.password", PASSWORD);
 
 			emf = Persistence.createEntityManagerFactory("stms", props);
 		}
 		return emf;
-	}
-
-	public static void terminate() throws SQLException {
-		try {
-			if (conn != null && !conn.isClosed()) {
-				conn.close();
-			}
-			if (emf != null && emf.isOpen()) {
-				emf.close();
-			}
-		} catch (SQLException e) {
-			logger.error("Error closing database resources: {}", e.getMessage());
-		}
 	}
 }

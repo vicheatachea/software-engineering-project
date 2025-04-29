@@ -1,9 +1,13 @@
 package dao;
 
+import datasource.MariaDBConnection;
 import entity.AssignmentEntity;
-import entity.UserGroupEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -13,9 +17,16 @@ import java.util.List;
  */
 public class AssignmentDAO {
 
-	private static final EntityManagerFactory emf = datasource.MariaDBConnection.getEntityManagerFactory();
+	private static final Logger logger = LoggerFactory.getLogger(AssignmentDAO.class);
+	private static final String ERROR_MESSAGE = "Error: ";
+	private static final EntityManagerFactory emf =
+			MariaDBConnection.getEntityManagerFactory();
 
-	public void persist(AssignmentEntity assignment) {
+	private void logErrorMessage(final Exception e) {
+		logger.error(ERROR_MESSAGE, e);
+	}
+
+	public void persist(final AssignmentEntity assignment) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
@@ -23,7 +34,7 @@ public class AssignmentDAO {
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
-			throw e;
+			logErrorMessage(e);
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -31,7 +42,7 @@ public class AssignmentDAO {
 		}
 	}
 
-	public void update(AssignmentEntity assignment) {
+	public void update(final AssignmentEntity assignment) {
 		EntityManager em = emf.createEntityManager();
 		AssignmentEntity existingAssignment = em.find(AssignmentEntity.class, assignment.getId());
 
@@ -48,7 +59,7 @@ public class AssignmentDAO {
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
-			throw e;
+			logErrorMessage(e);
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -56,11 +67,12 @@ public class AssignmentDAO {
 		}
 	}
 
-	public AssignmentEntity findById(Long id) {
+	public AssignmentEntity findById(final Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.find(AssignmentEntity.class, id);
-		} catch (Exception e) {
+		} catch (NoResultException e) {
+			logErrorMessage(e);
 			return null;
 		} finally {
 			if (em.isOpen()) {
@@ -73,28 +85,9 @@ public class AssignmentDAO {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT a FROM AssignmentEntity a", AssignmentEntity.class).getResultList();
-		} catch (Exception e) {
-			return null;
-		} finally {
-			if (em.isOpen()) {
-				em.close();
-			}
-		}
-	}
-
-	// TODO: Delete this method if unused in the view
-	public void deleteById(Long id) {
-		EntityManager em = emf.createEntityManager();
-		em.getTransaction().begin();
-		try {
-			AssignmentEntity assignment = em.find(AssignmentEntity.class, id);
-			if (assignment != null) {
-				em.remove(assignment);
-			}
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			em.getTransaction().rollback();
-			throw e;
+		} catch (NoResultException e) {
+			logErrorMessage(e);
+			return List.of();
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -111,7 +104,7 @@ public class AssignmentDAO {
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
-			throw e;
+			logErrorMessage(e);
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -127,7 +120,7 @@ public class AssignmentDAO {
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			em.getTransaction().rollback();
-			throw e;
+			logErrorMessage(e);
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -135,41 +128,17 @@ public class AssignmentDAO {
 		}
 	}
 
-	// TODO: Delete this method if unused in the view
-	public void deleteByGroupName(AssignmentEntity assignment, String groupName) {
-		EntityManager em = emf.createEntityManager();
-		em.getTransaction().begin();
-		try {
-			UserGroupEntity group =
-					em.createQuery("SELECT g FROM UserGroupEntity g WHERE g.name = :groupName", UserGroupEntity.class)
-					  .setParameter("groupName", groupName).getSingleResult();
-
-			if (assignment.getTimetable().getId().equals(group.getTimetable().getId())) {
-				em.remove(em.contains(assignment) ? assignment : em.merge(assignment));
-			}
-
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			em.getTransaction().rollback();
-			throw e;
-		} finally {
-			if (em.isOpen()) {
-				em.close();
-			}
-		}
-	}
-
-	public List<AssignmentEntity> findAllByTimetableIdDuringPeriod(Long timetableId, Timestamp start, Timestamp end) {
+	public List<AssignmentEntity> findAllByTimetableIdDuringPeriod(final Long timetableId, final Timestamp start,
+	                                                               final Timestamp end) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT a FROM AssignmentEntity a WHERE a.timetable.id = :timetableId AND " +
 			                      "a.deadline BETWEEN :start AND :end", AssignmentEntity.class)
-			         .setParameter("timetableId", timetableId)
-			         .setParameter("start", start)
-			         .setParameter("end", end)
+			         .setParameter("timetableId", timetableId).setParameter("start", start).setParameter("end", end)
 			         .getResultList();
-		} catch (Exception e) {
-			return null;
+		} catch (NoResultException e) {
+			logErrorMessage(e);
+			return List.of();
 		} finally {
 			if (em.isOpen()) {
 				em.close();
@@ -177,17 +146,19 @@ public class AssignmentDAO {
 		}
 	}
 
-	public List<AssignmentEntity> findAllByLocaleDuringPeriod(Timestamp start, Timestamp end, String localeCode) {
+	public List<AssignmentEntity> findAllByLocaleDuringPeriod(final Timestamp start, final Timestamp end,
+	                                                          final String localeCode, final Long timetableId) {
+
 		EntityManager em = emf.createEntityManager();
 		try {
-			return em.createQuery("SELECT a FROM AssignmentEntity a WHERE a.localeCode = :localeCode AND " + "a.deadline BETWEEN :start AND :end", AssignmentEntity.class)
-					.setParameter("localeCode", localeCode)
-					.setParameter("start", start)
-					.setParameter("end", end)
-					.getResultList();
-		} catch (Exception e) {
-			System.out.println("Error: " + e.getMessage());
-			return null;
+			return em.createQuery("SELECT a FROM AssignmentEntity a WHERE a.timetable.id = :timetableId AND " +
+			                      "a.deadline BETWEEN :start AND :end AND a.localeCode = :localeCode",
+			                      AssignmentEntity.class)
+			         .setParameter("localeCode", localeCode).setParameter("start", start).setParameter("end", end)
+			         .setParameter("timetableId", timetableId).getResultList();
+		} catch (NoResultException e) {
+			logErrorMessage(e);
+			return List.of();
 		} finally {
 			if (em.isOpen()) {
 				em.close();

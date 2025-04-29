@@ -14,14 +14,20 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LocationControllerTest {
+	private static final BaseController baseController = new BaseController();
+	private static final LocationController locationController = baseController.getLocationController();
+	private static final UserController userController = baseController.getUserController();
 
-	private static final LocationController locationController = new LocationController();
-	private static final UserController userController = new UserController();
+
+	private static void resetDatabase() {
+		locationController.deleteAllLocations();
+		userController.deleteAllUsers();
+	}
 
 	@BeforeAll
 	static void ensureDatabase() {
 		try {
-			MariaDBConnection.verifyDatabase();
+			new MariaDBConnection().verifyDatabase();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -29,19 +35,17 @@ class LocationControllerTest {
 
 	@AfterAll
 	static void tearDown() {
-		locationController.deleteAllLocations();
-		userController.deleteAllUsers();
+		resetDatabase();
 	}
 
 	private static UserDTO createTeacher() {
-		return new UserDTO("testLocation", "testPassword", "Test", "Teacher",
-		                   LocalDateTime.of(2000, 1, 1, 0, 0), "BA987654321", "TEACHER");
+		return new UserDTO("testLocation", "testPassword", "Test", "Teacher", LocalDateTime.of(2000, 1, 1, 0, 0),
+		                   "BA987654321", "TEACHER");
 	}
 
 	@BeforeEach
 	void setUp() {
-		locationController.deleteAllLocations();
-		userController.deleteAllUsers();
+		resetDatabase();
 	}
 
 	LocationDTO createLocationDTO(String name) {

@@ -13,13 +13,13 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserControllerTest {
-
-	private static final UserController userController = new UserController();
+	private static final BaseController baseController = new BaseController();
+	private static final UserController userController = baseController.getUserController();
 
 	@BeforeAll
 	static void ensureDatabase() {
 		try {
-			MariaDBConnection.verifyDatabase();
+			new MariaDBConnection().verifyDatabase();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -35,9 +35,9 @@ class UserControllerTest {
 		                   "STUDENT");
 	}
 
-	UserDTO createTeacherDTO(String username, String socialNumber) {
-		return new UserDTO(username, "testPassword", "Test", "User", LocalDateTime.of(2000, 1, 1, 0, 0), socialNumber,
-		                   "TEACHER");
+	UserDTO createTeacherDTO() {
+		return new UserDTO("teacherUsername", "testPassword", "Test", "User", LocalDateTime.of(2000, 1, 1, 0, 0),
+		                   "ba987654321", "TEACHER");
 	}
 
 	@BeforeEach
@@ -74,7 +74,7 @@ class UserControllerTest {
 		userController.registerUser(userDTO);
 
 		assertThrows(IllegalArgumentException.class,
-		             () -> userController.authenticateUser(userDTO.username(), "wrongPassword"));
+		             () -> userController.authenticateUser("username", "wrongPassword"));
 	}
 
 	@Test
@@ -133,9 +133,10 @@ class UserControllerTest {
 		UserDTO userDTO = createStudentDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
+		UserDTO newUserDTO = new UserDTO("", "", "", "", LocalDateTime.now(), "", "");
+
 		assertTrue(userController.authenticateUser(userDTO.username(), userDTO.password()));
-		assertThrows(IllegalArgumentException.class,
-		             () -> userController.updateUser(new UserDTO("", "", "", "", LocalDateTime.now(), "", "")));
+		assertThrows(IllegalArgumentException.class, () -> userController.updateUser(newUserDTO));
 	}
 
 	@Test
@@ -143,8 +144,9 @@ class UserControllerTest {
 		UserDTO userDTO = createStudentDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
-		assertThrows(IllegalArgumentException.class,
-		             () -> userController.updateUser(new UserDTO("", "", "", "", LocalDateTime.now(), "", "")));
+		UserDTO newUserDTO = new UserDTO("", "", "", "", LocalDateTime.now(), "", "");
+
+		assertThrows(IllegalArgumentException.class, () -> userController.updateUser(newUserDTO));
 	}
 
 	@Test
@@ -192,7 +194,7 @@ class UserControllerTest {
 
 		assertFalse(userController.isCurrentUserTeacher());
 
-		UserDTO teacherDTO = createTeacherDTO("teacherUsername", "ba987654321");
+		UserDTO teacherDTO = createTeacherDTO();
 		userController.registerUser(teacherDTO);
 
 		assertTrue(userController.authenticateUser(teacherDTO.username(), teacherDTO.password()));

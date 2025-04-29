@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import view.controllers.ControllerAware;
 import view.controllers.pages.user.LoginViewController;
 import view.controllers.pages.user.NotificationsViewController;
@@ -30,206 +32,211 @@ import view.controllers.pages.user.UserProfileViewController;
 
 
 public class SidebarViewController implements ControllerAware, NotificationAware {
-    private final StringProperty currentView = new SimpleStringProperty();
-    private NotificationService notificationService;
-    private List<EventNotification> notifications = new ArrayList<>();
+	private static final Logger logger = LoggerFactory.getLogger(SidebarViewController.class);
 
-    private BaseController baseController;
-    private LocaleController localeController;
-    private UserController userController;
-    private Button accountButton;
-    private Button loginButton;
-    private Button notificationsButton;
-    private ResourceBundle viewText;
+	private static final String TIMETABLE = "timetable";
 
-    @FXML
-    private VBox sidebar;
-    private Button timetableButton;
-    private Button groupsButton;
-    private Button subjectsButton;
-    private Button locationsButton;
-    private Button settingsButton;
-    private Button quitButton;
+	private final StringProperty currentView = new SimpleStringProperty();
+	private final List<EventNotification> notifications = new ArrayList<>();
+	private NotificationService notificationService;
+	private BaseController baseController;
+	private LocaleController localeController;
+	private UserController userController;
+	private Button accountButton;
+	private Button loginButton;
+	private Button notificationsButton;
+	private ResourceBundle viewText;
 
-    @FXML
-    private void initialize() {
-        Platform.runLater(() -> {
-            ResourceBundle viewText = localeController.getUIBundle();
+	@FXML
+	private VBox sidebar;
+	private Button timetableButton;
+	private Button groupsButton;
+	private Button subjectsButton;
+	private Button locationsButton;
+	private Button settingsButton;
+	private Button quitButton;
 
-            addButton(viewText.getString("sidebar.timetable"), "timetable");
-            addButton(viewText.getString("sidebar.groups"), "groups");
-            addButton(viewText.getString("sidebar.subjects"), "subjects");
-            addButton(viewText.getString("sidebar.locations"), "locations");
-            addButton(viewText.getString("sidebar.settings"), "settings");
-            addButton(viewText.getString("sidebar.quit"), "quit");
+	@FXML
+	private void initialize() {
+		Platform.runLater(() -> {
+			ResourceBundle initialViewText = localeController.getUIBundle();
 
-            currentView.set("timetable");
-            timetableButton = (Button) sidebar.lookup("#timetableButton");
-            groupsButton = (Button) sidebar.lookup("#groupsButton");
-            subjectsButton = (Button) sidebar.lookup("#subjectsButton");
-            locationsButton = (Button) sidebar.lookup("#locationsButton");
-            settingsButton = (Button) sidebar.lookup("#settingsButton");
-            quitButton = (Button) sidebar.lookup("#quitButton");
+			addButton(initialViewText.getString("sidebar.timetable"), TIMETABLE);
+			addButton(initialViewText.getString("sidebar.groups"), "groups");
+			addButton(initialViewText.getString("sidebar.subjects"), "subjects");
+			addButton(initialViewText.getString("sidebar.locations"), "locations");
+			addButton(initialViewText.getString("sidebar.settings"), "settings");
+			addButton(initialViewText.getString("sidebar.quit"), "quit");
 
-            try {
-                HBox userArea = FXMLLoader.load(getClass().getResource("/layouts/components/sidebar/user-area.fxml"));
+			currentView.set(TIMETABLE);
+			timetableButton = (Button) sidebar.lookup("#timetableButton");
+			groupsButton = (Button) sidebar.lookup("#groupsButton");
+			subjectsButton = (Button) sidebar.lookup("#subjectsButton");
+			locationsButton = (Button) sidebar.lookup("#locationsButton");
+			settingsButton = (Button) sidebar.lookup("#settingsButton");
+			quitButton = (Button) sidebar.lookup("#quitButton");
 
-                sidebar.getChildren().add(1, userArea);
+			try {
+				HBox userArea = FXMLLoader.load(getClass().getResource("/layouts/components/sidebar/user-area.fxml"));
 
-                accountButton = (Button) userArea.lookup("#accountButton");
-                loginButton = (Button) userArea.lookup("#loginButton");
-                notificationsButton = (Button) userArea.lookup("#notificationsButton");
+				sidebar.getChildren().add(1, userArea);
 
-                accountButton.setOnAction(event -> showUserProfilePopup());
-                loginButton.setOnAction(event -> showLoginPopup());
-                notificationsButton.setOnAction(event -> showNotificationPopup());
+				accountButton = (Button) userArea.lookup("#accountButton");
+				loginButton = (Button) userArea.lookup("#loginButton");
+				notificationsButton = (Button) userArea.lookup("#notificationsButton");
 
-                accountButton.setText(viewText.getString("sidebar.account"));
-                loginButton.setText(viewText.getString("sidebar.login"));
-                notificationsButton.setText(viewText.getString("sidebar.notifications"));
+				accountButton.setOnAction(event -> showUserProfilePopup());
+				loginButton.setOnAction(event -> showLoginPopup());
+				notificationsButton.setOnAction(event -> showNotificationPopup());
 
-                updateUserButtons();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
+				accountButton.setText(initialViewText.getString("sidebar.account"));
+				loginButton.setText(initialViewText.getString("sidebar.login"));
+				notificationsButton.setText(initialViewText.getString("sidebar.notifications"));
 
-    public StringProperty currentViewProperty() {
-        return currentView;
-    }
+				updateUserButtons();
+			} catch (IOException e) {
+				logger.error("Error initializing: {}", e.getMessage());
+			}
+		});
+	}
 
-    @Override
-    public void setBaseController(BaseController baseController) {
-        this.baseController = baseController;
-        this.localeController = baseController.getLocaleController();
-        this.userController = baseController.getUserController();
-        this.notificationService = new NotificationService(this, baseController.getEventController());
-        this.viewText = baseController.getLocaleController().getUIBundle();
-    }
+	public StringProperty currentViewProperty() {
+		return currentView;
+	}
 
-    private void addButton(String name, String view) {
-        try {
-            Button button = FXMLLoader.load(getClass().getResource("/layouts/components/sidebar/sidebar-button.fxml"));
+	@Override
+	public void setBaseController(BaseController baseController) {
+		this.baseController = baseController;
+		this.localeController = baseController.getLocaleController();
+		this.userController = baseController.getUserController();
+		this.notificationService = new NotificationService(this, baseController.getEventController());
+		this.viewText = baseController.getLocaleController().getUIBundle();
+	}
 
-            button.setText(name);
-            button.setId(view + "Button");
-            button.setOnAction(event -> currentView.set(view));
-            VBox.setMargin(button, new Insets(30, 0, 0, 0));
-            sidebar.getChildren().add(button);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+	private void addButton(String name, String view) {
+		try {
+			Button button = FXMLLoader.load(getClass().getResource("/layouts/components/sidebar/sidebar-button.fxml"));
 
-    public void updateUserButtons() {
-        boolean isLoggedIn = userController.isUserLoggedIn();
-        boolean isTeacher = userController.isCurrentUserTeacher();
+			button.setText(name);
+			button.setId(view + "Button");
+			button.setOnAction(event -> currentView.set(view));
+			VBox.setMargin(button, new Insets(30, 0, 0, 0));
+			sidebar.getChildren().add(button);
+		} catch (IOException e) {
+			logger.error("Error adding a button: {}", e.getMessage());
+		}
+	}
 
-        accountButton.setVisible(isLoggedIn);
-        accountButton.setManaged(isLoggedIn);
-        loginButton.setVisible(!isLoggedIn);
-        loginButton.setManaged(!isLoggedIn);
-        notificationsButton.setVisible(isLoggedIn);
-        notificationsButton.setManaged(isLoggedIn);
+	public void updateUserButtons() {
+		boolean isLoggedIn = userController.isUserLoggedIn();
+		boolean isTeacher = userController.isCurrentUserTeacher();
 
-        subjectsButton.setVisible(isTeacher);
-        subjectsButton.setManaged(isTeacher);
-        locationsButton.setVisible(isTeacher);
-        locationsButton.setManaged(isTeacher);
+		accountButton.setVisible(isLoggedIn);
+		accountButton.setManaged(isLoggedIn);
+		loginButton.setVisible(!isLoggedIn);
+		loginButton.setManaged(!isLoggedIn);
+		notificationsButton.setVisible(isLoggedIn);
+		notificationsButton.setManaged(isLoggedIn);
 
-        clearNotifications();
-        currentView.set("clear");
-        currentView.set("timetable");
-    }
+		subjectsButton.setVisible(isTeacher);
+		subjectsButton.setManaged(isTeacher);
+		locationsButton.setVisible(isTeacher);
+		locationsButton.setManaged(isTeacher);
 
-    private void showLoginPopup() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/login-page.fxml"));
-            Parent parent = fxmlLoader.load();
+		clearNotifications();
+		currentView.set("clear");
+		currentView.set(TIMETABLE);
+	}
 
-            LoginViewController loginViewController = fxmlLoader.getController();
-            loginViewController.setBaseController(baseController);
-            loginViewController.setSidebarViewController(this);
+	private void showLoginPopup() {
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/login-page.fxml"));
+			Parent parent = fxmlLoader.load();
 
-            Stage loginStage = new Stage();
-            loginStage.initModality(Modality.APPLICATION_MODAL);
-            loginStage.initOwner(sidebar.getScene().getWindow());
-            loginStage.setTitle(viewText.getString("login.title"));
-            loginStage.setScene(new Scene(parent));
-            loginStage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+			LoginViewController loginViewController = fxmlLoader.getController();
+			loginViewController.setBaseController(baseController);
+			loginViewController.setSidebarViewController(this);
 
-    private void showUserProfilePopup() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/user-profile-page.fxml"));
-            Parent parent = fxmlLoader.load();
+			Stage loginStage = new Stage();
+			loginStage.initModality(Modality.APPLICATION_MODAL);
+			loginStage.initOwner(sidebar.getScene().getWindow());
+			loginStage.setTitle(viewText.getString("login.title"));
+			loginStage.setScene(new Scene(parent));
+			loginStage.showAndWait();
+		} catch (IOException e) {
+			logger.error("Error showing login popup: {}", e.getMessage());
+		}
+	}
 
-            UserProfileViewController userProfileViewController = fxmlLoader.getController();
-            userProfileViewController.setBaseController(baseController);
-            userProfileViewController.setSidebarViewController(this);
-            userProfileViewController.updateUserInfo();
+	private void showUserProfilePopup() {
+		try {
+			FXMLLoader fxmlLoader =
+					new FXMLLoader(getClass().getResource("/layouts/pages/user/user-profile-page.fxml"));
+			Parent parent = fxmlLoader.load();
 
-            Stage userProfileStage = new Stage();
-            userProfileStage.initModality(Modality.APPLICATION_MODAL);
-            userProfileStage.initOwner(sidebar.getScene().getWindow());
-            userProfileStage.setTitle(viewText.getString("userprofile.title"));
-            userProfileStage.setScene(new Scene(parent));
-            userProfileStage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+			UserProfileViewController userProfileViewController = fxmlLoader.getController();
+			userProfileViewController.setBaseController(baseController);
+			userProfileViewController.setSidebarViewController(this);
+			userProfileViewController.updateUserInfo();
 
-    private void showNotificationPopup() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/notifications-page.fxml"));
-            Parent parent = fxmlLoader.load();
+			Stage userProfileStage = new Stage();
+			userProfileStage.initModality(Modality.APPLICATION_MODAL);
+			userProfileStage.initOwner(sidebar.getScene().getWindow());
+			userProfileStage.setTitle(viewText.getString("userprofile.title"));
+			userProfileStage.setScene(new Scene(parent));
+			userProfileStage.showAndWait();
+		} catch (IOException e) {
+			logger.error("Error showing profile popup: {}", e.getMessage());
+		}
+	}
 
-            NotificationsViewController notificationsViewController = fxmlLoader.getController();
-            notificationsViewController.setBaseController(baseController);
-            notificationsViewController.setEventNotifications(notifications);
+	private void showNotificationPopup() {
+		try {
+			FXMLLoader fxmlLoader =
+					new FXMLLoader(getClass().getResource("/layouts/pages/user/notifications-page.fxml"));
+			Parent parent = fxmlLoader.load();
 
-            Stage notificationStage = new Stage();
-            notificationStage.initModality(Modality.APPLICATION_MODAL);
-            notificationStage.initOwner(sidebar.getScene().getWindow());
-            notificationStage.setTitle(viewText.getString("notifications.title"));
-            notificationStage.setScene(new Scene(parent));
-            notificationStage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+			NotificationsViewController notificationsViewController = fxmlLoader.getController();
+			notificationsViewController.setBaseController(baseController);
+			notificationsViewController.setEventNotifications(notifications);
 
-    @Override
-    public void notify(Event event, int time) {
-        notifications.add(new EventNotification(event, time));
-    }
+			Stage notificationStage = new Stage();
+			notificationStage.initModality(Modality.APPLICATION_MODAL);
+			notificationStage.initOwner(sidebar.getScene().getWindow());
+			notificationStage.setTitle(viewText.getString("notifications.title"));
+			notificationStage.setScene(new Scene(parent));
+			notificationStage.showAndWait();
+		} catch (IOException e) {
+			logger.error("Error showing notification popup: {}", e.getMessage());
+		}
+	}
 
-    private void clearNotifications() {
-        notifications.clear();
-        notificationService.reset();
-    }
+	@Override
+	public void notify(Event event, int time) {
+		notifications.add(new EventNotification(event, time));
+	}
 
-    public void shutdownNotifications() {
-        notificationService.shutdown();
-    }
+	private void clearNotifications() {
+		notifications.clear();
+		notificationService.reset();
+	}
 
-    public void updateTranslations() {
-        ResourceBundle viewText = localeController.getUIBundle();
+	public void shutdownNotifications() {
+		notificationService.shutdown();
+	}
 
-        accountButton.setText(viewText.getString("sidebar.account"));
-        loginButton.setText(viewText.getString("sidebar.login"));
-        notificationsButton.setText(viewText.getString("sidebar.notifications"));
+	public void updateTranslations() {
+		ResourceBundle updateViewText = localeController.getUIBundle();
 
-        timetableButton.setText(viewText.getString("sidebar.timetable"));
-        groupsButton.setText(viewText.getString("sidebar.groups"));
-        subjectsButton.setText(viewText.getString("sidebar.subjects"));
-        locationsButton.setText(viewText.getString("sidebar.locations"));
-        settingsButton.setText(viewText.getString("sidebar.settings"));
-        quitButton.setText(viewText.getString("sidebar.quit"));
-    }
+		accountButton.setText(updateViewText.getString("sidebar.account"));
+		loginButton.setText(updateViewText.getString("sidebar.login"));
+		notificationsButton.setText(updateViewText.getString("sidebar.notifications"));
+
+		timetableButton.setText(updateViewText.getString("sidebar.timetable"));
+		groupsButton.setText(updateViewText.getString("sidebar.groups"));
+		subjectsButton.setText(updateViewText.getString("sidebar.subjects"));
+		locationsButton.setText(updateViewText.getString("sidebar.locations"));
+		settingsButton.setText(updateViewText.getString("sidebar.settings"));
+		quitButton.setText(updateViewText.getString("sidebar.quit"));
+	}
 }

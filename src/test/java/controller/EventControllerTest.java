@@ -13,60 +13,59 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EventControllerTest {
+	private static final BaseController baseController = new BaseController();
+	private static final EventController eventController = baseController.getEventController();
+	private static final LocationController locationController = baseController.getLocationController();
+	private static final UserController userController = baseController.getUserController();
+	private static final SubjectController subjectController = baseController.getSubjectController();
+	private static final GroupController groupController = baseController.getGroupController();
+	private static final TimetableController timetableController = baseController.getTimetableController();
 
-	private static final EventController eventController = new EventController();
-	private static final LocationController locationController = new LocationController();
-	private static final UserController userController = new UserController();
-	private static final SubjectController subjectController = new SubjectController();
-	private static final GroupController groupController = new GroupController();
-	private static final TimetableController timetableController = new TimetableController();
-
+	private static void resetDatabase() {
+		eventController.deleteAllEvents();
+		locationController.deleteAllLocations();
+		subjectController.deleteAllSubjects();
+		userController.deleteAllUsers();
+		timetableController.deleteAllTimetables();
+	}
 
 	@BeforeAll
 	static void ensureDatabase() {
 		try {
-			MariaDBConnection.verifyDatabase();
+			new MariaDBConnection().verifyDatabase();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@AfterAll
-	static void tearDown() {
-		eventController.deleteAllEvents();
-		locationController.deleteAllLocations();
-		subjectController.deleteAllSubjects();
-		userController.deleteAllUsers();
-		timetableController.deleteAllTimetables();
+	static void teardown() {
+		resetDatabase();
 	}
 
-	private static UserDTO createTeacher(String username, String socialNumber) {
-		return new UserDTO(username, "password", "John", "Doe", LocalDateTime.now().minusYears(32), socialNumber,
+	private static UserDTO createTeacher() {
+		return new UserDTO("teacher", "password", "John", "Doe", LocalDateTime.now().minusYears(32), "987654321BA",
 		                   "TEACHER");
 	}
 
 	@BeforeEach
-	void setUp() {
-		eventController.deleteAllEvents();
-		locationController.deleteAllLocations();
-		subjectController.deleteAllSubjects();
-		userController.deleteAllUsers();
-		timetableController.deleteAllTimetables();
+	void setup() {
+		resetDatabase();
 	}
 
-	UserDTO createStudent(String username, String socialNumber) {
-		return new UserDTO(username, "password", "John", "Doe", LocalDateTime.now().minusYears(16), socialNumber,
+	UserDTO createStudent() {
+		return new UserDTO("student", "password", "John", "Doe", LocalDateTime.now().minusYears(16), "123456789AB",
 		                   "STUDENT");
 	}
 
 	@Test
 	void fetchEventsByUser() {
-		UserDTO student = createStudent("student", "123456789AB");
+		UserDTO student = createStudent();
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
 		userController.logout();
 
-		UserDTO teacher = createTeacher("teacher", "987654321BA");
+		UserDTO teacher = createTeacher();
 		userController.registerUser(teacher);
 		userController.authenticateUser("teacher", "password");
 		long teacherId = userController.fetchCurrentUserId();
@@ -107,12 +106,12 @@ class EventControllerTest {
 
 	@Test
 	void addEventTeachingSession() {
-		UserDTO student = createStudent("student", "123456789AB");
+		UserDTO student = createStudent();
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
 		userController.logout();
 
-		UserDTO teacher = createTeacher("teacher", "987654321BA");
+		UserDTO teacher = createTeacher();
 		userController.registerUser(teacher);
 		userController.authenticateUser("teacher", "password");
 		long teacherId = userController.fetchCurrentUserId();
@@ -147,12 +146,12 @@ class EventControllerTest {
 
 	@Test
 	void addEventAssignment() {
-		UserDTO student = createStudent("student", "123456789AB");
+		UserDTO student = createStudent();
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
 		userController.logout();
 
-		UserDTO teacher = createTeacher("teacher", "987654321BA");
+		UserDTO teacher = createTeacher();
 		userController.registerUser(teacher);
 		userController.authenticateUser("teacher", "password");
 		long teacherId = userController.fetchCurrentUserId();
@@ -184,12 +183,12 @@ class EventControllerTest {
 
 	@Test
 	void updateEventTeachingSession() {
-		UserDTO student = createStudent("student", "123456789AB");
+		UserDTO student = createStudent();
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
 		userController.logout();
 
-		UserDTO teacher = createTeacher("teacher", "987654321BA");
+		UserDTO teacher = createTeacher();
 		userController.registerUser(teacher);
 		userController.authenticateUser("teacher", "password");
 		long teacherId = userController.fetchCurrentUserId();
@@ -250,12 +249,12 @@ class EventControllerTest {
 
 	@Test
 	void updateEventAssignment() {
-		UserDTO student = createStudent("student", "123456789AB");
+		UserDTO student = createStudent();
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
 		userController.logout();
 
-		UserDTO teacher = createTeacher("teacher", "987654321BA");
+		UserDTO teacher = createTeacher();
 		userController.registerUser(teacher);
 		userController.authenticateUser("teacher", "password");
 		long teacherId = userController.fetchCurrentUserId();
@@ -314,12 +313,12 @@ class EventControllerTest {
 
 	@Test
 	void deleteEventTeachingSession() {
-		UserDTO student = createStudent("student", "123456789AB");
+		UserDTO student = createStudent();
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
 		userController.logout();
 
-		UserDTO teacher = createTeacher("teacher", "987654321BA");
+		UserDTO teacher = createTeacher();
 		userController.registerUser(teacher);
 		userController.authenticateUser("teacher", "password");
 		long teacherId = userController.fetchCurrentUserId();
@@ -365,12 +364,12 @@ class EventControllerTest {
 
 	@Test
 	void deleteEventAssignment() {
-		UserDTO student = createStudent("student", "123456789AB");
+		UserDTO student = createStudent();
 		userController.registerUser(student);
 		userController.authenticateUser("student", "password");
 		userController.logout();
 
-		UserDTO teacher = createTeacher("teacher", "987654321BA");
+		UserDTO teacher = createTeacher();
 		userController.registerUser(teacher);
 		userController.authenticateUser("teacher", "password");
 		long teacherId = userController.fetchCurrentUserId();
