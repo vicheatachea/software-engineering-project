@@ -3,6 +3,7 @@ package view.controllers.pages.user;
 import controller.BaseController;
 import controller.UserController;
 import dto.UserDTO;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -13,7 +14,6 @@ import javafx.stage.Stage;
 import view.controllers.ControllerAware;
 import view.controllers.SidebarControllerAware;
 import view.controllers.components.SidebarViewController;
-import java.util.ResourceBundle;
 
 
 public class UserProfileViewController implements ControllerAware, SidebarControllerAware {

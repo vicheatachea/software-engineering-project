@@ -3,7 +3,6 @@ package dao;
 import entity.TeachingSessionEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-
 import java.sql.Timestamp;
 import java.util.List;
 

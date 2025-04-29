@@ -8,7 +8,6 @@ import entity.Role;
 import entity.TimetableEntity;
 import entity.UserEntity;
 import entity.UserGroupEntity;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;

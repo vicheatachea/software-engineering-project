@@ -1,7 +1,6 @@
 package controller.notifications;
 
 import dto.Event;
-
 import java.util.HashMap;
 import java.util.Map;
 

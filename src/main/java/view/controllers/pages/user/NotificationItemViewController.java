@@ -1,16 +1,16 @@
 package view.controllers.pages.user;
 
+import controller.BaseController;
 import dto.AssignmentDTO;
 import dto.Event;
 import dto.TeachingSessionDTO;
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import controller.BaseController;
 import view.controllers.ControllerAware;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
 
 public class NotificationItemViewController implements ControllerAware {
     private ResourceBundle viewText;

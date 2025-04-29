@@ -3,7 +3,6 @@ package dao;
 import entity.LocationEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-
 import java.util.List;
 
 public class LocationDAO {

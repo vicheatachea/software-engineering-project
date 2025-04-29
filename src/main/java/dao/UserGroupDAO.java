@@ -4,7 +4,6 @@ import datasource.MariaDBConnection;
 import entity.UserGroupEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-
 import java.util.List;
 
 public class UserGroupDAO {
@@ -78,12 +77,14 @@ public class UserGroupDAO {
 	public List<UserGroupEntity> findAllByUserId(Long userId) {
 		EntityManager em = emf.createEntityManager();
 		try {
-			return em.createQuery("SELECT DISTINCT g FROM UserGroupEntity g " + "WHERE g.teacher.id = :userId " +
-			                      "OR " +
-			                      "g IN (SELECT g2 FROM UserGroupEntity g2 JOIN g2.students s WHERE s.id = :userId)",
-			                      UserGroupEntity.class)
-			         .setParameter("userId", userId)
-			         .getResultList();
+			return em.createQuery(
+							"SELECT DISTINCT g FROM UserGroupEntity g "
+									+ "WHERE g.teacher.id = :userId "
+									+ "OR "
+									+ "g IN (SELECT g2 FROM UserGroupEntity g2 JOIN g2.students s WHERE s.id = :userId)",
+							UserGroupEntity.class)
+					.setParameter("userId", userId)
+					.getResultList();
 		} catch (Exception e) {
 			return null;
 		} finally {

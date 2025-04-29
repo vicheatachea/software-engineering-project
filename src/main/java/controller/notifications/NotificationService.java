@@ -4,7 +4,6 @@ import controller.EventController;
 import dto.AssignmentDTO;
 import dto.Event;
 import dto.TeachingSessionDTO;
-
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;

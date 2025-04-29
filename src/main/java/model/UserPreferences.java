@@ -1,7 +1,6 @@
 package model;
 
 import entity.Role;
-
 import java.util.prefs.Preferences;
 
 public final class UserPreferences {

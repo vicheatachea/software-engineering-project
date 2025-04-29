@@ -1,11 +1,11 @@
 package view;
 
+import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import view.controllers.pages.main.MainPageViewController;
-import java.io.IOException;
 
 /*
 * The controller should be initialized in the main page view controller

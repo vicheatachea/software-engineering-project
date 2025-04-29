@@ -3,17 +3,21 @@ package view.controllers.pages.main;
 import controller.BaseController;
 import controller.LocationController;
 import dto.LocationDTO;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import view.controllers.ControllerAware;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
 
 public class LocationsViewController implements ControllerAware {
 	private ResourceBundle viewText;
@@ -269,15 +273,23 @@ public class LocationsViewController implements ControllerAware {
 
 	private boolean resolveIsNotSaved() {
 		if (isEditingMode) {
-			String savedName = locations.get(currentIndex).name();
-			String savedBuilding = locations.get(currentIndex).building();
-			String savedCampus = locations.get(currentIndex).campus();
+			String savedName = locations
+					.get(currentIndex)
+					.name();
+			String savedBuilding = locations
+					.get(currentIndex)
+					.building();
+			String savedCampus = locations
+					.get(currentIndex)
+					.campus();
 
-			return !nameTextField.getText().equals(savedName) || !buildingTextField.getText().equals(savedBuilding) ||
-			       !campusTextField.getText().equals(savedCampus);
+			return !nameTextField.getText().equals(savedName)
+					|| !buildingTextField.getText().equals(savedBuilding)
+					|| !campusTextField.getText().equals(savedCampus);
 		} else {
-			return !nameTextField.getText().isEmpty() || !buildingTextField.getText().isEmpty() ||
-			       !campusTextField.getText().isEmpty();
+			return !nameTextField.getText().isEmpty()
+					|| !buildingTextField.getText().isEmpty()
+					|| !campusTextField.getText().isEmpty();
 		}
 	}
 

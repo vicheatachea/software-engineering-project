@@ -1,11 +1,22 @@
 package entity;
 
-import jakarta.persistence.*;
-import util.PasswordHashUtil;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Set;
+import util.PasswordHashUtil;
 
 @Entity
 @Table(name = "user")
@@ -161,10 +172,14 @@ public class UserEntity {
 			return false;
 		}
 		UserEntity user = (UserEntity) obj;
-		return Objects.equals(id, user.id) && Objects.equals(username, user.username) &&
-		       Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) &&
-		       Objects.equals(dateOfBirth, user.dateOfBirth) && Objects.equals(socialNumber, user.socialNumber) &&
-		       Objects.equals(role, user.role) && Objects.equals(timetable, user.timetable);
+		return Objects.equals(id, user.id)
+				&& Objects.equals(username, user.username)
+				&& Objects.equals(firstName, user.firstName)
+				&& Objects.equals(lastName, user.lastName)
+				&& Objects.equals(dateOfBirth, user.dateOfBirth)
+				&& Objects.equals(socialNumber, user.socialNumber)
+				&& Objects.equals(role, user.role)
+				&& Objects.equals(timetable, user.timetable);
 	}
 
 	@Override

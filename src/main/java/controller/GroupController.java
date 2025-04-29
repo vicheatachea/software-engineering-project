@@ -2,10 +2,10 @@ package controller;
 
 import dto.GroupDTO;
 import dto.UserDTO;
-import model.GroupModel;
-
 import java.util.List;
 import java.util.Set;
+import model.GroupModel;
+
 
 public class GroupController {
 	private final GroupModel groupModel = new GroupModel();

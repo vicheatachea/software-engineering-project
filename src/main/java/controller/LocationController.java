@@ -1,9 +1,9 @@
 package controller;
 
 import dto.LocationDTO;
+import java.util.List;
 import model.LocationModel;
 
-import java.util.List;
 
 public class LocationController {
 	private final LocationModel locationModel = new LocationModel();

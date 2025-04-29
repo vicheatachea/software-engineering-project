@@ -3,7 +3,6 @@ package dao;
 import entity.SubjectEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-
 import java.util.List;
 
 public class SubjectDAO {
@@ -62,13 +61,13 @@ public class SubjectDAO {
 			// This query finds subjects from groups where the user is a student
 			// AND subjects from teaching sessions where the user is a teacher
 			return em.createQuery(
-					         "SELECT DISTINCT s FROM SubjectEntity s WHERE " +
-					         "s IN (SELECT g.subject FROM UserGroupEntity g JOIN g.students u WHERE u.id = :userId) " +
-					         "OR " +
-					         "s IN (SELECT g.subject FROM UserGroupEntity g WHERE g.teacher.id = :userId) ",
-					         SubjectEntity.class)
-			         .setParameter("userId", userId)
-			         .getResultList();
+							"SELECT DISTINCT s FROM SubjectEntity s WHERE "
+									+ "s IN (SELECT g.subject FROM UserGroupEntity g JOIN g.students u WHERE u.id = :userId) "
+									+ "OR "
+									+ "s IN (SELECT g.subject FROM UserGroupEntity g WHERE g.teacher.id = :userId) ",
+							SubjectEntity.class)
+					.setParameter("userId", userId)
+					.getResultList();
 		} catch (Exception e) {
 			return null;
 		} finally {

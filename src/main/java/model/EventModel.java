@@ -1,6 +1,10 @@
 package model;
 
-import dao.*;
+import dao.AssignmentDAO;
+import dao.LocationDAO;
+import dao.SubjectDAO;
+import dao.TeachingSessionDAO;
+import dao.TimetableDAO;
 import dto.AssignmentDTO;
 import dto.Event;
 import dto.TeachingSessionDTO;
@@ -8,7 +12,6 @@ import entity.AssignmentEntity;
 import entity.SubjectEntity;
 import entity.TeachingSessionEntity;
 import entity.TimetableEntity;
-
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

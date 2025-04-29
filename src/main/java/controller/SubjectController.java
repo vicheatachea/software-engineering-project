@@ -1,9 +1,8 @@
 package controller;
 
 import dto.SubjectDTO;
-import model.SubjectModel;
-
 import java.util.List;
+import model.SubjectModel;
 
 public class SubjectController {
 	private final SubjectModel subjectModel = new SubjectModel();
