@@ -7,20 +7,30 @@ import controller.UserController;
 import dto.GroupDTO;
 import dto.SubjectDTO;
 import dto.UserDTO;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import view.controllers.ControllerAware;
-
-import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import view.controllers.ControllerAware;
 
 public class GroupsViewController implements ControllerAware {
     private static final Logger logger = LoggerFactory.getLogger(GroupsViewController.class);

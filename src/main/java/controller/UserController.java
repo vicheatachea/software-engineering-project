@@ -1,10 +1,10 @@
 package controller;
 
 import dto.UserDTO;
-import model.UserModel;
-
 import java.util.List;
 import java.util.Set;
+import model.UserModel;
+
 
 public class UserController {
 	private final UserModel userModel = new UserModel();

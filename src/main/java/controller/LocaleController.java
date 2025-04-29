@@ -1,10 +1,10 @@
 package controller;
 
-import model.UserPreferences;
-
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import model.UserPreferences;
+
 
 public class LocaleController {
     private static final String LOCALE_BUNDLE = "view_text";

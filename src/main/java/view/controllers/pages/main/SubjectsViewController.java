@@ -3,17 +3,22 @@ package view.controllers.pages.main;
 import controller.BaseController;
 import controller.SubjectController;
 import dto.SubjectDTO;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import view.controllers.ControllerAware;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
 
 public class SubjectsViewController implements ControllerAware {
 	private static final String ERROR_TITLE = "error.title";

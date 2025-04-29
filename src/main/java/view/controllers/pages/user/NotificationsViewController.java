@@ -2,6 +2,10 @@ package view.controllers.pages.user;
 
 import controller.BaseController;
 import dto.Event;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,14 +19,8 @@ import org.slf4j.LoggerFactory;
 import view.controllers.ControllerAware;
 import view.controllers.components.EventNotification;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-
 public class NotificationsViewController implements ControllerAware {
 	private static final Logger logger = LoggerFactory.getLogger(NotificationsViewController.class);
-
 	private List<EventNotification> eventNotifications = new ArrayList<>();
 	private ResourceBundle viewText;
 	private BaseController baseController;

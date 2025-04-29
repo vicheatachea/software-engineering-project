@@ -7,17 +7,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.util.ResourceBundle;
+import java.io.IOException;
 import view.controllers.SidebarControllerAware;
 import view.controllers.ControllerAware;
 import view.controllers.components.SidebarViewController;
-
-import java.util.ResourceBundle;
-
-import java.io.IOException;
 
 public class LoginViewController implements ControllerAware, SidebarControllerAware {
     private static final String ERROR_TITLE = "error.title";

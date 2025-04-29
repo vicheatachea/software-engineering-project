@@ -1,7 +1,17 @@
 package entity;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.util.Objects;
 import java.util.Set;
 
@@ -140,10 +150,13 @@ public class UserGroupEntity {
 			return false;
 		}
 		UserGroupEntity userGroup = (UserGroupEntity) obj;
-		return Objects.equals(id, userGroup.id) && Objects.equals(name, userGroup.name) &&
-		       Objects.equals(code, userGroup.code) && Objects.equals(capacity, userGroup.capacity) &&
-		       Objects.equals(teacher, userGroup.teacher) && Objects.equals(students, userGroup.students) &&
-		       Objects.equals(subject, userGroup.subject) &&
-		       Objects.equals(timetable, userGroup.timetable);
+		return Objects.equals(id, userGroup.id)
+				&& Objects.equals(name, userGroup.name)
+				&& Objects.equals(code, userGroup.code)
+				&& Objects.equals(capacity, userGroup.capacity)
+				&& Objects.equals(teacher, userGroup.teacher)
+				&& Objects.equals(students, userGroup.students)
+				&& Objects.equals(subject, userGroup.subject)
+				&& Objects.equals(timetable, userGroup.timetable);
 	}
 }

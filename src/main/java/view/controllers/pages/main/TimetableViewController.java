@@ -7,6 +7,21 @@ import controller.UserController;
 import dto.AssignmentDTO;
 import dto.Event;
 import dto.TeachingSessionDTO;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.WeekFields;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,7 +29,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -27,14 +46,6 @@ import view.controllers.ControllerAware;
 import view.controllers.components.EventLabel;
 import view.controllers.components.EventPopupViewController;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.WeekFields;
-import java.util.*;
 
 public class TimetableViewController implements ControllerAware {
 	private static final String TIMETABLE_ALL_LANGUAGES = "timetable.allLanguages";
@@ -202,8 +213,8 @@ public class TimetableViewController implements ControllerAware {
 			Stage popupStage = new Stage();
 			popupStage.setScene(new Scene(content));
 
-			popupStage.setTitle(event == null ? viewText.getString("timetable.newEvent") :
-			                    viewText.getString("timetable.editEvent"));
+			popupStage.setTitle(event == null ? viewText.getString("timetable.newEvent")
+                    : viewText.getString("timetable.editEvent"));
 			popupStage.initModality(Modality.WINDOW_MODAL);
 			popupStage.initOwner(topbar.getScene().getWindow());
 			popupStage.showAndWait();

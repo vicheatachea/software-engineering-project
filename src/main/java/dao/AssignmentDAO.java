@@ -11,6 +11,10 @@ import org.slf4j.LoggerFactory;
 import java.sql.Timestamp;
 import java.util.List;
 
+/**
+ * AssignmentDAO is a Data Access Object (DAO) class that provides methods to interact with the database
+ * for the AssignmentEntity. It handles CRUD operations and other specific queries related to assignments.
+ */
 public class AssignmentDAO {
 
 	private static final Logger logger = LoggerFactory.getLogger(AssignmentDAO.class);

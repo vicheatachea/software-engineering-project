@@ -18,9 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 public class UserModel {
-
 	private static final Logger logger = LoggerFactory.getLogger(UserModel.class);
-
 	private static final UserDAO userDAO = new UserDAO();
 	private static final TimetableDAO timetableDAO = new TimetableDAO();
 	private static final UserGroupDAO groupDAO = new UserGroupDAO();

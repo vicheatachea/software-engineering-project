@@ -3,6 +3,7 @@ package view.controllers.pages.user;
 import controller.BaseController;
 import controller.UserController;
 import dto.UserDTO;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -10,12 +11,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import view.controllers.ControllerAware;
 import view.controllers.SidebarControllerAware;
 import view.controllers.components.SidebarViewController;
-import java.util.ResourceBundle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class UserProfileViewController implements ControllerAware, SidebarControllerAware {
 	private static final Logger logger = LoggerFactory.getLogger(UserProfileViewController.class);

@@ -7,6 +7,10 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import util.TimeFormatterUtil;
 
+/**
+ * EventLabel is a custom label class that represents an event in the calendar.
+ * It extends the Label class and provides additional functionality for displaying event details.
+ */
 public class EventLabel extends Label {
     private final Event event;
 

@@ -1,10 +1,10 @@
 package controller;
 
 import dto.Event;
-import model.EventModel;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import model.EventModel;
+
 
 public class EventController {
 	private final EventModel eventModel = new EventModel();
