@@ -120,12 +120,13 @@ public class UserDAO {
 	public UserEntity authenticate(String username, String password) {
 		UserEntity user = findByUsername(username);
 		if (user == null) {
-			throw new IllegalArgumentException("User not found");
+			return null;
 		}
+		
 		boolean verified = verifyPassword(password, user.getPassword(), user.getSalt());
 
 		if (!verified) {
-			throw new IllegalArgumentException("Invalid password");
+			return null;
 		}
 
 		return user;
