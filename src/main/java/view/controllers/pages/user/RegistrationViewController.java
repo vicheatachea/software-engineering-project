@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -116,6 +117,8 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 				}
 			}
 		});
+
+		socialNumberField.addEventFilter(KeyEvent.KEY_TYPED, this::handleSocialNumber);
 	}
 
 	@FXML
@@ -203,5 +206,20 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 		alert.setHeaderText(null);
 		alert.setContentText(message);
 		alert.showAndWait();
+	}
+
+	private void handleSocialNumber(KeyEvent keyEvent) {
+		String character = keyEvent.getCharacter();
+		String text = socialNumberField.getText();
+
+		if (!character.matches("\\d|\\w") || text.length() >= 11) {
+			keyEvent.consume();
+			return;
+		}
+
+		int caretPosition = socialNumberField.getCaretPosition();
+		socialNumberField.setText(text + character);
+		socialNumberField.positionCaret(caretPosition + 1);
+		keyEvent.consume();
 	}
 }
