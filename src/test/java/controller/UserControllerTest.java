@@ -73,8 +73,7 @@ class UserControllerTest {
 		UserDTO userDTO = createStudentDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
-		assertThrows(IllegalArgumentException.class,
-		             () -> userController.authenticateUser("username", "wrongPassword"));
+		assertFalse(userController.authenticateUser(userDTO.username(), "wrongPassword"));
 	}
 
 	@Test
@@ -82,8 +81,7 @@ class UserControllerTest {
 		UserDTO userDTO = createStudentDTO("username", "123456789ab");
 		userController.registerUser(userDTO);
 
-		assertThrows(IllegalArgumentException.class,
-		             () -> userController.authenticateUser("wrongUsername", "wrongPassword"));
+		assertFalse(userController.authenticateUser("wrongUsername", "wrongPassword"));
 	}
 
 	@Test
