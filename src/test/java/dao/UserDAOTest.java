@@ -12,7 +12,8 @@ import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class UserDAOTest {
 
@@ -132,7 +133,7 @@ class UserDAOTest {
 		userDao.persist(user);
 
 		assertEquals(user.getId(), userDao.authenticate(user.getUsername(), "password").getId());
-		assertThrows(IllegalArgumentException.class, () -> userDao.authenticate("JohnDoe", "wrongPassword"));
+		assertNull(userDao.authenticate(user.getUsername(), "wrongpassword"));
 	}
 
 	@Test
