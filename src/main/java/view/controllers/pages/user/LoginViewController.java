@@ -7,118 +7,115 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import java.util.ResourceBundle;
-import java.io.IOException;
-import view.controllers.SidebarControllerAware;
 import view.controllers.ControllerAware;
+import view.controllers.SidebarControllerAware;
 import view.controllers.components.SidebarViewController;
 
+import java.io.IOException;
+import java.util.ResourceBundle;
+
 public class LoginViewController implements ControllerAware, SidebarControllerAware {
-    private static final String ERROR_TITLE = "error.title";
+	private static final String ERROR_TITLE = "error.title";
 
-    private BaseController baseController;
-    private UserController userController;
-    private SidebarViewController sidebarViewController;
-    private ResourceBundle viewText;
+	private BaseController baseController;
+	private UserController userController;
+	private SidebarViewController sidebarViewController;
+	private ResourceBundle viewText;
 
-    @FXML
-    private TextField emailField;
-    @FXML
-    private PasswordField passwordField;
-    @FXML
-    private Label emailLabel;
-    @FXML
-    private Label passwordLabel;
-    @FXML
-    private VBox loginVBox;
-    @FXML
-    private Label loginLabel;
-    @FXML
-    private HBox buttonsHBox;
-    @FXML
-    private Button loginButton;
-    @FXML
-    private Button loginRegisterButton;
+	@FXML
+	private TextField emailField;
+	@FXML
+	private PasswordField passwordField;
+	@FXML
+	private Label emailLabel;
+	@FXML
+	private Label passwordLabel;
+	@FXML
+	private VBox loginVBox;
+	@FXML
+	private Label loginLabel;
+	@FXML
+	private HBox buttonsHBox;
+	@FXML
+	private Button loginButton;
+	@FXML
+	private Button loginRegisterButton;
 
-    @Override
-    public void setBaseController(BaseController baseController) {
-        this.baseController = baseController;
-        this.userController = baseController.getUserController();
-        this.viewText = baseController.getLocaleController().getUIBundle();
-    }
+	@Override
+	public void setBaseController(BaseController baseController) {
+		this.baseController = baseController;
+		this.userController = baseController.getUserController();
+		this.viewText = baseController.getLocaleController().getUIBundle();
+	}
 
-    @Override
-    public void setSidebarViewController(SidebarViewController sidebarViewController) {
-        this.sidebarViewController = sidebarViewController;
-    }
+	@Override
+	public void setSidebarViewController(SidebarViewController sidebarViewController) {
+		this.sidebarViewController = sidebarViewController;
+	}
 
-    @FXML
-    private void initialize() {
-        Platform.runLater(() -> {
-            loginLabel.setText(viewText.getString("login.title"));
-            loginButton.setText(viewText.getString("login.login"));
-            loginRegisterButton.setText(viewText.getString("login.register"));
-            emailLabel.setText(viewText.getString("login.username"));
-            passwordLabel.setText(viewText.getString("login.password"));
+	@FXML
+	private void initialize() {
+		Platform.runLater(() -> {
+			loginLabel.setText(viewText.getString("login.title"));
+			loginButton.setText(viewText.getString("login.login"));
+			loginRegisterButton.setText(viewText.getString("login.register"));
+			emailLabel.setText(viewText.getString("login.username"));
+			passwordLabel.setText(viewText.getString("login.password"));
 
-        });
-    }
+		});
+	}
 
+	@FXML
+	private void handleLogin() {
+		String username = emailField.getText();
+		String password = passwordField.getText();
 
-    @FXML
-    private void handleLogin() {
-        String username = emailField.getText();
-        String password = passwordField.getText();
+		if (username.isEmpty() || password.isEmpty()) {
+			showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.fillAllFields"));
+			return;
+		}
 
-        if (username.isEmpty() || password.isEmpty()) {
-            showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.invalidLogin"));
-            return;
-        }
+		try {
+			if (userController.authenticateUser(username, password)) {
+				sidebarViewController.updateUserButtons();
+				Stage stage = (Stage) emailField.getScene().getWindow();
+				stage.close();
+			} else {
+				showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.invalidLogin"));
+			}
+		} catch (Exception e) {
+			showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.unexpectedError"));
+		}
+	}
 
-        try {
-            if (userController.authenticateUser(username, password)) {
-                sidebarViewController.updateUserButtons();
-                Stage stage = (Stage) emailField.getScene().getWindow();
-                stage.close();
-            } else {
-                showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.invalidCredentials"));
-            }
-        } catch (Exception e) {
-            showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.unexpectedError"));
-        }
-    }
+	@FXML
+	private void goToRegisterPage() {
+		try {
+			FXMLLoader fxmlLoader =
+					new FXMLLoader(getClass().getResource("/layouts/pages/user/registration-page.fxml"));
+			Parent parent = fxmlLoader.load();
 
-    @FXML
-    private void goToRegisterPage() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/registration-page.fxml"));
-            Parent parent = fxmlLoader.load();
+			RegistrationViewController registrationViewController = fxmlLoader.getController();
+			registrationViewController.setBaseController(baseController);
+			registrationViewController.setSidebarViewController(sidebarViewController);
 
-            RegistrationViewController registrationViewController = fxmlLoader.getController();
-            registrationViewController.setBaseController(baseController);
-            registrationViewController.setSidebarViewController(sidebarViewController);
+			Scene scene = emailField.getScene();
+			scene.setRoot(parent);
 
-            Scene scene = emailField.getScene();
-            scene.setRoot(parent);
+		} catch (IOException e) {
+			showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.unexpectedError"));
+		}
+	}
 
-        } catch (IOException e) {
-            showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.unexpectedError"));
-        }
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+	private void showAlert(String title, String message) {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+		alert.showAndWait();
+	}
 }
