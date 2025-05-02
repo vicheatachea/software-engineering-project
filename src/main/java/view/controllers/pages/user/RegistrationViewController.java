@@ -9,24 +9,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import view.controllers.ControllerAware;
+import view.controllers.SidebarControllerAware;
+import view.controllers.components.SidebarViewController;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
-import view.controllers.SidebarControllerAware;
-import view.controllers.ControllerAware;
-import view.controllers.components.SidebarViewController;
 
 
 public class RegistrationViewController implements ControllerAware, SidebarControllerAware {
@@ -132,8 +126,12 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 			String socialNumber = socialNumberField.getText();
 			String username = usernameField.getText();
 			String password = registerPasswordField.getText();
-			LocalDateTime dateOfBirth = dobPicker.getValue().atTime(0, 0);
 			String role = roleComboBox.getValue();
+			LocalDateTime dateOfBirth = null;
+
+			if (dobPicker.getValue() != null) {
+				dateOfBirth = dobPicker.getValue().atTime(0, 0);
+			}
 
 			if (firstName.isEmpty() || lastName.isEmpty() || socialNumber.isEmpty() || username.isEmpty() ||
 			    password.isEmpty() || dobPicker.getValue() == null || role == null) {
@@ -153,6 +151,11 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 
 			if (userController.isUsernameTaken(username)) {
 				showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.username"));
+				return;
+			}
+
+			if (userController.isSocialNumberTaken(socialNumber)) {
+				showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.socialNumber"));
 				return;
 			}
 
