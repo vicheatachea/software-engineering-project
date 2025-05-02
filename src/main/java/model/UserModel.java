@@ -221,4 +221,8 @@ public class UserModel {
 	public long fetchCurrentUserId() {
 		return UserPreferences.getUserId();
 	}
+
+	public boolean isSocialNumberTaken(String socialNumber) {
+		return userDAO.findBySocialNumber(socialNumber);
+	}
 }
