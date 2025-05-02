@@ -329,7 +329,9 @@ public class EventPopupViewController {
         return !checkNullOrEmpty(eventComboBox.getValue(), viewText.getString("event.promptEventType")) &&
                 !checkNullOrEmpty(scheduleComboBox.getValue(), viewText.getString("event.promptScheduleType")) &&
                 !checkNullOrEmpty(subjectComboBox.getValue(), viewText.getString("event.promptSubject")) &&
-                !checkNullOrEmpty(languageComboBox.getValue(), viewText.getString("event.promptLanguage"));
+                !checkNullOrEmpty(languageComboBox.getValue(), viewText.getString("event.promptLanguage")) &&
+                !checkNullOrEmpty(startTimeField.getText(), viewText.getString("event.promptStartTime")) &&
+                !checkNullOrEmpty(endTimeField.getText(), viewText.getString("event.promptEndTime"));
     }
 
     private boolean validateEventSpecificFields() {
@@ -341,9 +343,7 @@ public class EventPopupViewController {
                     !checkNullOrEmpty(nameTextField.getText(), viewText.getString("event.promptAssignmentName")) &&
                     !checkNullOrEmpty(assignmentComboBox.getValue(), viewText.getString("event.promptAssignmentType"));
         } else if (eventType.equals(viewText.getString(EVENT_CLASS))) {
-            return !checkNullOrEmpty(startTimeField.getText(), viewText.getString("event.promptStartTime")) &&
-                    !checkNullOrEmpty(endTimeField.getText(), viewText.getString("event.promptEndTime")) &&
-                    !checkNullOrEmpty(locationComboBox.getValue(), viewText.getString("event.promptLocation"));
+            return !checkNullOrEmpty(locationComboBox.getValue(), viewText.getString("event.promptLocation"));
         }
         return false;
     }
@@ -425,8 +425,15 @@ public class EventPopupViewController {
     }
 
     private TeachingSessionDTO createTeachingSession(Long id, Long timetableId, Locale eventLocale) {
-        LocalTime startTime = TimeFormatterUtil.getTimeFromString(startTimeField.getText());
-        LocalTime endTime = TimeFormatterUtil.getTimeFromString(endTimeField.getText());
+        String startTimeText = startTimeField.getText();
+        String endTimeText = endTimeField.getText();
+
+        if (isTimeInvalid(startTimeText) || isTimeInvalid(endTimeText)) {
+            return null;
+        }
+
+        LocalTime startTime = TimeFormatterUtil.getTimeFromString(startTimeText);
+        LocalTime endTime = TimeFormatterUtil.getTimeFromString(endTimeText);
 
         if (startTime.isAfter(endTime)) {
             displayErrorAlert(
@@ -453,13 +460,28 @@ public class EventPopupViewController {
     }
 
     private AssignmentDTO createAssignment(Long id, Long timetableId, Locale eventLocale) {
-        LocalTime startTime = TimeFormatterUtil.getTimeFromString(startTimeField.getText());
-        LocalTime endTime = TimeFormatterUtil.getTimeFromString(endTimeField.getText());
+        String startTimeText = startTimeField.getText();
+        String endTimeText = endTimeField.getText();
+
+        if (isTimeInvalid(startTimeText) || isTimeInvalid(endTimeText)) {
+            return null;
+        }
+
+        LocalTime startTime = TimeFormatterUtil.getTimeFromString(startTimeText);
+        LocalTime endTime = TimeFormatterUtil.getTimeFromString(endTimeText);
 
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
         LocalDateTime publishingDateTime = LocalDateTime.of(startDate, startTime);
         LocalDateTime deadlineDateTime = LocalDateTime.of(endDate, endTime);
+
+        if (publishingDateTime.isAfter(deadlineDateTime)) {
+            displayErrorAlert(
+                    viewText.getString(ERROR_TITLE),
+                    viewText.getString("error.event.dateAfter")
+            );
+            return null;
+        }
 
         return new AssignmentDTO(
                 id,
@@ -570,5 +592,16 @@ public class EventPopupViewController {
         timetableViewController.loadTimetable();
         Stage stage = (Stage) popupGridPane.getScene().getWindow();
         stage.close();
+    }
+
+    private boolean isTimeInvalid(String time) {
+        if (!time.matches("\\d{2}:\\d{2}")) {
+            displayErrorAlert(
+                    viewText.getString(ERROR_TITLE),
+                    viewText.getString("error.invalidTime")
+            );
+            return true;
+        }
+        return false;
     }
 }
