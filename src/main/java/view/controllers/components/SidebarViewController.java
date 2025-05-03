@@ -192,8 +192,7 @@ public class SidebarViewController implements ControllerAware, NotificationAware
 
 	private void showNotificationPopup() {
 		try {
-			FXMLLoader fxmlLoader =
-					new FXMLLoader(getClass().getResource("/layouts/pages/user/notifications-page.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/layouts/pages/user/notifications-page.fxml"));
 			Parent parent = fxmlLoader.load();
 
 			NotificationsViewController notificationsViewController = fxmlLoader.getController();

@@ -33,7 +33,5 @@ public class LocaleController {
     }
 
     // Fetch the bundle for UI translations
-    public ResourceBundle getUIBundle() {
-        return ResourceBundle.getBundle(LOCALE_BUNDLE, getUserLocale());
-    }
+    public ResourceBundle getUIBundle() {return ResourceBundle.getBundle(LOCALE_BUNDLE, getUserLocale());}
 }
