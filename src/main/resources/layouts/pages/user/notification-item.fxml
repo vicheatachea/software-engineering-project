@@ -8,7 +8,7 @@
 <HBox fx:id="notificationItem" spacing="10" styleClass="notification-item" stylesheets="@notifications.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.NotificationItemViewController">
 
     <Label fx:id="eventLabel" styleClass="event-label" text="Event" />
-   <Region HBox.hgrow="ALWAYS" />
+   <Region opacity="0.0" HBox.hgrow="ALWAYS" />
 
     <Button fx:id="deleteButton" onAction="#handleDelete" styleClass="delete-button" text="✖" />
 </HBox>
