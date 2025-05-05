@@ -103,9 +103,10 @@ public class LoginViewController implements ControllerAware, SidebarControllerAw
 			registrationViewController.setBaseController(baseController);
 			registrationViewController.setSidebarViewController(sidebarViewController);
 
+			Stage stage = (Stage) emailField.getScene().getWindow();
+			stage.setTitle(viewText.getString("register.title"));
 			Scene scene = emailField.getScene();
 			scene.setRoot(parent);
-
 		} catch (IOException e) {
 			showAlert(viewText.getString(ERROR_TITLE), viewText.getString("error.unexpectedError"));
 		}

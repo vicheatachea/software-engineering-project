@@ -193,6 +193,8 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 			loginViewController.setBaseController(baseController);
 			loginViewController.setSidebarViewController(sidebarViewController);
 
+			Stage stage = (Stage) firstNameField.getScene().getWindow();
+			stage.setTitle(viewText.getString("login.title"));
 			Scene scene = firstNameField.getScene();
 			scene.setRoot(parent);
 		} catch (IOException e) {
