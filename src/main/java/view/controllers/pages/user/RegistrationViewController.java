@@ -38,8 +38,6 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 	@FXML
 	private Label registrationLabel;
 	@FXML
-	private TextField emailField;
-	@FXML
 	private HBox dobRoleHBox;
 	@FXML
 	private HBox buttonsHBox;
@@ -55,8 +53,6 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 	private Label socialNumberLabel;
 	@FXML
 	private Label usernameLabel;
-	@FXML
-	private Label emailLabel;
 	@FXML
 	private Label registerPasswordLabel;
 	@FXML
@@ -86,7 +82,6 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 		this.sidebarViewController = sidebarViewController;
 	}
 
-
 	@FXML
 	public void initialize() {
 		Platform.runLater(() -> {
@@ -96,7 +91,6 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 			firstNameLabel.setText(viewText.getString("register.firstName"));
 			lastNameLabel.setText(viewText.getString("register.lastName"));
 			socialNumberLabel.setText(viewText.getString("register.socialNumber"));
-			emailLabel.setText(viewText.getString("register.email"));
 			dobPicker.setPromptText(viewText.getString("register.dateOfBirth"));
 			registerPasswordLabel.setText(viewText.getString("register.password"));
 			usernameLabel.setText(viewText.getString("register.username"));

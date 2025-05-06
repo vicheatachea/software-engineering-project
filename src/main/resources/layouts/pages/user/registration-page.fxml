@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="registrationVBox" alignment="CENTER" prefHeight="540.0" prefWidth="520.0" spacing="15" styleClass="registration-vbox" stylesheets="@registration-page.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.RegistrationViewController">
+<VBox fx:id="registrationVBox" alignment="CENTER" prefHeight="500.0" prefWidth="520.0" spacing="15" styleClass="registration-vbox" stylesheets="@registration-page.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controllers.pages.user.RegistrationViewController">
 
     <Label fx:id="registrationLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="60.0" styleClass="registration-label" text="Register"> </Label>
 
@@ -26,11 +26,6 @@
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Label fx:id="socialNumberLabel" prefHeight="17.0" prefWidth="150.0" styleClass="socialnumber-label" text="Social Number"> </Label>
         <TextField fx:id="socialNumberField" prefHeight="40.0" styleClass="social-number-field" />
-    </HBox>
-
-    <HBox alignment="CENTER_LEFT" spacing="10">
-        <Label fx:id="emailLabel" prefHeight="17.0" prefWidth="150.0" styleClass="email-label" text="Email"> </Label>
-        <TextField fx:id="emailField" prefHeight="40.0" styleClass="email-field" />
     </HBox>
 
     <HBox alignment="CENTER_LEFT" spacing="10">
