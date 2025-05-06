@@ -184,7 +184,7 @@ public class SubjectsViewController implements ControllerAware {
 					Alert alert = new Alert(Alert.AlertType.ERROR);
 					alert.setTitle(viewText.getString(ERROR_TITLE));
 					alert.setHeaderText(null);
-					alert.setContentText(viewText.getString("error.location.exists"));
+					alert.setContentText(viewText.getString("error.subject.exists"));
 					alert.showAndWait();
 					return;
 				}
