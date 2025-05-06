@@ -136,7 +136,7 @@ public class RegistrationViewController implements ControllerAware, SidebarContr
 				return;
 			}
 
-			if (!firstName.matches("^[a-zA-Z]+$") || !lastName.matches("^[a-zA-Z]+$")) {
+			if (!firstName.matches("^\\w+(\\s\\w+)*$") || !lastName.matches("^\\w+(\\s\\w+)*$")) {
 				showAlert(viewText.getString(WARNING_TITLE), viewText.getString("warning.fullName"));
 				return;
 			}
