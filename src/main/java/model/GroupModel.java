@@ -9,11 +9,16 @@ import entity.SubjectEntity;
 import entity.TimetableEntity;
 import entity.UserEntity;
 import entity.UserGroupEntity;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Manages operations related to user groups including creation, modification,
+ * and student enrollment. Enforces business rules for group management.
+ */
 public class GroupModel {
 
 	private static final UserGroupDAO userGroupDAO = new UserGroupDAO();
@@ -23,9 +28,12 @@ public class GroupModel {
 
 	private static final UserModel userModel = new UserModel();
 
-	// Fetch all available groups
+	/**
+	 * Retrieves all available groups in the system.
+	 *
+	 * @return A list of GroupDTOs for all groups
+	 */
 	public List<GroupDTO> fetchAllGroups() {
-
 		List<UserGroupEntity> groups = userGroupDAO.findAll();
 		List<GroupDTO> groupDTOs = new ArrayList<>();
 
@@ -38,7 +46,11 @@ public class GroupModel {
 		return groupDTOs;
 	}
 
-	// Fetch all groups for a user
+	/**
+	 * Retrieves all groups associated with the current user.
+	 *
+	 * @return A list of GroupDTOs for the current user
+	 */
 	public List<GroupDTO> fetchGroupsByUser() {
 		long userId = userModel.fetchCurrentUserId();
 
@@ -52,7 +64,13 @@ public class GroupModel {
 		return groupDTOs;
 	}
 
-	// Fetch a group DTO by the group name
+	/**
+	 * Finds a group by its name.
+	 *
+	 * @param groupName The name of the group to find
+	 * @return A GroupDTO representing the found group
+	 * @throws IllegalArgumentException if the group does not exist
+	 */
 	public GroupDTO fetchGroupByName(String groupName) {
 		UserGroupEntity group = userGroupDAO.findByName(groupName);
 
@@ -63,6 +81,13 @@ public class GroupModel {
 		return convertToGroupDTO(group);
 	}
 
+	/**
+	 * Finds a group by its timetable ID.
+	 *
+	 * @param timetableId The timetable ID to search for
+	 * @return A GroupDTO representing the found group
+	 * @throws IllegalArgumentException if the group does not exist
+	 */
 	public GroupDTO fetchGroupByTimetableId(long timetableId) {
 		UserGroupEntity group = userGroupDAO.findByTimetableId(timetableId);
 
@@ -73,6 +98,12 @@ public class GroupModel {
 		return convertToGroupDTO(group);
 	}
 
+	/**
+	 * Creates a new group in the system.
+	 *
+	 * @param groupDTO The group information to add
+	 * @throws IllegalArgumentException if the user is not a teacher or required entities don't exist
+	 */
 	public void addGroup(GroupDTO groupDTO) {
 		if (!userModel.isCurrentUserTeacher()) {
 			throw new IllegalArgumentException("Only teacher can add group");
@@ -101,9 +132,14 @@ public class GroupModel {
 		userGroupDAO.persist(group);
 	}
 
-	// Updates group details excluding the students and timetable
+	/**
+	 * Updates an existing group's details except students and timetable.
+	 *
+	 * @param groupDTO    The updated group information
+	 * @param currentName The current name of the group to update
+	 * @throws IllegalArgumentException if validation fails or the user lacks permission
+	 */
 	public void updateGroup(GroupDTO groupDTO, String currentName) {
-
 		if (!Objects.equals(currentName, groupDTO.name())) {
 			UserGroupEntity existingGroup = userGroupDAO.findByName(groupDTO.name());
 			if (existingGroup != null) {
@@ -144,7 +180,13 @@ public class GroupModel {
 		userGroupDAO.persist(existingGroup);
 	}
 
-	// Adds a student to a group
+	/**
+	 * Adds a student to a group.
+	 *
+	 * @param groupDTO        The group to add the student to
+	 * @param studentUsername The username of the student to add
+	 * @throws IllegalArgumentException if validation fails or the user lacks permission
+	 */
 	public void addStudentToGroup(GroupDTO groupDTO, String studentUsername) {
 		if (!userModel.isCurrentUserTeacher()) {
 			throw new IllegalArgumentException("Only teachers can add student to group");
@@ -173,9 +215,15 @@ public class GroupModel {
 		existingGroup.getStudents().add(student);
 		existingGroup.setTimetable(existingGroup.getTimetable());
 		userGroupDAO.persist(existingGroup);
-
 	}
 
+	/**
+	 * Removes a student from a group.
+	 *
+	 * @param groupDTO        The group to remove the student from
+	 * @param studentUsername The username of the student to remove
+	 * @throws IllegalArgumentException if validation fails or the user lacks permission
+	 */
 	public void removeStudentFromGroup(GroupDTO groupDTO, String studentUsername) {
 		if (!userModel.isCurrentUserTeacher()) {
 			throw new IllegalArgumentException("Only teachers can remove student from group");
@@ -195,9 +243,14 @@ public class GroupModel {
 
 		existingGroup.getStudents().remove(user);
 		userGroupDAO.persist(existingGroup);
-
 	}
 
+	/**
+	 * Deletes a group and its associated timetable.
+	 *
+	 * @param groupDTO The group to delete
+	 * @throws IllegalArgumentException if validation fails or the user lacks permission
+	 */
 	public void deleteGroup(GroupDTO groupDTO) {
 		if (!userModel.isCurrentUserTeacher()) {
 			throw new IllegalArgumentException("Only teachers can delete groups");
@@ -213,6 +266,13 @@ public class GroupModel {
 		timetableDAO.delete(existingGroup.getTimetable());
 	}
 
+	/**
+	 * Checks if the current user is the owner (teacher) of a group.
+	 *
+	 * @param groupName The name of the group to check
+	 * @return true if the current user is the owner, false otherwise
+	 * @throws IllegalArgumentException if the group does not exist
+	 */
 	public boolean isUserGroupOwner(String groupName) {
 		UserGroupEntity group = userGroupDAO.findByName(groupName);
 
@@ -227,6 +287,12 @@ public class GroupModel {
 		return Objects.equals(group.getTeacher().getId(), userModel.fetchCurrentUserId());
 	}
 
+	/**
+	 * Converts a UserGroupEntity to a GroupDTO.
+	 *
+	 * @param group The entity to convert
+	 * @return A GroupDTO representation of the entity
+	 */
 	private GroupDTO convertToGroupDTO(UserGroupEntity group) {
 		return new GroupDTO(group.getName(), group.getCode(), group.getCapacity(), group.getTeacher().getId(),
 		                    group.getSubject().getCode());

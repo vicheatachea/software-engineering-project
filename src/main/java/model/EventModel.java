@@ -1,10 +1,6 @@
 package model;
 
-import dao.AssignmentDAO;
-import dao.LocationDAO;
-import dao.SubjectDAO;
-import dao.TeachingSessionDAO;
-import dao.TimetableDAO;
+import dao.*;
 import dto.AssignmentDTO;
 import dto.Event;
 import dto.TeachingSessionDTO;
@@ -12,12 +8,17 @@ import entity.AssignmentEntity;
 import entity.SubjectEntity;
 import entity.TeachingSessionEntity;
 import entity.TimetableEntity;
+
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Manages calendar events for users, including teaching sessions and assignments.
+ * Provides functionality for retrieving, creating, updating, and deleting events
+ * with support for filtering by time periods, timetable, and locale.
+ */
 public class EventModel {
 
 	private static final AssignmentDAO assignmentDAO = new AssignmentDAO();
@@ -26,6 +27,13 @@ public class EventModel {
 
 	private static final UserModel userModel = new UserModel();
 
+	/**
+	 * Retrieves all events for the current user within a specified time period.
+	 *
+	 * @param startDate The beginning of the time period
+	 * @param endDate   The end of the time period
+	 * @return A list of events (teaching sessions and assignments) for the user
+	 */
 	public List<Event> fetchEventsByUser(LocalDateTime startDate, LocalDateTime endDate) {
 		List<Event> events = new ArrayList<>();
 
@@ -41,7 +49,14 @@ public class EventModel {
 		return events;
 	}
 
-	// Fetch events by timetable (Either group or user)
+	/**
+	 * Retrieves all events associated with a specific timetable within a time period.
+	 *
+	 * @param startDate   The beginning of the time period
+	 * @param endDate     The end of the time period
+	 * @param timetableId The ID of the timetable to find events for
+	 * @return A list of events (teaching sessions and assignments) for the timetable
+	 */
 	public List<Event> fetchEventsByTimetable(LocalDateTime startDate, LocalDateTime endDate, long timetableId) {
 		List<Event> events = new ArrayList<>();
 
@@ -67,7 +82,14 @@ public class EventModel {
 		return events;
 	}
 
-	// Fetch events by locale
+	/**
+	 * Retrieves all events for the current user within a specified time period and locale.
+	 *
+	 * @param startDate  The beginning of the time period
+	 * @param endDate    The end of the time period
+	 * @param localeCode The locale code to filter events by
+	 * @return A list of events (teaching sessions and assignments) matching the criteria
+	 */
 	public List<Event> fetchEventsByUserAndLocale(LocalDateTime startDate, LocalDateTime endDate, String localeCode) {
 		List<Event> events = new ArrayList<>();
 
@@ -84,6 +106,15 @@ public class EventModel {
 		return events;
 	}
 
+	/**
+	 * Retrieves events for a specific timetable and locale within a time period.
+	 *
+	 * @param startDate   The beginning of the time period
+	 * @param endDate     The end of the time period
+	 * @param timetableId The ID of the timetable
+	 * @param localeCode  The locale code to filter events by
+	 * @return A list of events matching the criteria
+	 */
 	private List<Event> fetchEventsByTimetableAndLocale(LocalDateTime startDate, LocalDateTime endDate,
 	                                                    Long timetableId, String localeCode) {
 		List<Event> events = new ArrayList<>();
@@ -111,8 +142,12 @@ public class EventModel {
 		return events;
 	}
 
-	// Add an event
-
+	/**
+	 * Adds a new event (teaching session or assignment) to the system.
+	 *
+	 * @param event The event to add (must be TeachingSessionDTO or AssignmentDTO)
+	 * @throws IllegalArgumentException if the event data is invalid
+	 */
 	public void addEvent(Event event) {
 		if (event instanceof TeachingSessionDTO teachingSessionDTO) {
 			try {
@@ -133,7 +168,12 @@ public class EventModel {
 		}
 	}
 
-	// Update an event
+	/**
+	 * Updates an existing event in the system.
+	 *
+	 * @param event The event to update (must be TeachingSessionDTO or AssignmentDTO)
+	 * @throws IllegalArgumentException if the event data is invalid
+	 */
 	public void updateEvent(Event event) {
 		if (event instanceof TeachingSessionDTO teachingSessionDTO) {
 			try {
@@ -154,7 +194,12 @@ public class EventModel {
 		}
 	}
 
-	// Delete an event
+	/**
+	 * Deletes an event from the system.
+	 *
+	 * @param event The event to delete (must be TeachingSessionDTO or AssignmentDTO)
+	 * @throws IllegalArgumentException if the event data is invalid
+	 */
 	public void deleteEvent(Event event) {
 		if (event instanceof TeachingSessionDTO teachingSessionDTO) {
 			try {
@@ -175,7 +220,12 @@ public class EventModel {
 		}
 	}
 
-	// Converts an Assignment DTO to an Entity
+	/**
+	 * Converts an AssignmentDTO to an AssignmentEntity.
+	 *
+	 * @param dto The AssignmentDTO to convert
+	 * @return The corresponding AssignmentEntity
+	 */
 	private AssignmentEntity convertToAssignmentEntity(AssignmentDTO dto) {
 		AssignmentEntity entity = new AssignmentEntity();
 
@@ -205,7 +255,12 @@ public class EventModel {
 		return entity;
 	}
 
-	// Converts an Assignment Entity to a DTO
+	/**
+	 * Converts an AssignmentEntity to an AssignmentDTO.
+	 *
+	 * @param entity The AssignmentEntity to convert
+	 * @return The corresponding AssignmentDTO
+	 */
 	private AssignmentDTO convertToAssignmentDTO(AssignmentEntity entity) {
 		return new AssignmentDTO(entity.getId(), entity.getType(), entity.getPublishingDate().toLocalDateTime(),
 		                         entity.getDeadline().toLocalDateTime(), entity.getName(),
@@ -215,7 +270,12 @@ public class EventModel {
 		                         entity.getLocaleCode());
 	}
 
-	// Converts an TeachingSession DTO to an Entity
+	/**
+	 * Converts a TeachingSessionDTO to a TeachingSessionEntity.
+	 *
+	 * @param dto The TeachingSessionDTO to convert
+	 * @return The corresponding TeachingSessionEntity
+	 */
 	private TeachingSessionEntity convertToTeachingSessionEntity(TeachingSessionDTO dto) {
 		TeachingSessionEntity entity = new TeachingSessionEntity();
 
@@ -246,7 +306,12 @@ public class EventModel {
 		return entity;
 	}
 
-	// Converts an TeachingSession Entity to a DTO
+	/**
+	 * Converts a TeachingSessionEntity to a TeachingSessionDTO.
+	 *
+	 * @param entity The TeachingSessionEntity to convert
+	 * @return The corresponding TeachingSessionDTO
+	 */
 	private TeachingSessionDTO convertToTeachingSessionDTO(TeachingSessionEntity entity) {
 		return new TeachingSessionDTO(entity.getId(), entity.getStartDate().toLocalDateTime(),
 		                              entity.getEndDate().toLocalDateTime(),
@@ -257,11 +322,20 @@ public class EventModel {
 		                              entity.getLocaleCode());
 	}
 
+	/**
+	 * Deletes all events from the system.
+	 */
 	public void deleteAllEvents() {
 		assignmentDAO.deleteAll();
 		teachingSessionDAO.deleteAll();
 	}
 
+	/**
+	 * Validates a teaching session's data.
+	 *
+	 * @param teachingSessionDTO The teaching session to validate
+	 * @throws IllegalArgumentException if any validation fails
+	 */
 	private void isValidTeachingSession(TeachingSessionDTO teachingSessionDTO) {
 		if (teachingSessionDTO.startDate() == null) {
 			throw new IllegalArgumentException("Start date cannot be null.");
@@ -280,6 +354,12 @@ public class EventModel {
 		}
 	}
 
+	/**
+	 * Validates an assignment's data.
+	 *
+	 * @param assignmentDTO The assignment to validate
+	 * @throws IllegalArgumentException if any validation fails
+	 */
 	private void isValidAssignment(AssignmentDTO assignmentDTO) {
 		if (assignmentDTO.assignmentName() == null || assignmentDTO.assignmentName().isEmpty()) {
 			throw new IllegalArgumentException("Assignment name cannot be null or empty.");
@@ -303,5 +383,4 @@ public class EventModel {
 			throw new IllegalArgumentException("Timetable ID cannot be less than or equal to 0.");
 		}
 	}
-
 }
