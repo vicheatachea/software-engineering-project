@@ -9,6 +9,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+/**
+ * TimetableDAO is a Data Access Object (DAO) class that provides methods to interact with the database
+ * for the {@link TimetableEntity}. It handles CRUD operations and other specific queries related to timetables,
+ * including retrieving timetables associated with users and groups.
+ */
 public class TimetableDAO {
 
 	private static final EntityManagerFactory emf = MariaDBConnection.getEntityManagerFactory();
@@ -19,10 +24,22 @@ public class TimetableDAO {
 	private static final String USER_ID = "userId";
 	private static final String ERROR_MESSAGE = "Error: ";
 
+	/**
+	 * Logs an error message using the configured logger.
+	 *
+	 * @param e The exception to log.
+	 */
 	private void logErrorMessage(final Exception e) {
 		logger.error(ERROR_MESSAGE, e);
 	}
 
+	/**
+	 * Persists a new timetable entity to the database.
+	 * The method starts a transaction, persists the entity, and commits the transaction.
+	 * If an exception occurs, the transaction is rolled back and the error is logged.
+	 *
+	 * @param timetable The timetable entity to be persisted
+	 */
 	public void persist(final TimetableEntity timetable) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -39,6 +56,11 @@ public class TimetableDAO {
 		}
 	}
 
+	/**
+	 * Retrieves all timetable entities from the database.
+	 *
+	 * @return A list of all timetable entities or an empty list if none are found
+	 */
 	public List<TimetableEntity> findAll() {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -53,6 +75,15 @@ public class TimetableDAO {
 		}
 	}
 
+	/**
+	 * Retrieves all timetable entities associated with a specific user.
+	 * This includes timetables directly associated with the user,
+	 * timetables of groups where the user is a student,
+	 * and timetables of groups where the user is a teacher.
+	 *
+	 * @param userId The ID of the user
+	 * @return A list of timetable entities associated with the user or an empty list if none are found
+	 */
 	public List<TimetableEntity> findAllByUserId(final Long userId) {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -83,7 +114,12 @@ public class TimetableDAO {
 		}
 	}
 
-
+	/**
+	 * Finds a timetable entity by its ID.
+	 *
+	 * @param id The ID of the timetable to find
+	 * @return The timetable entity if found, null otherwise
+	 */
 	public TimetableEntity findById(final Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -98,6 +134,13 @@ public class TimetableDAO {
 		}
 	}
 
+	/**
+	 * Deletes a timetable entity from the database.
+	 * This method first deletes all related entities (assignments, teaching sessions, users, user groups)
+	 * that reference the timetable, and then removes the timetable entity itself.
+	 *
+	 * @param timetable The timetable entity to be deleted
+	 */
 	public void delete(final TimetableEntity timetable) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -132,6 +175,11 @@ public class TimetableDAO {
 		}
 	}
 
+	/**
+	 * Deletes all timetable entities from the database.
+	 * This method also deletes all related entities (user groups, assignments, teaching sessions, users)
+	 * before removing all timetable entities.
+	 */
 	public void deleteAll() {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -157,6 +205,12 @@ public class TimetableDAO {
 		}
 	}
 
+	/**
+	 * Finds a timetable entity associated with a specific user.
+	 *
+	 * @param userId The ID of the user
+	 * @return The timetable entity if found, null otherwise
+	 */
 	public TimetableEntity findByUserId(final long userId) {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -172,6 +226,12 @@ public class TimetableDAO {
 		}
 	}
 
+	/**
+	 * Finds a timetable entity associated with a specific group name.
+	 *
+	 * @param groupName The name of the group
+	 * @return The timetable entity if found, null otherwise
+	 */
 	public TimetableEntity findByGroupName(final String groupName) {
 		EntityManager em = emf.createEntityManager();
 		try {

@@ -12,6 +12,11 @@ import java.util.List;
 
 import static util.PasswordHashUtil.verifyPassword;
 
+/**
+ * UserDAO is a Data Access Object (DAO) class that provides methods to interact with the database
+ * for the {@link UserEntity}. It handles CRUD operations and other specific queries related to users,
+ * including authentication.
+ */
 public class UserDAO {
 
 	private static final String ERROR_MESSAGE = "Error: ";
@@ -20,11 +25,23 @@ public class UserDAO {
 	private static final EntityManagerFactory emf =
 			MariaDBConnection.getEntityManagerFactory();
 
+	/**
+	 * Logs an error message using the configured logger.
+	 *
+	 * @param e The exception to log.
+	 */
 	private void logErrorMessage(final Exception e) {
 		logger.error(ERROR_MESSAGE, e);
 	}
 
-	public void persist(UserEntity user) {
+	/**
+	 * Persists a new user entity to the database.
+	 * The method starts a transaction, persists the entity, and commits the transaction.
+	 * If an exception occurs, the transaction is rolled back and the error is logged.
+	 *
+	 * @param user The user entity to be persisted
+	 */
+	public void persist(final UserEntity user) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
@@ -40,7 +57,14 @@ public class UserDAO {
 		}
 	}
 
-	public void update(UserEntity user) {
+	/**
+	 * Updates an existing user entity in the database.
+	 * The method starts a transaction, merges the entity, and commits the transaction.
+	 * If an exception occurs, the transaction is rolled back and the error is logged.
+	 *
+	 * @param user The user entity to be updated
+	 */
+	public void update(final UserEntity user) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
@@ -56,7 +80,13 @@ public class UserDAO {
 		}
 	}
 
-	public UserEntity findById(Long id) {
+	/**
+	 * Finds a user entity by its ID.
+	 *
+	 * @param id The ID of the user to find
+	 * @return The user entity if found, null otherwise
+	 */
+	public UserEntity findById(final Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.find(UserEntity.class, id);
@@ -70,7 +100,14 @@ public class UserDAO {
 		}
 	}
 
-	public UserEntity findTeacherById(Long id) {
+	/**
+	 * Finds a teacher entity by its ID.
+	 * This method specifically looks for users with the 'TEACHER' role.
+	 *
+	 * @param id The ID of the teacher to find
+	 * @return The teacher entity if found, null otherwise
+	 */
+	public UserEntity findTeacherById(final Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em
@@ -87,7 +124,13 @@ public class UserDAO {
 		}
 	}
 
-	public UserEntity findByUsername(String username) {
+	/**
+	 * Finds a user entity by its username.
+	 *
+	 * @param username The username of the user to find
+	 * @return The user entity if found, null otherwise
+	 */
+	public UserEntity findByUsername(final String username) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT u FROM UserEntity u WHERE u.username = :username", UserEntity.class)
@@ -103,6 +146,11 @@ public class UserDAO {
 		}
 	}
 
+	/**
+	 * Retrieves all user entities from the database.
+	 *
+	 * @return A list of all user entities or an empty list if none are found
+	 */
 	public List<UserEntity> findAll() {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -117,12 +165,20 @@ public class UserDAO {
 		}
 	}
 
-	public UserEntity authenticate(String username, String password) {
+	/**
+	 * Authenticates a user by verifying their username and password.
+	 * Uses the PasswordHashUtil to verify the hashed password with the provided salt.
+	 *
+	 * @param username The username of the user trying to authenticate
+	 * @param password The password to verify
+	 * @return The authenticated user entity if credentials are valid, null otherwise
+	 */
+	public UserEntity authenticate(final String username, final String password) {
 		UserEntity user = findByUsername(username);
 		if (user == null) {
 			return null;
 		}
-		
+
 		boolean verified = verifyPassword(password, user.getPassword(), user.getSalt());
 
 		if (!verified) {
@@ -132,6 +188,14 @@ public class UserDAO {
 		return user;
 	}
 
+	/**
+	 * Deletes a user entity from the database.
+	 * The method first finds the user by username to ensure it exists,
+	 * then starts a transaction, removes the entity, and commits the transaction.
+	 * If an exception occurs, the transaction is rolled back and the error is logged.
+	 *
+	 * @param user The user entity to be deleted
+	 */
 	public void delete(UserEntity user) {
 		EntityManager em = emf.createEntityManager();
 		user = findByUsername(user.getUsername());
@@ -149,6 +213,10 @@ public class UserDAO {
 		}
 	}
 
+	/**
+	 * Deletes all user entities from the database.
+	 * This method executes a JPQL query to remove all user entities.
+	 */
 	public void deleteAll() {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -165,7 +233,13 @@ public class UserDAO {
 		}
 	}
 
-	public boolean findBySocialNumber(String socialNumber) {
+	/**
+	 * Checks if a user with the given social number exists in the database.
+	 *
+	 * @param socialNumber The social number to check
+	 * @return true if a user with the given social number exists, false otherwise
+	 */
+	public boolean findBySocialNumber(final String socialNumber) {
 		EntityManager em = emf.createEntityManager();
 		try {
 			return em.createQuery("SELECT u FROM UserEntity u WHERE u.socialNumber = :socialNumber", UserEntity.class)

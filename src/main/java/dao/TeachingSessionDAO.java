@@ -11,6 +11,10 @@ import org.slf4j.LoggerFactory;
 import java.sql.Timestamp;
 import java.util.List;
 
+/**
+ * TeachingSessionDAO is a Data Access Object (DAO) class that provides methods to interact with the database
+ * for the {@link TeachingSessionEntity}. It handles CRUD operations and other specific queries related to teaching sessions.
+ */
 public class TeachingSessionDAO {
 
 	private static final EntityManagerFactory emf = MariaDBConnection.getEntityManagerFactory();
@@ -18,10 +22,20 @@ public class TeachingSessionDAO {
 
 	private static final String ERROR_MESSAGE = "Error: ";
 
+	/**
+	 * Logs an error message using the configured logger.
+	 *
+	 * @param e The exception to log.
+	 */
 	private void logErrorMessage(final Exception e) {
 		logger.error(ERROR_MESSAGE, e);
 	}
 
+	/**
+	 * Persists a new teaching session entity to the database.
+	 *
+	 * @param teachingSession The teaching session entity to persist.
+	 */
 	public void persist(final TeachingSessionEntity teachingSession) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -38,6 +52,12 @@ public class TeachingSessionDAO {
 		}
 	}
 
+	/**
+	 * Updates an existing teaching session entity in the database.
+	 *
+	 * @param entity The teaching session entity with updated information.
+	 * @throws IllegalArgumentException if the teaching session to update is not found.
+	 */
 	public void update(final TeachingSessionEntity entity) {
 		EntityManager em = emf.createEntityManager();
 		TeachingSessionEntity teachingSession = em.find(TeachingSessionEntity.class, entity.getId());
@@ -79,6 +99,12 @@ public class TeachingSessionDAO {
 		}
 	}
 
+	/**
+	 * Finds a teaching session entity by its ID.
+	 *
+	 * @param id The ID of the teaching session to find.
+	 * @return The found teaching session entity, or null if not found or an error occurs.
+	 */
 	public TeachingSessionEntity findById(final Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -93,6 +119,11 @@ public class TeachingSessionDAO {
 		}
 	}
 
+	/**
+	 * Retrieves all teaching session entities from the database.
+	 *
+	 * @return A list of all teaching session entities, or an empty list if none are found or an error occurs.
+	 */
 	public List<TeachingSessionEntity> findAll() {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -107,6 +138,11 @@ public class TeachingSessionDAO {
 		}
 	}
 
+	/**
+	 * Deletes a teaching session entity from the database.
+	 *
+	 * @param teachingSession The teaching session entity to delete.
+	 */
 	public void delete(final TeachingSessionEntity teachingSession) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -123,6 +159,12 @@ public class TeachingSessionDAO {
 		}
 	}
 
+	/**
+	 * Finds a teaching session entity by its associated subject ID.
+	 *
+	 * @param id The ID of the subject.
+	 * @return The found teaching session entity, or null if not found or an error occurs.
+	 */
 	public TeachingSessionEntity findBySubjectId(final Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -138,6 +180,12 @@ public class TeachingSessionDAO {
 		}
 	}
 
+	/**
+	 * Finds a teaching session entity by its associated location ID.
+	 *
+	 * @param id The ID of the location.
+	 * @return The found teaching session entity, or null if not found or an error occurs.
+	 */
 	public TeachingSessionEntity findByLocationId(final Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -153,6 +201,12 @@ public class TeachingSessionDAO {
 		}
 	}
 
+	/**
+	 * Finds all teaching session entities associated with a specific timetable ID.
+	 *
+	 * @param id The ID of the timetable.
+	 * @return A list of teaching session entities for the given timetable ID, or an empty list if none are found or an error occurs.
+	 */
 	public List<TeachingSessionEntity> findAllByTimetableId(final Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -168,6 +222,9 @@ public class TeachingSessionDAO {
 		}
 	}
 
+	/**
+	 * Deletes all teaching session entities from the database.
+	 */
 	public void deleteAll() {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -184,6 +241,14 @@ public class TeachingSessionDAO {
 		}
 	}
 
+	/**
+	 * Finds all teaching sessions for a specific timetable ID that fall within a given time period.
+	 *
+	 * @param id    The ID of the timetable.
+	 * @param start The start timestamp of the period.
+	 * @param end   The end timestamp of the period.
+	 * @return A list of teaching session entities matching the criteria, or an empty list if none are found or an error occurs.
+	 */
 	public List<TeachingSessionEntity> findAllByTimetableIdDuringPeriod(final Long id, final Timestamp start,
 	                                                                    final Timestamp end) {
 		EntityManager em = emf.createEntityManager();
@@ -201,6 +266,15 @@ public class TeachingSessionDAO {
 		}
 	}
 
+	/**
+	 * Finds all teaching sessions for a specific locale and timetable ID that fall within a given time period.
+	 *
+	 * @param start       The start timestamp of the period.
+	 * @param end         The end timestamp of the period.
+	 * @param localeCode  The locale code (e.g., "en_US", "fi_FI").
+	 * @param timetableId The ID of the timetable.
+	 * @return A list of teaching session entities matching the criteria, or an empty list if none are found or an error occurs.
+	 */
 	public List<TeachingSessionEntity> findAllByLocaleDuringPeriod(final Timestamp start, final Timestamp end,
 	                                                               final String localeCode, final Long timetableId) {
 		EntityManager em = emf.createEntityManager();

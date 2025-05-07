@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * AssignmentDAO is a Data Access Object (DAO) class that provides methods to interact with the database
- * for the AssignmentEntity. It handles CRUD operations and other specific queries related to assignments.
+ * for the {@link AssignmentEntity}. It handles CRUD operations and other specific queries related to assignments.
  */
 public class AssignmentDAO {
 
@@ -22,10 +22,20 @@ public class AssignmentDAO {
 	private static final EntityManagerFactory emf =
 			MariaDBConnection.getEntityManagerFactory();
 
+	/**
+	 * Logs an error message using the configured logger.
+	 *
+	 * @param e The exception to log.
+	 */
 	private void logErrorMessage(final Exception e) {
 		logger.error(ERROR_MESSAGE, e);
 	}
 
+	/**
+	 * Persists a new assignment entity to the database.
+	 *
+	 * @param assignment The assignment entity to persist.
+	 */
 	public void persist(final AssignmentEntity assignment) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -42,6 +52,11 @@ public class AssignmentDAO {
 		}
 	}
 
+	/**
+	 * Updates an existing assignment entity in the database.
+	 *
+	 * @param assignment The assignment entity with updated information.
+	 */
 	public void update(final AssignmentEntity assignment) {
 		EntityManager em = emf.createEntityManager();
 		AssignmentEntity existingAssignment = em.find(AssignmentEntity.class, assignment.getId());
@@ -67,6 +82,12 @@ public class AssignmentDAO {
 		}
 	}
 
+	/**
+	 * Finds an assignment entity by its ID.
+	 *
+	 * @param id The ID of the assignment to find.
+	 * @return The found assignment entity, or null if no assignment is found with the given ID or an error occurs.
+	 */
 	public AssignmentEntity findById(final Long id) {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -81,6 +102,11 @@ public class AssignmentDAO {
 		}
 	}
 
+	/**
+	 * Retrieves all assignment entities from the database.
+	 *
+	 * @return A list of all assignment entities, or an empty list if no assignments are found or an error occurs.
+	 */
 	public List<AssignmentEntity> findAll() {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -95,6 +121,11 @@ public class AssignmentDAO {
 		}
 	}
 
+	/**
+	 * Deletes an assignment entity from the database.
+	 *
+	 * @param assignment The assignment entity to delete.
+	 */
 	public void delete(AssignmentEntity assignment) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -112,6 +143,9 @@ public class AssignmentDAO {
 		}
 	}
 
+	/**
+	 * Deletes all assignment entities from the database.
+	 */
 	public void deleteAll() {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -128,6 +162,14 @@ public class AssignmentDAO {
 		}
 	}
 
+	/**
+	 * Finds all assignments for a specific timetable ID that fall within a given time period.
+	 *
+	 * @param timetableId The ID of the timetable.
+	 * @param start       The start timestamp of the period.
+	 * @param end         The end timestamp of the period.
+	 * @return A list of assignment entities matching the criteria, or an empty list if none are found or an error occurs.
+	 */
 	public List<AssignmentEntity> findAllByTimetableIdDuringPeriod(final Long timetableId, final Timestamp start,
 	                                                               final Timestamp end) {
 		EntityManager em = emf.createEntityManager();
@@ -146,6 +188,15 @@ public class AssignmentDAO {
 		}
 	}
 
+	/**
+	 * Finds all assignments for a specific timetable ID and locale code that fall within a given time period.
+	 *
+	 * @param start       The start timestamp of the period.
+	 * @param end         The end timestamp of the period.
+	 * @param localeCode  The locale code (e.g., "en_US", "fi_FI").
+	 * @param timetableId The ID of the timetable.
+	 * @return A list of assignment entities matching the criteria, or an empty list if none are found or an error occurs.
+	 */
 	public List<AssignmentEntity> findAllByLocaleDuringPeriod(final Timestamp start, final Timestamp end,
 	                                                          final String localeCode, final Long timetableId) {
 
