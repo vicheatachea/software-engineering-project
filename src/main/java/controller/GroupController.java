@@ -1,58 +1,110 @@
 package controller;
 
 import dto.GroupDTO;
-import java.util.List;
 import model.GroupModel;
 
+import java.util.List;
+
+/**
+ * Controller class for managing student groups in the system.
+ * Provides methods for group creation, retrieval, modification, and student management
+ * by interfacing with the GroupModel layer.
+ */
 public class GroupController {
 	private final GroupModel groupModel = new GroupModel();
 
-	// Fetch all available groups
+	/**
+	 * Retrieves all available groups in the system.
+	 *
+	 * @return A list of all group DTOs
+	 */
 	public List<GroupDTO> fetchAllGroups() {
 		return groupModel.fetchAllGroups();
 	}
 
-	// Fetch all groups for a user
+	/**
+	 * Fetches all groups associated with the currently logged-in user.
+	 *
+	 * @return A list of group DTOs for the current user
+	 */
 	public List<GroupDTO> fetchGroupsByUser() {
 		return groupModel.fetchGroupsByUser();
 	}
 
-	// Fetch a group DTO by the group name
+	/**
+	 * Retrieves a specific group by its name.
+	 *
+	 * @param groupName The name of the group to fetch
+	 * @return The group DTO if found, null otherwise
+	 */
 	public GroupDTO fetchGroupByName(String groupName) {
 		return groupModel.fetchGroupByName(groupName);
 	}
 
-	// Fetch a group DTO by the timetable ID
+	/**
+	 * Retrieves a group associated with a specific timetable.
+	 *
+	 * @param timetableId The ID of the timetable to find the group for
+	 * @return The group DTO if found, null otherwise
+	 */
 	public GroupDTO fetchGroupByTimetableId(long timetableId) {
 		return groupModel.fetchGroupByTimetableId(timetableId);
 	}
 
-	// Check if the logged-in user is the owner of a group
+	/**
+	 * Determines if the currently logged-in user is the owner of a specific group.
+	 *
+	 * @param groupName The name of the group to check ownership for
+	 * @return true if the current user owns the group, false otherwise
+	 */
 	public boolean isUserGroupOwner(String groupName) {
 		return groupModel.isUserGroupOwner(groupName);
 	}
 
-	// Add a group
+	/**
+	 * Creates a new group in the system.
+	 *
+	 * @param groupDTO The group data to add
+	 */
 	public void addGroup(GroupDTO groupDTO) {
 		groupModel.addGroup(groupDTO);
 	}
 
-	// Update a group
+	/**
+	 * Updates an existing group's information.
+	 *
+	 * @param groupDTO    The updated group data
+	 * @param currentName The current name of the group being updated
+	 */
 	public void updateGroup(GroupDTO groupDTO, String currentName) {
 		groupModel.updateGroup(groupDTO, currentName);
 	}
 
-	// Delete a group
+	/**
+	 * Removes a group from the system.
+	 *
+	 * @param groupDTO The group to delete
+	 */
 	public void deleteGroup(GroupDTO groupDTO) {
 		groupModel.deleteGroup(groupDTO);
 	}
 
-	// Add a student to a group
+	/**
+	 * Adds a student to an existing group.
+	 *
+	 * @param groupDTO        The group to add the student to
+	 * @param studentUsername The username of the student to add
+	 */
 	public void addStudentToGroup(GroupDTO groupDTO, String studentUsername) {
 		groupModel.addStudentToGroup(groupDTO, studentUsername);
 	}
 
-	// Remove a student from a group
+	/**
+	 * Removes a student from a group.
+	 *
+	 * @param groupDTO        The group to remove the student from
+	 * @param studentUsername The username of the student to remove
+	 */
 	public void removeStudentFromGroup(GroupDTO groupDTO, String studentUsername) {
 		groupModel.removeStudentFromGroup(groupDTO, studentUsername);
 	}

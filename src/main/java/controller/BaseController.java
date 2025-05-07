@@ -1,36 +1,72 @@
 package controller;
 
 /**
-* The controller should not manipulate the view directly to maintain separation of concerns
-* The view controllers should be able to call each controller to manipulate the model and retrieve data
-* The base controller should be passed among the views until the specific controllers are needed
-*/
+ * Serves as a central access point for all controllers in the application.
+ * Maintains separation of concerns by providing specific controllers to views.
+ * The view controllers call appropriate controllers to manipulate the model and retrieve data.
+ * This base controller should be passed among views until specific controllers are needed.
+ */
 public class BaseController {
-    public EventController getEventController() {
-        return new EventController();
-    }
+	/**
+	 * Provides access to the event management controller.
+	 *
+	 * @return A new EventController instance
+	 */
+	public EventController getEventController() {
+		return new EventController();
+	}
 
-    public GroupController getGroupController() {
-        return new GroupController();
-    }
+	/**
+	 * Provides access to the group management controller.
+	 *
+	 * @return A new GroupController instance
+	 */
+	public GroupController getGroupController() {
+		return new GroupController();
+	}
 
-    public LocationController getLocationController() {
-        return new LocationController();
-    }
+	/**
+	 * Provides access to the location management controller.
+	 *
+	 * @return A new LocationController instance
+	 */
+	public LocationController getLocationController() {
+		return new LocationController();
+	}
 
-    public SubjectController getSubjectController() {
-        return new SubjectController();
-    }
+	/**
+	 * Provides access to the subject management controller.
+	 *
+	 * @return A new SubjectController instance
+	 */
+	public SubjectController getSubjectController() {
+		return new SubjectController();
+	}
 
-    public TimetableController getTimetableController() {
-        return new TimetableController();
-    }
+	/**
+	 * Provides access to the timetable management controller.
+	 *
+	 * @return A new TimetableController instance
+	 */
+	public TimetableController getTimetableController() {
+		return new TimetableController();
+	}
 
-    public UserController getUserController() {
-        return new UserController();
-    }
+	/**
+	 * Provides access to the user management controller.
+	 *
+	 * @return A new UserController instance
+	 */
+	public UserController getUserController() {
+		return new UserController();
+	}
 
-    public LocaleController getLocaleController() {
-        return new LocaleController();
-    }
+	/**
+	 * Provides access to the locale management controller.
+	 *
+	 * @return A new LocaleController instance
+	 */
+	public LocaleController getLocaleController() {
+		return new LocaleController();
+	}
 }
