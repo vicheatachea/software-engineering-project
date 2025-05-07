@@ -3,8 +3,9 @@ package dto;
 import java.time.LocalDateTime;
 
 /**
- * AssignmentDTO is a Data Transfer Object (DTO) class that represents an assignment.
- * It is used to transfer data between different layers of the application.
+ * Data Transfer Object (DTO) representing an academic assignment.
+ * Contains assignment identification, scheduling information, content details, and metadata.
+ * Implements the {@link Event} interface for integration with the timetable system.
  */
 public record AssignmentDTO(
 		Long id, String type, LocalDateTime publishingDate, LocalDateTime deadline, String assignmentName,
