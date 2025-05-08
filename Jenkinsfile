@@ -7,7 +7,7 @@ pipeline {
 		DOCKERHUB_CREDENTIALS_ID = 'Docker_Hub'
 		DOCKERHUB_APP_REPO = 'sakuheinonen/stms'
 		DOCKERHUB_DB_REPO = 'sakuheinonen/stms-db'
-		DOCKER_IMAGE_TAG = 'test'
+		DOCKER_IMAGE_TAG = 'latest'
 	}
 	stages {
 		stage('Checkout') {

@@ -1,6 +1,6 @@
 services:
   app:
-    image: sakuheinonen/stms:test
+    image: sakuheinonen/stms:latest
     environment:
       DB_HOST: database
       DB_PORT: 3306
@@ -17,7 +17,7 @@ services:
   
   
   database:
-    image: sakuheinonen/stms-db:test
+    image: sakuheinonen/stms-db:latest
     restart: no
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
