@@ -8,6 +8,8 @@ pipeline {
 		DOCKERHUB_APP_REPO = 'sakuheinonen/stms'
 		DOCKERHUB_DB_REPO = 'sakuheinonen/stms-db'
 		DOCKER_IMAGE_TAG = 'latest'
+        FULL_APP_IMAGE_NAME = "${DOCKERHUB_APP_REPO}:${DOCKER_IMAGE_TAG}"
+        FULL_DB_IMAGE_NAME = "${DOCKERHUB_DB_REPO}:${DOCKER_IMAGE_TAG}"
 	}
 	stages {
 		stage('Checkout') {
@@ -46,22 +48,16 @@ pipeline {
 				)
 			}
 		}
-		stage('Build App Docker Image') {
+		stage('Build Docker Images') {
 			steps {
 				// Build Docker image
 				script {
-					docker.build("${DOCKERHUB_APP_REPO}:${DOCKER_IMAGE_TAG}")
+					sh "docker buildx build --platform linux/amd64,linux/arm64 -t ${FULL_APP_IMAGE_NAME} -f Dockerfile ."
 				}
-			}
-		}
-
-		stage('Build Db Docker Image') {
-		    steps {
-		    // Build Docker image}
                 script {
-                    docker.build("${DOCKERHUB_DB_REPO}:${DOCKER_IMAGE_TAG}", "-f Dockerfile-db .")
+                    sh "docker buildx build --platform linux/amd64,linux/arm64 -t ${FULL_DB_IMAGE_NAME} -f Dockerfile-db ."
                 }
-		    }
+			}
 		}
 	
 		stage('Push Docker Images') {
@@ -69,8 +65,8 @@ pipeline {
 				// Push both Docker images to Docker Hub
 				script {
 					docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
-						docker.image("${DOCKERHUB_APP_REPO}:${DOCKER_IMAGE_TAG}").push()
-						docker.image("${DOCKERHUB_DB_REPO}:${DOCKER_IMAGE_TAG}").push()
+						docker.image(env.FULL_APP_IMAGE_NAME).push()
+                        docker.image(env.FULL_DB_IMAGE_NAME).push()
           			}
         		}
       		}
